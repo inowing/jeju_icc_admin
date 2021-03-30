@@ -378,6 +378,7 @@
                         </template>
                     </b-table>
                 </b-tab>
+
             </b-tabs>
         </b-card>
         
@@ -420,6 +421,9 @@
                     좌장을 이메일로 초대합니다.
                 </b-tab>
                 <b-tab title="Presenter">
+                    발표자를 이메일로 초대합니다.
+                </b-tab>
+                <b-tab title="Attendee">
                     발표자를 이메일로 초대합니다.
                 </b-tab>
             </b-tabs>

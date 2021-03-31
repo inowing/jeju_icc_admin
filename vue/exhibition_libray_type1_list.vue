@@ -16,13 +16,30 @@
         </b-button>
 
         <b-table :fields="introduction_fields" :items="introduction" small bordered head-variant="light" class="mt-1">
+            <template #cell(id)="row">
+                <div class="text-center">
+                    {{row.item.id}}
+                </div>
+            </template>
+            <template #cell(order)="row">
+                <div class="text-center">
+                    {{row.item.order}}
+                </div>
+            </template>
+            <template #cell(library_type)="row">
+                <div class="text-center">
+                    {{row.item.library_type == 1 ? 'YouTube' : row.item.library_type == 2 ? '영상' : '사진'}}
+                </div>
+            </template>
             <template #cell(manageBtn)="row">
-                <b-button size="sm" variant="outline-success" @click="containModalOpen(row.item, $event, row.index)">
-                    <b-icon-pencil-square></b-icon-pencil-square>수정
-                </b-button>
-                <b-button size="sm" variant="outline-danger" @click="deleteItemFn(row.item, $event, row.index)">
-                    <b-icon-trash2-fill></b-icon-trash2-fill>삭제
-                </b-button>
+                <div class="text-center">
+                    <b-button size="sm" variant="outline-success" @click="containModalOpen(row.item, $event, row.index)">
+                        <b-icon-pencil-square></b-icon-pencil-square>수정
+                    </b-button>
+                    <b-button size="sm" variant="outline-danger" @click="deleteItemFn(row.item, $event, row.index)">
+                        <b-icon-trash2-fill></b-icon-trash2-fill>삭제
+                    </b-button>
+                </div>
             </template>
         </b-table>
 
@@ -49,7 +66,8 @@
                                 <b-row>
                                     <b-col>
                                         <b-card-group deck>
-                                            <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
+                                            <b-card no-body style="padding:0 max-width:182px;">
+                                            <!-- <b-card no-body style="padding:0 max-width:182px;"> -->
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_1_prev||photo_prev_default" fluid></b-img>
@@ -62,9 +80,9 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
-                                                <b-form-textarea v-model="selected_item.photo_1_message" rows="3" max-rows="6"></b-form-textarea>
+                                                <b-form-textarea v-model="selected_item.photo_1_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                                             </b-card>
-                                            <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
+                                            <b-card no-body style="padding:0 max-width:182px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_2_prev||photo_prev_default" fluid></b-img>
@@ -77,9 +95,9 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
-                                                <b-form-textarea v-model="selected_item.photo_2_message" rows="3" max-rows="6"></b-form-textarea>
+                                                <b-form-textarea v-model="selected_item.photo_2_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                                             </b-card>
-                                            <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
+                                            <b-card no-body style="padding:0 max-width:182px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_3_prev||photo_prev_default" fluid></b-img>
@@ -92,9 +110,9 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
-                                                <b-form-textarea v-model="selected_item.photo_3_message" rows="3" max-rows="6"></b-form-textarea>
+                                                <b-form-textarea v-model="selected_item.photo_3_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                                             </b-card>
-                                            <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
+                                            <b-card no-body style="padding:0 max-width:182px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_4_prev||photo_prev_default" fluid></b-img>
@@ -107,9 +125,9 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
-                                                <b-form-textarea v-model="selected_item.photo_4_message" rows="3" max-rows="6"></b-form-textarea>
+                                                <b-form-textarea v-model="selected_item.photo_4_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                                             </b-card>
-                                            <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
+                                            <b-card no-body style="padding:0 max-width:182px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_5_prev||photo_prev_default" fluid></b-img>
@@ -122,16 +140,16 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
-                                                <b-form-textarea v-model="selected_item.photo_5_message" rows="3" max-rows="6"></b-form-textarea>
+                                                <b-form-textarea v-model="selected_item.photo_5_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                                             </b-card>
                                         </b-card-group>
                                     </b-col>
                                 </b-row>
-                                <b-row>
+                                <b-row class="mt-1">
                                     <b-col>
                                         <b-card-group deck>
 
-                                            <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
+                                            <b-card no-body style="padding:0 max-width:182px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_6_prev||photo_prev_default" fluid></b-img>
@@ -144,9 +162,9 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
-                                                <b-form-textarea v-model="selected_item.photo_6_message" rows="3" max-rows="6"></b-form-textarea>
+                                                <b-form-textarea v-model="selected_item.photo_6_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                                             </b-card>
-                                            <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
+                                            <b-card no-body style="padding:0 max-width:182px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_7_prev||photo_prev_default" fluid></b-img>
@@ -159,9 +177,9 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
-                                                <b-form-textarea v-model="selected_item.photo_7_message" rows="3" max-rows="6"></b-form-textarea>
+                                                <b-form-textarea v-model="selected_item.photo_7_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                                             </b-card>
-                                            <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
+                                            <b-card no-body style="padding:0 max-width:182px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_8_prev||photo_prev_default" fluid></b-img>
@@ -174,9 +192,9 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
-                                                <b-form-textarea v-model="selected_item.photo_8_message" rows="3" max-rows="6"></b-form-textarea>
+                                                <b-form-textarea v-model="selected_item.photo_8_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                                             </b-card>
-                                            <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
+                                            <b-card no-body style="padding:0 max-width:182px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_9_prev||photo_prev_default" fluid></b-img>
@@ -189,9 +207,9 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
-                                                <b-form-textarea v-model="selected_item.photo_9_message" rows="3" max-rows="6"></b-form-textarea>
+                                                <b-form-textarea v-model="selected_item.photo_9_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                                             </b-card>
-                                            <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
+                                            <b-card no-body style="padding:0 max-width:182px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_10_prev||photo_prev_default" fluid></b-img>
@@ -204,7 +222,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
-                                                <b-form-textarea v-model="selected_item.photo_10_message" rows="3" max-rows="6"></b-form-textarea>
+                                                <b-form-textarea v-model="selected_item.photo_10_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                                             </b-card>
                                            
                                         </b-card-group>
@@ -256,7 +274,7 @@
                     <b-row class="p-1">
                         <b-col sm="4"><label style="font-size: 10pt;">링크 메시지</label></b-col>
                         <b-col sm="8">
-                            <b-form-textarea v-model="selected_item.link_message" rows="3" max-rows="6"></b-form-textarea>
+                            <b-form-textarea v-model="selected_item.link_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
                         </b-col>
                     </b-row>
                      -->
@@ -316,7 +334,7 @@ module.exports = {
                     label: '순서'
                 },
                 {
-                    key: 'type',
+                    key: 'library_type',
                     label: 'Type'
                 },
                 {
@@ -346,16 +364,16 @@ module.exports = {
                 photo_8: null,
                 photo_9: null,
                 photo_10: null,
-                photo_1_message: null,
-                photo_2_message: null,
-                photo_3_message: null,
-                photo_4_message: null,
-                photo_5_message: null,
-                photo_6_message: null,
-                photo_7_message: null,
-                photo_8_message: null,
-                photo_9_message: null,
-                photo_10_message: null,
+                photo_1_message: '',
+                photo_2_message: '',
+                photo_3_message: '',
+                photo_4_message: '',
+                photo_5_message: '',
+                photo_6_message: '',
+                photo_7_message: '',
+                photo_8_message: '',
+                photo_9_message: '',
+                photo_10_message: '',
                 photo_1_del: false,
                 photo_2_del: false,
                 photo_3_del: false,
@@ -454,16 +472,16 @@ module.exports = {
             this.photo_9_prev = null;
             this.photo_10_prev = null;
 
-            this.selected_item.photo_1_message = null,
-            this.selected_item.photo_2_message = null,
-            this.selected_item.photo_3_message = null,
-            this.selected_item.photo_4_message = null,
-            this.selected_item.photo_5_message = null,
-            this.selected_item.photo_6_message = null,
-            this.selected_item.photo_7_message = null,
-            this.selected_item.photo_8_message = null,
-            this.selected_item.photo_9_message = null,
-            this.selected_item.photo_10_message = null,
+            this.selected_item.photo_1_message = '';
+            this.selected_item.photo_2_message = '';
+            this.selected_item.photo_3_message = '';
+            this.selected_item.photo_4_message = '';
+            this.selected_item.photo_5_message = '';
+            this.selected_item.photo_6_message = '';
+            this.selected_item.photo_7_message = '';
+            this.selected_item.photo_8_message = '';
+            this.selected_item.photo_9_message = '';
+            this.selected_item.photo_10_message = '';
 
             this.introduction_modal = true;
         },

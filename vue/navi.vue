@@ -131,7 +131,7 @@
                 <span>7. 통계</span>
             </b-button>
         </b-card-header>
-        <b-collapse id="accordion-7" visible accordion="inowing-accordion" role="tabpanel">
+        <b-collapse id="accordion-7" visible accordion="inowing-accordion" role="tabpanel" v-model="accordion7">
             <b-card-body class="m-0 p-0">
                 <router-link to="/stats_login">
                     <b-card-text class="m-0 p-2">
@@ -145,7 +145,7 @@
                             <span>VM 상담</span>
                         </b-button>
                     </b-card-header>
-                    <b-collapse id="accordion-8" visible accordion="inowing-accordion" role="tabpanel">
+                    <b-collapse id="accordion-8" visible accordion="inowing-accordion2" role="tabpanel" v-model="accordion8">
                         <b-card-body class="m-0 p-0">
                             <router-link to="/stats_counsel_b">
                                 <b-card-text class="m-0 p-2">
@@ -168,7 +168,7 @@
                             <span>VM 실적</span>
                         </b-button>
                     </b-card-header>
-                    <b-collapse id="accordion-9" visible accordion="inowing-accordion" role="tabpanel">
+                    <b-collapse id="accordion-9" visible accordion="inowing-accordion3" role="tabpanel" v-model="accordion9">
                         <b-card-body class="m-0 p-0">
                             <router-link to="/stats_vm_b">
                                 <b-card-text class="m-0 p-2">
@@ -214,6 +214,8 @@ module.exports = {
             accordion5: false,
             accordion6: false,
             accordion7: false,
+            accordion8: false,
+            accordion9: false,
         }
     },
     watch: {
@@ -223,7 +225,11 @@ module.exports = {
             let aco3 = ['/company/list', '/com_request', '/company/admin'];
             let aco5 = ['/vm'];
             let aco6 = ['/biz/site', '/biz/schedule'];
+            let aco7 = ['/stats_login', '/stats_counsel_b', '/stats_counsel_s', '/stats_vm_b', '/stats_vm_s'];
+            let aco8 = ['/stats_counsel_b', '/stats_counsel_s'];
+            let aco9 = ['/stats_vm_b', '/stats_vm_s'];
             if (aco1.includes(this.routePath)) {
+                console.log('arco1');
                 this.accordion1 = true;
             }
             if (aco3.includes(this.routePath)) {
@@ -235,11 +241,29 @@ module.exports = {
             if (aco6.includes(this.routePath)) {
                 this.accordion6 = true;
             }
+            if (aco7.includes(this.routePath)) {
+                if ('/stats_login' == this.routePath) {
+                    this.accordion8 = false;
+                    this.accordion9 = false;
+                }
+                this.accordion7 = true;
+            }
+            if (aco8.includes(this.routePath)) {
+                this.accordion8 = true;
+                this.accordion9 = false;
+            }
+            if (aco9.includes(this.routePath)) {
+                this.accordion8 = false;
+                this.accordion9 = true;
+            }
             if (this.routePath == '/user_list' || this.routePath == '/mainmenu') {
                 this.accordion1 = false;
                 this.accordion3 = false;
                 this.accordion5 = false;
                 this.accordion6 = false;
+                this.accordion7 = false;
+                this.accordion8 = false;
+                this.accordion9 = false;
             }
             if (to.query.event_id) {
                 this.$store.commit('event_id', {event_id: to.query.event_id});

@@ -583,7 +583,7 @@ module.exports = {
             is_top: true, // 0 : 비활성, 1: 활성
 
             // 탭별구분
-            logo_preview_default: 'https://via.placeholder.com/290x200',
+            logo_preview_default: this.$store.getters.dummy_image_url(['290x200']),
 
             logo_file: null, // 기업로고 (한글) - 업로드할 파일 저장할 변수
             logo_preview_local: null, // 기업로고 (한글) - 사용자PC 프리뷰
@@ -714,7 +714,7 @@ module.exports = {
                 "link": "",
                 "image_prev": "",
                 "photo_1": {
-                    url: 'https://via.placeholder.com/180x180',
+                    url: this.$store.getters.dummy_image_url(['180x180']),
                     message: "",
                     file: null,
                     del: false
@@ -785,10 +785,10 @@ module.exports = {
             photo_8_prev: '',
             photo_9_prev: '',
             photo_10_prev: '',
-            photo_prev_default: `https://via.placeholder.com/180x180`,
+            photo_prev_default: this.$store.getters.dummy_image_url(['180x180']),
             thumb_prev: '',
             movie_file_src: '',
-            thumb_prev_default: `https://via.placeholder.com/180x180`,
+            thumb_prev_default: this.$store.getters.dummy_image_url(['180x180']),
             e_library_delete_ids: [],
             introduction_modal: false
         }
@@ -814,7 +814,7 @@ module.exports = {
     methods: {
         getTopCategory: async function () {
             // movie 형식으로 menu_id에 등록된 대분류
-            let url = `http://14.63.172.119/api/v1/menucategory/topcategory?menu_id=${this.menu_id}`;
+            let url = `${this.api_url}/menucategory/topcategory?menu_id=${this.menu_id}`;
 
             let response = await axios.get(url);
             let temArr = response.data.result;
@@ -832,7 +832,7 @@ module.exports = {
         getSubcategory: async function () {
             // movie 형식으로 menu_id에 등록된 대분류의 소분류
             this.category.selected_sub = '';
-            let url = `http://14.63.172.119/api/v1/menucategory/subcategory?menu_id=${this.menu_id}&category_id=${this.category.selected_top}`;
+            let url = `${this.api_url}/menucategory/subcategory?menu_id=${this.menu_id}&category_id=${this.category.selected_top}`;
             let response = await axios.get(url);
             let temArr = response.data.result;
             let sub = {};
@@ -850,8 +850,8 @@ module.exports = {
             if (!this.$route.query.id) return;
 
             // 수정 폼이면 값을 바인딩한다.
-            let url = `http://14.63.172.119/api/v1/exhibition/${this.$route.query.id}?type=0`;
-            // let url = `http://14.63.172.119/api/v1/exhibition/1?type=0`;
+            let url = `${this.api_url}/exhibition/${this.$route.query.id}?type=0`;
+            // let url = `${this.api_url}/exhibition/1?type=0`;
             let response = await axios.get(url);
             let rs = response.data.result;
             console.log('exhibition form data ', rs);
@@ -896,7 +896,7 @@ module.exports = {
 
             if (!this.$route.query.id) {
                 let url = `${this.$store.getters.api_url}/company/list?menu_id=${this.menu_id}`;
-                // http://14.63.172.119/api/v1/company/list?menu_id=11
+                // ${this.api_url}/company/list?menu_id=11
                 let res = await axios.get(url);
                 this.company_list = res.data.result;
             } else {
@@ -1084,7 +1084,7 @@ module.exports = {
             };
             for (var i = 1; i < 11; i++) {
                 this.selected_item[`photo_${i}`] = {
-                    url: 'https://via.placeholder.com/180x180',
+                    url: this.$store.getters.dummy_image_url(['180x180']),
                     message: "",
                     file: null,
                     del: false

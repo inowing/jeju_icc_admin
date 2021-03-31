@@ -3,6 +3,7 @@ export const store = new Vuex.Store({
     state: {
         event_id: 105,
         api_url: 'http://14.63.172.119/api/v1',
+        page_url: 'http://14.63.172.119',
         selected_item: null,
         logo_url: '',
         dummy_image_url: 'https://dummyimage.com/'
@@ -15,6 +16,9 @@ export const store = new Vuex.Store({
         },
         api_url: function (state) {
             return state.api_url;
+        },
+        page_url: function (state) {
+            return state.page_url;
         },
         logo_url: function (state) {
             return state.logo_url;

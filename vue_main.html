@@ -44,24 +44,24 @@
 
 <body>
 	<div id="app">
-		<header class="ino-gradiant">
+		<header class="ino-gradiant" style="height: 50px;">
 			<b-row>
 				<b-col cols="3" class="text-left">
 					<b-button squared v-show="!navShow" variant="info" v-b-toggle.sidebar-1>***</b-button>
 				</b-col>
 				<b-col cols="6">
-					<div v-show="navShow" style="height:30px; width:230px; object-fit:contain; margin: 0px auto; padding-top: 4px;">
+					<div v-show="navShow" style="height:32px; width:230px; object-fit:contain; margin: 0px auto; padding-top: 10px;">
 						<b-img :src="logo_url" fluid style="display:inline-block; width:100%; height: 100%;"></b-img>
 					</div>
 				</b-col>
 				<b-sidebar id="sidebar-1" title="Jeju ICC" shadow>
-					<div class="px-3 py-2"><navi></navi></div>
+					<div class="px-3 py-2" style="background-color: #e1e9eb"><navi></navi></div>
 				</b-sidebar>
-				<b-col cols="3" class="text-right"><b-button squared variant="info"><b-icon-link45deg></b-icon-link45deg> <span v-show="navShow">사이트바로가기</span></b-button></b-col>
+				<b-col cols="3" class="text-right"><b-button squared variant="info" style="height: 50px;"><b-icon-link45deg></b-icon-link45deg> <span v-show="navShow">사이트바로가기</span></b-button></b-col>
 			</b-row>
 		</header>
 		<main ref="inoResizer">
-			<nav v-show="navShow">
+			<nav v-show="navShow" style="background-color: #e1e9eb">
 				<navi></navi>
 				<b-row class="text-center mt-3 p-1">
 					<b-col>

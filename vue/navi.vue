@@ -2,7 +2,9 @@
 <div class="accordion" role="tablist">
     <b-card no-body class="mb-0 p-0">
         <b-card-header class="p-0" role="tab">
-            <b-button block squared v-b-toggle.accordion-1 variant="info" size="sm" class="text-left" v-bind:class="[ routePath == '/' || routePath == '/site_info' || routePath == '/familysite' || routePath == '/popup' || routePath == '/banner' || routePath == '/copy' ? active_parent_menu : '' ]">
+            <b-button block squared v-b-toggle.accordion-1 variant="info" size="sm" 
+                class="text-left" 
+                v-bind:class="[ routePath == '/' || routePath == '/site_info' || routePath == '/familysite' || routePath == '/popup' || routePath == '/banner' || routePath == '/copy' ? active_parent_menu : '' ]">
                 <span>1. 기본환경설정</span>
             </b-button>
         </b-card-header>
@@ -268,3 +270,8 @@ module.exports = {
     }
 }
 </script>
+<style scoped>
+    button {
+        height: 50px;
+    }
+</style>

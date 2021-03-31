@@ -7,7 +7,7 @@
 						<b-icon-list v-show="!isJustShown"></b-icon-list>
 						<b-icon-chevron-left v-show="isJustShown"></b-icon-chevron-left>
 					</b-button>
-					<b-img v-show="!isJustShown" :src="url.url1" fluid alt="Responsive image" style="max-width:250px;"></b-img>
+					<b-img v-show="!isJustShown" :src="url.logo" fluid alt="Responsive image" style="max-width:250px;"></b-img>
 					<span v-show="isJustShown" style="font-size: 10pt; padding-left:270px;">로그인 | 회원가입</span>
 				</b-col>
 			</b-row>

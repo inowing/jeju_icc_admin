@@ -222,7 +222,7 @@ module.exports = {
             photo_1_en_del: false, // file delete status
             
             // https://www.fillmurray.com/640/360
-            photo_prev: 'https://www.fillmurray.com/640/360', // preview image url
+            photo_prev: './static/images/no_image.jpg', // preview image url
 
         }
     },

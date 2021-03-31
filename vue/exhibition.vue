@@ -103,14 +103,14 @@ module.exports = {
     },
     methods: {
         getList: async function () {
-            let url = `http://14.63.172.119/api/v1/exhibition?menu_id=${this.menu_id}`;
+            let url = `${this.api_url}/exhibition?menu_id=${this.menu_id}`;
             let data = (await axios.get(url)).data;
             this.items = data.result;
             console.log(data);
         },
         getTopCategory: async function () {
             // movie 형식으로 menu_id에 등록된 대분류
-            let url = `http://14.63.172.119/api/v1/menucategory/topcategory?menu_id=${this.menu_id}`;
+            let url = `${this.api_url}/menucategory/topcategory?menu_id=${this.menu_id}`;
             
             let response = await axios.get(url);
             let temArr = response.data.result;
@@ -126,7 +126,7 @@ module.exports = {
         },
         getSubcategory: async function () {
             // movie 형식으로 menu_id에 등록된 대분류의 소분류
-            let url = `http://14.63.172.119/api/v1/menucategory/subcategory?menu_id=${this.menu_id}&category_id=${this.selected_top}`;
+            let url = `${this.api_url}/menucategory/subcategory?menu_id=${this.menu_id}&category_id=${this.selected_top}`;
             let response = await axios.get(url);
             let temArr = response.data.result;
             let sub = {};

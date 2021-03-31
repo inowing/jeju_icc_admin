@@ -62,6 +62,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
+                                                <b-form-textarea v-model="selected_item.photo_1_message" rows="3" max-rows="6"></b-form-textarea>
                                             </b-card>
                                             <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
@@ -76,6 +77,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
+                                                <b-form-textarea v-model="selected_item.photo_2_message" rows="3" max-rows="6"></b-form-textarea>
                                             </b-card>
                                             <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
@@ -90,6 +92,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
+                                                <b-form-textarea v-model="selected_item.photo_3_message" rows="3" max-rows="6"></b-form-textarea>
                                             </b-card>
                                             <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
@@ -104,6 +107,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
+                                                <b-form-textarea v-model="selected_item.photo_4_message" rows="3" max-rows="6"></b-form-textarea>
                                             </b-card>
                                             <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
@@ -118,6 +122,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
+                                                <b-form-textarea v-model="selected_item.photo_5_message" rows="3" max-rows="6"></b-form-textarea>
                                             </b-card>
                                         </b-card-group>
                                     </b-col>
@@ -139,6 +144,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
+                                                <b-form-textarea v-model="selected_item.photo_6_message" rows="3" max-rows="6"></b-form-textarea>
                                             </b-card>
                                             <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
@@ -153,6 +159,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
+                                                <b-form-textarea v-model="selected_item.photo_7_message" rows="3" max-rows="6"></b-form-textarea>
                                             </b-card>
                                             <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
@@ -167,6 +174,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
+                                                <b-form-textarea v-model="selected_item.photo_8_message" rows="3" max-rows="6"></b-form-textarea>
                                             </b-card>
                                             <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
@@ -181,6 +189,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
+                                                <b-form-textarea v-model="selected_item.photo_9_message" rows="3" max-rows="6"></b-form-textarea>
                                             </b-card>
                                             <b-card no-body class="p-1 mb-1" style="max-height: 230px;">
                                                 <b-card-text class="ino-180-180-wrap mb-1">
@@ -195,6 +204,7 @@
                                                         <b-icon-trash></b-icon-trash>
                                                     </b-button>
                                                 </b-form>
+                                                <b-form-textarea v-model="selected_item.photo_10_message" rows="3" max-rows="6"></b-form-textarea>
                                             </b-card>
                                            
                                         </b-card-group>
@@ -242,12 +252,14 @@
                             <b-button @click="selected_item.file = null; selected_item.movie_file_del = true; movie_file_src='';" size="sm" variant="danger">영상 삭제</b-button>
                         </b-col>
                     </b-row>
+<!-- 
                     <b-row class="p-1">
                         <b-col sm="4"><label style="font-size: 10pt;">링크 메시지</label></b-col>
                         <b-col sm="8">
                             <b-form-textarea v-model="selected_item.link_message" rows="3" max-rows="6"></b-form-textarea>
                         </b-col>
                     </b-row>
+                     -->
                 </b-col>
             </b-row>
 
@@ -334,6 +346,16 @@ module.exports = {
                 photo_8: null,
                 photo_9: null,
                 photo_10: null,
+                photo_1_message: null,
+                photo_2_message: null,
+                photo_3_message: null,
+                photo_4_message: null,
+                photo_5_message: null,
+                photo_6_message: null,
+                photo_7_message: null,
+                photo_8_message: null,
+                photo_9_message: null,
+                photo_10_message: null,
                 photo_1_del: false,
                 photo_2_del: false,
                 photo_3_del: false,
@@ -357,9 +379,9 @@ module.exports = {
             photo_8_prev: '',
             photo_9_prev: '',
             photo_10_prev: '',
-            photo_prev_default: `https://via.placeholder.com/180x180`,
+            photo_prev_default: this.$store.getters.dummy_image_url(['180x180']),
             thumb_prev: '',
-            thumb_prev_default: `https://via.placeholder.com/180x180`,
+            thumb_prev_default: this.$store.getters.dummy_image_url(['180x180']),
             movie_file_src: '',
             isNew: true
         }
@@ -406,6 +428,7 @@ module.exports = {
                 photo_8: null,
                 photo_9: null,
                 photo_10: null,
+                
                 photo_1_del: false,
                 photo_2_del: false,
                 photo_3_del: false,
@@ -430,6 +453,17 @@ module.exports = {
             this.photo_8_prev = null;
             this.photo_9_prev = null;
             this.photo_10_prev = null;
+
+            this.selected_item.photo_1_message = null,
+            this.selected_item.photo_2_message = null,
+            this.selected_item.photo_3_message = null,
+            this.selected_item.photo_4_message = null,
+            this.selected_item.photo_5_message = null,
+            this.selected_item.photo_6_message = null,
+            this.selected_item.photo_7_message = null,
+            this.selected_item.photo_8_message = null,
+            this.selected_item.photo_9_message = null,
+            this.selected_item.photo_10_message = null,
 
             this.introduction_modal = true;
         },
@@ -461,6 +495,17 @@ module.exports = {
             this.photo_8_prev = item.photo_8;
             this.photo_9_prev = item.photo_9;
             this.photo_10_prev = item.photo_10;
+
+            this.selected_item.photo_1_message = item.message_1
+            this.selected_item.photo_2_message = item.message_2
+            this.selected_item.photo_3_message = item.message_3
+            this.selected_item.photo_4_message = item.message_4
+            this.selected_item.photo_5_message = item.message_5
+            this.selected_item.photo_6_message = item.message_6
+            this.selected_item.photo_7_message = item.message_7
+            this.selected_item.photo_8_message = item.message_8
+            this.selected_item.photo_9_message = item.message_9
+            this.selected_item.photo_10_message = item.message_10
 
             this.selected_item.photo_1_del = false;
             this.selected_item.photo_2_del = false;
@@ -509,7 +554,16 @@ module.exports = {
                     !item.photo_9 && item.photo_9_del ? formData.append('photo_9_del', 'Y') : formData.append('photo_9', item.photo_9);
                     !item.photo_10 && item.photo_10_del ? formData.append('photo_10_del', 'Y') : formData.append('photo_10', item.photo_10);
 
-
+                    formData.append('photo_1_message', item.photo_1_message);
+                    formData.append('photo_2_message', item.photo_2_message);
+                    formData.append('photo_3_message', item.photo_3_message);
+                    formData.append('photo_4_message', item.photo_4_message);
+                    formData.append('photo_5_message', item.photo_5_message);
+                    formData.append('photo_6_message', item.photo_6_message);
+                    formData.append('photo_7_message', item.photo_7_message);
+                    formData.append('photo_8_message', item.photo_8_message);
+                    formData.append('photo_9_message', item.photo_9_message);
+                    formData.append('photo_10_message', item.photo_10_message);
 
                     break;
             }
@@ -560,9 +614,16 @@ module.exports = {
                     !item.photo_9 && item.photo_9_del ? formData.append('photo_9_del', 'Y') : formData.append('photo_9', item.photo_9);
                     !item.photo_10 && item.photo_10_del ? formData.append('photo_10_del', 'Y') : formData.append('photo_10', item.photo_10);
 
-
-
-
+                    formData.append('photo_1_message', item.photo_1_message);
+                    formData.append('photo_2_message', item.photo_2_message);
+                    formData.append('photo_3_message', item.photo_3_message);
+                    formData.append('photo_4_message', item.photo_4_message);
+                    formData.append('photo_5_message', item.photo_5_message);
+                    formData.append('photo_6_message', item.photo_6_message);
+                    formData.append('photo_7_message', item.photo_7_message);
+                    formData.append('photo_8_message', item.photo_8_message);
+                    formData.append('photo_9_message', item.photo_9_message);
+                    formData.append('photo_10_message', item.photo_10_message);
 
                     break;
                 case 1:

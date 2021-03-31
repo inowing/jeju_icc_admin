@@ -87,7 +87,7 @@
 											</template>
 											<template #cell(manageBtn)="row">
 												<div class="text-center">
-													<b-button size="sm" variant="outline-success" @click="updatePopup(row.item, row.index, $event.target)">
+													<b-button size="sm" variant="outline-success" @click="updatePopup($event.target, row.item, row.index)">
 														<b-icon-pencil-square></b-icon-pencil-square> 수정
 													</b-button>
 													<b-button size="sm" variant="outline-danger" @click="deletePopup(row.item, row.index, $event.target)">
@@ -103,12 +103,12 @@
 					</b-card>
 			</b-col>
 		</b-row>
-		
+<!-- 		
 		<b-modal id="confirm" v-model="confirm" hide-footer>
 			<p class="my-4">삭제 하시겠습니까?</p>
 			<b-button class="mt-2" variant="outline-primary" @click="confirm=false; confirm=false;">취소</b-button>
 			<b-button class="mt-2" variant="outline-danger" @click="deleteBanner">삭제</b-button>
-		</b-modal>
+		</b-modal> -->
 
 		<!-- 하단배너 추가/수정 -->
 		<b-modal v-model="bottomBanner" hide-footer ref="bottomBanner-modal" title="하단 배너">
@@ -230,9 +230,11 @@ module.exports = {
 			photo_1_en: null,
 			photo_1_en_url: this.$store.getters.dummy_image_url(['180x70']),
 			
-			api_url: ''
+			api_url: '',
+			isNew: true,
+			banner_id: null
+
 			}
-		
 	},
 	mounted() {
 		this.$nextTick(function () {
@@ -294,7 +296,7 @@ module.exports = {
 			this.$refs[id].hide()
 		},
 		openReset() {
-			this.url=this.apiUrl;
+			this.isNew = true;
 			this.order= 0;
 			this.name= null;
 			this.link= null;
@@ -306,9 +308,9 @@ module.exports = {
 			this.bottomBanner = !this.bottomBanner;
 		},
 		
-		updatePopup (item, index, target) {
-			// console.log(item);
-			this.url = `${this.apiUrl}/${item.id}`;
+		updatePopup (target, item) {
+			this.isNew = false;
+			this.banner_id = item.id;
 			this.order = item.order;
 			this.name = item.name;
 			this.link = item.link;
@@ -317,9 +319,15 @@ module.exports = {
 			this.photo_1__url_en = item.photo_1_en ? item.photo_1_en : this.defaultImage250;
 			this.bottomBanner = true;
 		},
-		deletePopup (item, index, target) {
-			this.deleteItem = item;
-			this.confirm = true;
+		deletePopup: async function (item, index, target) {
+			if (confirm('삭제하시겠습니까?')) {
+				this.deleteItem = item;
+				this.confirm = true;
+				let rs = await axios.delete(`${this.api_url}/banner/${item.id}`);
+				this.getList();
+				this.bottomBanner = false;
+				this.$showMsgBoxTwo(rs.status);
+			}
 		},
 		save: async function () {
 			var formData = new FormData();
@@ -340,8 +348,9 @@ module.exports = {
 				} else {
 					formData.append("photo_1_en_del", 'Y');
 				}
-				
-			await axios.post(this.url, formData, {
+			
+			let url = this.isNew ? `${this.api_url}/banner` : `${this.api_url}/banner/${this.banner_id}`;
+			await axios.post(url, formData, {
 						headers: {
 							'Content-Type': 'multipart/form-data'
 						}

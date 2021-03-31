@@ -170,10 +170,10 @@
                         </b-form-file>
                         <b-button @click="photo_1 = null; photo_1_prev = null; photo_1_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
                         
-                        <b-form-group label="Outlink (국문)" class="mt-2">
+                        <b-form-group label="Outlink (국문)" class="mt-2" placeholder="http://를 반드시 입력해 주세요.">
                             <b-form-input type="text" v-model="link" size="sm" class="mt-1"></b-form-input>
                         </b-form-group>
-                        <b-form-group label="Outlink (영문)">
+                        <b-form-group label="Outlink (영문)" placeholder="http://를 반드시 입력해 주세요.">
                             <b-form-input type="text" v-model="link_en" size="sm" class="mt-1"></b-form-input>
                         </b-form-group>
                         
@@ -496,6 +496,12 @@ module.exports = {
             }
 
             if (12 == this.form.type) { // outlink
+                if (!this.link.includes('http')) {
+                    this.link = `http://${this.link}`;
+                }
+                if (!this.link_en.includes('http')) {
+                    this.link_en = `http://${this.link_en}`;
+                }
                 formData.append('link', this.link);
                 formData.append('link_en', this.link_en);
                 !this.photo_1 && this.photo_1_del ? formData.append('photo_1_del', 'Y') : formData.append('photo_1', this.photo_1);

@@ -217,7 +217,7 @@ module.exports = {
     watch: {
         $route: function (to, from) {
             this.routePath = to.path;
-            let aco1 = ['/site_info', '/familysite', '/popup', 'banner', '/copy'];
+            let aco1 = ['/', '/site_info', '/familysite', '/popup', '/banner', '/copy'];
             let aco3 = ['/company/list', '/com_request', '/company/admin'];
             let aco5 = ['/vm'];
             let aco6 = ['/biz/site', '/biz/schedule'];

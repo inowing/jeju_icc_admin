@@ -265,8 +265,9 @@ module.exports = {
             let formData = new FormData();
                 formData.append('event_id', this.event_id);
                 formData.append('date', this.form.date);
-                formData.append('start_time', this.form.start_time);
-                formData.append('end_time', this.form.end_time);
+                // 01:00:00
+                formData.append('start_time', this.form.start_time.substr(0, 5));
+                formData.append('end_time', this.form.end_time.substr(0, 5));
                 formData.append('interval', this.form.interval);
             let rs = await axios.post(url, formData, {
                 Headers: {
@@ -289,8 +290,8 @@ module.exports = {
             let url = `${this.api_url}/schedule/${this.form.id}`;
             let formData = new FormData();
                 formData.append('date', this.form.date);
-                formData.append('start_time', this.form.start_time);
-                formData.append('end_time', this.form.end_time);
+                formData.append('start_time', this.form.start_time.substr(0, 5));
+                formData.append('end_time', this.form.end_time.substr(0, 5));
                 formData.append('interval', this.form.interval);
             try {
                 let rs = await axios.post(url, formData, {

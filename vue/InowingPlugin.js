@@ -48,12 +48,13 @@ export default {
             })
         }
         
-        Vue.prototype.onFileChange = function (e, url) {
-            // 최초 설계시 개별 콤포넌트에서 사용중이던 함수를 끌어다 놓다보니
-            // 너무 지엽적이고 함수 외부에서 url이 존재해야 하는구조임.
-            // console.log('object 이면 뭔가 해야하네...', url);
-            const file = e.target.files[0];
-            this[url] = URL.createObjectURL(file); // 개별컴포넌트에 변경되는 url 받아줄 변수가 있어야함.
+        Vue.prototype.onFileChange = function (event, property, obj) {
+            const file = event.target.files[0];
+            if (obj) {
+                obj[property] = URL.createObjectURL(file);
+            } else {
+                this[property] = URL.createObjectURL(file);
+            }
         }
 
         Vue.prototype.$fileUploadChecker = function (local, database) {

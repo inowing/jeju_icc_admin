@@ -23,6 +23,13 @@
                 <template #cell(like_count)="row">
                     <div class="text-center">{{row.item.like_count}}</div>
                 </template>
+                <template #cell(is_top)="row">
+                    <div class="text-center mt-1">
+                        <b-form-group class="p-0 m-0">
+                            <b-form-checkbox value="1" v-model="row.item.is_top" name="check-button" switch @change="updateIsTop($event, row.item)"></b-form-checkbox>
+                        </b-form-group>
+                    </div>
+                </template>
                 <template #cell(manageBtn)="row">
                     <div class="text-center">
                         <b-button size="sm" variant="outline-info" @click="updateFn(row.item, $event)">
@@ -70,10 +77,6 @@ module.exports = {
                     key: "top_category",
                     label: "대분류",
                 },
-                // {
-                //     key: "sub_category",
-                //     label: "소분류",
-                // },
                 {
                     key: "company.name",
                     label: "업체명",
@@ -81,6 +84,10 @@ module.exports = {
                 {
                     key: "like_count",
                     label: "좋아요 수",
+                },
+                {
+                    key: "is_top",
+                    label: "기업노출",
                 },
                 {
                     key: "manageBtn",
@@ -155,6 +162,21 @@ module.exports = {
             let rs = await axios.delete(`${this.api_url}/exhibition/${item.id}`);
             this.$showMsgBoxTwo(rs.status, 'delete');
             this.getList();
+        },
+        updateIsTop: async function (event, item) {
+            if (confirm(`${item.company.name} 노출을 변경 하시겠습니까?`)) {
+                let url = `${this.api_url}/exhibition/${item.id}`;
+                let formData = new FormData();
+                    formData.append('menu_id', this.menu_id);
+                    formData.append('is_top', event ? 1 : 0);
+                let rs = await axios.post(url, formData, {
+                    Headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                this.getList();
+                this.$showMsgBoxTwo(rs.status);
+            }
         }
     },
 };

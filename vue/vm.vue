@@ -107,6 +107,27 @@
                                                                             </p>
                                                                         </b-card>
                                                                     </b-col>
+                                                                    <b-col class="pl-1">
+                                                                        <b-card align="center" no-body class="p-2">
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Attendee</b-button>
+                                                                            </p>
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" 
+                                                                                    @click="openModal4(item, 1)"
+                                                                                    pill variant="outline-secondary">
+                                                                                    <b-icon-people></b-icon-people>
+                                                                                </b-button>&nbsp;8명
+                                                                            </p>
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" 
+                                                                                    @click="modal3=true; invitaion_tabIndex=2"
+                                                                                    pill variant="outline-primary">
+                                                                                    <b-icon-envelope></b-icon-envelope> Invitation
+                                                                                </b-button>
+                                                                            </p>
+                                                                        </b-card>
+                                                                    </b-col>
                                                                 </b-row>
                                                                 <b-row class="mt-3">
                                                                     <b-col align="center">
@@ -419,24 +440,55 @@
             <b-tabs v-model="invitaion_tabIndex" small card>
                 <b-tab title="Moderator">
                     좌장을 이메일로 초대합니다.
+                    <b-row>
+                        <b-col cols="3">
+                            <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
+                        </b-col>
+                        <b-col cols="9">
+                            <p class="m-0">Join URL</p>
+                            <p class="m-0 text-primary">
+                                <span>http://earth-sandwich.com/VM/conference_m.html?event_id={{event_id}}</span>
+                                <input type="hidden" ref="email1" :value="`http://earth-sandwich.com/VM/conference_m.html?event_id=${event_id}`">
+                                <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email1')" ><b-icon-clipboard-plus></b-icon-clipboard-plus></b-button>
+                            </p>
+                        </b-col>
+                    </b-row>
                 </b-tab>
                 <b-tab title="Presenter">
                     발표자를 이메일로 초대합니다.
+                    <b-row>
+                        <b-col cols="3">
+                            <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
+                        </b-col>
+                        <b-col cols="9">
+                            <p class="m-0">Join URL</p>
+                            <p class="m-0 text-primary">
+                                <span>http://earth-sandwich.com/VM/conference_p.html?event_id=37</span>
+                                <input type="hidden" ref="email2" :value="`http://earth-sandwich.com/VM/conference_p.html?event_id=${event_id}`">
+                                <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email2')" ><b-icon-clipboard-plus></b-icon-clipboard-plus></b-button>
+                            </p>
+                        </b-col>
+                    </b-row>
                 </b-tab>
                 <b-tab title="Attendee">
-                    발표자를 이메일로 초대합니다.
+                    참석자를 이메일로 초대합니다.
+                    <b-row>
+                        <b-col cols="3">
+                            <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
+                        </b-col>
+                        <b-col cols="9">
+                            <p class="m-0">Join URL</p>
+                            <p class="m-0 text-primary">
+                                <span>http://earth-sandwich.com/VM/conference_1.html?event_id=37</span>
+                                <input type="hidden" ref="email3" :value="`http://earth-sandwich.com/VM/conference_1.html?event_id=${event_id}`">
+                                <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email3')" ><b-icon-clipboard-plus></b-icon-clipboard-plus></b-button>
+                            </p>
+                        </b-col>
+                    </b-row>
                 </b-tab>
             </b-tabs>
             
-            <b-row>
-                <b-col cols="3">
-                    <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
-                </b-col>
-                <b-col cols="9">
-                    <p class="m-0">Join URL</p>
-                    <p class="m-0 text-primary">https://primetime.bluejeans.com/a2m/live-event/ykrqgdsh</p>
-                </b-col>
-            </b-row>
+            
             <b-row class="p-1">
                 <b-col>
                     <b-form-textarea
@@ -561,12 +613,14 @@ module.exports = {
             modal4_items_2: [
                 
             ],
+            event_id: 0
         };
     },
     mounted: function () {
         this.$nextTick(function () {
             this.setWeek(7);
             this.form.title= 'hey';
+            this.event_id = this.$store.getters.event_id;
         })
     },
     methods: {
@@ -631,6 +685,28 @@ module.exports = {
         },
         excelDownload: function () {
             console.log(this.modal2_type, ' download...');
+        },
+        exeCopy: function (event, ref_id) {
+            let testingCodeToCopy = this.$refs[ref_id];
+                testingCodeToCopy.setAttribute('type', 'text');
+                testingCodeToCopy.select();
+            
+            
+             try {
+                var successful = document.execCommand('copy');
+                if (successful) {
+                    this.$toast('Good', 'email address copied', 'success');
+                } else {
+                    this.$toast('Ooops', 'unable to copy', 'danger');
+                }
+            } catch (err) {
+                this.$toast('Ooops', 'unable to copy', 'danger');
+            }
+
+            testingCodeToCopy.setAttribute('type', 'hidden');
+            window.getSelection().removeAllRanges();
+
+            
         }
 
     },

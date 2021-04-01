@@ -43,6 +43,7 @@ export default {
         Vue.prototype.$toast = function (title, inputMessage, variant) {
             this.$bvToast.toast(inputMessage, {
                 title,
+                autoHideDelay: 2000,
                 variant: variant||'success',
                 solid: true
             })

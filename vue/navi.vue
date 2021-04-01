@@ -101,7 +101,9 @@
     <b-card no-body class="mb-0 p-0">
         <b-card-header class="p-0" role="tab">
             <b-button block squared v-b-toggle.accordion-6 variant="info" size="sm" class="text-left" v-bind:class="[ routePath == '/biz/site' || routePath == '/biz/schedule' || routePath == '/biz/link' ? active_parent_menu : '' ]">
-                <span>6. Bizmatching 관리 (VM-Business)</span></b-button>
+                <span>6. Bizmatching 관리</span><br>
+                <span style="line-height: 1.2; padding-left: 1em;">(VM-Business)</span>
+            </b-button>
         </b-card-header>
          <b-collapse id="accordion-6" visible accordion="inowing-accordion" role="tabpanel" v-model="accordion6">
             <b-card-body class="m-0 p-0">

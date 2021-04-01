@@ -1,11 +1,5 @@
 <template>
 <section>
-<!--     
-    <b-row>
-        <b-col>
-            <h6><b>메인메뉴 설정</b></h6>
-        </b-col>
-    </b-row> -->
     <b-row class="mt-1">
         <b-col>
             <b-button href="#" variant="primary" size="sm" @click="mainMenuAdd = !mainMenuAdd">
@@ -314,7 +308,8 @@ module.exports = {
                 },
                 14: {
                     type: 14,
-                    name: '컨퍼런스'
+                    name: '컨퍼런스',
+                    vue_name: 'conference'
                 },
                 15: {
                     type: 15,

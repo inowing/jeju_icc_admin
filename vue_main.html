@@ -92,17 +92,6 @@
 		Vue.use(VueQuillEditor);
 		Vue.use(InowingPlugin);
 
-
-
-		// Vue.mixin({
-		// 	data: function () {
-		// 		return {
-		// 			get event_id() {
-		// 				return "106";
-		// 			}
-		// 		}
-		// 	}
-		// });
 		const routes = [];
 		const router = new VueRouter({ routes: routes });
 
@@ -113,7 +102,6 @@
 			store: store,
 			components: {
 				navi: window.httpVueLoader(`./vue/navi.vue`),
-				// 'vue-confirm-dialog': VueConfirmDialog.default
 			},
 			router: router,
 			data: function (){
@@ -123,10 +111,6 @@
 					logo_url: ''
 				}
 			},
-			watch: {
-				// 라우트가 변경되면 메소드를 다시 호출됩니다.
-				// '$route': 'fetchData'
-			},
 			mounted: function () {
 				this.$nextTick(function () {
 					
@@ -135,7 +119,6 @@
 						
 					}
 					this.api_url = this.$store.getters.api_url;
-					
 
 					this.navShow = this.$refs.inoResizer.clientWidth > 800 ? true : false; // 네비게이션 쇼,하이드
 					router.addRoute({ path: '/', component: window.httpVueLoader('./vue/site_info.vue') });
@@ -160,6 +143,8 @@
 					router.addRoute({ path: '/mainmenu/contents/notice_form', name: 'notice_form', component: window.httpVueLoader('./vue/notice_form.vue') });
 					router.addRoute({ path: '/mainmenu/manage/com_info', name: 'com_info', component: window.httpVueLoader('./vue/com_info.vue') });
 
+					router.addRoute({ path: '/mainmenu/contents/conference', name: 'conference', component: window.httpVueLoader('./vue/conference.vue') });
+					
 					router.addRoute({ path: '/mainmenu/shop/product', name: 'shop_product', component: window.httpVueLoader('./vue/shop_product.vue') });
 					router.addRoute({ path: '/mainmenu/shop/regist',name:'shop_regist', component: window.httpVueLoader('./vue/shop_regist.vue') });
 					router.addRoute({ path: '/mainmenu/shop/order',name:'shop_order', component: window.httpVueLoader('./vue/shop_order.vue') });

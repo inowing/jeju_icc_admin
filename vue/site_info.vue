@@ -688,7 +688,7 @@ module.exports = {
 
             let res = (await axios.get(url)).data.result;
             EventBus.$emit('change_logo', res.logo);
-            console.log(res);
+            // console.log(res);
 
             this.logo = res.logo;
             this.logo_en = res.logo_en;
@@ -807,15 +807,15 @@ module.exports = {
             // 홈페이지 언어
             formData.append("is_language", this.is_language ? 1 : 0); // 언어선택 노출여부
 
-            console.log(this.language, ' send value language');
+            // console.log(this.language, ' send value language');
             formData.append("language", this.language); // 타입 language : 0 - kr, 1 - en, 2 - kr & en
-            console.log(formData);
+            // console.log(formData);
             let response = await axios.post(url, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             });
-            console.log(response.status);
+            // console.log(response.status);
             this.getData();
             this.$showMsgBoxTwo(response.status);
         },

@@ -229,7 +229,7 @@ module.exports = {
             let aco8 = ['/stats_counsel_b', '/stats_counsel_s'];
             let aco9 = ['/stats_vm_b', '/stats_vm_s'];
             if (aco1.includes(this.routePath)) {
-                console.log('arco1');
+                // console.log('arco1');
                 this.accordion1 = true;
             }
             if (aco3.includes(this.routePath)) {
@@ -269,7 +269,7 @@ module.exports = {
                 this.$store.commit('event_id', {event_id: to.query.event_id});
                 // window.location.href = `http://14.63.172.119/admin/vue_main.html#${from.path}`;
             }
-            console.log(to);
+            // console.log(to);
         }
     },
     mounted: function () {

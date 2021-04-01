@@ -1,12 +1,5 @@
 <template>
 	<section>
-<!-- 		
-		<b-row>
-			<b-col>
-				<h6><strong>Familysite 관리</strong></h6>
-			</b-col>
-		</b-row> -->
-
 		<b-row>
 			<b-col>
 				<b-button variant="primary" size="sm" @click="familyPost = !familyPost; url=apiUrl;"><b-icon-plus></b-icon-plus>사이트 추가</b-button>
@@ -108,9 +101,7 @@ module.exports = {
 	mounted() {
 		this.$nextTick(function () {
 			this.event_id = this.$store.getters.event_id;
-			console.log('familysite...event_id', this.event_id);
 			this.getList();
-			
 		})
 	},
 	methods: {
@@ -119,7 +110,6 @@ module.exports = {
 			this.items = (await axios.get(url)).data.result.familysite;
 		},
 		save: async function () {
-			// let insUrl = this.url;
 			
 			var formData = new FormData();
 				formData.append("event_id", this.event_id);
@@ -128,7 +118,6 @@ module.exports = {
 				formData.append("link", this.link);
 				formData.append("name_en", this.name_en);
 				formData.append("link_en", this.link_en);
-				console.log(formData);
 			
 			await axios.post(this.url, formData, {
 					headers: {
@@ -143,7 +132,6 @@ module.exports = {
 			this.$refs[id].hide()
 		},
 		updatePopup(item, index, target) {
-			console.log(item, index, target);
 			this.url = `${this.apiUrl}/${item.id}`;
 			this.order = item.order;
 			this.name = item.name;
@@ -158,9 +146,7 @@ module.exports = {
 		},
 		async deleteFamilySite() {
 			try {
-				
 				let result = await axios.delete(`${this.apiUrl}/${this.deleteItem.id}`);
-				console.log(result);
 				this.getList();
 				this.hideModal('familysite-modal');
 			} catch (error) {

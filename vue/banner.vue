@@ -247,7 +247,6 @@ module.exports = {
 		getList: async function() {
 			let url = `${this.api_url}/event/main_banner?event_id=${this.event_id}`;
 			this.banner = (await axios.get(url)).data.result;
-			console.log(this.banner);
 			this.banner_photo_1_preview = this.banner.banner_photo_1; // file 전송파라미터를 file url과 함께쓰고 있어서 복잡해짐.
 			this.banner_photo_2_preview = this.banner.banner_photo_2;
 		},
@@ -263,7 +262,6 @@ module.exports = {
 					formData.append("banner_photo_1", this.file1);
 				}
 				if (this.banner_photo_1_preview == this.defaultImage250) {
-					console.log('delete 안됨.');
 					formData.append("banner_photo_1_del", 'Y');
 				}
 

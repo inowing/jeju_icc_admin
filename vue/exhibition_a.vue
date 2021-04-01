@@ -262,7 +262,7 @@
                             <b-row class="mb-3">
                                 <b-col>
                                     <b-row>
-                                        <b-col class="pt-0 pb-0 mt-0 mb-0" cols="9">>
+                                        <b-col class="pt-0 pb-0 mt-0 mb-0" cols="9">
                                             <label>카테고리 #1 컨텐츠</label>
                                         </b-col>
                                         <b-col class="pt-0 pb-0 mt-0 mb-0">

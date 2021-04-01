@@ -6,7 +6,8 @@ export const store = new Vuex.Store({
         page_url: 'http://14.63.172.119',
         selected_item: null,
         logo_url: '',
-        dummy_image_url: 'https://dummyimage.com/'
+        dummy_image_url: 'https://via.placeholder.com/'
+        // dummy_image_url: 'https://dummyimage.com/'
     },
     getters: {
         // usage
@@ -38,14 +39,12 @@ export const store = new Vuex.Store({
         // usage
         // this.$store.commit('increment', {key: '', value: ''})
         event_id(state, payload) {
-            console.log('mutation', payload);
             state.event_id = payload.event_id;
         },
         logo_url(state, payload) {
             state.logo_url = payload;
         },
         selected_item(state, payload) {
-            console.log('selected_item set... ', payload);
             state.selected_item = payload;
         }
     },

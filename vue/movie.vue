@@ -58,7 +58,7 @@
         <b-row class="p-1">
             <b-col sm="4"><label style="font-size: 10pt;">순서</label></b-col>
             <b-col sm="8">
-                <b-form-input type="text" size="sm" v-model="form.order">
+                <b-form-input type="number" size="sm" v-model="form.order">
             </b-col>
         </b-row>
         <b-row class="p-1">
@@ -82,14 +82,14 @@
                                             </div>
                                         </b-card-text>
 
-                                        <b-form-file v-model="form.photo_1" @change="onFileChange($event, 'photoPreview')" class="mb-2" size="sm">
+                                        <b-form-file v-model="form.photo_1" @change="onFileChange($event, 'photoPreview')" class="mt-1 mb-1" size="sm">
                                         </b-form-file>
                                         <b-button @click="form.photo_1 = null; photoPreview = photoPreview_default;" size="sm" variant="danger">이미지 삭제</b-button>
                                     </b-card>
                                 </b-col>
                             </b-row>
                             <b-row class="p-1">
-                                <b-col sm="4"><label style="font-size: 10pt;">영상 외부(Youtube) 링크</label></b-col>
+                                <b-col sm="4"><label style="font-size: 10pt;">영상 링크(Youtube)</label></b-col>
                                 <b-col sm="8">
                                     <b-form-input type="text" size="sm" v-model="form.link">
                                 </b-col>
@@ -112,14 +112,14 @@
                                                 <b-img :src="photoPreview_en||photoPreview_default" fluid></b-img>
                                             </div>
                                         </b-card-text>
-                                        <b-form-file v-model="form.photo_1_en" @change="onFileChange($event, 'photoPreview_en')" class="mb-2" size="sm">
+                                        <b-form-file v-model="form.photo_1_en" @change="onFileChange($event, 'photoPreview_en')" class="mt-1 mb-1" size="sm">
                                         </b-form-file>
                                         <b-button @click="form.photo_1_en = null; photoPreview_en = photoPreview_default;" size="sm" variant="danger">이미지 삭제</b-button>
                                     </b-card>
                                 </b-col>
                             </b-row>
                             <b-row class="p-1">
-                                <b-col sm="4"><label style="font-size: 10pt;">영상 외부(Youtube) 링크</label></b-col>
+                                <b-col sm="4"><label style="font-size: 10pt;">영상 링크(Youtube)</label></b-col>
                                 <b-col sm="8">
                                     <b-form-input type="text" size="sm" v-model="form.link_en">
                                 </b-col>
@@ -139,10 +139,8 @@
         </b-row>
         <b-row class="mt-2">
             <b-col>
-                <b-button variant="outline-danger" @click="$refs['modal1'].hide()" size="sm" block>Close</b-button>
-            </b-col>
-            <b-col>
-                <b-button variant="outline-primary" @click="storeData" size="sm" block>Save</b-button>
+                <b-button variant="primary" @click="storeData" size="sm" class="inoBtn-150">저장</b-button>
+                <b-button variant="danger" @click="$refs['modal1'].hide()" size="sm" class="inoBtn-150">취소</b-button>
             </b-col>
         </b-row>
 

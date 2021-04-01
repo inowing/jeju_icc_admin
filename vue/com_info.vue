@@ -461,7 +461,6 @@ module.exports = {
             this.photo_1_del = false;
             this.photo_1 = null;
             menu.photo_1 = null;
-            console.log(rs);
             this.link = menu.link;
             this.link_en = menu.link_en;
 
@@ -539,8 +538,6 @@ module.exports = {
             this.modal1 = true;
         },
         storeShoppingLink: async function () {
-            console.log(this.shopping_form);
-            // http://14.63.172.119/api/v1/menu_link?menu_id=33&order=0&title=title&lang_type=2&type=0&link=www.google.com
             let url = `${this.api_url}/menu_link`;
             let formData = new FormData();
                 formData.append('menu_id', this.id);
@@ -567,10 +564,6 @@ module.exports = {
 
         },
         updateShoppingLink: async function () {
-            console.log(this.shopping_form);
-            
-            // http://14.63.172.119/api/v1/menu_link/1
-            
             let url = `${this.api_url}/menu_link/${this.shopping_form.id}`;
             let formData = new FormData();
                 formData.append('order', this.shopping_form.order);
@@ -626,8 +619,6 @@ module.exports = {
             this.modal2 = true;
         },
         storeShoppingBanner: async function () {
-            console.log(this.shopping_banner_form);
-            // http://14.63.172.119/api/v1/menu_banner?menu_id=33&order=0&title=title&lang_type=2
             let url = `${this.api_url}/menu_banner`;
             let formData = new FormData();
                 formData.append('menu_id', this.id);
@@ -650,8 +641,6 @@ module.exports = {
 
         },
         updateShoppingBanner: async function () {
-            console.log(this.shopping_banner_form);
-            
             let url = `${this.api_url}/menu_banner/${this.shopping_banner_form.id}`;
             let formData = new FormData();
                 formData.append('menu_id', this.id);
@@ -683,20 +672,19 @@ module.exports = {
         },
         
         deletePhoto: async function (item, index, target) {
-            console.log(item);
             if (confirm('삭제하시겠습니까?')) {
                 await axios.delete(`http://14.63.172.119/api/v1/overview/${item.id}`);
                 this.getList();
             }
         },
         onEditorBlur(quill) {
-            // console.log("editor blur!", quill);
+            
         },
         onEditorFocus(quill) {
-            // console.log("editor focus!", quill);
+            
         },
         onEditorReady(quill) {
-            // console.log("editor ready!", quill);
+            
         },
     }
 };

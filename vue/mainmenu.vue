@@ -532,7 +532,7 @@ module.exports = {
         manageCategory(item, index, target) {
             // console.log(item, index, target);
             this.$router.push({
-                name: 'menuInfo',
+                name: 'category',
                 query: {
                     menu_id: item.id
                 },

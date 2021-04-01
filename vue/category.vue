@@ -95,10 +95,11 @@
 
 <script>
 module.exports = {
-    name: 'menuInfo',
+    name: 'category',
     data: function () {
         return {
             event_id: null,
+            api_url: null,
             hover: false,
             form: {
                 menu_id: null,
@@ -119,13 +120,14 @@ module.exports = {
     mounted: function () {
         this.$nextTick(function () {
             this.event_id = this.$store.getters.event_id;
+            this.api_url = this.$store.getters.api_url;
             this.form.menu_id = this.$route.query.menu_id;
             this.getTopCategory();
         })
     },
     methods: {
         getTopCategory: async function () {
-            let url = `http://14.63.172.119/api/v1/menucategory/topcategory?menu_id=${this.form.menu_id}`;
+            let url = `${this.api_url}/menucategory/topcategory?menu_id=${this.form.menu_id}`;
             let response = await axios.get(url);
             this.topcategory = response.data.result;
 
@@ -137,10 +139,9 @@ module.exports = {
             });
 
             this.top_id_key_store = top;
-            console.log(this.topcategory);
         },
         getSubcategory: async function () {
-            let url = `http://14.63.172.119/api/v1/menucategory/subcategory?menu_id=${this.form.menu_id}&category_id=${this.top_selected}`;
+            let url = `${this.api_url}/menucategory/subcategory?menu_id=${this.form.menu_id}&category_id=${this.top_selected}`;
             let response = await axios.get(url);
             this.subcategory = response.data.result;
 
@@ -162,7 +163,6 @@ module.exports = {
         },
         fn: async function (id) {
             // 대분류 클릭 이벤트 핸들러
-            console.log('topcategory click event selected id : ', id, this.top_selected);
             this.sub_selected = '';
 
             // 메뉴명 표출하기
@@ -173,8 +173,7 @@ module.exports = {
         },
         subFn: async function (id) {
             // 소분류 클릭 이벤트 핸들러
-            console.log(id);
-
+            
             // 메뉴명 표출하기
             this.boldmote(id, 'sub');
         },
@@ -186,7 +185,7 @@ module.exports = {
             }
         },
         updateCategory: async function () {
-            let url = `http://14.63.172.119/api/v1/menucategory/${this.form.id}`;
+            let url = `${this.api_url}/menucategory/${this.form.id}`;
             var formData = new FormData();
             formData.append("menu_id", this.form.menu_id);
             formData.append("top_category_id", this.form.top_category_id);
@@ -205,11 +204,10 @@ module.exports = {
 
                 let url = null;
                 if (type == 0) {
-                    url = `http://14.63.172.119/api/v1/menucategory/${this.top_selected}`
+                    url = `${this.api_url}/menucategory/${this.top_selected}`
                 } else {
-                    url = `http://14.63.172.119/api/v1/menucategory/${this.sub_selected}`
+                    url = `${this.api_url}/menucategory/${this.sub_selected}`
                 }
-                console.log('url ', url);
                 let rs = await axios.delete(url);
 
                 this.getTopCategory();
@@ -218,7 +216,7 @@ module.exports = {
 
         },
         storeCategory: async function (type) {
-            let url = 'http://14.63.172.119/api/v1/menucategory'
+            let url = '${this.api_url}/menucategory'
             var formData = new FormData();
             if (type === 0) {
                 // new top category
@@ -248,9 +246,9 @@ module.exports = {
         increaseMenu: async function (direction) {
             let url = null;
             if (this.sub_selected) {
-                url = `http://14.63.172.119/api/v1/menucategory/${this.sub_selected}/orderincrease`;
+                url = `${this.api_url}/menucategory/${this.sub_selected}/orderincrease`;
             } else {
-                url = `http://14.63.172.119/api/v1/menucategory/${this.top_selected}/orderincrease`;
+                url = `${this.api_url}/menucategory/${this.top_selected}/orderincrease`;
             }
             let rs = await axios.get(url);
             this.getTopCategory();
@@ -259,9 +257,9 @@ module.exports = {
         decreaseMenu: async function () {
             let url = null;
             if (this.sub_selected) {
-                url = `http://14.63.172.119/api/v1/menucategory/${this.sub_selected}/orderdecrease`;
+                url = `${this.api_url}/menucategory/${this.sub_selected}/orderdecrease`;
             } else {
-                url = `http://14.63.172.119/api/v1/menucategory/${this.top_selected}/orderdecrease`;
+                url = `${this.api_url}/menucategory/${this.top_selected}/orderdecrease`;
             }
             let rs = await axios.get(url);
             this.getTopCategory();

@@ -204,34 +204,219 @@
                                 </b-row>
                             </b-col>
                         </b-row>
+                    </b-tab>
+                    <b-tab title="영문">
+                        <b-row>
+                            <b-col>
+                                <b-form-group label="사업자등록번호">
+                                    <b-input-group>
+                                        <b-form-input size="sm" v-model="form.number" @change="ditectNumberChange" :state="validation.valid1" :disabled="!isNew"></b-form-input>
+                                        <b-input-group-append>
+                                            <b-button variant="info" size="sm" @click="searchCompany">중복 체크</b-button>
+                                        </b-input-group-append>
+                                    </b-input-group>
+                                    <b-form-invalid-feedback :state="validation.valid1">{{valid1_text}}</b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col>
+                                 <b-form-group label="업체명">
+                                    <b-form-input size="sm" v-model="form.name_en" :state="validation.valid2_en"></b-form-input>
+                                    <b-form-invalid-feedback :state="validation.valid2_en">업체명을 입력하세요.</b-form-invalid-feedback>
+                                 </b-form-group>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                 <b-form-group label="행사 참가구분" v-slot="{ ariaDescribedby2 }">
+                                    <b-form-radio-group
+                                        v-model="event_type"
+                                        :options="event_type_ops"
+                                        :aria-describedby="ariaDescribedby2"
+                                    ></b-form-radio-group>
+                                 </b-form-group>
+                            </b-col>
+                            <b-col>
+                                 <b-form-group label="참가구분" v-slot="{ ariaDescribedby }">
+                                    <b-form-radio-group
+                                        v-model="attend_type"
+                                        :options="attend_type_ops"
+                                        :aria-describedby="ariaDescribedby"
+                                    ></b-form-radio-group>
+                                 </b-form-group>
+                            </b-col>
+                        </b-row>
+                        <hr>
                         <b-row>
                             <b-col>
                                 <b-row class="p-1">
-                                    <b-col sm="4"><label style="font-size: 10pt;">사업자 등록 사본</label></b-col>
+                                    <b-col sm="4"><label style="font-size: 10pt;">대표자</label></b-col>
                                     <b-col sm="8">
-                                        <b-form-file v-model="form.business_registration" :placeholder="file_src" size="sm" class="w-50 mr-sm-2"></b-form-file>
-                                        <b-button @click="form.business_registration = null; file_src='No file'; file_del=true;" size="sm" variant="danger">파일 삭제</b-button>
+                                        <b-form-input size="sm" v-model="form.representation_name_en" :state="validation.valid3_en"></b-form-input>
+                                        <b-form-invalid-feedback :state="validation.valid3_en">대표자 성함을 입력하세요.</b-form-invalid-feedback>
                                     </b-col>
                                 </b-row>
                             </b-col>
                             <b-col>
                                 <b-row class="p-1">
-                                    <b-col sm="4"><label style="font-size: 10pt;">기업 로고</label></b-col>
+                                    <b-col sm="4"><label style="font-size: 10pt;">직원수</label></b-col>
                                     <b-col sm="8">
-                                        <b-form-file v-model="form.logo" :placeholder="logo_src" size="sm" class="w-50 mr-sm-2"></b-form-file>
-                                        <b-button @click="form.logo = null; logo_src='No file'; logo_del=true;" size="sm" variant="danger">파일 삭제</b-button>
+                                        <b-form-select v-model="form.employees_count" :options="employees_count_options" size="sm"></b-form-select>
+                                        <!-- <b-form-input size="sm" v-model="form.employees_count"></b-form-input> -->
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">대표번호</label></b-col>
+                                    <b-col sm="8">
+                                        <b-form-input size="sm" v-model="form.representation_phone" :state="validation.valid4"></b-form-input>
+                                        <b-form-invalid-feedback :state="validation.valid4">대표번호를 입력하세요.</b-form-invalid-feedback>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">국가</label></b-col>
+                                    <b-col sm="8">
+                                        <!-- <b-form-input size="sm" v-model="form.country"></b-form-input> -->
+                                        <b-form-select v-model="form.country" :options="nation_options" size="sm"></b-form-select>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">홈페이지</label></b-col>
+                                    <b-col sm="8">
+                                        <b-form-input size="sm" v-model="form.homepage"></b-form-input>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">업태</label></b-col>
+                                    <b-col sm="8">
+                                        <b-form-input size="sm" v-model="form.condition" :state="validation.valid5"></b-form-input>
+                                        <b-form-invalid-feedback :state="validation.valid5">업태를 입력하세요.</b-form-invalid-feedback>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">업종</label></b-col>
+                                    <b-col sm="8">
+                                        <b-form-input size="sm" v-model="form.sectors" :state="validation.valid6"></b-form-input>
+                                        <b-form-invalid-feedback :state="validation.valid6">업종을 입력하세요.</b-form-invalid-feedback>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">매출액</label></b-col>
+                                    <b-col sm="8">
+                                        <b-form-select v-model="form.take" :options="take_options" size="sm"></b-form-select>
+                                        <!-- <b-form-input size="sm" v-model="form.take"></b-form-input> -->
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">출품 품목</label></b-col>
+                                    <b-col sm="8">
+                                        <b-form-input size="sm" v-model="form.product_type"></b-form-input>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">이메일</label></b-col>
+                                    <b-col sm="8">
+                                        <b-form-input size="sm" v-model="form.email" :state="validation.valid7" type="email"></b-form-input>
+                                        <b-form-invalid-feedback :state="validation.valid7">이메일을 입력하세요.</b-form-invalid-feedback>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">쇼핑몰/배송비(원)</label></b-col>
+                                    <b-col sm="8">
+                                        <b-form-input size="sm" type="number" v-model="form.delivery_price"></b-form-input>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                            <b-col>
+                                <b-row class="p-1">
+                                </b-row>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">지역</label></b-col>
+                                    <b-col sm="8">
+                                            <b-form-select v-model="form.local_type" :options="local_type_options" size="sm"></b-form-select>
+                                    </b-col>
+                                </b-row>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">주소</label></b-col>
+                                    <b-col sm="8">
+                                            <b-form-textarea
+                                                v-model="form.address_en"
+                                                rows="3"
+                                                max-rows="6"
+                                                class="mt-1"
+                                                :state="validation.valid8_en"
+                                            ></b-form-textarea>
+                                            <b-form-invalid-feedback :state="validation.valid8_en">주소를 입력하세요.</b-form-invalid-feedback>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">업체개요</label></b-col>
+                                    <b-col sm="8">
+                                            <b-form-textarea
+                                                v-model="form.introduce_en"
+                                                rows="3"
+                                                max-rows="6"
+                                            ></b-form-textarea>
                                     </b-col>
                                 </b-row>
                             </b-col>
                         </b-row>
                     </b-tab>
-                    <b-tab title="영문">
-                        <b-card-text>
-                            영문
-                        </b-card-text>
-                    </b-tab>
                 </b-tabs>
             </b-card>
+
+            <b-row>
+                <b-col>
+                    <b-row class="p-1">
+                        <b-col sm="4"><label style="font-size: 10pt;">사업자 등록 사본</label></b-col>
+                        <b-col sm="8">
+                            <b-form-file v-model="form.business_registration" :placeholder="file_src" size="sm" class="w-50 mr-sm-2"></b-form-file>
+                            <b-button @click="form.business_registration = null; file_src='No file'; file_del=true;" size="sm" variant="danger">파일 삭제</b-button>
+                        </b-col>
+                    </b-row>
+                </b-col>
+                <b-col>
+                    <b-row class="p-1">
+                        <b-col sm="4"><label style="font-size: 10pt;">기업 로고</label></b-col>
+                        <b-col sm="8">
+                            <b-form-file v-model="form.logo" :placeholder="logo_src" size="sm" class="w-50 mr-sm-2"></b-form-file>
+                            <b-button @click="form.logo = null; logo_src='No file'; logo_del=true;" size="sm" variant="danger">파일 삭제</b-button>
+                        </b-col>
+                    </b-row>
+                </b-col>
+            </b-row>
 
         </b-col>
     </b-row>
@@ -343,25 +528,40 @@ module.exports = {
     },
     computed: {
         validation: function () {
+            
             let valid_result = this.isCheckedNumber
-                && this.form.name ? true : false
-                && this.form.representation_name ? true : false
-                && this.form.representation_phone ? true : false
-                && this.form.condition ? true : false
-                && this.form.sectors ? true : false
-                && this.form.email ? true : false
-                && this.form.address ? true : false
+                && this.form.name
+                && this.form.representation_name
+                && this.form.representation_phone
+                && this.form.condition
+                && this.form.sectors
+                && this.form.email
+                && this.form.address
+            console.log('this.form', valid_result ? true : false,  this.form);
+
+            let valid_result_en = this.isCheckedNumber
+                && this.form.name_en
+                && this.form.representation_name_en
+                && this.form.representation_phone
+                && this.form.condition
+                && this.form.sectors
+                && this.form.email
+                && this.form.address_en
             ;
             return {
                 valid1: this.isCheckedNumber,
                 valid2: this.form.name ? true : false,
+                valid2_en: this.form.name_en ? true : false,
                 valid3: this.form.representation_name ? true : false,
+                valid3_en: this.form.representation_name_en ? true : false,
                 valid4: this.form.representation_phone ? true : false,
                 valid5: this.form.condition ? true : false,
                 valid6: this.form.sectors ? true : false,
                 valid7: this.form.email ? true : false,
                 valid8: this.form.address ? true : false,
-                valid_result: valid_result
+                valid8_en: this.form.address_en ? true : false,
+                valid_result: valid_result ? true : false,
+                valid_result_en: valid_result_en ? true : false
             }
         }
     },
@@ -417,7 +617,7 @@ module.exports = {
             this.isNew = false;
         },
         storeData: async function () {
-            if (!this.validation.valid_result) {
+            if (!this.validation.valid_result && !this.validation.valid_result_en) {
                 return;
             }
 
@@ -447,7 +647,10 @@ module.exports = {
         }
 
         ,updateData: async function () {
-            
+            if (!this.validation.valid_result && !this.validation.valid_result_en) {
+                return;
+            }
+
             let url =  `${this.api_url}/company/${this.company_id}`;
             let formData = new FormData();
             for (let key in this.form) {

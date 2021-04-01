@@ -48,7 +48,7 @@
         </b-col>
     </b-row>
 
-    <b-modal v-model="modal1" hide-footer title="문의내역">
+    <b-modal v-model="modal1" hide-footer :title="isNew ? '사용자 추가': '사용자 수정'">
         <b-row class="p-1">
             <b-col sm="4"><label style="font-size: 10pt;">이름 / 이메일</label></b-col>
             <b-col sm="8">

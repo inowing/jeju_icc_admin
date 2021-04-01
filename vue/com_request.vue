@@ -33,8 +33,11 @@
                 <template #cell(attend_type)="row">
                     <div class="text-center">{{row.item.attend_type == 0 ? '바이어' : '셀러'}}</div>
                 </template>
+                <template #cell(name)="row">
+                    <div class="text-center">{{row.item.name ? row.item.name : row.item.name_en }}</div>
+                </template>
                 <template #cell(representation_name)="row">
-                    <div class="text-center">{{row.item.representation_name}}</div>
+                    <div class="text-center">{{row.item.representation_name ? row.item.representation_name : row.item.representation_name_en }}</div>
                 </template>
                 <template #cell(address)="row">
                     <div class="text-center">{{row.item.address}}</div>

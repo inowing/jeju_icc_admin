@@ -60,8 +60,8 @@
             </b-col>
         </b-row>
 
-        <b-button class="mt-2" variant="outline-danger" @click="hideModal('mainMenuAdd-modal')">Close</b-button>
-        <b-button class="mt-2" variant="outline-primary" @click="save">Save</b-button>
+        <b-button class="mt-2 inoBtn-150" size="sm" variant="primary" @click="save">저장</b-button>
+        <b-button class="mt-2 inoBtn-150" size="sm" variant="danger" @click="hideModal('mainMenuAdd-modal')">취소</b-button>
     </b-modal>
 
     <b-modal v-model="colorChange" hide-footer ref="colorChange-modal">
@@ -140,8 +140,8 @@
 
         </b-card>
 
-        <b-button class="mt-2" variant="outline-danger" @click="hideModal('colorChange-modal')">Close</b-button>
-        <b-button class="mt-2" variant="outline-primary" @click="saveColor">Save</b-button>
+        <b-button class="mt-2 inoBtn-150" size="sm" variant="primary" @click="saveColor">저장</b-button>
+        <b-button class="mt-2 inoBtn-150" size="sm" variant="danger" @click="hideModal('colorChange-modal')">취소</b-button>
     </b-modal>
 
     <!-- 테이블 -->
@@ -416,6 +416,7 @@ module.exports = {
             // console.log('event_id... mainmenu ', this.$store.getters.event_id);
             this.loadData();
             this.menuItems = Object.values(this.menuType);
+            
         })
     },
     methods: {
@@ -502,14 +503,27 @@ module.exports = {
                 let res2 = await axios.get(`${this.api_url}/event/main_page?event_id=${this.$store.getters.event_id}`);
                 let data2 = res2.data.result;
                 
+                // normal
                 this.colors.menu_back_color = data2.menu_back_color;
                 this.colors.menu_text_color = data2.menu_text_color;
+                this.menuBtnPreview['background-color'] = data2.menu_back_color;
+                this.menuBtnPreview.color = data2.menu_text_color;
+
+                // hover
                 this.colors.menu_back_color_on = data2.menu_back_color_on;
                 this.colors.menu_text_color_on = data2.menu_text_color_on;
+                this.menuBtnHoverPreview['background-color'] = data2.menu_back_color_on;
+                this.menuBtnHoverPreview.color = data2.menu_text_color_on;
+
                 this.colors.submenu_back_color = data2.submenu_back_color;
                 this.colors.submenu_text_color = data2.submenu_text_color;
+                this.subMenuBtnPreview['background-color'] = data2.submenu_back_color;
+                this.subMenuBtnPreview.color = data2.submenu_text_color;
+
                 this.colors.submenu_back_color_on = data2.submenu_back_color_on;
                 this.colors.submenu_text_color_on = data2.submenu_text_color_on;
+                this.subMenuBtnHoverPreview['background-color'] = data2.submenu_back_color_on;
+                this.subMenuBtnHoverPreview.color = data2.submenu_text_color_on;
                 
             } catch (error) {
                 console.error(error);

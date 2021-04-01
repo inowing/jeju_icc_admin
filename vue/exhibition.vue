@@ -9,10 +9,19 @@
             <b-button class="mt-2" href="#" variant="primary" size="sm" :to="'/mainmenu/contents/exhibition/form?menu_id='+menu_id">
                 <b-icon-plus></b-icon-plus>리스트 추가
             </b-button>
+
+            <b-button class="mt-2" href="#" variant="outline-primary" size="sm" @click="updateIsVisible(1, menu_id)">
+                <b-icon-eye></b-icon-eye> 모두 노출
+            </b-button>
+            <b-button class="mt-2" href="#" variant="outline-secondary" size="sm" @click="updateIsVisible(0, menu_id)">
+                <b-icon-eye-slash></b-icon-eye-slash> 모두 비노출
+            </b-button>
         </b-col>
     </b-row>
     <b-row>
         <b-col>
+
+            
             <b-table :fields="fields" :items="items" small responsive="sm" bordered head-variant="light" sticky-header>
                 <template #cell(id)="row">
                     <div class="text-center">{{row.item.id}}</div>
@@ -169,6 +178,21 @@ module.exports = {
                 let formData = new FormData();
                     formData.append('menu_id', this.menu_id);
                     formData.append('is_top', event ? 1 : 0);
+                let rs = await axios.post(url, formData, {
+                    Headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                this.getList();
+                this.$showMsgBoxTwo(rs.status);
+            }
+        },
+        updateIsVisible: async function (is_visible, menu_id) {
+            if (confirm(`모든 기업의 노출상태를 변경 하시겠습니까?`)) {
+                let url = `${this.api_url}/exhibition/batch_set_visible/`;
+                let formData = new FormData();
+                    formData.append('menu_id', menu_id);
+                    formData.append('is_visible', is_visible);
                 let rs = await axios.post(url, formData, {
                     Headers: {
                         'Content-Type': 'application/json'

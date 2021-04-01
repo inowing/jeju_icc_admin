@@ -253,9 +253,12 @@
                             </b-card-text>
                             <b-card-text class="mt-1 pl-1 pb-1">
                                 <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
-                                <b-form-file v-model="logo_file" @change="onFileChange($event, 'logo_prev')" 
-                                style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-                                <b-button @click="logo_file = null; logo_prev=''; logo_del=true;" size="sm" variant="danger">삭제</b-button>
+                                <b-input-group>
+                                    <b-form-file v-model="logo_file" @change="onFileChange($event, 'logo_prev')" size="sm"></b-form-file>
+                                    <b-input-group-append>
+                                        <b-button @click="logo_file = null; logo_prev=''; logo_del=true;" size="sm" variant="danger">삭제</b-button>
+                                    </b-input-group-append>
+                                </b-input-group>
                             </b-card-text>
                         </b-card>
                     </b-form-group>
@@ -270,9 +273,12 @@
                             </b-card-text>
                             <b-card-text class="mt-1 pl-1 pb-1">
                                 <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
-                                <b-form-file v-model="banner_file" @change="onFileChange($event, 'banner_prev')" 
-                                style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-                                <b-button @click="banner_file = null; banner_prev=''; banner_del=true;" size="sm" variant="danger">삭제</b-button>
+                                <b-input-group>
+                                    <b-form-file v-model="banner_file" @change="onFileChange($event, 'banner_prev')" size="sm"></b-form-file>
+                                    <b-input-group-append>
+                                        <b-button @click="banner_file = null; banner_prev=''; banner_del=true;" size="sm" variant="danger">삭제</b-button>
+                                    </b-input-group-append>
+                                </b-input-group>
                             </b-card-text>
                         </b-card>
                     </b-form-group>

@@ -111,7 +111,7 @@
             <b-form-group label="VM" label-for="tags-component-select">
                 <!-- Prop `add-on-change` is needed to enable adding tags vie the `change` event -->
                 <b-form-tags id="tags-component-select" v-model="tagValue" size="sm" add-on-change no-outer-focus>
-                    <template v-slot="{ tags, inputAttrs, addTag, inputHandlers, disabled, removeTag }">
+                    <template v-slot="{ tags, inputAttrs,addTag, inputHandlers, disabled, removeTag }">
 
                         <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
                             <li v-for="tag in tags" :key="tag" class="list-inline-item">
@@ -119,24 +119,41 @@
                             </li>
                         </ul>
 
-                        <!-- <b-form-input list="input-list" id="input-with-list"></b-form-input> -->
-                         <b-form-input
-                            v-model="search"
-                            id="tag-search-input"
-                            type="search"
-                            size="sm"
-                            autocomplete="off"
-                            list="input-list"
-                            ref="shobal"
-                            @update="onOptionClick({ option: search, addTag })"
-                            ></b-form-input>
-                        <!-- <b-form-datalist id="input-list" :options="availableOptions" @click="onOptionClick({ option, addTag })"></b-form-datalist> -->
-                        <datalist id="input-list">
-                            <option v-for="option in availableOptions" :key="option">{{ option }}</option>
-                            <option v-if="availableOptions.length === 0">There are no tags available to select</option>
-                        </datalist>
-<!-- 
-                        <b-dropdown-item-button
+                        <!-- <b-form-input v-model="search" id="tag-search-input" type="search" size="sm" autocomplete="off"></b-form-input> -->
+
+                        <b-form-select 
+                            
+                            v-bind="inputAttrs" v-on="inputHandlers" :disabled="disabled || availableOptions.length === 0" :options="availableOptions">
+                            
+                        </b-form-select>
+
+
+
+
+                        <b-dropdown size="sm" variant="outline-secondary" block menu-class="w-100">
+                            <template #button-content>
+                            <b-icon icon="tag-fill"></b-icon> Choose tags
+                            </template>
+                            <b-dropdown-form @submit.stop.prevent="() => {}">
+                            <b-form-group
+                                label="Search tags"
+                                label-for="tag-search-input"
+                                label-cols-md="auto"
+                                class="mb-0"
+                                label-size="sm"
+                                :disabled="disabled"
+                            >
+                                <b-form-input
+                                v-model="search"
+                                id="tag-search-input"
+                                type="search"
+                                size="sm"
+                                autocomplete="off"
+                                ></b-form-input>
+                            </b-form-group>
+                            </b-dropdown-form>
+                            <b-dropdown-divider></b-dropdown-divider>
+                            <b-dropdown-item-button
                             v-for="option in availableOptions"
                             :key="option"
                             @click="onOptionClick({ option, addTag })"
@@ -144,10 +161,10 @@
                             {{ option }}
                             </b-dropdown-item-button>
                             <b-dropdown-text v-if="availableOptions.length === 0">
-                                There are no tags available to select
+                            There are no tags available to select
                             </b-dropdown-text>
-                             -->
-            
+                        </b-dropdown>
+                         
                     </template>
                 </b-form-tags>
             </b-form-group>
@@ -221,31 +238,17 @@ module.exports = {
         });
     },
     computed: {
-        // ino_datalist_selection(options, value) {
-        //     // Compute the search criteria
-        //     options.forEach(element => {
-        //         if (element == value) {
-        //             console.log('만세~~~');
-
-        //         }
-        //     });
-        // },
         criteria() {
             // Compute the search criteria
             return this.search.trim().toLowerCase()
         },
         availableOptions() {
             const criteria = this.criteria
-            // const ino_datalist_selection = this.ino_datalist_selection
             // Filter out already selected options
             const options = this.options.filter(opt => this.tagValue.indexOf(opt) === -1)
             if (criteria) {
                 // Show only options that match criteria
-                // this.onOptionClick(criteria, this.addTag);
-                // ino_datalist_selection(options, criteria);
-                console.log(this.$refs.shobal);
-                // this.$refs.shobal.click();
-                return options.filter(opt => opt.toLowerCase().indexOf(criteria) > -1); // return new array
+                return options.filter(opt => opt.toLowerCase().indexOf(criteria) > -1);
             }
             // Show all options available
             return options;
@@ -253,20 +256,10 @@ module.exports = {
         
     },
     methods: {
-        // test(e) {
-        //     console.log('test', e);
-        // },
         onOptionClick({ option, addTag }) {
-            for (let item of this.options) {
-                console.log(item);
-                if (item == option) {
-                    addTag(option);
-                    // console.log('ohing~' , option, this.$refs.shobal);
-                    this.search = '';
-                    this.$refs.shobal.localValue = '';
-                }
-            }
-        },
+        addTag(option)
+        this.search = ''
+      },
         getData: async function () {
             let url = `${this.api_url}/menu/${this.menu_id}`;
             let data = (await axios.get(url)).data;

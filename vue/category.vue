@@ -216,7 +216,7 @@ module.exports = {
 
         },
         storeCategory: async function (type) {
-            let url = '${this.api_url}/menucategory'
+            let url = `${this.api_url}/menucategory`;
             var formData = new FormData();
             if (type === 0) {
                 // new top category

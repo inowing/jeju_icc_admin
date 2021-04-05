@@ -247,23 +247,26 @@ module.exports = {
                 2: {
                     type: 2,
                     name: '행사개요',
-                    style: '개요형'
+                    style: '개요형', // 사용가능한 카테고리만 써
+                    vue_name: 'information'
                 },
                 3: {
                     type: 3,
                     name: '오프닝세션',
-                    style: '개요형',
+                    style: '개요형', // 사용가능한 카테고리 예외
                     vue_name: 'movie'
                 },
                 4: {
                     type: 4,
                     name: 'Introduction',
-                    style: '개요형'
+                    style: '개요형', // 사용가능한 카테고리만 써
+                    vue_name: 'introduction'
                 },
                 5: {
                     type: 5,
                     name: '프로그램',
-                    style: '게시글형'
+                    style: '게시글형',
+                    vue_name: 'program'
                 },
                 6: {
                     type: 6,
@@ -278,7 +281,7 @@ module.exports = {
                 8: {
                     type: 8,
                     name: 'Map',
-                    style: '개요형'
+                    style: '개요형' // 사용가능한 카테고리만 써
                 },
                 9: {
                     type: 9,
@@ -318,7 +321,7 @@ module.exports = {
                 16: {
                     type: 16,
                     name: 'Shopping',
-                    style: '개요형',
+                    style: '개요형', // 사용가능한 카테고리 예외
                     vue_name: 'shop_product'
                 }
             },

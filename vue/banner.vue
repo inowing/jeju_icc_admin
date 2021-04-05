@@ -14,13 +14,13 @@
 												<h6><strong>배너 #1</strong></h6>
 												<b-card-text class="ino-250-420-wrap mb-1">
 													<div>
-														<b-img :src="banner_photo_1_preview" fluid></b-img>
+														<b-img :src="banner_photo_1_preview || defaultImage250" fluid></b-img>
 													</div>
 												</b-card-text>
 												<b-card-text class="mt-1">
 													<b-form-file v-model="file1" @change="onFileChange($event, 'banner_photo_1_preview')" 
 													style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-													<b-button @click="file1 = null; banner_photo_1_preview = defaultImage250;" size="sm" variant="danger">이미지 삭제</b-button>
+													<b-button @click="file1 = null; banner_photo_1_preview = ''; banner_photo_1_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
 												</b-card-text>
 											</b-card>
 										</b-col>
@@ -39,13 +39,13 @@
 												<h6><strong>배너 #2</strong></h6>
 												<b-card-text class="ino-250-420-wrap mb-1">
 													<div>
-														<b-img :src="banner_photo_2_preview" fluid></b-img>
+														<b-img :src="banner_photo_2_preview || defaultImage250" fluid></b-img>
 													</div>
 												</b-card-text>
 												<b-card-text class="mt-1">
 													<b-form-file v-model="file2" @change="onFileChange($event, 'banner_photo_2_preview')" 
 													style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-													<b-button @click="file2 = null; banner_photo_2_preview = defaultImage250;" size="sm" variant="danger">이미지 삭제</b-button>
+													<b-button @click="file2 = null; banner_photo_2_preview = ''; banner_photo_2_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
 												</b-card-text>
 											</b-card>
 										</b-col>
@@ -103,12 +103,6 @@
 					</b-card>
 			</b-col>
 		</b-row>
-<!-- 		
-		<b-modal id="confirm" v-model="confirm" hide-footer>
-			<p class="my-4">삭제 하시겠습니까?</p>
-			<b-button class="mt-2" variant="outline-primary" @click="confirm=false; confirm=false;">취소</b-button>
-			<b-button class="mt-2" variant="outline-danger" @click="deleteBanner">삭제</b-button>
-		</b-modal> -->
 
 		<!-- 하단배너 추가/수정 -->
 		<b-modal v-model="bottomBanner" hide-footer ref="bottomBanner-modal" title="하단 배너">
@@ -206,6 +200,8 @@ module.exports = {
 			file2: null,
 			banner_photo_1_preview: null,
 			banner_photo_2_preview: null,
+			banner_photo_1_del: false,
+			banner_photo_2_del: false,
 
 			previewUrl1: this.$store.getters.dummy_image_url(['180x70']),
 			previewUrl2: this.$store.getters.dummy_image_url(['180x70']),
@@ -258,26 +254,12 @@ module.exports = {
 			let url = `${this.api_url}/event/${this.event_id}`;
 			
 			var formData = new FormData();
-				if (this.file1) {
-					formData.append("banner_photo_1", this.file1);
-				}
-				if (this.banner_photo_1_preview == this.defaultImage250) {
-					formData.append("banner_photo_1_del", 'Y');
-				}
-
-				if (this.file2) {
-					formData.append("banner_photo_2", this.file2);
-				}
-				if (!this.banner_photo_2_preview == this.defaultImage250) {
-					formData.append("banner_photo_2_del", 'Y');
-				}
+				console.log("@!!!" , this.banner_photo_2_del);
+				!this.file1 && this.banner_photo_1_del ? formData.append('banner_photo_1_del', 'Y') : formData.append('banner_photo_1', this.file1);
+				!this.file2 && this.banner_photo_2_del ? formData.append('banner_photo_2_del', 'Y') : formData.append('banner_photo_2', this.file2);
 
 				formData.append("banner_photo_1_link", this.banner.banner_photo_1_link);
 				formData.append("banner_photo_2_link", this.banner.banner_photo_2_link);
-				// formData.append("banner_photo_1_en", this.link_en);
-				// formData.append("banner_photo_2_en", this.link_en);
-				// formData.append("banner_photo_1_link_en", this.link_en);
-				// formData.append("banner_photo_2_link_en", this.link_en);
 				
 			let rs = await axios.post(url, formData, {
 						headers: {

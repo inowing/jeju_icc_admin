@@ -131,7 +131,7 @@
 
 <script>
 module.exports = {
-    name: "conference",
+    name: "program",
     data: function () {
         return {
             event_id: 0,

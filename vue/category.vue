@@ -141,8 +141,14 @@ module.exports = {
             this.top_id_key_store = top;
         },
         getSubcategory: async function () {
+
             let url = `${this.api_url}/menucategory/subcategory?menu_id=${this.form.menu_id}&category_id=${this.top_selected}`;
             let response = await axios.get(url);
+            
+            if (response.data.code == 410) {
+                this.subcategory = [];
+                return;
+            }
             this.subcategory = response.data.result;
 
             let sub = {};
@@ -241,7 +247,7 @@ module.exports = {
 
             this.getTopCategory();
             this.getSubcategory();
-
+            
         },
         increaseMenu: async function (direction) {
             let url = null;

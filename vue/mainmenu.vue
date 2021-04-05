@@ -271,12 +271,14 @@ module.exports = {
                 6: {
                     type: 6,
                     name: '연자소개',
-                    style: '게시글형'
+                    style: '게시글형',
+                    vue_name: 'keynote'
                 },
                 7: {
                     type: 7,
                     name: '연자소개2',
-                    style: '게시글형'
+                    style: '게시글형',
+                    vue_name: 'speaker'
                 },
                 8: {
                     type: 8,

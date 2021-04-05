@@ -2,7 +2,7 @@
 <section>
     <b-row class="mb-1">
         <b-col>
-            <h6><strong>2.메뉴 및 컨텐츠 관리 > 프로그램 > 컨텐츠 (관리)</strong></h6>
+            <h6><strong>2.메뉴 및 컨텐츠 관리 >	Program > 상세 </strong></h6>
             <b-button class="mt-2" href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
                 <b-icon-arrow-left></b-icon-arrow-left> 이전으로
             </b-button>
@@ -11,7 +11,7 @@
     </b-row>
     <b-card>
         <template #header>
-            <h6><strong>메뉴수정</strong></h6>
+            <h6><strong>입력</strong></h6>
         </template>
         <b-row>
             <b-col>
@@ -35,16 +35,16 @@
 					<b-tabs content-class="" card>
 						<b-tab title="국문" active @>
                             <b-form-group label="Time">
-                                <b-form-input type="text" v-model="time" size="sm"></b-form-input>
+                                <b-form-input type="text" v-model="time"></b-form-input>
                             </b-form-group>
                             <b-form-group label="Title">
-                                <b-form-input type="text" v-model="title" size="sm"></b-form-input>
+                                <b-form-input type="text" v-model="title"></b-form-input>
                             </b-form-group>
                             <b-form-group label="Venue">
-                                <b-form-input type="text" v-model="venue" size="sm"></b-form-input>
+                                <b-form-input type="text" v-model="venue"></b-form-input>
                             </b-form-group>
                             <b-form-group label="Link">
-                                <b-form-input type="text" v-model="link" size="sm"></b-form-input>
+                                <b-form-input type="text" v-model="link"></b-form-input>
                             </b-form-group>
 							<b-card-text>
 								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
@@ -53,6 +53,18 @@
 							</b-card-text>
 						</b-tab>
 						<b-tab title="영문">
+                            <b-form-group label="Time">
+                                <b-form-input type="text" v-model="time_en"></b-form-input>
+                            </b-form-group>
+                            <b-form-group label="Title">
+                                <b-form-input type="text" v-model="title_en"></b-form-input>
+                            </b-form-group>
+                            <b-form-group label="Venue">
+                                <b-form-input type="text" v-model="venue_en"></b-form-input>
+                            </b-form-group>
+                            <b-form-group label="Link">
+                                <b-form-input type="text" v-model="link_en"></b-form-input>
+                            </b-form-group>
 							<b-card-text>
 								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
 								<br>
@@ -63,19 +75,22 @@
 				</b-card>
             </b-col>
         </b-row>
-        <b-button variant="primary" size="sm" class="inoBtn-150 mt-2" @click="updateData">저장</b-button>
+        <b-button v-show="!id" variant="primary" size="sm" class="inoBtn-150 mt-2" @click="storeData">저장</b-button>
+        <b-button v-show="id" variant="success" size="sm" class="inoBtn-150 mt-2" @click="updateData">수정</b-button>
     </b-card>
 </section>
 </template>
 
 <script>
 module.exports = {
-    name: "conference",
+    name: "program_form",
     data: function () {
         return {
             event_id: 0,
             api_url: '',
             menu_id: null,
+            id: 0,
+            menu_id: 0,
 
             category: {
                 topcategory: [],
@@ -89,20 +104,18 @@ module.exports = {
 
             id: '',
             time: '',
-            time_en: '',
             venue: '',
-            venue_en: '',
             link: '',
+            time_en: '',
+            venue_en: '',
             link_en: '',
+
             title: '',
             title_en: '',
             contents: null,
 			contents_en: null,
-            
+
             editorOption: {
-				modules: {
-					
-				},
 				placeholder: '게시물을 작성해주세요.',
                 theme: "snow",
             },
@@ -111,55 +124,69 @@ module.exports = {
     },
     mounted: function () {
         this.$nextTick(async function () {
+            this.id = this.$route.query.id;
             this.menu_id = this.$route.query.menu_id;
             this.event_id = this.$store.getters.event_id;
             this.api_url = this.$store.getters.api_url;
-
-            await this.getData();
+            
             await this.getTopCategory();
+            await this.getData();
         });
     },
     methods: {
-        /**
-         *  데이터
-         **/
-        getData: async function () { // 상단 데이터 가져오기
-            let url = `${this.api_url}/program?menu_id=${this.menu_id}`;
+        getData: async function () { // 데이터 가져오기
+            let url = `${this.api_url}/program/${this.id}`;
             let rs = await axios.get(url);
-            
-            let data = rs.data.result[0];
+            console.log(rs);
+            let data = rs.data.result;
             this.id = data.id;
             this.title = data.title;
-            this.title_en = data.title_en;
-            this.contents = data.contents;
-			this.contents_en = data.contents_en;
-
             this.time = data.time;
             this.time_en = data.time_en;
+            this.title = data.title;
             this.venue = data.venue;
             this.venue_en = data.venue_en;
             this.link = data.link;
             this.link_en = data.link_en;
 
+            this.title = data.title;
+            this.title_en = data.title_en;
+            this.contents = data.contents;
+			this.contents_en = data.contents_en;
+
+            
             // 탑 셀렉트
             this.category.selected_top = data.top_category_id
             // 서브검색
-            this.getSubcategory();
+            await this.getSubcategory();
+            console.log(this.category.subcategory);
+            console.log(data.sub_category_id, ' == 115');
             this.category.selected_sub = data.sub_category_id;
+            console.log(this.category.selected_sub, data.sub_category_id);
         },
-        updateData: async function () { // 데이터 수정저장
-            let url = `${this.api_url}/program/${this.menu_id}`;
+        storeData: async function () { // 데이터 저장
+            let url = `${this.api_url}/program`;
             let formData = new FormData();
+                formData.append('menu_id', this.menu_id);
+                
+                formData.append('time', this.time);
+                formData.append('time_en', this.time_en);
+                formData.append('venue', this.venue);
+                formData.append('venue_en', this.venue_en);
+
+                if (!this.link.includes('http')) {
+                    this.link = `http://${this.link}`;
+                }
+                if (!this.link_en.includes('http')) {
+                    this.link_en = `http://${this.link_en}`;
+                }
+                formData.append('link', this.link);
+                formData.append('link_en', this.link_en);
+                
                 formData.append('title', this.title);
                 formData.append('title_en', this.title_en);
                 formData.append('contents', this.contents);
                 formData.append('contents_en', this.contents_en);
-                formData.append('time', this.time);
-                formData.append('time_en', this.time_en);
-                formData.append('venu', this.venu);
-                formData.append('venu_en', this.venu_en);
-                formData.append('link', this.link);
-                formData.append('link_en', this.link_en);
 
                 let category_id = this.category.selected_sub != 0 ? this.category.selected_sub : this.category.selected_top;
                 formData.append('category_id', category_id);
@@ -172,8 +199,55 @@ module.exports = {
                     }
                 });
 
-                this.$showMsgBoxTwo(rs.status);
-                this.getData();
+                function callback () {
+                    this.$router.go(-1);
+                }
+                this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
+
+            } catch (error) {
+                this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+            }
+
+        },
+        updateData: async function () { // 데이터 수정저장
+            let url = `${this.api_url}/program/${this.id}`;
+            let formData = new FormData();
+
+                formData.append('time', this.time);
+                formData.append('time_en', this.time_en);
+                formData.append('venue', this.venue);
+                formData.append('venue_en', this.venue_en);
+
+                if (!this.link.includes('http')) {
+                    this.link = `http://${this.link}`;
+                }
+                if (!this.link_en.includes('http')) {
+                    this.link_en = `http://${this.link_en}`;
+                }
+                formData.append('link', this.link);
+                formData.append('link_en', this.link_en);
+
+                formData.append('title', this.title);
+                formData.append('title_en', this.title_en);
+                formData.append('contents', this.contents);
+                formData.append('contents_en', this.contents_en);
+
+                let category_id = this.category.selected_sub != 0 ? this.category.selected_sub : this.category.selected_top;
+                formData.append('category_id', category_id);
+                
+            try {
+
+                let rs = await axios.post(url, formData, {
+                    Headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                function callback () {
+                    this.$router.go(-1);
+                }
+                this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
+                
 
             } catch (error) {
                 this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
@@ -200,7 +274,7 @@ module.exports = {
 
             this.category.top_id_key_store = top;
             this.category.topcategory = temArr;
-            this.getSubcategory();
+            await this.getSubcategory();
         },
         getSubcategory: async function () {
             // movie 형식으로 menu_id에 등록된 대분류의 소분류

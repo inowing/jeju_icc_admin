@@ -65,7 +65,7 @@
 
 <script>
 module.exports = {
-    name: "information_form",
+    name: "introduction_form",
     data: function () {
         return {
             event_id: 0,
@@ -120,11 +120,11 @@ module.exports = {
             this.contents = data.contents;
 			this.contents_en = data.contents_en;
 
-            this.is_visible = data.is_visible;
-            this.is_visible_title = data.is_visible_title;
+            // this.is_visible = data.is_visible;
+            // this.is_visible_title = data.is_visible_title;
 
-            this.photo_1 = data.photo_1;
-            this.photo_1_en = data.photo_1_en;
+            // this.photo_1 = data.photo_1;
+            // this.photo_1_en = data.photo_1_en;
 
             // 탑 셀렉트
             this.category.selected_top = data.top_category_id

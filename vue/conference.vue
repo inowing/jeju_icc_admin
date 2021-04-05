@@ -65,8 +65,9 @@
                 <template #cell(order)="row">
                     <div class="text-center">{{row.item.order}}</div>
                 </template>
-                <template #cell(like_count)="row">
-                    <div class="text-center">{{row.item.like_count}}</div>
+
+                <template #cell(conference_date)="row">
+                    <div class="text-center">{{ row.item.conference.date }}</div>
                 </template>
                 <template #cell(is_top)="row">
                     <div class="text-center mt-1">
@@ -77,19 +78,11 @@
                 </template>
                 <template #cell(manageBtn)="row">
                     <div class="text-center">
-                        <b-button size="sm" variant="outline-info" @click="updateFn(row.item, $event)">
+                        <b-button size="sm" variant="outline-info" @click="openModal($event, row.item)">
                             <b-icon-credit-card2-front></b-icon-credit-card2-front>
-                            부스 개요 수정
+                            수정
                         </b-button>
-                        <b-button size="sm" variant="outline-primary" @click="updateFn(row.item, $event, 1)">
-                            <b-icon-film></b-icon-film>
-                            전시관
-                        </b-button>
-                        <b-button size="sm" variant="outline-secondary" @click="goQuestion(row.item, $event)">
-                            <b-icon-patch-question-fill></b-icon-patch-question-fill>
-                            문의내역
-                        </b-button>
-                        <b-button size="sm" variant="outline-danger" @click="deleteFn(row.item, $event)">
+                        <b-button size="sm" variant="outline-danger" @click="deleteVM($event, row.item)">
                             <b-icon-trash2-fill></b-icon-trash2-fill>
                             삭제
                         </b-button>
@@ -101,59 +94,36 @@
 
     <b-modal v-model="modal1" hide-footer title="VM">
         <b-form-group label="대분류" class="mb-1">
-            <b-form-select size="sm"></b-form-select>
+            <b-form-select v-model="category_id" :options="category" size="sm"></b-form-select>
         </b-form-group>
         <b-form-group label="컬러 Template" class="mb-1">
-            <b-form-select size="sm"></b-form-select>
+            <b-form-select v-model="color_type_id" :options="color" size="sm"></b-form-select>
         </b-form-group>
 
         <div>
             <b-form-group label="VM" label-for="tags-component-select">
-                <!-- Prop `add-on-change` is needed to enable adding tags vie the `change` event -->
                 <b-form-tags id="tags-component-select" v-model="tagValue" size="sm" add-on-change no-outer-focus>
-                    <template v-slot="{ tags, inputAttrs, addTag, inputHandlers, disabled, removeTag }">
+                    <template v-slot="{ tags, addTag, disabled, removeTag }">
 
                         <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
                             <li v-for="tag in tags" :key="tag" class="list-inline-item">
-                                <b-form-tag @remove="removeTag(tag)" :title="tag" :disabled="disabled" variant="info">{{ tag }}</b-form-tag>
+                                <b-form-tag @remove="removeTag(tag), vm.push({id: conference_id, name: tag}), conference_id = ''" :title="tag" :disabled="disabled" variant="info">{{ tag }}</b-form-tag>
                             </li>
                         </ul>
-
-                        <!-- <b-form-input list="input-list" id="input-with-list"></b-form-input> -->
-                         <b-form-input
-                            v-model="search"
-                            id="tag-search-input"
-                            type="search"
-                            size="sm"
-                            autocomplete="off"
-                            list="input-list"
-                            ref="shobal"
-                            @update="onOptionClick({ option: search, addTag })"
-                            ></b-form-input>
-                        <!-- <b-form-datalist id="input-list" :options="availableOptions" @click="onOptionClick({ option, addTag })"></b-form-datalist> -->
+                        
+                        <b-form-input v-model="search" id="tag-search-input" type="search" size="sm" autocomplete="off" list="input-list" ref="shobal" @update="onOptionClick({ search, addTag, removeTag })"></b-form-input>
                         <datalist id="input-list">
-                            <option v-for="option in availableOptions" :key="option">{{ option }}</option>
+                            <option v-for="option in availableOptions" :key="option.id">{{ option.name }}</option>
                             <option v-if="availableOptions.length === 0">There are no tags available to select</option>
                         </datalist>
-<!-- 
-                        <b-dropdown-item-button
-                            v-for="option in availableOptions"
-                            :key="option"
-                            @click="onOptionClick({ option, addTag })"
-                            >
-                            {{ option }}
-                            </b-dropdown-item-button>
-                            <b-dropdown-text v-if="availableOptions.length === 0">
-                                There are no tags available to select
-                            </b-dropdown-text>
-                             -->
-            
+
                     </template>
                 </b-form-tags>
             </b-form-group>
         </div>
 
-        <b-button variant="primary" size="sm" class="inoBtn-150" @click="updateData(form, event_id, `${api_url}/menu/${menu_id}`)">저장</b-button>
+        <b-button v-show="!vm_id" variant="primary" size="sm" class="inoBtn-150" @click="storeVM">저장</b-button>
+        <b-button v-show="vm_id" variant="success" size="sm" class="inoBtn-150" @click="updateVM">수정</b-button>
     </b-modal>
 
 </section>
@@ -177,12 +147,19 @@ module.exports = {
                 photo_1: '',
                 photo_1_del: false,
             },
+            
+            vm_id: '',
+            category: [],
+            category_id: 0,
+            color: [],
+            color_type_id: 0,
+            vm: [],
+            conference_id: '',
 
-            modal_form: {},
-
-            search: '',
-            options: ['Apple', 'Orange', 'Banana', 'Lime', 'Peach', 'Chocolate', 'Strawberry'],
-            tagValue: [],
+            search: '', // 선택한 vm 키워드
+            tagValue: [], // 선택된 vm 키워드 문자 집합
+            order: 0,
+            
 
             photo_1_prev: this.$store.getters.dummy_image_url(['180x70']),
 
@@ -191,15 +168,15 @@ module.exports = {
                     label: "순서",
                 },
                 {
-                    key: "top_category",
+                    key: "category.name",
                     label: "대분류",
                 },
                 {
-                    key: "company.name",
+                    key: "conference.name",
                     label: "VM 타이틀",
                 },
                 {
-                    key: "like_count",
+                    key: "conference_date",
                     label: "시작일",
                 },
                 {
@@ -212,68 +189,41 @@ module.exports = {
         };
     },
     mounted: function () {
-        this.$nextTick(function () {
+        this.$nextTick(async function () {
             this.menu_id = this.$route.query.menu_id;
             this.event_id = this.$store.getters.event_id;
             this.api_url = this.$store.getters.api_url;
-            this.getData();
 
+            await this.getData();
+            await this.getSelects();
+            await this.getList();
         });
     },
     computed: {
-        // ino_datalist_selection(options, value) {
-        //     // Compute the search criteria
-        //     options.forEach(element => {
-        //         if (element == value) {
-        //             console.log('만세~~~');
-
-        //         }
-        //     });
-        // },
         criteria() {
-            // Compute the search criteria
             return this.search.trim().toLowerCase()
         },
         availableOptions() {
-            const criteria = this.criteria
-            // const ino_datalist_selection = this.ino_datalist_selection
-            // Filter out already selected options
-            const options = this.options.filter(opt => this.tagValue.indexOf(opt) === -1)
+            const criteria = this.criteria;
+            const options = this.vm.filter(opt => this.tagValue.indexOf(opt.name) === -1);
             if (criteria) {
-                // Show only options that match criteria
-                // this.onOptionClick(criteria, this.addTag);
-                // ino_datalist_selection(options, criteria);
-                console.log(this.$refs.shobal);
-                // this.$refs.shobal.click();
-                return options.filter(opt => opt.toLowerCase().indexOf(criteria) > -1); // return new array
+                return options.filter(opt => opt.name.toLowerCase().indexOf(criteria) > -1); // return new array
             }
-            // Show all options available
             return options;
         },
-        
+
     },
     methods: {
-        // test(e) {
-        //     console.log('test', e);
-        // },
-        onOptionClick({ option, addTag }) {
-            for (let item of this.options) {
-                console.log(item);
-                if (item == option) {
-                    addTag(option);
-                    // console.log('ohing~' , option, this.$refs.shobal);
-                    this.search = '';
-                    this.$refs.shobal.localValue = '';
-                }
-            }
-        },
-        getData: async function () {
+        /**
+         *  상단 데이터
+         **/
+        getData: async function () { // 상단 데이터 가져오기
             let url = `${this.api_url}/menu/${this.menu_id}`;
             let data = (await axios.get(url)).data;
             this.form = data.result;
             console.log(this.form);
         },
-        updateData: async function (form, event_id, url) {
+        updateData: async function (form, event_id, url) { // 상단 데이터 수정저장
             let formData = new FormData();
             formData.append('event_id', event_id);
 
@@ -300,11 +250,140 @@ module.exports = {
             }
 
         },
-        openModal: function (event, item) {
-            this.modal_form = item ? {} : item;
-            this.modal1 = true;
+
+        /**
+         *  하단 리스트
+         **/
+        getList: async function () { // VM 설정 하단 리스트
+            let url = `${this.api_url}/menu_conference?menu_id=${this.menu_id}`;
+            let rs = await axios.get(url);
+            console.log('----',rs);
+            this.items = rs.data.result;
+        },
+        storeVM: async function () { // 하단 리스트아이템 저장하기
+            if (!(this.category_id && this.conference_id && this.color_type_id)) {
+                alert('값을 선택해 주세요 주세요.');
+                return;
+            }
+
+            let url = `${this.api_url}/menu_conference`;
+            let formData = new FormData();
+                formData.append('menu_id', this.menu_id);
+                formData.append('order', this.order);
+                formData.append('category_id', this.category_id);
+                formData.append('conference_id', this.conference_id);
+                formData.append('color_type_id', this.color_type_id);
+
+            await this.sendPost(url, formData);
+            await this.getList();
+            await this.getSelects();
+            this.modal1 = false;
+        },
+        updateVM: async function () { // 하단 리스트아이템 저장하기
+            if (!(this.category_id && this.conference_id && this.color_type_id)) {
+                alert('값을 선택해 주세요 주세요.');
+                return;
+            }
+
+            let url = `${this.api_url}/menu_conference/${this.vm_id}`;
+            let formData = new FormData();
+                formData.append('order', this.order);
+                formData.append('category_id', this.category_id);
+                formData.append('conference_id', this.conference_id);
+                formData.append('color_type_id', this.color_type_id);
+
+            await this.sendPost(url, formData);
+            await this.getList();
+            await this.getSelects();
+            this.modal1 = false;
+        },
+        deleteVM: async function (event, item) { // 하단 리스트아이템 저장하기
+            if (confirm('삭제 하시겠습니까?')) {
+                let url = `${this.api_url}/menu_conference/${item.id}`;
+                try {
+                    let rs = await axios.delete(url);
+                    await this.getList();
+                    await this.getSelects();
+                    this.$showMsgBoxTwo(rs.status, "delete");
+                    this.modal1 = false;
+                } catch (error) {
+                    this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+                }
+            }
+        },
+        sendPost: async function (url, formData) {
+            try {
+                let rs = await axios.post(url, formData, {
+                    Headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                this.$showMsgBoxTwo(rs.status);
+            } catch (error) {
+                this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+            }
         },
 
+        /**
+         * 기타
+         **/
+        openModal: function (event, item) {
+            if (item) {
+                console.log('selected item', item);
+                this.vm_id = item.id;
+                this.category_id = item.category_id;
+                this.color_type_id = item.color_type_id;
+                this.conference_id = item.conference_id;
+                this.tagValue = [item.conference.name];
+            } else {
+                this.vm_id = '';
+                this.category_id = '';
+                this.color_type_id = '';
+                this.conference_id = '';
+                this.tagValue = [];
+            }
+            this.modal1 = true;
+        },
+        getSelects: async function () { // modal select options 초기화
+            let url = `${this.api_url}/menu_conference/get_item_list?menu_id=${this.menu_id}`;
+            let rs = await axios.get(url);
+            this.category = this.array_reform(rs.data.result.category);
+            this.color = this.array_reform(rs.data.result.color);
+            this.vm = rs.data.result.conference;
+            
+            console.log('this.vm ', this.vm);
+        },
+        array_reform: function (arr) {
+            if (!arr || !arr.length) {
+                return;
+            }
+            arr.forEach(element => {
+                element.value = element.id;
+                element.text = element.name;
+            });
+            return arr;
+        },
+        onOptionClick({search, addTag, removeTag}) { // VM 목록에서 클릭시 태그 추가. 
+            for (let option of this.vm) {
+                if (option.name == search) {
+                    removeTag(this.tagValue[0]); // 1건만 된다.
+                    addTag(option.name); // string만 되는듯하다...
+                    this.conference_id = option.id;
+                    this.search = '';
+                    this.$refs.shobal.localValue = '';
+                }
+            }
+        },
+        multi_onOptionClick({search, addTag}) { // VM 목록에서 클릭시 태그 추가.
+            for (let option of this.vm) {
+                if (option.name == search) {
+                    addTag(option.name); // string만 되는듯하다...
+                    this.conference_id = option.id;
+                    this.search = '';
+                    this.$refs.shobal.localValue = '';
+                }
+            }
+        }
     }
 };
 </script>

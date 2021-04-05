@@ -65,6 +65,7 @@
                 <template #cell(order)="row">
                     <div class="text-center">{{row.item.order}}</div>
                 </template>
+
                 <template #cell(like_count)="row">
                     <div class="text-center">{{row.item.like_count}}</div>
                 </template>
@@ -79,15 +80,7 @@
                     <div class="text-center">
                         <b-button size="sm" variant="outline-info" @click="updateFn(row.item, $event)">
                             <b-icon-credit-card2-front></b-icon-credit-card2-front>
-                            부스 개요 수정
-                        </b-button>
-                        <b-button size="sm" variant="outline-primary" @click="updateFn(row.item, $event, 1)">
-                            <b-icon-film></b-icon-film>
-                            전시관
-                        </b-button>
-                        <b-button size="sm" variant="outline-secondary" @click="goQuestion(row.item, $event)">
-                            <b-icon-patch-question-fill></b-icon-patch-question-fill>
-                            문의내역
+                            수정
                         </b-button>
                         <b-button size="sm" variant="outline-danger" @click="deleteFn(row.item, $event)">
                             <b-icon-trash2-fill></b-icon-trash2-fill>
@@ -101,76 +94,35 @@
 
     <b-modal v-model="modal1" hide-footer title="VM">
         <b-form-group label="대분류" class="mb-1">
-            <b-form-select size="sm"></b-form-select>
+            <b-form-select v-model="category_id" :options="category" size="sm"></b-form-select>
         </b-form-group>
         <b-form-group label="컬러 Template" class="mb-1">
-            <b-form-select size="sm"></b-form-select>
+            <b-form-select v-model="color_type_id" :options="color" size="sm"></b-form-select>
         </b-form-group>
 
         <div>
             <b-form-group label="VM" label-for="tags-component-select">
-                <!-- Prop `add-on-change` is needed to enable adding tags vie the `change` event -->
                 <b-form-tags id="tags-component-select" v-model="tagValue" size="sm" add-on-change no-outer-focus>
-                    <template v-slot="{ tags, inputAttrs,addTag, inputHandlers, disabled, removeTag }">
+                    <template v-slot="{ tags, addTag, disabled, removeTag }">
 
                         <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
                             <li v-for="tag in tags" :key="tag" class="list-inline-item">
                                 <b-form-tag @remove="removeTag(tag)" :title="tag" :disabled="disabled" variant="info">{{ tag }}</b-form-tag>
                             </li>
                         </ul>
+                        
+                        <b-form-input v-model="search" id="tag-search-input" type="search" size="sm" autocomplete="off" list="input-list" ref="shobal" @update="onOptionClick({ search, addTag })"></b-form-input>
+                        <datalist id="input-list">
+                            <option v-for="option in availableOptions" :key="option.id">{{ option.name }}</option>
+                            <option v-if="availableOptions.length === 0">There are no tags available to select</option>
+                        </datalist>
 
-                        <!-- <b-form-input v-model="search" id="tag-search-input" type="search" size="sm" autocomplete="off"></b-form-input> -->
-
-                        <b-form-select 
-                            
-                            v-bind="inputAttrs" v-on="inputHandlers" :disabled="disabled || availableOptions.length === 0" :options="availableOptions">
-                            
-                        </b-form-select>
-
-
-
-
-                        <b-dropdown size="sm" variant="outline-secondary" block menu-class="w-100">
-                            <template #button-content>
-                            <b-icon icon="tag-fill"></b-icon> Choose tags
-                            </template>
-                            <b-dropdown-form @submit.stop.prevent="() => {}">
-                            <b-form-group
-                                label="Search tags"
-                                label-for="tag-search-input"
-                                label-cols-md="auto"
-                                class="mb-0"
-                                label-size="sm"
-                                :disabled="disabled"
-                            >
-                                <b-form-input
-                                v-model="search"
-                                id="tag-search-input"
-                                type="search"
-                                size="sm"
-                                autocomplete="off"
-                                ></b-form-input>
-                            </b-form-group>
-                            </b-dropdown-form>
-                            <b-dropdown-divider></b-dropdown-divider>
-                            <b-dropdown-item-button
-                            v-for="option in availableOptions"
-                            :key="option"
-                            @click="onOptionClick({ option, addTag })"
-                            >
-                            {{ option }}
-                            </b-dropdown-item-button>
-                            <b-dropdown-text v-if="availableOptions.length === 0">
-                            There are no tags available to select
-                            </b-dropdown-text>
-                        </b-dropdown>
-                         
                     </template>
                 </b-form-tags>
             </b-form-group>
         </div>
 
-        <b-button variant="primary" size="sm" class="inoBtn-150" @click="updateData(form, event_id, `${api_url}/menu/${menu_id}`)">저장</b-button>
+        <b-button variant="primary" size="sm" class="inoBtn-150" @click="storeVM(form, event_id, `${api_url}/menu/${menu_id}`)">저장</b-button>
     </b-modal>
 
 </section>
@@ -197,9 +149,17 @@ module.exports = {
 
             modal_form: {},
 
-            search: '',
-            options: ['Apple', 'Orange', 'Banana', 'Lime', 'Peach', 'Chocolate', 'Strawberry'],
-            tagValue: [],
+            category: [],
+            category_id: '',
+            color: [],
+            color_type_id: '',
+            vm: [],
+            conference_id: '',
+
+            search: '', // 선택한 vm 키워드
+            tagValue: [], // 선택된 vm 키워드 문자 집합
+
+            
 
             photo_1_prev: this.$store.getters.dummy_image_url(['180x70']),
 
@@ -229,44 +189,41 @@ module.exports = {
         };
     },
     mounted: function () {
-        this.$nextTick(function () {
+        this.$nextTick(async function () {
             this.menu_id = this.$route.query.menu_id;
             this.event_id = this.$store.getters.event_id;
             this.api_url = this.$store.getters.api_url;
-            this.getData();
 
+            await this.getData();
+            await this.getSelects();
+            await this.getList();
         });
     },
     computed: {
         criteria() {
-            // Compute the search criteria
             return this.search.trim().toLowerCase()
         },
         availableOptions() {
-            const criteria = this.criteria
-            // Filter out already selected options
-            const options = this.options.filter(opt => this.tagValue.indexOf(opt) === -1)
+            const criteria = this.criteria;
+            const options = this.vm.filter(opt => this.tagValue.indexOf(opt.name) === -1);
             if (criteria) {
-                // Show only options that match criteria
-                return options.filter(opt => opt.toLowerCase().indexOf(criteria) > -1);
+                return options.filter(opt => opt.name.toLowerCase().indexOf(criteria) > -1); // return new array
             }
-            // Show all options available
             return options;
         },
-        
+
     },
     methods: {
-        onOptionClick({ option, addTag }) {
-        addTag(option)
-        this.search = ''
-      },
-        getData: async function () {
+        /**
+         *  상단 데이터
+         **/
+        getData: async function () { // 상단 데이터 가져오기
             let url = `${this.api_url}/menu/${this.menu_id}`;
             let data = (await axios.get(url)).data;
             this.form = data.result;
             console.log(this.form);
         },
-        updateData: async function (form, event_id, url) {
+        updateData: async function (form, event_id, url) { // 상단 데이터 수정저장
             let formData = new FormData();
             formData.append('event_id', event_id);
 
@@ -293,11 +250,70 @@ module.exports = {
             }
 
         },
-        openModal: function (event, item) {
-            this.modal_form = item ? {} : item;
-            this.modal1 = true;
+
+        /**
+         *  하단 리스트
+         **/
+        getList: async function () { // VM 설정 하단 리스트
+            let url = `${this.api_url}/menu_conference?menu_id=${this.menu_id}`;
+            let rs = await axios.get(url);
+            this.items = rs.data.result;
+        },
+        storeVM: function (form, event_id, url) { // 하단 리스트아이템 저장하기
+            // http://14.63.172.119/api/v1/menu_conference
+            // menu_id
+            // category_id -- 대분류
+            // conference_id -- 컨퍼런스 아이디
+            // color_type_id -- 컬러
+
+            console.log(this.category_id, this.color_type_id, this.tagValue);
+
         },
 
+        /**
+         * 기타
+         **/
+        openModal: function (event, item) {
+            this.modal_form = item ? item : {};
+            this.modal1 = true;
+        },
+        getSelects: async function () { // modal select options 초기화
+            let url = `${this.api_url}/menu_conference/get_item_list?menu_id=${this.menu_id}`;
+            let rs = await axios.get(url);
+            this.category = this.array_reform(rs.data.result.category);
+            this.color = this.array_reform(rs.data.result.color);
+            this.vm = rs.data.result.conference;
+        },
+        array_reform: function (arr) {
+            if (!arr || !arr.length) {
+                return;
+            }
+            arr.forEach(element => {
+                element.value = element.id;
+                element.text = element.name;
+            });
+            return arr;
+        },
+        onOptionClick({search, addTag}) { // VM 목록에서 클릭시 태그 추가.
+            for (let option of this.vm) {
+                if (option.name == search) {
+                    addTag(option.name); // string만 되는듯하다...
+                    this.conference_id = option.id;
+                    this.search = '';
+                    this.$refs.shobal.localValue = '';
+                }
+            }
+        },
+        multi_onOptionClick({search, addTag}) { // VM 목록에서 클릭시 태그 추가.
+            for (let option of this.vm) {
+                if (option.name == search) {
+                    addTag(option.name); // string만 되는듯하다...
+                    this.conference_id = option.id;
+                    this.search = '';
+                    this.$refs.shobal.localValue = '';
+                }
+            }
+        }
     }
 };
 </script>

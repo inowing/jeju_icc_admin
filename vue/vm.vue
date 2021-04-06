@@ -3,7 +3,7 @@
     <b-row>
         <b-col>
             <b-button href="#" variant="primary" size="sm" @click="openModal1">
-                <b-icon-plus></b-icon-plus> Create Event
+                <b-icon-plus></b-icon-plus> VM 생성
             </b-button>
         </b-col>
     </b-row>
@@ -32,13 +32,13 @@
                         </b-row>
 
                         <!-- 반복할 리스트 -->
-                        <b-row class="mt-1" v-for="item in [{id:'a1', title: 'jeju icc', logo: ''}, {id:'b1', title: 'ccc gogogo', logo: ''}]" :key="item.id">
+                        <b-row class="mt-1" v-for="item in past" :key="item.id">
                             <b-col>
                                 <b-card no-body>
                                     <b-row>
                                         <b-col cols="2" class="text-center vm_card_v_left">
                                             <div>
-                                                <span style="font-size:smaller;">08/25</span><br>
+                                                <span style="font-size:smaller;">{{item.date}}</span><br>
                                                 <span style="font-size:smaller;">(Wed)</span><br>
                                                 <b-button variant="danger" pill size="sm">Broadcast START</b-button>
                                             </div>
@@ -46,14 +46,14 @@
                                         <b-col cols="8" class="vm_card_v_center">
                                             <b-row style="min-height: 90px;">
                                                 <b-col cols="9">
-                                                    <span style="font-size:smaller;">vm id : 420</span>
-                                                    <h5 class="text-primary">제주 ICC 개회식</h5>
+                                                    <span style="font-size:smaller;">vm id : {{item.id}}</span>
+                                                    <h5 class="text-primary">{{item.name}}</h5>
                                                     <br>
-                                                    <span class="text-secondary">제주 ICC Grand Hall / 08.25 09:00 ~ 0m / GMT +09:00 SEOUL</span>
+                                                    <span class="text-secondary">{{item.venue}} / 08.25 09:00 ~ 0m / GMT +09:00 SEOUL</span>
                                                 </b-col>
                                                 <b-col cols="3" class="p-1">
                                                     <p class="text-secondary" style="font-size:smaller; width: 100%; height: 100%; padding: 5px; border-left:1px solid silver; line-height: 85px; margin-bottom:0px;">
-                                                        <span style="margin-top: 15px;">제주 발전연구원</span>
+                                                        <span style="margin-top: 15px;">{{item.host}}</span>
                                                     </p>
                                                 </b-col>
                                             </b-row>
@@ -63,7 +63,7 @@
                                                     <b-row>
                                                         <b-col>
 
-                                                            <b-collapse :id="item.id" style="width:100%;">
+                                                            <b-collapse :id="'toggle_'+item.id" style="width:100%;">
                                                                 <b-row>
                                                                     <b-col class="pr-1">
                                                                         <b-card align="center" no-body class="p-2">
@@ -169,7 +169,7 @@
 
                                                     <b-row class="text-right mb-1">
                                                         <b-col>
-                                                            <b-button v-b-toggle="item.id" size="sm" variant="outline-primary" @click="openId.includes(item.id) ? openId.splice(openId.indexOf(item.id), 1) : openId.push(item.id);">
+                                                            <b-button v-b-toggle="'toggle_'+item.id" size="sm" variant="outline-primary" @click="openId.includes(item.id) ? openId.splice(openId.indexOf(item.id), 1) : openId.push(item.id);">
                                                                 <b-icon-chevron-down v-show="!openId.includes(item.id)"></b-icon-chevron-down>
                                                                 <b-icon-chevron-up v-show="openId.includes(item.id)"></b-icon-chevron-up>
                                                             </b-button>
@@ -306,13 +306,17 @@
                 </b-col>
             </b-row>
             <b-form-group label="Languages">
-                <b-input-group v-for="(item, index) in lang_arr" :key="index" class="mb-1">
-                    <b-form-select v-model="item.language" :options="lang_options" style="width:427px;"></b-form-select>
+                <b-input-group v-for="(item, index) in lang_arr" :key="item.language" class="mb-1">
+                    <b-form-select v-model="item.language" :options="item.available" style="width:427px;"></b-form-select>
                     <b-input-group-append>
-                        <b-button size="sm" variant="danger" @click="lang_arr.splice(index, 1)">X</b-button>
+                        <b-button size="sm" variant="danger" @click="removeLang(item, index)">X</b-button>
                     </b-input-group-append>
                 </b-input-group>
-                <b-row class="text-center" @click="lang_arr.push({language: '한국어'})"><b-col><b-button size="sm" variant="info"><b-icon-plus></b-icon-plus> 언어추가</b-button></b-col></b-row>
+                <b-row class="text-center">
+                    <b-col>
+                        <b-button size="sm" variant="info" @click="addLanguage"><b-icon-plus></b-icon-plus> 언어추가</b-button>
+                    </b-col>
+                </b-row>
             </b-form-group>
         </b-card>
 
@@ -554,17 +558,21 @@ module.exports = {
             
             form_page: 1,
 
-
 			lang_options: [
 				{value: '한국어', text: '한국어'},
 				{value: '영어', text: '영어'},
+				{value: '일본어', text: '일본어'},
+				{value: '중국어', text: '중국어'},
+				{value: '스페인어', text: '스페인어'},
+				{value: '러시아어', text: '러시아어'},
 				{value: '프랑스어', text: '프랑스어'},
+				{value: '독일어', text: '독일어'},
+				{value: '이탈리아어', text: '이탈리아어'},
+				{value: '힌디어', text: '힌디어'},
+				{value: '아랍어', text: '아랍어'}
 			],
-
-			lang_arr: [
-				{language: '영어'},
-				{language: '한국어'},
-			],
+            selected_lang: ['한국어', '영어', '일본어'],
+			lang_arr: [], // {language, available}
 
             login: 0,
             login_type: 0,
@@ -578,9 +586,9 @@ module.exports = {
 
             survey: 0,
             survey_link: '',
-
-            form: {
-            },
+            
+            form_date: '',
+            form: {},
 
             qna_fields: [
                 {key: 'id', label: '번호'},
@@ -619,23 +627,107 @@ module.exports = {
             modal4_items_2: [
                 
             ],
-            event_id: 0
+            event_id: 0,
+            api_url: ``,
+
+            upcoming: [],
+            past: []
         };
+    },
+    watch: {
+        // form: {
+        //     deep: true,
+        //     handler: function() {
+        //         // console.log('this.title', this.form);
+        //         // return this.form;
+        //     }
+            
+        // }
     },
     mounted: function () {
         this.$nextTick(function () {
-            this.setWeek(7);
-            this.form.title= 'hey';
             this.event_id = this.$store.getters.event_id;
+            this.api_url = this.$store.getters.api_url;
+            this.setWeek(7);
+            this.getList();
         })
     },
     methods: {
+
+        /**
+         * 기본
+         */
+        getList: async function () {
+            let rs = await axios.get(`${this.api_url}/conference?event_id=${this.event_id}`);
+            this.upcoming = rs.data.result.upcoming;
+            this.past = rs.data.result.past;
+        },
+        storeData: async function () {
+
+        },
         update: function(obj, prop, value) {
             console.log(obj, prop, value);
             this.$emit('input', { ...this[obj], [prop]: value })
             // Vue.set(obj, prop, obj[prop]);
         },
+        deleteQnA: async function (item) {
+
+        },
+
+        /**
+         * 기타
+         */
+        addLanguage: function () {
+            // lang_arr를 만들어준다.
+            let language = ''; // 요소 1
+            let available = []; // 요소 2
+            
+            if (!this.lang_arr.length) {
+                language = this.lang_options[0].value;
+                available = [...this.lang_options];
+                this.lang_arr.push({language, available});
+                return;
+            }
+            // 최초순환 끝
+
+            // 두번째부터 수행
+            let selected = [];
+            this.lang_arr.forEach(el => {
+                selected.push(el.language);
+            });
+
+            this.lang_options.forEach(el => {
+                if (!selected.includes(el.value)) {
+                    available.push(el); // 순수한 선택옵션들로 재구성
+                }
+            });
+
+            selected.push(available[0].value); // 가능목록에서 중 1번을 선택됨에 추가
+            available.splice(0, 1); // 추가시킨 항목을 다시 제거
+            
+            this.lang_arr = []; // 초기화
+
+            // 선택됨 항목을 다시 그려줌.
+            selected.forEach(language => {
+                let individual_list = [{value: language, text: language}, ...available];
+                this.lang_arr.push({language, available: individual_list});
+            });
+        },
+        removeLang: function (item, index) {
+            let revive = {value: item.language, text: item.language}; // 되살릴 아이템 구성
+            this.lang_arr.splice(index, 1); // 일단 목록에서 줄어든다.
+            this.lang_arr.forEach(el => {
+                el.available.push(revive); // 남은 목록 안에 선택 가능한 옵션으로 되살린 아이템 넣어준다.
+            });
+        },
+        setForm: function () {
+            // 등록폼 모달의 초기 폼 세팅
+            this.form = {};
+            const now = new Date();
+            this.form.date = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+        },
         setWeek: function (days) {
+            // 상단 1주일치 날짜버튼 생성
             var date = new Date();
             var week = ['Sun', 'Mon', 'Tue', 'Wen', 'Thur', 'Fri', 'Sat'];
             for (var i = 1; i < days + 1; i++) {
@@ -651,8 +743,8 @@ module.exports = {
                 });
             }
         },
-        getList: async function (item) {
-            console.log(item);
+        excelDownload: function () {
+            console.log(this.modal2_type, ' download...');
         },
         openModal1: function(event, item) {
             if (item) {
@@ -660,22 +752,10 @@ module.exports = {
                 this.form = {...item};
                 this.modal1_border = "success";
             } else {
-                this.form = {};
+                this.setForm();
                 this.modal1_border = "primary";
             }
             this.modal1 = true;
-        },
-        openModal4: async function(item, index) {
-            // get list... 참가자 초청리스트
-            this.attend_tabIndex = index;
-            this.modal4 = true;
-        },
-        // selected_event_size = form.event_size
-        storeData: async function () {
-
-        },
-        deleteQnA: async function (item) {
-
         },
         openModal2: async function (item, open_type) {
             console.log(item);
@@ -689,15 +769,16 @@ module.exports = {
             this.modal2 = true;
 
         },
-        excelDownload: function () {
-            console.log(this.modal2_type, ' download...');
+        openModal4: async function(item, index) {
+            // get list... 참가자 초청리스트
+            this.attend_tabIndex = index;
+            this.modal4 = true;
         },
         exeCopy: function (event, ref_id) {
+            // 이메일 주소 복사
             let testingCodeToCopy = this.$refs[ref_id];
                 testingCodeToCopy.setAttribute('type', 'text');
                 testingCodeToCopy.select();
-            
-            
              try {
                 var successful = document.execCommand('copy');
                 if (successful) {
@@ -708,11 +789,8 @@ module.exports = {
             } catch (err) {
                 this.$toast('Ooops', 'unable to copy', 'danger');
             }
-
             testingCodeToCopy.setAttribute('type', 'hidden');
             window.getSelection().removeAllRanges();
-
-            
         }
 
     },

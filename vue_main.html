@@ -111,13 +111,20 @@
 					logo_url: ''
 				}
 			},
+			
 			mounted: function () {
 				this.$nextTick(function () {
 					
-					if (this.$route.query.event_id) {
-						this.$store.commit('event_id', {event_id: this.$route.query.event_id});
-						
-					}
+					// if (this.$route.query.event_id) {
+					// 	console.log('???1', this.$store.getters.event_id);
+					// 	if (this.$route.query.event_id != this.$store.getters.event_id) {
+					// 		console.log('???2', this.$store.getters.event_id);
+					// 		this.$store.commit('event_id', {event_id: this.$route.query.event_id});
+					// 		console.log('???3', this.$store.getters.event_id);
+							
+					// 	}
+					// }
+					
 					this.api_url = this.$store.getters.api_url;
 
 					this.navShow = this.$refs.inoResizer.clientWidth > 800 ? true : false; // 네비게이션 쇼,하이드

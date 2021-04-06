@@ -189,7 +189,11 @@
 
             </b-card-body>
         </b-collapse>
+
     </b-card>
+
+    <a href="#" v-show="$store.getters.event_id == 106" @click='goReload("http://14.63.172.119/admin/vue_main.html#/?event_id=105")'>테스트버전(105) 가기</a>
+    <a href="#" v-show="$store.getters.event_id == 105" @click='goReload("http://14.63.172.119/admin/vue_main.html#/?event_id=106")'>운영버전(106) 가기</a>
 </div>
 </template>
 
@@ -268,7 +272,10 @@ module.exports = {
                 this.accordion9 = false;
             }
             if (to.query.event_id) {
-                this.$store.commit('event_id', {event_id: to.query.event_id});
+                if (to.query.event_id != this.$store.getters.event_id) {
+                    this.$store.commit('event_id', {event_id: to.query.event_id});
+                    // this.$router.go();
+                }
                 // window.location.href = `http://14.63.172.119/admin/vue_main.html#${from.path}`;
             }
             // console.log(to);
@@ -292,6 +299,11 @@ module.exports = {
                 // console.log('close');
                 // Do something else
             }
+        },
+        goReload: function (url) {
+            window.location.href = url;
+            this.$router.go(url);
+            
         }
     }
 }

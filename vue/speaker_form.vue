@@ -77,17 +77,19 @@
                             </b-row>
                             <b-form-group label="발표주제">
                                 <b-card-text>
-                                    <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+                                    <b-form-textarea v-model="contents"></b-form-textarea>
+                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
                                     <br>
-                                    <div class="content ql-editor" v-html="contents"></div>
+                                    <div class="content ql-editor" v-html="contents"></div> -->
                                 </b-card-text>
                             </b-form-group>
 
                             <b-form-group label="연자소개">
                                 <b-card-text>
-                                    <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="introduction" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+                                    <b-form-textarea v-model="introduction"></b-form-textarea>
+                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="introduction" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
                                     <br>
-                                    <div class="content ql-editor" v-html="introduction"></div>
+                                    <div class="content ql-editor" v-html="introduction"></div> -->
                                 </b-card-text>
                             </b-form-group>
 						</b-tab>
@@ -133,17 +135,19 @@
                             </b-row>
                             <b-form-group label="발표주제">
                                 <b-card-text>
-                                    <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+                                    <b-form-textarea v-model="contents_en"></b-form-textarea>
+                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
                                     <br>
-                                    <div class="content ql-editor" v-html="contents_en"></div>
+                                    <div class="content ql-editor" v-html="contents_en"></div> -->
                                 </b-card-text>
                             </b-form-group>
 
                             <b-form-group label="연자소개">
                                 <b-card-text>
-                                    <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="introduction_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+                                    <b-form-textarea v-model="introduction_en"></b-form-textarea>
+                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="introduction_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
                                     <br>
-                                    <div class="content ql-editor" v-html="introduction_en"></div>
+                                    <div class="content ql-editor" v-html="introduction_en"></div> -->
                                 </b-card-text>
                             </b-form-group>
 						</b-tab>

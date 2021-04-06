@@ -487,7 +487,7 @@ module.exports = {
                 "created_at": "",
                 "updated_at": "",
                 "status": 0,
-                "country": "한국",
+                "country": "대한민국",
                 "condition": "",
                 "sectors": "",
                 "take": 1,

@@ -32,13 +32,13 @@
                         </b-row>
 
                         <!-- 반복할 리스트 -->
-                        <b-row class="mt-1" v-for="item in past" :key="item.id">
+                        <b-row class="mt-1" v-for="item in upcoming" :key="item.id">
                             <b-col>
                                 <b-card no-body>
                                     <b-row>
                                         <b-col cols="2" class="text-center vm_card_v_left">
                                             <div>
-                                                <span style="font-size:smaller;">{{item.date}}</span><br>
+                                                <span style="font-size:smaller;">{{item.date.split(' ')[0]}}</span><br>
                                                 <span style="font-size:smaller;">(Wed)</span><br>
                                                 <b-button variant="danger" pill size="sm">Broadcast START</b-button>
                                             </div>
@@ -149,7 +149,7 @@
                                                                             <b-button size="sm" pill variant="outline-primary">
                                                                                 <b-icon-people></b-icon-people>
                                                                             </b-button>
-                                                                            예상 참가자수 <strong class="text-primary">{{ expectNum }}</strong> 명
+                                                                            예상 참가자수 <strong class="text-primary">{{ item.event_size }}</strong> 명
                                                                         </p>
                                                                         <p class="mb-1">
                                                                             <b-button size="sm" variant="danger" class="inoBtn-200">
@@ -173,7 +173,7 @@
                                                                 <b-icon-chevron-down v-show="!openId.includes(item.id)"></b-icon-chevron-down>
                                                                 <b-icon-chevron-up v-show="openId.includes(item.id)"></b-icon-chevron-up>
                                                             </b-button>
-                                                            <b-button size="sm" variant="outline-danger">
+                                                            <b-button size="sm" variant="outline-danger" @click="deleteData(item)">
                                                                 <b-icon-trash></b-icon-trash>
                                                             </b-button>
                                                         </b-col>
@@ -210,24 +210,24 @@
 
         </b-col>
     </b-row>
-  
+    
     <b-modal v-model="modal1" hide-footer title="Event Information" body-bg-variant="light">
         <b-card no-body class="p-1" :border-variant="modal1_border" v-show="form_page == 1">
             <b-form-group label="Event title">
-                <b-form-input v-model="form.title" size="sm"></b-form-input>
+                <b-form-input v-model="form.name" size="sm"></b-form-input>
             </b-form-group>
             <b-form-group label="Menu">
                 <b-form-input v-model="form.link" size="sm"></b-form-input>
             </b-form-group>
             <b-form-group label="Host">
-                <b-form-input v-model="form.link" size="sm"></b-form-input>
+                <b-form-input v-model="form.host" size="sm"></b-form-input>
             </b-form-group>
             <b-form-group label="Event Size (최대 예상인원, 누적 인원 수)">
-                <b-button size="sm" style="width: 80px;" :variant="selected_event_size == 100 ? 'warning' : 'outline-warning'" @click="selected_event_size = 100">100</b-button>
-                <b-button size="sm" style="width: 80px;" :variant="selected_event_size == 200 ? 'warning' : 'outline-warning'"  @click="selected_event_size = 200">200</b-button>
-                <b-button size="sm" style="width: 80px;" :variant="selected_event_size == 500 ? 'warning' : 'outline-warning'"  @click="selected_event_size = 500">500</b-button>
-                <b-button size="sm" style="width: 80px;" :variant="selected_event_size == 1000 ? 'warning' : 'outline-warning'" @click="selected_event_size = 1000">1000</b-button>
-                <b-button size="sm" style="width: 80px;" :variant="selected_event_size == 2500 ? 'warning' : 'outline-warning'" @click="selected_event_size = 2500">2500</b-button>
+                <b-button size="sm" style="width: 80px;" :variant="event_size == 100 ? 'warning' : 'outline-warning'" @click="event_size = 100">100</b-button>
+                <b-button size="sm" style="width: 80px;" :variant="event_size == 200 ? 'warning' : 'outline-warning'"  @click="event_size = 200">200</b-button>
+                <b-button size="sm" style="width: 80px;" :variant="event_size == 500 ? 'warning' : 'outline-warning'"  @click="event_size = 500">500</b-button>
+                <b-button size="sm" style="width: 80px;" :variant="event_size == 1000 ? 'warning' : 'outline-warning'" @click="event_size = 1000">1000</b-button>
+                <b-button size="sm" style="width: 80px;" :variant="event_size == 2500 ? 'warning' : 'outline-warning'" @click="event_size = 2500">2500</b-button>
             </b-form-group>
             <b-row>
                 <b-col>
@@ -237,8 +237,25 @@
                     </b-form-group>
                 </b-col>
                 <b-col>
+                    <b-form-group label="시간">
+                        <b-input-group>
+                            <b-form-input
+                                v-model="form.start_time"
+                                type="text"
+                                placeholder="HH:mm"
+                                size="sm"
+                            ></b-form-input>
+                            <b-input-group-append>
+                                <b-form-timepicker v-model="form.start_time" size="sm" locale="kr" button-only></b-form-timepicker>
+                            </b-input-group-append>
+                        </b-input-group>
+                    </b-form-group>
+                </b-col>
+            </b-row>
+            <b-row>
+                <b-col>
                     <b-form-group label="진행시간(분)">
-                        <b-form-input v-model="form.term" type="number" size="sm"></b-form-input>
+                        <b-form-input v-model="form.time" type="number" size="sm"></b-form-input>
                     </b-form-group>
                 </b-col>
             </b-row>
@@ -248,15 +265,15 @@
                         <b-card no-body>
                             <b-card-text class="ino-180-180-wrap mt-1">
                                 <div>
-                                    <b-img :src="logo_prev||logo_prev_default" fluid></b-img>
+                                    <b-img :src="form.logo||logo_prev" fluid></b-img>
                                 </div>
                             </b-card-text>
                             <b-card-text class="mt-1 pl-1 pb-1">
                                 <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
                                 <b-input-group>
-                                    <b-form-file v-model="logo_file" @change="onFileChange($event, 'logo_prev')" size="sm"></b-form-file>
+                                    <b-form-file v-model="logo_file" @change="onFileChange($event, 'logo', form)" size="sm"></b-form-file>
                                     <b-input-group-append>
-                                        <b-button @click="logo_file = null; logo_prev=''; logo_del=true;" size="sm" variant="danger">삭제</b-button>
+                                        <b-button @click="logo_file = null; form.logo=''; logo_del=true;" size="sm" variant="danger">삭제</b-button>
                                     </b-input-group-append>
                                 </b-input-group>
                             </b-card-text>
@@ -268,15 +285,15 @@
                         <b-card no-body>
                             <b-card-text class="ino-180-180-wrap mt-1">
                                 <div>
-                                    <b-img :src="banner_prev||banner_prev_default" fluid></b-img>
+                                    <b-img :src="form.banner||banner_prev" fluid></b-img>
                                 </div>
                             </b-card-text>
                             <b-card-text class="mt-1 pl-1 pb-1">
                                 <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
                                 <b-input-group>
-                                    <b-form-file v-model="banner_file" @change="onFileChange($event, 'banner_prev')" size="sm"></b-form-file>
+                                    <b-form-file v-model="banner_file" @change="onFileChange($event, 'banner', form)" size="sm"></b-form-file>
                                     <b-input-group-append>
-                                        <b-button @click="banner_file = null; banner_prev=''; banner_del=true;" size="sm" variant="danger">삭제</b-button>
+                                        <b-button @click="banner_file = null; form.banner=''; banner_del=true;" size="sm" variant="danger">삭제</b-button>
                                     </b-input-group-append>
                                 </b-input-group>
                             </b-card-text>
@@ -290,14 +307,14 @@
                         <b-card no-body>
                             <b-card-text class="ino-180-180-wrap mt-1">
                                 <div>
-                                    <b-img :src="background_prev||background_prev_default" fluid></b-img>
+                                    <b-img :src="form.background||background_prev" fluid></b-img>
                                 </div>
                             </b-card-text>
                             <b-card-text class="mt-1 pl-1 pb-1">
                                 <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
-                                <b-form-file v-model="background_file" @change="onFileChange($event, 'background_prev')" 
+                                <b-form-file v-model="background_file" @change="onFileChange($event, 'background', form)" 
                                 style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-                                <b-button @click="background_file = null; background_prev=''; background_del=true;" size="sm" variant="danger">삭제</b-button>
+                                <b-button @click="background_file = null; form.background=''; background_del=true;" size="sm" variant="danger">삭제</b-button>
                             </b-card-text>
                         </b-card>
                     </b-form-group>
@@ -322,49 +339,49 @@
 
         <b-card no-body class="p-1" :border-variant="modal1_border" v-show="form_page == 2">
             <b-form-group label="Event type">
-                <b-form-checkbox v-model="login" unchecked-value="1" value="0" variant="success">
+                <b-form-checkbox v-model="form.is_login_attendee" unchecked-value="1" value="0" variant="success">
                     Attendee 로그인 계정 불필요
                 </b-form-checkbox>
-                <b-form-checkbox v-model="login" unchecked-value="0" value="1" variant="success">
+                <b-form-checkbox v-model="form.is_login_attendee" unchecked-value="0" value="1" variant="success">
                     Attendee 로그인 계정 필요
                 </b-form-checkbox>
-                <div class="pl-4" v-show="login==1">
+                <div class="pl-4" v-show="form.is_login_attendee == 1">
                     <p class="m-0" style="color: silver; font-size: 10pt;">- Attendee에 참가등록 이메일을 전송합니다.</p>
                     <p class="m-0" style="color: silver; font-size: 10pt;">(참가등록 알림을 수령한 이메일로만 로그인 가능합니다.)</p>
-                    <b-form-checkbox v-model="login_type" unchecked-value="1" value="0" variant="success">
-                    비밀번호 없이 이메일 ID로만 로그인 합니다.
+                    <b-form-checkbox v-model="form.is_type_attendee" unchecked-value="1" value="0" variant="success">
+                        비밀번호 없이 이메일 ID로만 로그인 합니다.
                     </b-form-checkbox>
-                    <b-form-checkbox v-model="login_type" unchecked-value="0" value="1" variant="success">
-                    이메일 ID + Passcode로 로그인 합니다.
+                    <b-form-checkbox v-model="form.is_type_attendee" unchecked-value="0" value="1" variant="success">
+                        이메일 ID + Passcode로 로그인 합니다.
                     </b-form-checkbox>
-                    <b-form-input v-show="login_type == 1" placeholder="Passcode를 입력하세요.(6자리 숫자)" size="sm" type="number"></b-form-input>
+                    <b-form-input v-show="form.is_type_attendee == 1" v-model="form.attendee_password" placeholder="Passcode를 입력하세요.(6자리 숫자)" size="sm" type="number" :max="6"></b-form-input>
                 </div>
             </b-form-group>
             <b-form-group label="Event 정책설정">
-                <b-form-checkbox v-model="event_chat" unchecked-value="1" value="0" variant="success">
+                <b-form-checkbox v-model="form.is_qna_chat" unchecked-value="1" value="0" variant="success">
                     Event Chatting
                 </b-form-checkbox>
                 <div class="pl-4">
                     <p class="m-0" style="color: silver; font-size: 10pt;">- Attendees 사이에 chatting할 수 있습니다.</p>
                 </div>
-                <b-form-checkbox v-model="qna" unchecked-value="0" value="1" variant="success">
+                <b-form-checkbox v-model="form.is_qna_chat" unchecked-value="0" value="1" variant="success">
                     Q&A / Chat
                 </b-form-checkbox>
                 <p class="pl-4 m-0" style="color: silver; font-size: 10pt;">- Attendees 가 Moderators와 Presenters에 질문할 수 있습니다.</p>
-                <div class="pl-4" v-show="qna==1">
-                    <b-form-checkbox v-model="qna_noname" unchecked-value="0" value="1" variant="success">
+                <div class="pl-4" v-show="form.is_qna_chat==1">
+                    <b-form-checkbox v-model="form.is_question_anonymous" unchecked-value="0" value="1" variant="success">
                         익명질문을 허용합니다.
                     </b-form-checkbox>
-                    <b-form-checkbox v-model="qna_auto" unchecked-value="0" value="1" variant="success">
+                    <b-form-checkbox v-model="form.is_question_auto" unchecked-value="0" value="1" variant="success">
                         질문을 자동으로 승인합니다.
                     </b-form-checkbox>
                 </div>
 
-                <b-form-checkbox v-model="show_count" unchecked-value="0" value="1" variant="success">
+                <b-form-checkbox v-model="form.is_show_attendee_count" unchecked-value="0" value="1" variant="success">
                     Live Attendee
                 </b-form-checkbox>
 
-                <b-form-checkbox v-model="music" unchecked-value="0" value="1" variant="success">
+                <b-form-checkbox v-model="form.is_play_music" unchecked-value="0" value="1" variant="success">
                     Welcome Music Play
                 </b-form-checkbox>
                 <div class="pl-4">
@@ -372,19 +389,20 @@
                 </div>
             </b-form-group>
             <b-form-group label="Survey">
-                <b-form-checkbox v-model="survey" unchecked-value="0" value="1" variant="success">
+                <b-form-checkbox v-model="form.is_use_survey" unchecked-value="0" value="1" variant="success">
                     Attendee가 종료 후 사전 설정된 survey에 참여토록 합니다.
                 </b-form-checkbox>
-                <div class="pl-4" v-show="survey == 1">
-                    <b-form-input size="sm" v-model="survey_link" placeholder="https://(servey 링크를 입력하세요)"></b-form-input>
+                <div class="pl-4" v-show="form.is_use_survey == 1">
+                    <b-form-input size="sm" v-model="form.survey_link" placeholder="https://(servey 링크를 입력하세요)"></b-form-input>
                 </div>
             </b-form-group>
         </b-card>
-        <b-row class="text-right mt-1"><b-col><b-button size="sm" variant="info" @click="form_page = 2" v-show="form_page == 1">Next <b-icon-chevron-right></b-icon-chevron-right></b-button></b-col></b-row>
+        <b-row class="text-right mt-1"><b-col><b-button size="sm" variant="info" @click="goNext" v-show="form_page == 1">Next <b-icon-chevron-right></b-icon-chevron-right></b-button></b-col></b-row>
         <b-row class="text-right mt-1">
             <b-col>
                 <b-button size="sm" variant="info" @click="form_page = 1" v-show="form_page == 2"><b-icon-chevron-left></b-icon-chevron-left> Previous</b-button>
-                <b-button size="sm" variant="primary" @click="storeData" v-show="form_page == 2"> Done </b-button>
+                <b-button size="sm" variant="primary" @click="storeData" v-show="form_page == 2 && !form.id"> Done </b-button>
+                <b-button size="sm" variant="success" @click="update" v-show="form_page == 2 && form.id"> Update </b-button>
             </b-col>
         </b-row>
     </b-modal>
@@ -531,7 +549,7 @@ module.exports = {
             primary: 'primary',
             outline_primary: 'outline-primary',
             selected_btn_index: 0,
-            selected_event_size: 0,
+            event_size: 0,
             datepicker_state: 'normal', // disabled, readonly, normal
             modal1: false,
             modal1_border: "primary",
@@ -542,18 +560,15 @@ module.exports = {
             modal4: false,
 
             logo_file: null,
-            logo_prev: '',
-            logo_prev_default: 'https://via.placeholder.com/480x60',
+            logo_prev: 'https://via.placeholder.com/480x60',
             logo_del: false,
 
             banner_file: null,
-            banner_prev: '',
-            banner_prev_default: 'https://via.placeholder.com/100x600',
+            banner_prev: 'https://via.placeholder.com/100x600',
             banner_del: false,
 
             background_file: null,
-            background_prev: '',
-            background_prev_default: 'https://via.placeholder.com/480x60',
+            background_prev: 'https://via.placeholder.com/480x60',
             background_del: false,
             
             form_page: 1,
@@ -644,6 +659,12 @@ module.exports = {
             
         // }
     },
+    computed: {
+        validation: function () {
+
+            return true;
+        }
+    },
     mounted: function () {
         this.$nextTick(function () {
             this.event_id = this.$store.getters.event_id;
@@ -663,12 +684,123 @@ module.exports = {
             this.past = rs.data.result.past;
         },
         storeData: async function () {
+            console.log(this.form);
+            
+            let url = `${this.api_url}/conference`;
+            let formData = new FormData();
+                formData.append('event_id', this.event_id);
+                
+                // language
+                let language = [];
+                this.lang_arr.forEach(el => {
+                    language.push({'user_id': 'test', language: el.language});
+                });
+                
+                formData.append('language', JSON.stringify(language));
+
+                // event size
+                formData.append('event_size', this.event_size);
+
+                // etc 
+                for (let item in this.form) {
+                    formData.append(item, this.form[item]);
+                }
+
+                // files
+                formData.delete('logo');
+                formData.delete('banner');
+                formData.delete('background');
+
+                
+
+                let date = `${this.form.date} ${this.form.start_time ? this.form.start_time.substr(0, 5) : '00:00'}`;
+                console.log('date - ', date);
+                formData.append('date', date); // date 리셋
+                formData.delete('start_time');
+
+                !this.logo_file && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.logo_file);
+                !this.banner_file && this.banner_del ? formData.append('banner_del', 'Y') : formData.append('banner', this.banner_file);
+                !this.background_file && this.background_del ? formData.append('background_del', 'Y') : formData.append('background', this.background_file);
+
+                // form submit
+                try {
+                    let rs = await axios.post(url, formData, {
+                        Headers: {'Content-Type': 'multipart/form-data'}
+                    });
+
+                    // function callback () {
+                    //     this.$router.go(-1);
+                    // }
+                    this.getList();
+                    this.$showMsgBoxTwo(rs.status);
+                } catch (error) {
+                    this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+                } finally {
+                    this.modal1 = false;
+                }
 
         },
-        update: function(obj, prop, value) {
-            console.log(obj, prop, value);
-            this.$emit('input', { ...this[obj], [prop]: value })
-            // Vue.set(obj, prop, obj[prop]);
+        update: async function() {
+            console.log(this.form);
+            
+            let url = `${this.api_url}/conference/${this.form.id}`;
+            let formData = new FormData();
+                // language
+                let language = [];
+                this.lang_arr.forEach(el => {
+                    language.push({'user_id': 'test', language: el.language});
+                });
+                
+                formData.append('language', JSON.stringify(language));
+
+                // event size
+                formData.append('event_size', this.event_size);
+
+                // etc 
+                for (let item in this.form) {
+                    formData.append(item, this.form[item]);
+                }
+
+                // files
+                formData.delete('logo');
+                formData.delete('banner');
+                formData.delete('background');
+
+                console.log(this.form.start_time);
+
+                let date = `${this.form.date} ${this.form.start_time ? this.form.start_time.substr(0, 5) : '00:00'}`;
+                console.log('date - ', date);
+                formData.append('date', date); // date 리셋
+                formData.delete('start_time');
+
+                !this.logo_file && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.logo_file);
+                !this.banner_file && this.banner_del ? formData.append('banner_del', 'Y') : formData.append('banner', this.banner_file);
+                !this.background_file && this.background_del ? formData.append('background_del', 'Y') : formData.append('background', this.background_file);
+
+                // form submit
+                try {
+                    let rs = await axios.post(url, formData, {
+                        Headers: {'Content-Type': 'multipart/form-data'}
+                    });
+                    this.getList();
+                    this.$showMsgBoxTwo(rs.status);
+                } catch (error) {
+                    this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+                } finally {
+                    this.modal1 = false;
+                }
+        },
+        deleteData: async function (item) {
+            //http://14.63.172.119/api/v1/conference/3
+            if (confirm('삭제 하시겠습니까?')) {
+                try {
+                    let rs = await axios.delete(`${this.api_url}/conference/${item.id}`);
+                    this.getList();
+                    this.$showMsgBoxTwo(rs.status);
+                } catch (error) {
+                    this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+                }
+            }
         },
         deleteQnA: async function (item) {
 
@@ -720,11 +852,25 @@ module.exports = {
                 el.available.push(revive); // 남은 목록 안에 선택 가능한 옵션으로 되살린 아이템 넣어준다.
             });
         },
+        goNext: function () {
+            if (this.validation) {
+                this.form_page = 2;
+            } else {
+                this.$toast('Alert', '폼을 모두 입력해 주세요.', 'danger');
+            }
+        },
         setForm: function () {
             // 등록폼 모달의 초기 폼 세팅
             this.form = {};
             const now = new Date();
-            this.form.date = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+
+            let month = now.getMonth() + 1;
+                month = month < 10 ? `0${month}` : month;
+
+            let date = now.getDate();
+                date = date < 10 ? `0${date}` : date;
+
+            this.form.date = `${now.getFullYear()}-${month}-${date}`;
         },
         setWeek: function (days) {
             // 상단 1주일치 날짜버튼 생성
@@ -750,11 +896,16 @@ module.exports = {
             if (item) {
                 console.log(item);
                 this.form = {...item};
+                this.form.start_time = this.form.date.split(' ')[1];
+                this.form.date = this.form.date.split(' ')[0];
+                this.event_size = this.form.event_size;
                 this.modal1_border = "success";
             } else {
                 this.setForm();
                 this.modal1_border = "primary";
             }
+
+            this.form_page == 1;
             this.modal1 = true;
         },
         openModal2: async function (item, open_type) {

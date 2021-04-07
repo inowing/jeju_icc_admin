@@ -1,4 +1,5 @@
 Vue.use(Vuex);
+
 export const store = new Vuex.Store({
     state: {
         event_id: 105,
@@ -58,5 +59,10 @@ export const store = new Vuex.Store({
             await context.dispatch('actionA') // wait for `actionA` to finish
             context.commit('increment')
         }
-    }
+    },
+    plugins: [
+        createPersistedState({
+            storage: window.sessionStorage,
+        })
+    ]
 })

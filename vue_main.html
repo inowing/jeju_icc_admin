@@ -21,7 +21,8 @@
 	<!-- Required scripts -->
 	<script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
 	<script src="https://unpkg.com/vuex@3.6.2/dist/vuex.js"></script>
-
+	<script src="https://unpkg.com/vuex-persistedstate/dist/vuex-persistedstate.umd.js"></script>
+	
 	<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
 	<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 	<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
@@ -87,7 +88,7 @@
 	<script type="module">
 		import { store } from './vue/store.js';
 		import InowingPlugin from './vue/InowingPlugin.js'
-		
+
 		Vue.use(httpVueLoader);
 		Vue.use(VueQuillEditor);
 		Vue.use(InowingPlugin);

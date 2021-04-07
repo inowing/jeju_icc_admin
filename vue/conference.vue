@@ -67,7 +67,7 @@
                 </template>
 
                 <template #cell(conference_date)="row">
-                    <div class="text-center">{{ row.item.conference.date }}</div>
+                    <div class="text-center">{{ row.item.conference ? row.item.conference.date: '' }}</div>
                 </template>
                 <template #cell(is_top)="row">
                     <div class="text-center mt-1">

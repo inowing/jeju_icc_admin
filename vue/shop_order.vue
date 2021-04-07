@@ -336,7 +336,7 @@ module.exports = {
         getList: async function () {
             console.log('this event_id : %s, menu_id : %s', this.event_id, this.menu_id);
             let url = `${this.api_url}/order?menu_id=${this.menu_id}`;
-
+            console.log(url);
             if (this.search_key) {
                 url += `&search_key=${this.search_key}`;
             }

@@ -26,7 +26,7 @@ export default {
                 buttonSize: 'sm',
                 okVariant,
                 headerClass: 'p-2 border-bottom-0',
-                footerClass: 'p-2 border-top-0',
+                footerClass: 'p-2 border-top-0 ino-msg-footer-btn-100',
                 centered: true
             })
                 .then(value => {

@@ -50,7 +50,7 @@
                                                     <span style="font-size:smaller;">vm id : {{item.id}}</span>
                                                     <h5 class="text-primary">{{item.name}}</h5>
                                                     <br>
-                                                    <span class="text-secondary">{{item.venue}} / 08.25 09:00 ~ 0m / GMT +09:00 SEOUL</span>
+                                                    <span class="text-secondary">{{item.venue}} {{item.date.substr(5,5).replace('-', '/')}} {{item.date.split(' ')[1]}} ~ {{item.time}}m / GMT +09:00 SEOUL</span>
                                                 </b-col>
                                                 <b-col cols="3" class="p-1">
                                                     <p class="text-secondary" style="font-size:smaller; width: 100%; height: 100%; padding: 5px; border-left:1px solid silver; line-height: 85px; margin-bottom:0px;">
@@ -214,14 +214,14 @@
     
     <b-modal v-model="modal1" hide-footer title="Event Information" body-bg-variant="light">
         <b-card no-body class="p-1" :border-variant="modal1_border" v-show="form_page == 1">
-            <b-form-group label="Event title">
-                <b-form-input v-model="form.name" size="sm"></b-form-input>
+            <b-form-group label="Event title" label-variant="primary">
+                <b-form-input v-model="form.name" size="sm" :state="form.name ? true: false"></b-form-input>
             </b-form-group>
-            <b-form-group label="Menu">
-                <b-form-input v-model="form.link" size="sm"></b-form-input>
+            <b-form-group label="Venue">
+                <b-form-input v-model="form.venue" size="sm" :state="form.venue ? true: false"></b-form-input>
             </b-form-group>
             <b-form-group label="Host">
-                <b-form-input v-model="form.host" size="sm"></b-form-input>
+                <b-form-input v-model="form.host" size="sm" :state="form.host ? true: false"></b-form-input>
             </b-form-group>
             <b-form-group label="Event Size (최대 예상인원, 누적 인원 수)">
                 <b-button size="sm" style="width: 80px;" :variant="event_size == 100 ? 'warning' : 'outline-warning'" @click="event_size = 100">100</b-button>
@@ -234,7 +234,9 @@
                 <b-col>
                     <b-form-group label="Date">
                         <!-- ko_KR -->
-                        <b-form-datepicker v-model="form.date" locale="ko" :normal="datepicker_state == 'normal' ? true : false" :readonly="datepicker_state == 'readonly' ? true : false" size="sm"></b-form-datepicker>
+                        <b-form-datepicker v-model="form.date" locale="ko" 
+                            :min="min"
+                            :normal="datepicker_state == 'normal' ? true : false" :readonly="datepicker_state == 'readonly' ? true : false" size="sm"></b-form-datepicker>
                     </b-form-group>
                 </b-col>
                 <b-col>
@@ -242,6 +244,7 @@
                         <b-input-group>
                             <b-form-input
                                 v-model="start_time"
+                                :state="start_time ? true: false"
                                 type="text"
                                 placeholder="HH:mm"
                                 size="sm"
@@ -256,7 +259,7 @@
             <b-row>
                 <b-col>
                     <b-form-group label="진행시간(분)">
-                        <b-form-input v-model="form.time" type="number" size="sm"></b-form-input>
+                        <b-form-input v-model="form.time" :state="form.time ? true: false" type="number" size="sm"></b-form-input>
                     </b-form-group>
                 </b-col>
             </b-row>
@@ -542,6 +545,10 @@
 module.exports = {
     name: "Vm",
     data: function () {
+        const now = new Date()
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+        const minDate = new Date(today)
+        
         return {
             tabIndex: 0,
             openId: [],
@@ -606,6 +613,7 @@ module.exports = {
             form_date: '',
             start_time: '',
             form: {},
+            min: minDate,
 
             qna_fields: [
                 {key: 'id', label: '번호'},
@@ -663,8 +671,8 @@ module.exports = {
     },
     computed: {
         validation: function () {
-
-            return true;
+            return this.form.name && this.form.venue && this.form.host && this.event_size
+            && this.form.date && this.start_time && this.form.time;
         }
     },
     mounted: function () {
@@ -695,6 +703,7 @@ module.exports = {
         },
         storeData: async function () {
             console.log(this.form);
+            
             
             let url = `${this.api_url}/conference`;
             let formData = new FormData();
@@ -876,6 +885,8 @@ module.exports = {
                 date = date < 10 ? `0${date}` : date;
 
             this.form.date = `${now.getFullYear()}-${month}-${date}`;
+            this.form.is_login_attendee = 0;
+            this.event_size = 100;
         },
         setWeek: function (days) {
             // 상단 1주일치 날짜버튼 생성

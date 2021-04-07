@@ -197,7 +197,7 @@ module.exports = {
             },
             photoPreview: ``,
             photoPreview_en: ``,
-            photoPreview_default: `https://via.placeholder.com/800x450`,
+            photoPreview_default: this.$store.getters.dummy_image_url(['800x450']),
 
             isNew: false,
             selectedItem: null,

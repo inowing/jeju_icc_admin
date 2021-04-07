@@ -76,7 +76,7 @@
                                                                                     @click="openModal4(item, 0)"
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
-                                                                                </b-button>&nbsp;2명
+                                                                                </b-button>&nbsp;{{item.moderator_count}}명
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
@@ -97,7 +97,7 @@
                                                                                     @click="openModal4(item, 1)"
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
-                                                                                </b-button>&nbsp;8명
+                                                                                </b-button>&nbsp;{{item.presenter_count}}명
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
@@ -118,7 +118,7 @@
                                                                                     @click="openModal4(item, 1)"
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
-                                                                                </b-button>&nbsp;8명
+                                                                                </b-button>&nbsp;{{item.attendee_count}}명
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
@@ -185,7 +185,7 @@
                                         </b-col>
                                         <b-col cols="2" class="vm_card_v_right ino-180-180-wrap">
                                             <div style="border: none; padding: 0px;">
-                                                <b-img :src="item.logo||'https://picsum.photos/480/60/?image=20'" fluid></b-img>
+                                                <b-img :src="item.logo||logo_prev" fluid></b-img>
                                             </div>
                                         </b-col>
                                     </b-row>
@@ -202,8 +202,167 @@
                     <!-- . -->
 
                     <b-tab title="Past Events">
-                        Past Events
-                        <b-card>I'm the card in tab</b-card>
+                        <b-row class="mt-1" v-for="item in past" :key="item.id">
+                            <b-col>
+                                <b-card no-body>
+                                    <b-row>
+                                        <b-col cols="2" class="text-center vm_card_v_left">
+                                            <div>
+                                                <span style="font-size:smaller;">{{item.date.split(' ')[0]}}</span><br>
+
+                                                <span style="font-size:smaller;">({{ week[(new Date(Date.parse(item.date.split(' ')[0]))).getDay()] }})</span><br>
+                                                <b-button variant="danger" pill size="sm">Broadcast START</b-button>
+                                            </div>
+                                        </b-col>
+                                        <b-col cols="8" class="vm_card_v_center">
+                                            <b-row style="min-height: 90px;">
+                                                <b-col cols="9">
+                                                    <span style="font-size:smaller;">vm id : {{item.id}}</span>
+                                                    <h5 class="text-primary">{{item.name}}</h5>
+                                                    <br>
+                                                    <span class="text-secondary">{{item.venue}} {{item.date.substr(5,5).replace('-', '/')}} {{item.date.split(' ')[1]}} ~ {{item.time}}m / GMT +09:00 SEOUL</span>
+                                                </b-col>
+                                                <b-col cols="3" class="p-1">
+                                                    <p class="text-secondary" style="font-size:smaller; width: 100%; height: 100%; padding: 5px; border-left:1px solid silver; line-height: 85px; margin-bottom:0px;">
+                                                        <span style="margin-top: 15px;">{{item.host}}</span>
+                                                    </p>
+                                                </b-col>
+                                            </b-row>
+                                            <hr style="padding: 0; margin: 0">
+                                            <b-row class="mt-1">
+                                                <b-col>
+                                                    <b-row>
+                                                        <b-col>
+
+                                                            <b-collapse :id="'toggle_'+item.id" style="width:100%;">
+                                                                <b-row>
+                                                                    <b-col class="pr-1">
+                                                                        <b-card align="center" no-body class="p-2">
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Moderator</b-button>
+                                                                            </p>
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" 
+                                                                                    @click="openModal4(item, 0)"
+                                                                                    pill variant="outline-secondary">
+                                                                                    <b-icon-people></b-icon-people>
+                                                                                </b-button>&nbsp;{{item.moderator_count}}명
+                                                                            </p>
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" 
+                                                                                    @click="modal3=true; invitaion_tabIndex=0"
+                                                                                    pill variant="outline-primary">
+                                                                                    <b-icon-envelope></b-icon-envelope> Invitation
+                                                                                </b-button>
+                                                                            </p>
+                                                                        </b-card>
+                                                                    </b-col>
+                                                                    <b-col class="pl-1">
+                                                                        <b-card align="center" no-body class="p-2">
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Presenter</b-button>
+                                                                            </p>
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" 
+                                                                                    @click="openModal4(item, 1)"
+                                                                                    pill variant="outline-secondary">
+                                                                                    <b-icon-people></b-icon-people>
+                                                                                </b-button>&nbsp;{{item.presenter_count}}명
+                                                                            </p>
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" 
+                                                                                    @click="modal3=true; invitaion_tabIndex=1"
+                                                                                    pill variant="outline-primary">
+                                                                                    <b-icon-envelope></b-icon-envelope> Invitation
+                                                                                </b-button>
+                                                                            </p>
+                                                                        </b-card>
+                                                                    </b-col>
+                                                                    <b-col class="pl-1">
+                                                                        <b-card align="center" no-body class="p-2">
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Attendee</b-button>
+                                                                            </p>
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" 
+                                                                                    @click="openModal4(item, 1)"
+                                                                                    pill variant="outline-secondary">
+                                                                                    <b-icon-people></b-icon-people>
+                                                                                </b-button>&nbsp;{{item.attendee_count}}명
+                                                                            </p>
+                                                                            <p class="p-0 mb-1">
+                                                                                <b-button size="sm" 
+                                                                                    @click="modal3=true; invitaion_tabIndex=2"
+                                                                                    pill variant="outline-primary">
+                                                                                    <b-icon-envelope></b-icon-envelope> Invitation
+                                                                                </b-button>
+                                                                            </p>
+                                                                        </b-card>
+                                                                    </b-col>
+                                                                </b-row>
+                                                                <b-row class="mt-3">
+                                                                    <b-col align="center">
+                                                                        <b-button size="sm" variant="outline-secondary">
+                                                                            <b-icon-info-circle></b-icon-info-circle> 공지사항
+                                                                        </b-button>
+                                                                        <b-button size="sm" variant="outline-secondary" @click="openModal2(item, 'Q&A')">
+                                                                            <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A(0)
+                                                                        </b-button>
+                                                                        <b-button size="sm" variant="outline-secondary" @click="openModal2(item, '참가자')">
+                                                                            <b-icon-people></b-icon-people> 참가자(0)
+                                                                        </b-button>
+                                                                    </b-col>
+                                                                </b-row>
+                                                                <hr>
+                                                                <b-row>
+                                                                    <b-col align="center">
+                                                                        <p>
+                                                                            <b-button size="sm" pill variant="outline-primary">
+                                                                                <b-icon-people></b-icon-people>
+                                                                            </b-button>
+                                                                            예상 참가자수 <strong class="text-primary">{{ item.event_size }}</strong> 명
+                                                                        </p>
+                                                                        <p class="mb-1">
+                                                                            <b-button size="sm" variant="danger" class="inoBtn-200">
+                                                                                <b-icon-stop-circle></b-icon-stop-circle> BroadCast 멈추기
+                                                                            </b-button>
+                                                                        </p>
+                                                                        <p class="mb-1">
+                                                                            <b-button size="sm" variant="success" class="inoBtn-200" @click="openModal1($event, item)">
+                                                                                <b-icon-files-alt></b-icon-files-alt> 수정
+                                                                            </b-button>
+                                                                        </p>
+                                                                    </b-col>
+                                                                </b-row>
+                                                            </b-collapse>
+                                                        </b-col>
+                                                    </b-row>
+
+                                                    <b-row class="text-right mb-1">
+                                                        <b-col>
+                                                            <b-button v-b-toggle="'toggle_'+item.id" size="sm" variant="outline-primary" @click="openId.includes(item.id) ? openId.splice(openId.indexOf(item.id), 1) : openId.push(item.id);">
+                                                                <b-icon-chevron-down v-show="!openId.includes(item.id)"></b-icon-chevron-down>
+                                                                <b-icon-chevron-up v-show="openId.includes(item.id)"></b-icon-chevron-up>
+                                                            </b-button>
+                                                            <b-button size="sm" variant="outline-danger" @click="deleteData(item)">
+                                                                <b-icon-trash></b-icon-trash>
+                                                            </b-button>
+                                                        </b-col>
+                                                    </b-row>
+
+                                                </b-col>
+                                            </b-row>
+                                        </b-col>
+                                        <b-col cols="2" class="vm_card_v_right ino-180-180-wrap">
+                                            <div style="border: none; padding: 0px;">
+                                                <b-img :src="item.logo||logo_prev" fluid></b-img>
+                                            </div>
+                                        </b-col>
+                                    </b-row>
+                                </b-card>
+
+                            </b-col>
+                        </b-row>
                     </b-tab>
 
                 </b-tabs>
@@ -568,15 +727,15 @@ module.exports = {
             modal4: false,
 
             logo_file: null,
-            logo_prev: 'https://via.placeholder.com/480x60',
+            logo_prev: this.$store.getters.dummy_image_url(['480x60']),
             logo_del: false,
 
             banner_file: null,
-            banner_prev: 'https://via.placeholder.com/100x600',
+            banner_prev: this.$store.getters.dummy_image_url(['100x600']),
             banner_del: false,
 
             background_file: null,
-            background_prev: 'https://via.placeholder.com/480x60',
+            background_prev: this.$store.getters.dummy_image_url(['480x60']),
             background_del: false,
             
             form_page: 1,

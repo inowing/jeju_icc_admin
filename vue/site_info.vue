@@ -588,10 +588,10 @@ module.exports = {
             PCPreview: false,
             MobilePreview: false,
 
-            prev_250_50: 'https://dummyimage.com/250x50/aaa/fff',
-            prev_150_150: 'https://dummyimage.com/150x150/aaa/fff',
-            prev_480_60: 'https://dummyimage.com/480x60/aaa/fff',
-            prev_240_48: 'https://dummyimage.com/240x48/aaa/fff',
+            prev_250_50: this.$store.getters.dummy_image_url(['250x250']),
+            prev_150_150: this.$store.getters.dummy_image_url(['150x150']),
+            prev_480_60: this.$store.getters.dummy_image_url(['480x60']),
+            prev_240_48: this.$store.getters.dummy_image_url(['240x48']),
             
 
             file1: null,

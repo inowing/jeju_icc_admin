@@ -196,7 +196,7 @@ module.exports = {
             question_modal: false,
             selected_item: Object,
             thumb_prev: '',
-            thumb_prev_default: `https://via.placeholder.com/180x180`,
+            thumb_prev_default: this.$store.getters.dummy_image_url(['180x180']),
             movie_file_src: '',
             isNew: true
         }

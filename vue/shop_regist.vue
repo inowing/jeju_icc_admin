@@ -144,11 +144,11 @@ module.exports = {
 
             product_image_prev: '',
             product_image_del: false,
-            product_image_default: 'https://via.placeholder.com/180x180',
+            product_image_default: this.$store.getters.dummy_image_url(['180x180']),
 
             detail_image_prev: '',
             detail_image_del: false,
-            detail_image_default: 'https://via.placeholder.com/180x180',
+            detail_image_default: this.$store.getters.dummy_image_url(['180x180']),
 
 
             top_category_options: [],

@@ -14,9 +14,9 @@
                     <b-tab title="Upcoming Events">
                         <b-row class="mb-2">
                             <b-col cols="9">
-                                <b-button href="#" :variant="selected_btn_index == 0 ? primary : outline_primary" size="sm" @click="selected_btn_index = 0; getList(0)">ALL</b-button>
+                                <b-button href="#" :variant="selected_btn_index == 0 ? primary : outline_primary" size="sm" @click="searchDayList(0)">ALL</b-button>
                                 <span v-for="(item, index) in weeks" :key="index">
-                                    <b-button href="#" :variant="selected_btn_index == (index+1) ? primary : outline_primary" size="sm" class="mr-1" @click="selected_btn_index = (index+1); getList(item);">{{item.text}}</b-button>
+                                    <b-button href="#" :variant="selected_btn_index == (index+1) ? primary : outline_primary" size="sm" class="mr-1" @click="searchDayList(index+1, item);">{{item.text}}</b-button>
                                 </span>
                             </b-col>
                             <b-col>
@@ -39,7 +39,8 @@
                                         <b-col cols="2" class="text-center vm_card_v_left">
                                             <div>
                                                 <span style="font-size:smaller;">{{item.date.split(' ')[0]}}</span><br>
-                                                <span style="font-size:smaller;">(Wed)</span><br>
+
+                                                <span style="font-size:smaller;">({{ week[(new Date(Date.parse(item.date.split(' ')[0]))).getDay()] }})</span><br>
                                                 <b-button variant="danger" pill size="sm">Broadcast START</b-button>
                                             </div>
                                         </b-col>
@@ -240,13 +241,13 @@
                     <b-form-group label="시간">
                         <b-input-group>
                             <b-form-input
-                                v-model="form.start_time"
+                                v-model="start_time"
                                 type="text"
                                 placeholder="HH:mm"
                                 size="sm"
                             ></b-form-input>
                             <b-input-group-append>
-                                <b-form-timepicker v-model="form.start_time" size="sm" locale="kr" button-only></b-form-timepicker>
+                                <b-form-timepicker v-model="start_time" size="sm" locale="kr" button-only></b-form-timepicker>
                             </b-input-group-append>
                         </b-input-group>
                     </b-form-group>
@@ -603,6 +604,7 @@ module.exports = {
             survey_link: '',
             
             form_date: '',
+            start_time: '',
             form: {},
 
             qna_fields: [
@@ -646,15 +648,15 @@ module.exports = {
             api_url: ``,
 
             upcoming: [],
-            past: []
+            past: [],
+            week: ['Sun', 'Mon', 'Tue', 'Wen', 'Thur', 'Fri', 'Sat']
         };
     },
     watch: {
         // form: {
         //     deep: true,
         //     handler: function() {
-        //         // console.log('this.title', this.form);
-        //         // return this.form;
+                
         //     }
             
         // }
@@ -678,10 +680,18 @@ module.exports = {
         /**
          * 기본
          */
-        getList: async function () {
-            let rs = await axios.get(`${this.api_url}/conference?event_id=${this.event_id}`);
+        getList: async function (item) {
+            let url = `${this.api_url}/conference?event_id=${this.event_id}`;
+            if (item) {
+                url = `${url}&date=${item.value}`;
+            }
+            let rs = await axios.get(url);
             this.upcoming = rs.data.result.upcoming;
             this.past = rs.data.result.past;
+        },
+        searchDayList: async function (index, item) {
+            this.selected_btn_index = index;
+            this.getList(item);
         },
         storeData: async function () {
             console.log(this.form);
@@ -711,12 +721,9 @@ module.exports = {
                 formData.delete('banner');
                 formData.delete('background');
 
-                
-
-                let date = `${this.form.date} ${this.form.start_time ? this.form.start_time.substr(0, 5) : '00:00'}`;
-                console.log('date - ', date);
+                let date = `${this.form.date} ${this.start_time ? this.start_time.substr(0, 5) : '00:00'}`;
                 formData.append('date', date); // date 리셋
-                formData.delete('start_time');
+                
 
                 !this.logo_file && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.logo_file);
                 !this.banner_file && this.banner_del ? formData.append('banner_del', 'Y') : formData.append('banner', this.banner_file);
@@ -768,10 +775,8 @@ module.exports = {
 
                 console.log(this.form.start_time);
 
-                let date = `${this.form.date} ${this.form.start_time ? this.form.start_time.substr(0, 5) : '00:00'}`;
-                console.log('date - ', date);
+                let date = `${this.form.date} ${this.start_time ? this.start_time.substr(0, 5) : '00:00'}`;
                 formData.append('date', date); // date 리셋
-                formData.delete('start_time');
 
                 !this.logo_file && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.logo_file);
                 !this.banner_file && this.banner_del ? formData.append('banner_del', 'Y') : formData.append('banner', this.banner_file);
@@ -875,7 +880,7 @@ module.exports = {
         setWeek: function (days) {
             // 상단 1주일치 날짜버튼 생성
             var date = new Date();
-            var week = ['Sun', 'Mon', 'Tue', 'Wen', 'Thur', 'Fri', 'Sat'];
+            let week = this.week;
             for (var i = 1; i < days + 1; i++) {
                 var loadDate = new Date(Date.parse(date) + i * 1000 * 60 * 60 * 24); // ++1 일
                 var month = (1 + loadDate.getMonth());
@@ -896,8 +901,9 @@ module.exports = {
             if (item) {
                 console.log(item);
                 this.form = {...item};
-                this.form.start_time = this.form.date.split(' ')[1];
-                this.form.date = this.form.date.split(' ')[0];
+                let times = this.form.date.split(' ');
+                this.form.date = times[0];
+                this.start_time = times[1];
                 this.event_size = this.form.event_size;
                 this.modal1_border = "success";
             } else {
@@ -905,7 +911,7 @@ module.exports = {
                 this.modal1_border = "primary";
             }
 
-            this.form_page == 1;
+            this.form_page = 1;
             this.modal1 = true;
         },
         openModal2: async function (item, open_type) {

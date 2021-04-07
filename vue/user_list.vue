@@ -16,35 +16,75 @@
         </b-col>
     </b-row>
 
-    <b-row>
+    <b-row class="mt-1">
         <b-col>
-            <b-table :fields="fields" :items="items" small bordered head-variant="light" class="mt-1">
-                <template #cell(id)="row">
-                    <div class="text-center">
-                        {{row.item.id}}
-                    </div>
-                </template>
-                <template #cell(name)="row">
-                    <div class="text-center">
-                        {{row.item.name}}
-                    </div>
-                </template>
-                <template #cell(phone)="row">
-                    <div class="text-center">
-                        {{row.item.phone}}
-                    </div>
-                </template>
-                <template #cell(manageBtn)="row">
-                    <div class="text-center">
-                        <b-button size="sm" variant="outline-success" @click="openModal1($event, row.item)">
-                            <b-icon-pencil-square></b-icon-pencil-square> 수정
-                        </b-button>
-                        <b-button size="sm" variant="outline-danger" @click="userDelete(row.item, row.index, $event.target)">
-                            <b-icon-trash2-fill></b-icon-trash2-fill> 삭제
-                        </b-button>
-                    </div>
-                </template>
-            </b-table>
+            <b-card no-body>
+                <b-tabs card>
+                    <b-tab title="일반회원" active>
+                        <b-card>
+                            <b-table :fields="fields" :items="level50_items" small bordered head-variant="light" class="mt-1">
+                                <template #cell(id)="row">
+                                    <div class="text-center">
+                                        {{row.item.id}}
+                                    </div>
+                                </template>
+                                <template #cell(name)="row">
+                                    <div class="text-center">
+                                        {{row.item.name}}
+                                    </div>
+                                </template>
+                                <template #cell(phone)="row">
+                                    <div class="text-center">
+                                        {{row.item.phone}}
+                                    </div>
+                                </template>
+                                <template #cell(manageBtn)="row">
+                                    <div class="text-center">
+                                        <b-button size="sm" variant="outline-success" @click="openModal1($event, row.item)">
+                                            <b-icon-pencil-square></b-icon-pencil-square> 수정
+                                        </b-button>
+                                        <b-button size="sm" variant="outline-danger" @click="userDelete(row.item, row.index, $event.target)">
+                                            <b-icon-trash2-fill></b-icon-trash2-fill> 삭제
+                                        </b-button>
+                                    </div>
+                                </template>
+                            </b-table>
+                        </b-card>
+                    </b-tab>
+                    <b-tab title="기업회원">
+                        <b-card>
+                            <b-table :fields="fields" :items="level40_items" small bordered head-variant="light" class="mt-1">
+                                <template #cell(id)="row">
+                                    <div class="text-center">
+                                        {{row.item.id}}
+                                    </div>
+                                </template>
+                                <template #cell(name)="row">
+                                    <div class="text-center">
+                                        {{row.item.name}}
+                                    </div>
+                                </template>
+                                <template #cell(phone)="row">
+                                    <div class="text-center">
+                                        {{row.item.phone}}
+                                    </div>
+                                </template>
+                                <template #cell(manageBtn)="row">
+                                    <div class="text-center">
+                                        <b-button size="sm" variant="outline-success" @click="openModal1($event, row.item)">
+                                            <b-icon-pencil-square></b-icon-pencil-square> 수정
+                                        </b-button>
+                                        <b-button size="sm" variant="outline-danger" @click="userDelete(row.item, row.index, $event.target)">
+                                            <b-icon-trash2-fill></b-icon-trash2-fill> 삭제
+                                        </b-button>
+                                    </div>
+                                </template>
+                            </b-table>
+                        </b-card>
+                    </b-tab>
+                </b-tabs>
+
+            </b-card>
         </b-col>
     </b-row>
 
@@ -131,7 +171,7 @@ module.exports = {
     data: function () {
         return {
             modal1: false,
-            
+
             form: {
                 email: '',
                 password: '',
@@ -168,6 +208,8 @@ module.exports = {
                 },
             ],
             items: [],
+            level40_items: [], // 기업회원
+            level50_items: [], // 일반회원
             api_url: '',
             event_id: 0
 
@@ -198,13 +240,25 @@ module.exports = {
             let valid2 = this.isUniquiId;
             return valid && valid1 && valid2;
         },
- 
+
     },
 
     methods: {
         getList: async function () {
             let rs = await axios.get(`${this.api_url}/user/in_event?event_id=${this.event_id}`);
             this.items = rs.data.result;
+            // admin_level
+            let level40_items = [];
+            let level50_items = [];
+
+            this.items.forEach(el => {
+                el.admin_level == 40 ? level40_items.push(el) : level50_items.push(el);
+            });
+
+            this.level40_items = level40_items;
+            this.level50_items = level50_items;
+
+
         },
         userUpdate(item, index, target) {
             console.log(item, index, target);

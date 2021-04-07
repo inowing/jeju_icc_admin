@@ -34,19 +34,19 @@
                     <div class="text-center">{{row.item.attend_type == 0 ? '바이어' : '셀러'}}</div>
                 </template>
                 <template #cell(name)="row">
-                    <div class="text-center">{{row.item.name ? row.item.name : row.item.name_en }}</div>
+                    <div class="text-center" v-b-tooltip.hover :title="row.item.name ? row.item.name : row.item.name_en" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:100px;">{{row.item.name ? row.item.name : row.item.name_en }}</div>
                 </template>
                 <template #cell(representation_name)="row">
                     <div class="text-center">{{row.item.representation_name ? row.item.representation_name : row.item.representation_name_en }}</div>
                 </template>
                 <template #cell(address)="row">
-                    <div class="text-center">{{row.item.address}}</div>
+                    <div class="text-center" v-b-tooltip.hover :title="row.item.address" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:230px;">{{row.item.address}}</div>
                 </template>
                 <template #cell(condition)="row">
-                    <div class="text-center">{{row.item.condition}}</div>
+                    <div class="text-center" v-b-tooltip.hover :title="row.item.condition" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:50px;">{{row.item.condition}}</div>
                 </template>
                 <template #cell(sectors)="row">
-                    <div class="text-center">{{row.item.sectors}}</div>
+                    <div class="text-center" v-b-tooltip.hover :title="row.item.sectors" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:50px;">{{row.item.sectors}}</div>
                 </template>
                 <template #cell(event_type)="row">
                     <div class="text-center">{{row.item.event_type == 0 ? 'Exhibition' : row.item.event_type == 1 ? 'Bizmatching' : 'Exhibition + Bizmatching'}}</div>

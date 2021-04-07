@@ -373,15 +373,37 @@
     
     <b-modal v-model="modal1" hide-footer title="Event Information" body-bg-variant="light">
         <b-card no-body class="p-1" :border-variant="modal1_border" v-show="form_page == 1">
-            <b-form-group label="Event title" label-variant="primary">
-                <b-form-input v-model="form.name" size="sm" :state="form.name ? true: false"></b-form-input>
-            </b-form-group>
-            <b-form-group label="Venue">
-                <b-form-input v-model="form.venue" size="sm" :state="form.venue ? true: false"></b-form-input>
-            </b-form-group>
-            <b-form-group label="Host">
-                <b-form-input v-model="form.host" size="sm" :state="form.host ? true: false"></b-form-input>
-            </b-form-group>
+            <b-tabs card>
+                <b-tab title="국문" active>
+                    <b-form-group label="Event title" label-variant="primary">
+                        <b-form-input v-model="form.name" size="sm" :state="form.name ? true: false"></b-form-input>
+                    </b-form-group>
+                    <b-form-group label="Sub title">
+                        <b-form-input v-model="form.sub_title" size="sm"></b-form-input>
+                    </b-form-group>
+                    <b-form-group label="Venue">
+                        <b-form-input v-model="form.venue" size="sm" :state="form.venue ? true: false"></b-form-input>
+                    </b-form-group>
+                    <b-form-group label="Host">
+                        <b-form-input v-model="form.host" size="sm" :state="form.host ? true: false"></b-form-input>
+                    </b-form-group>
+                </b-tab>
+                <b-tab title="영문">
+                    <b-form-group label="Event title" label-variant="primary">
+                        <b-form-input v-model="form.name_en" size="sm"></b-form-input>
+                    </b-form-group>
+                    <b-form-group label="Sub title">
+                        <b-form-input v-model="form.sub_title_en" size="sm"></b-form-input>
+                    </b-form-group>
+                    <b-form-group label="Venue">
+                        <b-form-input v-model="form.venue_en" size="sm"></b-form-input>
+                    </b-form-group>
+                    <b-form-group label="Host">
+                        <b-form-input v-model="form.host_en" size="sm"></b-form-input>
+                    </b-form-group>
+                </b-tab>
+            </b-tabs>
+            <hr class="mt-0">
             <b-form-group label="Event Size (최대 예상인원, 누적 인원 수)">
                 <b-button size="sm" style="width: 80px;" :variant="event_size == 100 ? 'warning' : 'outline-warning'" @click="event_size = 100">100</b-button>
                 <b-button size="sm" style="width: 80px;" :variant="event_size == 200 ? 'warning' : 'outline-warning'"  @click="event_size = 200">200</b-button>
@@ -879,7 +901,7 @@ module.exports = {
                 // event size
                 formData.append('event_size', this.event_size);
 
-                if (!this.form.survey_link.includes('http') && this.forEach.survey_link) {
+                if (this.form.survey_link && !this.form.survey_link.includes('http')) {
                     this.form.survey_link = `http://${this.form.survey_link}`;
                 }
                 // etc 
@@ -934,7 +956,7 @@ module.exports = {
                 // event size
                 formData.append('event_size', this.event_size);
 
-                if (!this.form.survey_link.includes('http') && this.forEach.survey_link) {
+                if (this.form.survey_link && !this.form.survey_link.includes('http')) {
                     this.form.survey_link = `http://${this.form.survey_link}`;
                 }
                 // etc 
@@ -974,8 +996,13 @@ module.exports = {
             if (confirm('삭제 하시겠습니까?')) {
                 try {
                     let rs = await axios.delete(`${this.api_url}/conference/${item.id}`);
+                    if (rs.data.code == 412) {
+                        this.$showMsgBoxTwo(rs.data.code, '', '컨퍼런스 메뉴에서 사용중인 VM 입니다.');
+                        return;
+                    }
                     this.getList();
                     this.$showMsgBoxTwo(rs.status);
+                    
                 } catch (error) {
                     this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
                 }

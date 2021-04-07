@@ -97,14 +97,20 @@
             <b-form-select v-model="category_id" :options="category" size="sm"></b-form-select>
         </b-form-group>
         <b-form-group label="Main 컬러" class="mb-1">
-            <b-form-input type="color" v-model="main_color" size="sm">
+            <b-form-input type="color" v-model="main_theme_color" size="sm">
         </b-form-group>
         <b-form-group label="Sub 컬러" class="mb-1">
-            <b-form-input type="color" v-model="sub_color" size="sm">
+            <b-form-input type="color" v-model="sub_theme_color" size="sm">
         </b-form-group>
-        <b-form-group label="Sub Title" class="mb-1">
+        <b-form-group label="Main Text 컬러" class="mb-1">
+            <b-form-input type="color" v-model="main_text_color" size="sm">
+        </b-form-group>
+        <b-form-group label="Sub Text 컬러" class="mb-1">
+            <b-form-input type="color" v-model="sub_text_color" size="sm">
+        </b-form-group>
+        <!-- <b-form-group label="Sub Title" class="mb-1">
             <b-form-input type="text" v-model="sub_title" size="sm">
-        </b-form-group>
+        </b-form-group> -->
 
         <div>
             <b-form-group label="VM" label-for="tags-component-select">
@@ -159,9 +165,11 @@ module.exports = {
             category_id: 0,
             color: [],
             color_type_id: 0,
-            main_color: 0,
-            sub_color: 0,
-            sub_title: 0,
+            main_theme_color: 0,
+            sub_theme_color: 0,
+            main_text_color: 0,
+            sub_text_color: 0,
+            // main_theme_color: 0,
             vm: [],
             conference_id: '',
 
@@ -270,7 +278,7 @@ module.exports = {
             this.items = rs.data.result;
         },
         storeVM: async function () { // 하단 리스트아이템 저장하기
-            if (!(this.category_id && this.conference_id && this.sub_title)) {
+            if (!(this.category_id && this.conference_id)) {
                 alert('값을 선택해 주세요 주세요.');
                 return;
             }
@@ -281,9 +289,11 @@ module.exports = {
                 formData.append('order', this.order);
                 formData.append('category_id', this.category_id);
                 formData.append('conference_id', this.conference_id);
-                formData.append('sub_color', this.sub_color);
-                formData.append('main_color', this.main_color);
-                formData.append('sub_title', this.sub_title);
+                formData.append('main_theme_color', this.main_theme_color);
+                formData.append('sub_theme_color', this.sub_theme_color);
+                formData.append('main_text_color', this.main_text_color);
+                formData.append('sub_text_color', this.sub_text_color);
+                // formData.append('sub_title', this.sub_title);
 
             await this.sendPost(url, formData);
             await this.getList();
@@ -291,7 +301,7 @@ module.exports = {
             this.modal1 = false;
         },
         updateVM: async function () { // 하단 리스트아이템 저장하기
-            if (!(this.category_id && this.conference_id && this.sub_title)) {
+            if (!(this.category_id && this.conference_id)) {
                 alert('값을 선택해 주세요 주세요.');
                 return;
             }
@@ -301,9 +311,11 @@ module.exports = {
                 formData.append('order', this.order);
                 formData.append('category_id', this.category_id);
                 formData.append('conference_id', this.conference_id);
-                formData.append('sub_color', this.sub_color);
-                formData.append('main_color', this.main_color);
-                formData.append('sub_title', this.sub_title);
+                formData.append('main_theme_color', this.main_theme_color);
+                formData.append('sub_theme_color', this.sub_theme_color);
+                formData.append('main_text_color', this.main_text_color);
+                formData.append('sub_text_color', this.sub_text_color);
+                // formData.append('sub_title', this.sub_title);
 
             await this.sendPost(url, formData);
             await this.getList();
@@ -345,17 +357,23 @@ module.exports = {
                 console.log('selected item', item);
                 this.vm_id = item.id;
                 this.category_id = item.category_id;
-                this.sub_title = item.sub_title;
-                this.sub_color = item.sub_color;
-                this.main_color = item.main_color;
+                // this.sub_title = item.sub_title;
+                
+                this.main_theme_color = item.main_theme_color;
+                this.sub_theme_color = item.sub_theme_color;
+                this.main_text_color = item.main_text_color;
+                this.sub_text_color = item.sub_text_color;
+
                 this.conference_id = item.conference_id;
                 this.tagValue = [item.conference.name];
             } else {
                 this.vm_id = '';
                 this.category_id = '';
-                this.sub_title = '';
-                this.sub_color = '';
-                this.main_color = '';
+                // this.sub_title = '';
+                this.main_theme_color = '';
+                this.sub_theme_color = '';
+                this.main_text_color = '';
+                this.sub_text_color = '';
                 this.conference_id = '';
                 this.tagValue = [];
             }

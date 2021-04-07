@@ -47,9 +47,12 @@
                                 <b-form-input type="text" v-model="link"></b-form-input>
                             </b-form-group>
 							<b-card-text>
-								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+                                <b-form-textarea  v-model="contents">
+
+                                </b-form-textarea>
+								<!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
 								<br>
-								<div class="content ql-editor" v-html="contents"></div>
+								<div class="content ql-editor" v-html="contents"></div> -->
 							</b-card-text>
 						</b-tab>
 						<b-tab title="영문">
@@ -66,9 +69,12 @@
                                 <b-form-input type="text" v-model="link_en"></b-form-input>
                             </b-form-group>
 							<b-card-text>
-								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+                                <b-form-textarea  v-model="contents_en">
+
+                                </b-form-textarea>
+								<!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
 								<br>
-								<div class="content ql-editor" v-html="contents_en"></div>
+								<div class="content ql-editor" v-html="contents_en"></div> -->
 							</b-card-text>
 						</b-tab>
 					</b-tabs>
@@ -174,10 +180,10 @@ module.exports = {
                 formData.append('venue', this.venue);
                 formData.append('venue_en', this.venue_en);
 
-                if (!this.link.includes('http')) {
+                if (!this.link.includes('http') && this.link) {
                     this.link = `http://${this.link}`;
                 }
-                if (!this.link_en.includes('http')) {
+                if (!this.link_en.includes('http') && this.link_en) {
                     this.link_en = `http://${this.link_en}`;
                 }
                 formData.append('link', this.link);
@@ -218,10 +224,10 @@ module.exports = {
                 formData.append('venue', this.venue);
                 formData.append('venue_en', this.venue_en);
 
-                if (!this.link.includes('http')) {
+                if (!this.link.includes('http') && this.link) {
                     this.link = `http://${this.link}`;
                 }
-                if (!this.link_en.includes('http')) {
+                if (!this.link_en.includes('http') && this.link_en) {
                     this.link_en = `http://${this.link_en}`;
                 }
                 formData.append('link', this.link);

@@ -879,6 +879,9 @@ module.exports = {
                 // event size
                 formData.append('event_size', this.event_size);
 
+                if (!this.form.survey_link.includes('http') && this.forEach.survey_link) {
+                    this.form.survey_link = `http://${this.form.survey_link}`;
+                }
                 // etc 
                 for (let item in this.form) {
                     formData.append(item, this.form[item]);
@@ -931,6 +934,9 @@ module.exports = {
                 // event size
                 formData.append('event_size', this.event_size);
 
+                if (!this.form.survey_link.includes('http') && this.forEach.survey_link) {
+                    this.form.survey_link = `http://${this.form.survey_link}`;
+                }
                 // etc 
                 for (let item in this.form) {
                     formData.append(item, this.form[item]);

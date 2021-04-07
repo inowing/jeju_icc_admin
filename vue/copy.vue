@@ -45,6 +45,7 @@ module.exports = {
 	data: function () {
 	return {
 			event_id: 0,
+			api_url: 0,
 			copyright: null,
 			copyright_en: null,
             editorOption: {
@@ -59,12 +60,13 @@ module.exports = {
 	mounted: function () {
         this.$nextTick(function () {
 			this.event_id = this.$store.getters.event_id;
+			this.api_url = this.$store.getters.api_url;
             this.getCopyright();
         })
     },
 	methods: {
 		getCopyright: async function () {
-			let res = await axios.get(`http://14.63.172.119/api/v1/event/main_page?event_id=${this.event_id}`);
+			let res = await axios.get(`${this.api_url}/event/main_page?event_id=${this.event_id}`);
 			let data = res.data.result;
 			this.copyright = data.copyright;
 			this.copyright_en = data.copyright_en;
@@ -73,7 +75,7 @@ module.exports = {
 			var formData = new FormData();
 			formData.append('copyright', this.copyright);
 			formData.append('copyright_en', this.copyright_en);
-			let rs = await axios.post(`http://14.63.172.119/api/v1/event/${this.event_id}`, formData, {
+			let rs = await axios.post(`${this.api_url}/event/${this.event_id}`, formData, {
 						headers: {
 							'Content-Type': 'application/json'
 						}

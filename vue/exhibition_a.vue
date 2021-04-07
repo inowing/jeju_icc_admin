@@ -652,6 +652,16 @@ module.exports = {
 
             var formData = new FormData();
             formData.append("menu_id", this.menu_id);
+
+            this.exibition_a.link_1 = this.exibition_a.link_1 && !this.exibition_a.link_1.includes('http') ? `http://${this.exibition_a.link_1}` : this.exibition_a.link_1;
+            this.exibition_a.link_2 = this.exibition_a.link_2 && !this.exibition_a.link_2.includes('http') ? `http://${this.exibition_a.link_2}` : this.exibition_a.link_2;
+            this.exibition_a.link_3 = this.exibition_a.link_3 && !this.exibition_a.link_3.includes('http') ? `http://${this.exibition_a.link_3}` : this.exibition_a.link_3;
+
+            this.exibition_a.link_1_en = this.exibition_a.link_1_en && !this.exibition_a.link_1_en.includes('http') ? `http://${this.exibition_a.link_1_en}` : this.exibition_a.link_1_en;
+            this.exibition_a.link_2_en = this.exibition_a.link_2_en && !this.exibition_a.link_2_en.includes('http') ? `http://${this.exibition_a.link_2_en}` : this.exibition_a.link_2_en;
+            this.exibition_a.link_3_en = this.exibition_a.link_3_en && !this.exibition_a.link_3_en.includes('http') ? `http://${this.exibition_a.link_3_en}` : this.exibition_a.link_3_en;
+
+            
             formData.append("link_1", this.exibition_a.link_1); // 상단 슬라이드 링크
             formData.append("link_2", this.exibition_a.link_2);
             formData.append("link_3", this.exibition_a.link_3);

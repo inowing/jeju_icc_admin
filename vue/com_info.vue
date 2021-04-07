@@ -495,10 +495,10 @@ module.exports = {
             }
 
             if (12 == this.form.type) { // outlink
-                if (!this.link.includes('http')) {
+                if (!this.link.includes('http') && this.link) {
                     this.link = `http://${this.link}`;
                 }
-                if (!this.link_en.includes('http')) {
+                if (!this.link_en.includes('http') && this.link_en) {
                     this.link_en = `http://${this.link_en}`;
                 }
                 formData.append('link', this.link);

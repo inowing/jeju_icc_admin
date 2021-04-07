@@ -350,9 +350,9 @@ module.exports = {
             console.log(this.start_date);
 
             let response = await axios.get(url)
-            .catch(error=> {
-                this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
-            });
+                                .catch(error=> {
+                                    this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+                                });
 
             
             let rs = response.data.result;

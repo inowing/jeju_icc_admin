@@ -509,8 +509,11 @@
             </b-row>
             <b-form-group label="Languages">
                 <b-input-group v-for="(item, index) in lang_arr" :key="item.user_id" class="mb-1">
-                    <b-form-input v-model="item.memo" type="text"></b-form-input>
-                    <b-form-select v-model="item.user_id" :options="item.available"></b-form-select>
+                    <b-form-input v-model="item.language" type="text"></b-form-input>
+                    <b-form-select v-model="item.user_id" @change="selectedChange(item, index)">
+                          <b-form-select-option :value="item.user_id">{{item.name}}</b-form-select-option>
+                          <b-form-select-option v-for="user in available" :key="user.value" :value="user.value">{{user.text}}</b-form-select-option>
+                    </b-form-select>
                     <b-input-group-append>
                         <b-button size="sm" variant="danger" @click="removeLang(item, index)">X</b-button>
                     </b-input-group-append>
@@ -770,7 +773,8 @@ module.exports = {
 				{value: 4, text: '파루크'},
 				{value: 5, text: '이순신'}
 			],
-			lang_arr: [], // {user_id, memo, available}
+			lang_arr: [], // {user_id, language, available}
+            available: [],
 
             login: 0,
             login_type: 0,
@@ -836,13 +840,13 @@ module.exports = {
         };
     },
     watch: {
-        // form: {
-        //     deep: true,
-        //     handler: function() {
+        lang_arr: {
+            deep: true,
+            handler: function() {
                 
-        //     }
+            }
             
-        // }
+        }
     },
     computed: {
         validation: function () {
@@ -887,7 +891,7 @@ module.exports = {
                 // language
                 let language = [];
                 this.lang_arr.forEach(el => {
-                    language.push({user_id: el.user_id, language: el.memo});
+                    language.push({user_id: el.user_id, language: el.language});
                 });
                 
                 formData.append('language', JSON.stringify(language));
@@ -942,7 +946,7 @@ module.exports = {
                 // language
                 let language = [];
                 this.lang_arr.forEach(el => {
-                    language.push({user_id: el.user_id, language: el.memo});
+                    language.push({user_id: el.user_id, language: el.language});
                 });
                 
                 formData.append('language', JSON.stringify(language));
@@ -1009,18 +1013,41 @@ module.exports = {
         /**
          * 기타
          */
+        selectedChange: function(item, index) {
+            console.log(index, item); // id, name, language(memo)
+            if (!this.available.length) {
+                return;
+            }
+            let filterd = this.available.filter(el => el.value == item.user_id);
+            item.name = filterd[0].text;
+
+            let selected_ids = [];
+            this.lang_arr.forEach(el => {
+                selected_ids.push(el.user_id);
+            })
+            
+            this.available = [];
+            this.lang_options.forEach(el => {
+                if (!selected_ids.includes(el.value)) {
+                    this.available.push(el);
+                }
+            });
+            
+        },
         addLanguage: function () {
-            // lang_arr를 만들어준다. {user_id, name, memo, available: [{text: user_id, value: name}]}
+            console.log(this.lang_arr);
+
+            // lang_arr를 만들어준다. {user_id, name, language, available: [{text: user_id, value: name}]}
             let user_id = ''; // 요소 1
             let name = '';
-            let memo = '';
-            let available = []; // 요소 2 {user_id, name}
-            
+            let language = '';
             if (!this.lang_arr.length) {
                 user_id = this.lang_options[0].value;
                 name = this.lang_options[0].text;
-                available = [...this.lang_options];
-                this.lang_arr.push({user_id, name, memo, available});
+                language = '';
+                this.available = [...this.lang_options];
+                this.available.splice(0, 1);
+                this.lang_arr.push({user_id, name, language});
                 return;
             }
             // 최초순환 끝
@@ -1030,34 +1057,35 @@ module.exports = {
             let selected_name = {};
             this.lang_arr.forEach(el => {
                 selected.push(el.user_id);
-                selected_name[el.user_id] = {name: el.name, memo: el.memo};
+                selected_name[el.user_id] = {name: el.name, language: el.language};
             });
             
+            this.available = [];
             this.lang_options.forEach(el => {
                 if (!selected.includes(el.value)) {
-                    available.push(el); // 순수한 선택옵션들로 재구성
+                    this.available.push(el); // 순수한 선택옵션들로 재구성
                 }
             });
 
-            selected.push(available[0].value); // 가능목록 중 1번을 선택됨에 추가
-            selected_name[available[0].value] = {name: available[0].text, memo: ''}; // 가능목록 중 1번 이름을 선택됨에 추가
+            if (!this.available.length) {
+                return;
+            }
 
-            available.splice(0, 1); // 추가시킨 항목을 가능 목록에서 제거
+            selected.push(this.available[0].value); // 가능목록 중 1번을 선택됨에 추가
+            selected_name[this.available[0].value] = {name: this.available[0].text, language: ''}; // 가능목록 중 1번 이름을 선택됨에 추가
+            this.available.splice(0, 1); // 추가시킨 항목을 가능 목록에서 제거
             
             this.lang_arr = []; // 초기화
             // 선택됨을 토대로 다시 그려줌.
             selected.forEach(user_id => {
                 let obj = selected_name[user_id];
-                let individual_list = [{value: user_id, text: obj.name}, ...available];
-                this.lang_arr.push({user_id, name: obj.name, memo: obj.memo, available: individual_list});
+                this.lang_arr.push({user_id, name: obj.name, language: obj.language});
             });
         },
         removeLang: function (item, index) {
             let revive = {value: item.user_id, text: item.name}; // 되살릴 아이템 구성
             this.lang_arr.splice(index, 1); // 일단 목록에서 줄어든다.
-            this.lang_arr.forEach(el => {
-                el.available.push(revive); // 남은 목록 안에 선택 가능한 옵션으로 되살린 아이템 넣어준다.
-            });
+            this.available.push(revive); // 남은 목록 안에 선택 가능한 옵션으로 되살린 아이템 넣어준다.
         },
         goNext: function () {
             if (this.validation) {
@@ -1110,8 +1138,42 @@ module.exports = {
                 this.start_time = times[1];
                 this.event_size = this.form.event_size;
                 this.modal1_border = "success";
+
+                // temp test
+                item.language = JSON.stringify([{user_id: 1, language: 'k4eke'},
+                                        {user_id: 2, language: 'keke1'},
+                                        {user_id: 3, language: 'keke3'}]);
+                // test..... end
+                if (item.language) {
+                    let temp_arr = JSON.parse(item.language); // 저장되어 있는 목록
+                    if (temp_arr.length) {
+                        this.lang_arr = [];
+    
+                        let selected_value = []; // 아이디만 있는 목록
+                        let obj = {};
+                        this.lang_options.forEach(el => {
+                            obj[el.value] = el.text;
+                        });
+
+                        temp_arr.forEach(el => {
+                            selected_value.push(el.user_id);
+                            this.lang_arr.push({user_id: el.user_id, name:obj[el.user_id], language: el.language});
+                        });
+    
+                        this.available = [];
+                        this.lang_options.forEach(el => {
+                            if (!selected_value.includes(el.value)) {
+                                this.available.push(el);
+                            }
+                        });
+                    }
+                }
+
+
             } else {
                 this.setForm();
+                this.lang_arr = [];
+                this.available = this.lang_options;
                 this.modal1_border = "primary";
             }
 

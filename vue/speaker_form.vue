@@ -337,6 +337,9 @@ module.exports = {
                 formData.append('introduction_en', this.introduction_en);
                 
                 let category_id = this.category.selected_sub != 0 ? this.category.selected_sub : this.category.selected_top;
+                console.log(category_id, '???');
+                console.log(category_id, category_id);
+                console.log(category_id, category_id);
                 formData.append('category_id', category_id);
                 
             try {

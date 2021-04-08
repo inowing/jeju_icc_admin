@@ -81,6 +81,7 @@ module.exports = {
         },
         goForm: function (event, item) {
             if (item) {
+                console.log('id? ', item);
                 this.$router.push({ name: 'speaker_form', query: {menu_id: this.menu_id, id: item.id}});
             } else {
                 this.$router.push({ name: 'speaker_form', query: {menu_id: this.menu_id}});

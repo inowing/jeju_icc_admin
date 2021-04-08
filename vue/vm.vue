@@ -708,11 +708,25 @@
             
             <b-row class="p-1">
                 <b-col>
-                    <b-form-textarea
-                    v-model="email_content"
-                    rows="3"
-                    max-rows="6"
-                    ></b-form-textarea>
+                    <b-form-group label="VM" label-for="tags-component-select">
+                        <b-form-tags id="tags-component-select" v-model="tagValue" size="sm" add-on-change no-outer-focus>
+                            <template v-slot="{ tags, addTag, disabled, removeTag }">
+
+                                <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
+                                    <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                                        <b-form-tag @remove="removeTag(tag)" :title="tag" :disabled="disabled" variant="info">{{ tag }}</b-form-tag>
+                                    </li>
+                                </ul>
+                                
+                                <b-form-input v-model="search" id="tag-search-input" type="search" size="sm" autocomplete="off" list="input-list" ref="shobal" @update="multi_onOptionClick({ search, addTag, removeTag })"></b-form-input>
+                                <datalist id="input-list">
+                                    <option v-for="option in availableOptions" :key="option.id">{{ option.name }}</option>
+                                    <option v-if="availableOptions.length === 0">There are no tags available to select</option>
+                                </datalist>
+
+                            </template>
+                        </b-form-tags>
+                    </b-form-group>
 
                 </b-col>
             </b-row>
@@ -836,7 +850,11 @@ module.exports = {
 
             upcoming: [],
             past: [],
-            week: ['Sun', 'Mon', 'Tue', 'Wen', 'Thur', 'Fri', 'Sat']
+            week: ['Sun', 'Mon', 'Tue', 'Wen', 'Thur', 'Fri', 'Sat'],
+
+            vm: [],
+            search: '', // 선택한 vm 키워드
+            tagValue: [], // 선택된 vm 키워드 문자 집합
         };
     },
     watch: {
@@ -852,13 +870,25 @@ module.exports = {
         validation: function () {
             return this.form.name && this.form.venue && this.form.host && this.event_size
             && this.form.date && this.start_time && this.form.time;
-        }
+        },
+        criteria() {
+            return this.search.trim().toLowerCase()
+        },
+        availableOptions() {
+            const criteria = this.criteria;
+            const options = this.vm.filter(opt => this.tagValue.indexOf(opt.name) === -1);
+            if (criteria) {
+                return options.filter(opt => opt.name.toLowerCase().indexOf(criteria) > -1); // return new array
+            }
+            return options;
+        },
     },
     mounted: function () {
-        this.$nextTick(function () {
+        this.$nextTick(async function () {
             this.event_id = this.$store.getters.event_id;
             this.api_url = this.$store.getters.api_url;
             this.setWeek(7);
+            await this.getSelects();
             this.getList();
         })
     },
@@ -1214,6 +1244,29 @@ module.exports = {
             }
             testingCodeToCopy.setAttribute('type', 'hidden');
             window.getSelection().removeAllRanges();
+        },
+
+        getSelects: async function () { // modal select options 초기화
+            let url = `${this.api_url}/menu_conference/get_item_list?menu_id=${this.menu_id}`;
+            let rs = await axios.get(url);
+
+            this.vm = rs.data.result.conference;
+            this.vm = [
+                {id: 'abc', name: 'abc@abc.com'},
+                {id: 'ade', name: 'ade@abc.com'},
+            ]
+            console.log('this.vm ', this.vm);
+        },
+        
+        multi_onOptionClick({search, addTag}) { // VM 목록에서 클릭시 태그 추가.
+            for (let option of this.vm) {
+                if (option.name == search) {
+                    addTag(option.name); // string만 되는듯하다...
+                    this.conference_id = option.id;
+                    this.search = '';
+                    this.$refs.shobal.localValue = '';
+                }
+            }
         }
 
     },

@@ -408,16 +408,6 @@ module.exports = {
                     this.$refs.shobal.localValue = '';
                 }
             }
-        },
-        multi_onOptionClick({search, addTag}) { // VM 목록에서 클릭시 태그 추가.
-            for (let option of this.vm) {
-                if (option.name == search) {
-                    addTag(option.name); // string만 되는듯하다...
-                    this.conference_id = option.id;
-                    this.search = '';
-                    this.$refs.shobal.localValue = '';
-                }
-            }
         }
     }
 };

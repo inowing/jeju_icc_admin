@@ -51,14 +51,14 @@
 					<b-button squared v-show="!navShow" variant="info" v-b-toggle.sidebar-1 style="height: 50px;"><b-icon-list></b-icon-list></b-button>
 				</b-col>
 				<b-col cols="6">
-					<div v-show="navShow" style="height:45px; width:250px; object-fit:contain; margin: 0px auto; padding-top: 5px;">
+					<div v-show="navShow" style="max-height:48px; max-width:250px; object-fit:contain; margin: 0px auto; padding-top: 0px;">
 						<b-img :src="logo_url" fluid style="display:inline-block; width:100%; height: 100%;"></b-img>
 					</div>
 				</b-col>
 				<b-sidebar id="sidebar-1" title="Jeju ICC" shadow>
 					<div class="px-3 py-2" style="background-color: #e1e9eb"><navi></navi></div>
 				</b-sidebar>
-				<b-col cols="3" class="text-right"><b-button squared variant="info" style="height: 50px;"><b-icon-link45deg></b-icon-link45deg> <span v-show="navShow">사이트바로가기</span></b-button></b-col>
+				<b-col cols="3" class="text-right"><b-button @click="myLink" squared variant="info" style="height: 50px;"><b-icon-link45deg></b-icon-link45deg> <span v-show="navShow">사이트바로가기</span></b-button></b-col>
 			</b-row>
 		</header>
 		<main ref="inoResizer">
@@ -84,6 +84,22 @@
 				<router-view></router-view>
 			</article>
 		</main>
+
+		<b-modal v-model="link_modal" hide-footer title="사이트 바로가기">
+			<b-card>
+				<b-form-group label="이동하실 사이트 주소를 입력해 주세요." label-variant="success">
+					<b-form-input v-model="site_url" @keyup.enter="goCMS" size="sm"></b-form-input>
+				</b-form-group>
+				<b-card-text>
+					<b-button size="sm" variant="primary">
+						저장하기
+					</b-button>
+					<b-button size="sm" variant="success" @click="goCMS">
+						이동하기
+					</b-button>
+				</b-card-text>
+		   </b-card>
+	   </b-modal>
 	</div>
 	<script type="module">
 		import { store } from './vue/store.js';
@@ -109,7 +125,9 @@
 				return {
 					api_url: null,
 					navShow: true,
-					logo_url: ''
+					logo_url: '',
+					link_modal: false,
+					site_url: ''
 				}
 			},
 			
@@ -224,7 +242,22 @@
 						}
 						}
 					)
+				},
+				myLink: function () {
+					this.link_modal = true;
+				},
+				saveLink: async function () {
+					console.log(this.site_url, ' save...');
+					return this.site_url;
+				},
+				goCMS: function () {
+					this.saveLink();
+					if (this.site_url.includes('http')) {
+						window.location.href = this.site_url;
+					} else {
+						window.location.href = 'http://'+this.site_url;
 					}
+				}
 				
 			}
 		})

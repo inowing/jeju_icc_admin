@@ -124,6 +124,7 @@
 			data: function (){
 				return {
 					api_url: null,
+					event_id: 0,
 					navShow: true,
 					logo_url: '',
 					link_modal: false,
@@ -132,7 +133,7 @@
 			},
 			
 			mounted: function () {
-				this.$nextTick(function () {
+				this.$nextTick(async function () {
 					
 					// if (this.$route.query.event_id) {
 					// 	console.log('???1', this.$store.getters.event_id);
@@ -145,6 +146,8 @@
 					// }
 					
 					this.api_url = this.$store.getters.api_url;
+					this.event_id = this.$store.getters.event_id;
+					await this.getData();
 
 					this.navShow = this.$refs.inoResizer.clientWidth > 800 ? true : false; // 네비게이션 쇼,하이드
 					router.addRoute({ path: '/', component: window.httpVueLoader('./vue/site_info.vue') });
@@ -213,11 +216,6 @@
 					this.logo_url = payload;
 				});
 			},
-			// computed: {
-			// 	logo_url: function () {
-			// 		return 
-			// 	}
-			// },
 			methods: {
 				inowingResizeListener: function (e) {
 					this.navShow = this.$refs.inoResizer.clientWidth > 800 ? true : false;
@@ -243,15 +241,27 @@
 						}
 					)
 				},
+				getData: async function () {
+					let rs = await axios.get(`${this.api_url}/event/main_page?event_id=${this.event_id}`);
+					this.site_url = rs.data.result.link;
+				},
 				myLink: function () {
 					this.link_modal = true;
 				},
 				saveLink: async function () {
-					console.log(this.site_url, ' save...');
-					return this.site_url;
+					let url = `${this.api_url}/event/${this.event_id}`;
+					let formData = new FormData();
+						formData.append('link', this.site_url);
+					let rs = await axios.post(url, formData, {
+						Headers: {
+							'Content-Type': 'application/json'
+						}
+					});
+					return rs;
 				},
-				goCMS: function () {
-					this.saveLink();
+				goCMS: async function () {
+					let res = await this.saveLink();
+					this.getData();
 					if (this.site_url.includes('http')) {
 						window.location.href = this.site_url;
 					} else {

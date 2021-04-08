@@ -508,8 +508,9 @@
                 </b-col>
             </b-row>
             <b-form-group label="Languages">
-                <b-input-group v-for="(item, index) in lang_arr" :key="item.language" class="mb-1">
-                    <b-form-select v-model="item.language" :options="item.available" style="width:427px;"></b-form-select>
+                <b-input-group v-for="(item, index) in lang_arr" :key="item.user_id" class="mb-1">
+                    <b-form-input v-model="item.memo" type="text"></b-form-input>
+                    <b-form-select v-model="item.user_id" :options="item.available"></b-form-select>
                     <b-input-group-append>
                         <b-button size="sm" variant="danger" @click="removeLang(item, index)">X</b-button>
                     </b-input-group-append>
@@ -763,20 +764,13 @@ module.exports = {
             form_page: 1,
 
 			lang_options: [
-				{value: '한국어', text: '한국어'},
-				{value: '영어', text: '영어'},
-				{value: '일본어', text: '일본어'},
-				{value: '중국어', text: '중국어'},
-				{value: '스페인어', text: '스페인어'},
-				{value: '러시아어', text: '러시아어'},
-				{value: '프랑스어', text: '프랑스어'},
-				{value: '독일어', text: '독일어'},
-				{value: '이탈리아어', text: '이탈리아어'},
-				{value: '힌디어', text: '힌디어'},
-				{value: '아랍어', text: '아랍어'}
+				{value: 1, text: '박지성'},
+				{value: 2, text: '김종국'},
+				{value: 3, text: '홀란드'},
+				{value: 4, text: '파루크'},
+				{value: 5, text: '이순신'}
 			],
-            selected_lang: ['한국어', '영어', '일본어'],
-			lang_arr: [], // {language, available}
+			lang_arr: [], // {user_id, memo, available}
 
             login: 0,
             login_type: 0,
@@ -893,7 +887,7 @@ module.exports = {
                 // language
                 let language = [];
                 this.lang_arr.forEach(el => {
-                    language.push({'user_id': 'test', language: el.language});
+                    language.push({user_id: el.user_id, language: el.memo});
                 });
                 
                 formData.append('language', JSON.stringify(language));
@@ -948,7 +942,7 @@ module.exports = {
                 // language
                 let language = [];
                 this.lang_arr.forEach(el => {
-                    language.push({'user_id': 'test', language: el.language});
+                    language.push({user_id: el.user_id, language: el.memo});
                 });
                 
                 formData.append('language', JSON.stringify(language));
@@ -1016,43 +1010,50 @@ module.exports = {
          * 기타
          */
         addLanguage: function () {
-            // lang_arr를 만들어준다.
-            let language = ''; // 요소 1
-            let available = []; // 요소 2
+            // lang_arr를 만들어준다. {user_id, name, memo, available: [{text: user_id, value: name}]}
+            let user_id = ''; // 요소 1
+            let name = '';
+            let memo = '';
+            let available = []; // 요소 2 {user_id, name}
             
             if (!this.lang_arr.length) {
-                language = this.lang_options[0].value;
+                user_id = this.lang_options[0].value;
+                name = this.lang_options[0].text;
                 available = [...this.lang_options];
-                this.lang_arr.push({language, available});
+                this.lang_arr.push({user_id, name, memo, available});
                 return;
             }
             // 최초순환 끝
 
             // 두번째부터 수행
             let selected = [];
+            let selected_name = {};
             this.lang_arr.forEach(el => {
-                selected.push(el.language);
+                selected.push(el.user_id);
+                selected_name[el.user_id] = {name: el.name, memo: el.memo};
             });
-
+            
             this.lang_options.forEach(el => {
                 if (!selected.includes(el.value)) {
                     available.push(el); // 순수한 선택옵션들로 재구성
                 }
             });
 
-            selected.push(available[0].value); // 가능목록에서 중 1번을 선택됨에 추가
-            available.splice(0, 1); // 추가시킨 항목을 다시 제거
+            selected.push(available[0].value); // 가능목록 중 1번을 선택됨에 추가
+            selected_name[available[0].value] = {name: available[0].text, memo: ''}; // 가능목록 중 1번 이름을 선택됨에 추가
+
+            available.splice(0, 1); // 추가시킨 항목을 가능 목록에서 제거
             
             this.lang_arr = []; // 초기화
-
-            // 선택됨 항목을 다시 그려줌.
-            selected.forEach(language => {
-                let individual_list = [{value: language, text: language}, ...available];
-                this.lang_arr.push({language, available: individual_list});
+            // 선택됨을 토대로 다시 그려줌.
+            selected.forEach(user_id => {
+                let obj = selected_name[user_id];
+                let individual_list = [{value: user_id, text: obj.name}, ...available];
+                this.lang_arr.push({user_id, name: obj.name, memo: obj.memo, available: individual_list});
             });
         },
         removeLang: function (item, index) {
-            let revive = {value: item.language, text: item.language}; // 되살릴 아이템 구성
+            let revive = {value: item.user_id, text: item.name}; // 되살릴 아이템 구성
             this.lang_arr.splice(index, 1); // 일단 목록에서 줄어든다.
             this.lang_arr.forEach(el => {
                 el.available.push(revive); // 남은 목록 안에 선택 가능한 옵션으로 되살린 아이템 넣어준다.

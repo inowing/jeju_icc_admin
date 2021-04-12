@@ -80,7 +80,7 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="modal3=true; invitaion_tabIndex=0"
+                                                                                    @click="openModal3(item, 0)"
                                                                                     pill variant="outline-primary">
                                                                                     <b-icon-envelope></b-icon-envelope> Invitation
                                                                                 </b-button>
@@ -101,7 +101,7 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="modal3=true; invitaion_tabIndex=1"
+                                                                                    @click="openModal3(item, 1)"
                                                                                     pill variant="outline-primary">
                                                                                     <b-icon-envelope></b-icon-envelope> Invitation
                                                                                 </b-button>
@@ -115,14 +115,14 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="openModal4(item, 1)"
+                                                                                    @click="openModal4(item, 2)"
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
                                                                                 </b-button>&nbsp;{{item.attendee_count}}명
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="modal3=true; invitaion_tabIndex=2"
+                                                                                    @click="openModal3(item, 2)"
                                                                                     pill variant="outline-primary">
                                                                                     <b-icon-envelope></b-icon-envelope> Invitation
                                                                                 </b-button>
@@ -136,10 +136,10 @@
                                                                             <b-icon-info-circle></b-icon-info-circle> 공지사항
                                                                         </b-button>
                                                                         <b-button size="sm" variant="outline-secondary" @click="openModal2(item, 'Q&A')">
-                                                                            <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A(0)
+                                                                            <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A({{item.qna_count}})
                                                                         </b-button>
                                                                         <b-button size="sm" variant="outline-secondary" @click="openModal2(item, '참가자')">
-                                                                            <b-icon-people></b-icon-people> 참가자(0)
+                                                                            <b-icon-people></b-icon-people> 참가자({{item.user_count}})
                                                                         </b-button>
                                                                     </b-col>
                                                                 </b-row>
@@ -250,7 +250,7 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="modal3=true; invitaion_tabIndex=0"
+                                                                                    @click="openModal3(item, 0)"
                                                                                     pill variant="outline-primary">
                                                                                     <b-icon-envelope></b-icon-envelope> Invitation
                                                                                 </b-button>
@@ -271,7 +271,7 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="modal3=true; invitaion_tabIndex=1"
+                                                                                    @click="openModal3(item, 1)"
                                                                                     pill variant="outline-primary">
                                                                                     <b-icon-envelope></b-icon-envelope> Invitation
                                                                                 </b-button>
@@ -285,14 +285,14 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="openModal4(item, 1)"
+                                                                                    @click="openModal4(item, 2)"
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
                                                                                 </b-button>&nbsp;{{item.attendee_count}}명
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="modal3=true; invitaion_tabIndex=2"
+                                                                                    @click="openModal3(item, 2)"
                                                                                     pill variant="outline-primary">
                                                                                     <b-icon-envelope></b-icon-envelope> Invitation
                                                                                 </b-button>
@@ -306,10 +306,10 @@
                                                                             <b-icon-info-circle></b-icon-info-circle> 공지사항
                                                                         </b-button>
                                                                         <b-button size="sm" variant="outline-secondary" @click="openModal2(item, 'Q&A')">
-                                                                            <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A(0)
+                                                                            <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A({{item.qna_count}})
                                                                         </b-button>
                                                                         <b-button size="sm" variant="outline-secondary" @click="openModal2(item, '참가자')">
-                                                                            <b-icon-people></b-icon-people> 참가자(0)
+                                                                            <b-icon-people></b-icon-people> 참가자({{item.user_count}})
                                                                         </b-button>
                                                                     </b-col>
                                                                 </b-row>
@@ -606,6 +606,12 @@
                         <template #cell(id)="row">
                             <div class="text-center">{{row.item.id}}</div>
                         </template>
+                        <template #cell(email)="row">
+                            <div class="text-center">{{row.item.user.email}}</div>
+                        </template>
+                        <template #cell(updated_at)="row">
+                            <div class="text-center">{{row.item.updated_at}}</div>
+                        </template>
                     </b-table>
                 </b-tab>
                 <b-tab title="Presenter">
@@ -613,6 +619,26 @@
                         :fields="modal4_fields" :items="modal4_items_2" small bordered head-variant="light" class="mt-1" style="font-size: 9pt; vertical-align: center; line-height:33px;">
                         <template #cell(id)="row">
                             <div class="text-center">{{row.item.id}}</div>
+                        </template>
+                        <template #cell(email)="row">
+                            <div class="text-center">{{row.item.user.email}}</div>
+                        </template>
+                        <template #cell(updated_at)="row">
+                            <div class="text-center">{{row.item.updated_at}}</div>
+                        </template>
+                    </b-table>
+                </b-tab>
+                <b-tab title="Attendee">
+                    <b-table
+                        :fields="modal4_fields" :items="modal4_items_3" small bordered head-variant="light" class="mt-1" style="font-size: 9pt; vertical-align: center; line-height:33px;">
+                        <template #cell(id)="row">
+                            <div class="text-center">{{row.item.id}}</div>
+                        </template>
+                        <template #cell(email)="row">
+                            <div class="text-center">{{row.item.user.email}}</div>
+                        </template>
+                        <template #cell(updated_at)="row">
+                            <div class="text-center">{{row.item.updated_at}}</div>
                         </template>
                     </b-table>
                 </b-tab>
@@ -634,6 +660,12 @@
             <template #cell(id)="row">
                 <div class="text-center">{{row.item.id}}</div>
             </template>
+            <template #cell(name)="row">
+                <div class="text-center">{{row.item.user.name}}</div>
+            </template>
+            <template #cell(created_at)="row">
+                <div class="text-center">{{row.item.created_at}}</div>
+            </template>
             <template #cell(manageBtn)="row">
                 <div class="text-center">
                     <b-button size="sm" variant="outline-danger" @click="deleteQnA(row.item, $event, row.index)">
@@ -647,6 +679,15 @@
             :fields="attend_fields" :items="attend_items" small bordered head-variant="light" class="mt-1" style="font-size: 9pt; vertical-align: center; line-height:33px;">
             <template #cell(id)="row">
                 <div class="text-center">{{row.item.id}}</div>
+            </template>
+            <template #cell(name)="row">
+                <div class="text-center">{{row.item.user.name}}</div>
+            </template>
+            <template #cell(time_login)="row">
+                <div class="text-center">{{row.item.time_login}}</div>
+            </template>
+            <template #cell(time_logout)="row">
+                <div class="text-center">{{row.item.time_logout}}</div>
             </template>
         </b-table>
     </b-modal>
@@ -664,8 +705,8 @@
                         <b-col cols="9">
                             <p class="m-0">Join URL</p>
                             <p class="m-0 text-primary">
-                                <span>http://earth-sandwich.com/VM/conference_m.html?event_id={{event_id}}</span>
-                                <input type="hidden" ref="email1" :value="`http://earth-sandwich.com/VM/conference_m.html?event_id=${event_id}`">
+                                <span>{{conference_item ? conference_item.link : ''}}</span>
+                                <input type="hidden" ref="email1" :value="conference_item ? conference_item.link : ''">
                                 <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email1')" ><b-icon-clipboard-plus></b-icon-clipboard-plus></b-button>
                             </p>
                         </b-col>
@@ -680,8 +721,8 @@
                         <b-col cols="9">
                             <p class="m-0">Join URL</p>
                             <p class="m-0 text-primary">
-                                <span>http://earth-sandwich.com/VM/conference_p.html?event_id=37</span>
-                                <input type="hidden" ref="email2" :value="`http://earth-sandwich.com/VM/conference_p.html?event_id=${event_id}`">
+                                <span>{{conference_item ? conference_item.link : ''}}</span>
+                                <input type="hidden" ref="email2" :value="conference_item ? conference_item.link : ''">
                                 <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email2')" ><b-icon-clipboard-plus></b-icon-clipboard-plus></b-button>
                             </p>
                         </b-col>
@@ -696,8 +737,8 @@
                         <b-col cols="9">
                             <p class="m-0">Join URL</p>
                             <p class="m-0 text-primary">
-                                <span>http://earth-sandwich.com/VM/conference_1.html?event_id=37</span>
-                                <input type="hidden" ref="email3" :value="`http://earth-sandwich.com/VM/conference_1.html?event_id=${event_id}`">
+                                <span>{{conference_item ? conference_item.link : ''}}</span>
+                                <input type="hidden" ref="email3" :value="conference_item ? conference_item.link : ''">
                                 <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email3')" ><b-icon-clipboard-plus></b-icon-clipboard-plus></b-button>
                             </p>
                         </b-col>
@@ -720,7 +761,7 @@
                                 
                                 <b-form-input v-model="search" id="tag-search-input" type="search" size="sm" autocomplete="off" list="input-list" ref="shobal" @update="multi_onOptionClick({ search, addTag, removeTag })"></b-form-input>
                                 <datalist id="input-list">
-                                    <option v-for="option in availableOptions" :key="option.id">{{ option.name }}</option>
+                                    <option v-for="option in availableOptions" :key="option.id">{{ option.email }}</option>
                                     <option v-if="availableOptions.length === 0">There are no tags available to select</option>
                                 </datalist>
 
@@ -730,9 +771,9 @@
 
                 </b-col>
             </b-row>
-            <b-row class="mt-1 mb-1 text-center">
+            <b-row class="mb-1 text-center">
                 <b-col>
-                    <b-button size="sm" variant="primary">초대메일 전송</b-button>
+                    <b-button size="sm" variant="primary" @click="sendEmail">초대메일 전송</b-button>
                 </b-col>
             </b-row>
         </b-card>
@@ -809,26 +850,21 @@ module.exports = {
             min: minDate,
 
             qna_fields: [
-                {key: 'id', label: '번호'},
-                {key: 'content', label: '내용'},
-                {key: 'creater', label: '작성자'},
+                {key: 'id', label: '아이디'},
+                {key: 'contents', label: '내용'},
+                {key: 'name', label: '작성자'},
                 {key: 'created_at', label: '작성일'},
                 {key: 'manageBtn', label: '관리'},
             ],
-            qna_items: [
-                {id:3, content: '질문들이 보이시나요', creater: 'test@test.com', created_at: '2020.12.11 14:00'}
-            ],
+            qna_items: [],
 
             attend_fields: [
-                {key: 'id', label: '번호'},
-                {key: 'email', label: '아이디'},
+                {key: 'id', label: '아이디'},
                 {key: 'name', label: '이름'},
-                {key: 'login', label: '로그인 시간'},
-                {key: 'logout', label: '로그아웃 시간'}
+                {key: 'time_login', label: '로그인 시간'},
+                {key: 'time_logout', label: '로그아웃 시간'}
             ],
-            attend_items: [
-                {id: 3, email: 'test@test.com', name: 'kim youn wu', login: '2020.12.11 14:00', logout: '2020.12.11 15:00'}
-            ],
+            attend_items: [],
 
             invitaion_tabIndex: 0,
             attend_tabIndex: 0,
@@ -837,14 +873,11 @@ module.exports = {
             modal4_fields: [
                 {key: 'id', label: 'No.'},
                 {key: 'email', label: 'E-mail'},
-                {key: 'invite_time', label: '초대일시'}
+                {key: 'updated_at', label: '초대일시'}
             ],
-            modal4_items_1: [
-                {id: 3, email: 'test@test.com', invite_time: '2020.12.11 14:00'}
-            ],
-            modal4_items_2: [
-                
-            ],
+            modal4_items_1: [],
+            modal4_items_2: [],
+            modal4_items_3: [],
             event_id: 0,
             api_url: ``,
 
@@ -855,6 +888,8 @@ module.exports = {
             vm: [],
             search: '', // 선택한 vm 키워드
             tagValue: [], // 선택된 vm 키워드 문자 집합
+            
+            conference_item: null
         };
     },
     watch: {
@@ -876,9 +911,9 @@ module.exports = {
         },
         availableOptions() {
             const criteria = this.criteria;
-            const options = this.vm.filter(opt => this.tagValue.indexOf(opt.name) === -1);
+            const options = this.vm.filter(opt => this.tagValue.indexOf(opt.email) === -1);
             if (criteria) {
-                return options.filter(opt => opt.name.toLowerCase().indexOf(criteria) > -1); // return new array
+                return options.filter(opt => opt.email.toLowerCase().indexOf(criteria) > -1); // return new array
             }
             return options;
         },
@@ -1037,7 +1072,39 @@ module.exports = {
             }
         },
         deleteQnA: async function (item) {
+            // this.conference_item.id
+            let url = `${this.api_url}/conference_qna/${item.id}`;
+            if (confirm('삭제 하시겠습니까?')) {
+                let rs = await axios.delete(url);
+                console.log(rs);
+                this.$showMsgBoxTwo(rs.status);
+                this.modal2 = false;
+            }
 
+        },
+        sendEmail: async function () {
+            try {
+                let user_type = this.invitaion_tabIndex;
+                let url = `${this.api_url}/conference_invitation`;
+                let formData = new FormData();
+                    formData.append('conference_id', this.conference_item.id);
+                    formData.append('user_type', user_type);
+                    for (var i = 0; i < this.tagValue.length; i ++) {
+                        formData.append('user[]', this.tagValue[i]);
+                    }
+                    console.log(this.tagValue);
+                let rs = await axios.post(url, formData, {
+                    Headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                this.getList();
+                this.$showMsgBoxTwo(rs.status);
+                this.modal3 = false;
+
+            } catch (error) {
+                this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+            }
         },
 
         /**
@@ -1157,7 +1224,11 @@ module.exports = {
             }
         },
         excelDownload: function () {
-            console.log(this.modal2_type, ' download...');
+            let url = this.modal2_type == 'Q&A' ? 
+                `${this.api_url}/conference_qna/excel?conference_id=${this.conference_item.id}`
+                : `${this.api_url}/conference_log/excel?conference_id=${this.conference_item.id}`;
+                
+            window.location.href = url;
         },
         openModal1: function(event, item) {
             if (item) {
@@ -1211,20 +1282,40 @@ module.exports = {
             this.modal1 = true;
         },
         openModal2: async function (item, open_type) {
-            console.log(item);
-            //todo. get list for type
-            if (open_type == 'qna') {
-                console.log('qna list...');
+            this.conference_item = item;
+            if (open_type == 'Q&A') {
+                let rs = await axios.get(`${this.api_url}/conference_qna?conference_id=${item.id}`);
+                this.qna_items = rs.data.result;
             } else {
-                console.log('attend list...');
+                let rs = await axios.get(`${this.api_url}/conference_log?conference_id=${item.id}`);
+                this.attend_items = rs.data.result;
             }
             this.modal2_type = open_type;
             this.modal2 = true;
+        },
+        openModal3: async function (item, invitaion_tabIndex) {
+            this.tagValue = [];
+            console.log("open 333333");
+            this.conference_item = item;
+            this.invitaion_tabIndex = invitaion_tabIndex;
+            let url = `${this.api_url}/user/in_event?event_id=${this.event_id}`;
+            let rs = await axios.get(url);
+            console.log(rs);
+            this.vm = rs.data.result;
 
+            // availableOptions
+            this.modal3 = true;
         },
         openModal4: async function(item, index) {
-            // get list... 참가자 초청리스트
+            console.log(">>>>");
+            this.conference_item = item;
             this.attend_tabIndex = index;
+            let url = `${this.api_url}/conference_invitation?conference_id=${this.conference_item.id}`;
+            let rs = await axios.get(url);
+                this.modal4_items_1 = rs.data.result.moderator;
+                this.modal4_items_2 = rs.data.result.presenter;
+                this.modal4_items_3 = rs.data.result.attendee;
+            console.log('openModal4 ', rs);
             this.modal4 = true;
         },
         exeCopy: function (event, ref_id) {
@@ -1252,16 +1343,15 @@ module.exports = {
 
             this.vm = rs.data.result.conference;
             this.vm = [
-                {id: 'abc', name: 'abc@abc.com'},
-                {id: 'ade', name: 'ade@abc.com'},
+                {id: 'a', name: 'dezcao@gmail.com'}
             ]
             console.log('this.vm ', this.vm);
         },
         
         multi_onOptionClick({search, addTag}) { // VM 목록에서 클릭시 태그 추가.
             for (let option of this.vm) {
-                if (option.name == search) {
-                    addTag(option.name); // string만 되는듯하다...
+                if (option.email == search) {
+                    addTag(option.email); // string만 되는듯하다...
                     this.conference_id = option.id;
                     this.search = '';
                     this.$refs.shobal.localValue = '';

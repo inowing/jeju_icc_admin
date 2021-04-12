@@ -10,8 +10,6 @@
 	<title>Jeju ICC</title>
 
 	<!-- Required Stylesheets -->
-	<!-- <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" /> -->
-	<!-- <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css" /> -->
 	<link type="text/css" rel="stylesheet" href="./static/css/bootstrap.min.css" />
 	<link type="text/css" rel="stylesheet" href="./static/css/bootstrap-vue.css" />
 
@@ -38,7 +36,6 @@
 
 	<!-- Include stylesheet -->
 	<link type="text/css" href="https://cdn.quilljs.com/1.3.4/quill.core.css" rel="stylesheet">
-	<link type="text/css" href="https://cdn.quilljs.com/1.3.4/quill.snow.css" rel="stylesheet">
 	<link type="text/css" href="https://cdn.quilljs.com/1.3.4/quill.snow.css" rel="stylesheet">
 
 </head>
@@ -192,7 +189,7 @@
 
 					router.addRoute({ path: '/biz/site',name:'biz_site', component: window.httpVueLoader('./vue/biz_site.vue') });
 					router.addRoute({ path: '/biz/site/form',name:'biz_site_form', component: window.httpVueLoader('./vue/biz_site_form.vue') });
-					router.addRoute({ path: '/biz/schedule',name:'biz_schedule', component: window.httpVueLoader('./vue/biz_schedule.vue') });
+					router.addRoute({ path: '/biz/schedule',name:'biz_schedule', component: window.httpVueLoader('./vue/biz_schedule.vue?v=123') });
 					router.addRoute({ path: '/biz/link',name:'biz_link', component: window.httpVueLoader('./vue/biz_link.vue') });
 
 					router.addRoute({ path: '/company/list', component: window.httpVueLoader('./vue/company_list.vue') });
@@ -223,23 +220,6 @@
 				getLogo: async function() {
 					let rs = await axios.get(`${this.api_url}/event/main_page?event_id=${this.$store.getters.event_id}`);
 					this.logo_url = rs.data.result.logo;
-				},
-				handleClick(){
-					this.$confirm(
-						{
-						message: `Are you sure?`,
-						button: {
-							no: 'No',
-							yes: 'Yes'
-						},
-						
-						callback: confirm => {
-							if (confirm) {
-							// ... do something
-							}
-						}
-						}
-					)
 				},
 				getData: async function () {
 					let rs = await axios.get(`${this.api_url}/event/main_page?event_id=${this.event_id}`);

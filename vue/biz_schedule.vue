@@ -37,7 +37,7 @@
                 </template>
                 <template #cell(manageBtn)="row">
                     <div class="text-center">
-                        <b-button size="sm" variant="outline-info" @click="openModal2($event, row.item)">
+                        <b-button size="sm" variant="outline-info" @click="openModal2($event, row.item, row.index)">
                             <b-icon-mic-mute></b-icon-mic-mute> 휴계관리
                         </b-button>
                         <b-button size="sm" variant="outline-success" @click="openModal1($event, row.item)">
@@ -115,7 +115,7 @@
         <b-button v-show="form.id" class="mt-2 inoBtn-150" variant="info" @click="updateData" size="sm">수정</b-button>
     </b-modal>
 
-    <b-modal v-model="modal2" hide-footer title="휴계관리">
+    <b-modal v-model="modal2" hide-footer title="휴계관리" size="lg">
         <b-table :fields="restFields" :items="restList" small bordered head-variant="light" class="mt-1">
             <template #cell(start)="row">
                 <div class="text-center">{{row.item.start}}</div>
@@ -125,13 +125,23 @@
             </template>
             <template #cell(status)="row">
                 <div class="text-center">
-                    <b-button v-show="row.item.status == 1" size="sm" variant="primary" @click="statusChang($event, row.item)">
-                        <b-icon-mic></b-icon-mic>활성
+                    <b-button v-show="row.item.status == 1" style="width:100px;" size="sm" @click="statusChang($event, row.item)">
+                        <b-icon-mic></b-icon-mic>비활성
                     </b-button>
-                    <b-button v-show="row.item.status == 0" size="sm" variant="danger" @click="statusChang($event, row.item)">
-                        <b-icon-mic-mute></b-icon-mic-mute>비활성
+                    <b-button v-show="row.item.status == 0" style="width:100px;" size="sm" variant="primary" @click="statusChang($event, row.item)">
+                        <b-icon-mic-mute></b-icon-mic-mute>활성
                     </b-button>
                 </div>
+            </template>
+            <template #cell(memo)="row">
+                <b-input-group>
+                    <b-form-input v-model="row.item.memo" size="sm"></b-form-input>
+                    <b-input-group-append>
+                        <b-button variant="info" size="sm" @click="saveMemo($event, row.item)">저장</b-button>
+                    </b-input-group-append>
+                </b-input-group>
+
+                
             </template>
         </b-table>
     </b-modal>
@@ -148,6 +158,7 @@ module.exports = {
             modal1: false,
             modal2: false,
             modal1_border: 'primary',
+            selected_item_index: 0,
             fields: [{
                     key: 'id',
                     label: '아이디'
@@ -186,7 +197,11 @@ module.exports = {
                 },
                 {
                     key: "status",
-                    label: "관리",
+                    label: "현재상태",
+                },
+                {
+                    key: "memo",
+                    label: "메모",
                 }
             ],
             
@@ -253,12 +268,11 @@ module.exports = {
             }
             this.modal1 = true;
         },
-        openModal2: async function (event, item) {
+        openModal2: async function (event, item, index) {
             // 휴계관리
-            console.log(item);
             this.restList = item.details;
+            this.selected_item_index = index;
             this.modal2 = true;
-
         },
         storeData: async function () {
             let url = `${this.api_url}/schedule`;
@@ -280,6 +294,7 @@ module.exports = {
             this.modal1 = false;
             return rs.staus;
         },
+        
         updateData: async function () {
             console.log(this.form);
             // api 태우고
@@ -344,7 +359,8 @@ module.exports = {
                         'Content-Type': 'application/json'
                     }
                 });
-                this.getList();
+                await this.getList();
+                this.restList = this.items[this.selected_item_index].details;
                 console.log('rs.data.code : ', rs.data.code);
                 if (rs.data.code == 412) {
                     this.$showMsgBoxTwo(rs.data.code, '', '변경 하시려는 일정에 비즈니스 매칭이 신청되어 있어 변경이 불가합니다.');
@@ -355,8 +371,27 @@ module.exports = {
             } catch (error) {
                 this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
             }
-            this.modal2 = false;
-        }
+            
+        },
+        saveMemo: async function (event, item) {
+            let url = `${this.api_url}/schedule/detail/${item.id}`;
+            let formData = new FormData();
+                formData.append('memo', item.memo);
+
+            try {
+                let rs = await axios.post(url, formData, {
+                    Headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                await this.getList();
+                this.restList = this.items[this.selected_item_index].details;
+                this.$showMsgBoxTwo(rs.status);
+                
+            } catch (error) {
+                this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+            }
+        },
     }
 }
 </script>

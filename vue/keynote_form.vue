@@ -67,12 +67,14 @@
                                     </b-form-group>
                                 </b-col>
                                 <b-col>
+<!-- 
                                     <b-form-group label="발표자료">
                                         <b-card-text class="mt-1">
                                             <b-form-file v-model="file2" style="max-width:70%;" :placeholder="file2_placeholder" class="mr-2" size="sm"></b-form-file>
                                             <b-button @click="file2= null; file2_del=true; file2_placeholder=''" size="sm" variant="danger">발표자료 삭제</b-button>
                                         </b-card-text>
                                     </b-form-group>
+                                     -->
                                 </b-col>
                             </b-row>
                             <b-form-group label="발표주제">
@@ -125,12 +127,14 @@
                                     </b-form-group>
                                 </b-col>
                                 <b-col>
+<!-- 
                                     <b-form-group label="발표자료">
                                         <b-card-text class="mt-1">
                                             <b-form-file v-model="file2_en" :placeholder="file2_en_placeholder" style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
                                             <b-button @click="file2_en= null; file2_en_del=true; file2_en_placeholder=''" size="sm" variant="danger">발표자료 삭제</b-button>
                                         </b-card-text>
                                     </b-form-group>
+                                     -->
                                 </b-col>
                             </b-row>
                             <b-form-group label="발표주제">

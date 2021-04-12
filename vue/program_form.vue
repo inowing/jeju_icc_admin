@@ -141,6 +141,9 @@ module.exports = {
     },
     methods: {
         getData: async function () { // 데이터 가져오기
+            if (!this.id) {
+                return;
+            }
             let url = `${this.api_url}/program/${this.id}`;
             let rs = await axios.get(url);
             console.log(rs);
@@ -180,10 +183,10 @@ module.exports = {
                 formData.append('venue', this.venue);
                 formData.append('venue_en', this.venue_en);
 
-                if (!this.link.includes('http') && this.link) {
+                if (this.link && !this.link.includes('http')) {
                     this.link = `http://${this.link}`;
                 }
-                if (!this.link_en.includes('http') && this.link_en) {
+                if (this.link_en && !this.link_en.includes('http')) {
                     this.link_en = `http://${this.link_en}`;
                 }
                 formData.append('link', this.link);
@@ -224,10 +227,10 @@ module.exports = {
                 formData.append('venue', this.venue);
                 formData.append('venue_en', this.venue_en);
 
-                if (!this.link.includes('http') && this.link) {
+                if (this.link && !this.link.includes('http')) {
                     this.link = `http://${this.link}`;
                 }
-                if (!this.link_en.includes('http') && this.link_en) {
+                if (this.link_en && !this.link_en.includes('http')) {
                     this.link_en = `http://${this.link_en}`;
                 }
                 formData.append('link', this.link);

@@ -132,7 +132,7 @@
                                                                 </b-row>
                                                                 <b-row class="mt-3">
                                                                     <b-col align="center">
-                                                                        <b-button size="sm" variant="outline-secondary">
+                                                                        <b-button size="sm" variant="outline-secondary" @click="goVmNotice(item)">
                                                                             <b-icon-info-circle></b-icon-info-circle> 공지사항
                                                                         </b-button>
                                                                         <b-button size="sm" variant="outline-secondary" @click="openModal2(item, 'Q&A')">
@@ -302,7 +302,7 @@
                                                                 </b-row>
                                                                 <b-row class="mt-3">
                                                                     <b-col align="center">
-                                                                        <b-button size="sm" variant="outline-secondary">
+                                                                        <b-button size="sm" variant="outline-secondary" @click="goVmNotice(item)">
                                                                             <b-icon-info-circle></b-icon-info-circle> 공지사항
                                                                         </b-button>
                                                                         <b-button size="sm" variant="outline-secondary" @click="openModal2(item, 'Q&A')">
@@ -1110,6 +1110,9 @@ module.exports = {
         /**
          * 기타
          */
+        goVmNotice: function(item) {
+            this.$router.push({ name: 'conference_notice', query: {conference_id: item.id}});
+        },
         selectedChange: function(item, index) {
             console.log(index, item); // id, name, language(memo)
             if (!this.available.length) {

@@ -84,7 +84,7 @@
     </b-card>
     <b-card no-body class="mb-0 p-0">
         <b-card-header class="p-0" role="tab">
-            <b-button block squared v-b-toggle.accordion-5 variant="info" size="sm" class="text-left" v-bind:class="[ routePath == '/vm' ? active_parent_menu : '' ]">
+            <b-button block squared v-b-toggle.accordion-5 variant="info" size="sm" class="text-left" v-bind:class="[ routePath == '/vm' || routePath == '/conference_notice' ? active_parent_menu : '' ]">
                 <span>5. Conference 관리(VM)</span>
             </b-button>
         </b-card-header>
@@ -92,7 +92,7 @@
             <router-link to="/vm">
                 <b-card-body class="m-0 p-0">
                     <b-card-text class="m-0 p-2">
-                        <span v-bind:class="[ routePath == '/vm' ? classObject : '' ]">VM</span>
+                        <span v-bind:class="[ routePath == '/vm' || routePath == '/conference_notice' ? classObject : '' ]">VM</span>
                     </b-card-text>
                 </b-card-body>
             </router-link>
@@ -229,7 +229,7 @@ module.exports = {
             this.routePath = to.path;
             let aco1 = ['/', '/site_info', '/familysite', '/popup', '/banner', '/copy'];
             let aco3 = ['/company/list', '/com_request', '/company/admin'];
-            let aco5 = ['/vm'];
+            let aco5 = ['/vm', '/conference_notice'];
             let aco6 = ['/biz/site', '/biz/schedule'];
             let aco7 = ['/stats_login', '/stats_counsel_b', '/stats_counsel_s', '/stats_vm_b', '/stats_vm_s'];
             let aco8 = ['/stats_counsel_b', '/stats_counsel_s'];

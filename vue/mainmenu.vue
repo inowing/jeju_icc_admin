@@ -283,7 +283,8 @@ module.exports = {
                 8: {
                     type: 8,
                     name: 'Map',
-                    style: '개요형' // 사용가능한 카테고리만 써
+                    style: '개요형',
+                    vue_name: 'map_form'
                 },
                 9: {
                     type: 9,

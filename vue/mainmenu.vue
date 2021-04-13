@@ -289,7 +289,8 @@ module.exports = {
                 9: {
                     type: 9,
                     name: 'SNS',
-                    style: '게시글형'
+                    style: '게시글형',
+                    vue_name: 'sns_list'
                 },
                 10: {
                     type: 10,

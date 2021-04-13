@@ -284,7 +284,7 @@ module.exports = {
                     type: 8,
                     name: 'Map',
                     style: '개요형',
-                    vue_name: 'map_form'
+                    vue_name: 'map_list'
                 },
                 9: {
                     type: 9,

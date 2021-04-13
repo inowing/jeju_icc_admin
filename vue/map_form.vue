@@ -110,6 +110,9 @@ module.exports = {
     },
     methods: {
         getData: async function () { // 데이터 가져오기
+            if (!this.id) {
+                return;
+            }
             let url = `${this.api_url}/map/${this.id}`;
             let rs = await axios.get(url);
             console.log(rs);

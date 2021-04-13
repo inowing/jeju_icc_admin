@@ -301,7 +301,8 @@ module.exports = {
                 11: {
                     type: 11,
                     name: 'Survey',
-                    style: '게시글형'
+                    style: '게시글형',
+                    vue_name: 'survey_list'
                 },
                 12: {
                     type: 12,

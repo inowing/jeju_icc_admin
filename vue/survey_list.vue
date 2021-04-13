@@ -2,7 +2,7 @@
 <section>
     <b-row class="mb-1">
         <b-col>
-            <h6><strong>2.메뉴 및 컨텐츠 관리 >	SNS > 컨텐츠 (관리)</strong></h6>
+            <h6><strong>2.메뉴 및 컨텐츠 관리 >	Survey > 컨텐츠 (관리)</strong></h6>
             <b-button href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
                 <b-icon-arrow-left></b-icon-arrow-left> 이전으로
             </b-button>
@@ -50,7 +50,7 @@ module.exports = {
                     label: '소분류'
                 },
                 {
-                    key: 'title',
+                    key: 'name',
                     label: '제목'
                 },
                 {

@@ -27,6 +27,12 @@
                     </b-form-group>
                 </b-form>
             </b-col>
+            <b-col>
+                <b-form-group label="설문 On/Off">
+                    <b-form-radio-group v-model="form.is_use_survey" :options="options" 
+                        button-variant="outline-primary" size="sm" buttons></b-form-radio-group>
+                </b-form-group>
+            </b-col>
         </b-row>
         <b-row>
             <b-col>
@@ -36,18 +42,13 @@
                             <b-row>
                                 <b-col>
                                     <b-button size="sm" @click="goServeyInfo('kor')" variant="outline-success">설문 확인</b-button>
-                                    <b-button size="sm" @click="resetServey('kor')"  variant="outline-danger">설문 확인 데이터 초기화</b-button>
+                                    <b-button size="sm" @click="resetServey"  variant="outline-danger">설문 확인 데이터 초기화</b-button>
                                 </b-col>
                             </b-row>
                             <b-form-group label="제목" class="mt-1">
                                 <b-form-input type="text" v-model="form.name" size="sm"></b-form-input>
                             </b-form-group>
-                            <b-form-group label="설문 On/Off">
-                                <b-form-radio-group v-model="form.is_use_survey" :options="options" 
-                                    button-variant="outline-primary" size="sm" buttons></b-form-radio-group>
-                            </b-form-group>
                             <b-form-group label="설문 제목">
-                                
                                 <b-form-input type="text" v-model="form.poll_question.survey_overview" size="sm"></b-form-input>
                             </b-form-group>
                             <b-form-group label="설문 문항">
@@ -66,6 +67,9 @@
                                         </b-input-group>
                                         <b-button variant="success" size="sm" class="mt-1" @click="item.case.push('')">보기 추가하기</b-button>
                                     </b-form-group>
+                                    <b-card-footer>
+                                        <b-button variant="outline-danger" size="sm" @click="question.splice(index, 1)">문항 삭제하기</b-button>
+                                    </b-card-footer>
                                 </b-card>
                             </b-form-group>
                             <b-button variant="primary" size="sm" @click="addArray(question, question_type1)">문항 추가하기</b-button>
@@ -74,13 +78,31 @@
                             <b-form-group label="제목">
                                 <b-form-input type="text" v-model="form.name_en"></b-form-input>
                             </b-form-group>
-                            <b-form-group label="설문 On/Off">
-                                <b-form-radio-group v-model="form.is_use_survey_en" :options="options" 
-                                    button-variant="outline-primary" size="sm" buttons></b-form-radio-group>
+                            <b-form-group label="설문 제목">
+                                <b-form-input type="text" v-model="form.poll_question_en.survey_overview" size="sm"></b-form-input>
                             </b-form-group>
-                            <!-- <b-form-group label="설문 제목">
-                                <b-form-input type="text" v-model="form.poll_question_en.survey_overview"></b-form-input>
-                            </b-form-group> -->
+                            <b-form-group label="설문 문항">
+                                <b-card class="mb-1" bg-variant="light" v-for="(item, index) in question_en" v-bind:key="index">
+                                    <b-form-group label="문항 제목">
+                                        <b-form-input type="text" v-model="item.title" size="sm"></b-form-input>
+                                    </b-form-group>
+                                    <b-form-group label="문항 종류">
+                                        <b-form-radio-group v-model="item.type" :options="question_options"></b-form-radio-group>
+                                    </b-form-group>
+                                    <b-form-group label="보기" v-if="item.type == 1">
+                                        <b-input-group size="sm" class="mb-1"
+                                            v-for="(choice, index) in item.case" v-bind:key="index">
+                                            <b-form-input type="text" v-model="item.case[index]"></b-form-input>
+                                            <b-input-group-append><b-button variant="danger" size="sm" @click="item.case.splice(index, 1)">x</b-button></b-input-group-append>
+                                        </b-input-group>
+                                        <b-button variant="success" size="sm" class="mt-1" @click="item.case.push('')">보기 추가하기</b-button>
+                                    </b-form-group>
+                                    <b-card-footer>
+                                        <b-button variant="outline-danger" size="sm" @click="question_en.splice(index, 1)">문항 삭제하기</b-button>
+                                    </b-card-footer>
+                                </b-card>
+                            </b-form-group>
+                            <b-button variant="primary" size="sm" @click="addArray(question_en, question_type1)">문항 추가하기</b-button>
 						</b-tab>
 					</b-tabs>
 				</b-card>
@@ -99,7 +121,6 @@ module.exports = {
         return {
             event_id: 0,
             api_url: '',
-            menu_id: null,
             id: 0,
             menu_id: 0,
 
@@ -120,7 +141,6 @@ module.exports = {
                 { text: '주관식', value: 2 }
             ],
 
-            id: '',
             form : {
                 name: '', // 제목
                 name_en: '', // 제목
@@ -147,11 +167,11 @@ module.exports = {
         });
     },
     methods: {
-        goServeyInfo: function (type) {
-            console.log(this.id, ' : ', type);
-        },
-        resetServey: function (type) {
-            console.log(this.id, ' : ', type);
+        goServeyInfo: function () {
+            if (!this.id) {
+                return;
+            }
+            this.$router.push({ name: 'survey_result', query: {id: this.id}});
         },
         getData: async function () { // 데이터 가져오기
             if (!this.id) {
@@ -160,7 +180,7 @@ module.exports = {
             let url = `${this.api_url}/survey/${this.id}`;
             let rs = await axios.get(url);
             let data = rs.data.result;
-            console.log(data);
+            
             this.form.name = data.name;
             this.form.name_en = data.name_en;
             this.form.is_use_survey = data.is_use_survey;
@@ -168,17 +188,7 @@ module.exports = {
             this.form.poll_question = JSON.parse(data.poll_question);
             this.form.poll_question_en = JSON.parse(data.poll_question_en);
             this.question = this.form.poll_question.question ? this.form.poll_question.question : [];
-            this.question_en = this.form.poll_question.question_en ? this.form.poll_question.question_en : [];
-
-            
-            // this.name = data.name
-            // this.name_en = data.name_en
-            // this.is_use_survey = data.is_use_survey
-            // this.is_use_survey_en = data.is_use_survey_en
-            // this.survey_overview = data.survey_overview
-            // this.survey_overview_en = data.survey_overview_en
-            // this.question = data.question
-            // this.question_en = data.question_en
+            this.question_en = this.form.poll_question_en.question ? this.form.poll_question_en.question : [];
             
             // 탑 셀렉트
             this.category.selected_top = data.top_category_id
@@ -294,6 +304,19 @@ module.exports = {
             }
             let clone = cloneObject(new_item);
             array.push(clone);
+        },
+        resetServey: async function () {
+            if (confirm('유저가 설문에 응답한 데이터를 삭제하시겠습니까?')) {
+                try {
+                    // let rs = axios.delete(`${this.api_url}/survey/${this.id}`);
+                    function callback () {
+                        this.$router.go(-1);
+                    }
+                    // this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
+                } catch (error) {
+                    this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+                }
+            }
         }
         
     }

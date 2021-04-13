@@ -110,7 +110,6 @@ module.exports = {
         return {
             event_id: 0,
             api_url: '',
-            menu_id: null,
             id: 0,
             menu_id: 0,
 
@@ -123,7 +122,7 @@ module.exports = {
                 selected_sub: ''
             },
 
-            id: '',
+            
             title: '',
             title_en: '',
             link: '',

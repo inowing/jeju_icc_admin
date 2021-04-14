@@ -36,25 +36,25 @@
         </b-row>
         <b-row>
             <b-col>
+                <b-button size="sm" @click="goServeyInfo('kor')" variant="outline-success"><b-icon icon="search"></b-icon>설문 확인</b-button>
+                <b-button size="sm" @click="resetServey"  variant="outline-danger">
+                    <b-icon-x-octagon></b-icon-x-octagon> 설문 확인 데이터 초기화</b-button>
+            </b-col>
+        </b-row>
+        <b-row class="mt-1">
+            <b-col>
                 <b-card no-body>
 					<b-tabs content-class="" card>
 						<b-tab title="국문" active >
-                            <b-row>
-                                <b-col>
-                                    <b-button size="sm" @click="goServeyInfo('kor')" variant="outline-success"><b-icon icon="search"></b-icon>설문 확인</b-button>
-                                    <b-button size="sm" @click="resetServey"  variant="outline-danger">
-                                        <b-icon-x-octagon></b-icon-x-octagon> 설문 확인 데이터 초기화</b-button>
-                                </b-col>
-                            </b-row>
                             <b-form-group label="제목" class="mt-1">
                                 <b-form-input type="text" v-model="form.name" size="sm"></b-form-input>
                             </b-form-group>
                             <b-form-group label="설문 제목">
                                 <b-form-input type="text" v-model="form.poll_question.survey_overview" size="sm"></b-form-input>
                             </b-form-group>
-                            <b-form-group label="설문 문항">
+                            <b-form-group label="설문 문항" class="survey-cardgroup">
                                 <b-card class="mb-1" bg-variant="light" v-for="(item, index) in question" v-bind:key="index">
-                                    <template #header style="padding:0px;">
+                                    <template #header>
                                         <a class="mb-0" href="#" @click="question.splice(index, 1)"><b-icon-x-square ></b-icon-x-square></a>
                                     </template>
                                     <b-form-group label="문항 제목">
@@ -82,8 +82,11 @@
                             <b-form-group label="설문 제목">
                                 <b-form-input type="text" v-model="form.poll_question_en.survey_overview" size="sm"></b-form-input>
                             </b-form-group>
-                            <b-form-group label="설문 문항">
+                            <b-form-group label="설문 문항" class="survey-cardgroup">
                                 <b-card class="mb-1" bg-variant="light" v-for="(item, index) in question_en" v-bind:key="index">
+                                    <template #header>
+                                        <a class="mb-0" href="#" @click="question_en.splice(index, 1)"><b-icon-x-square ></b-icon-x-square></a>
+                                    </template>
                                     <b-form-group label="문항 제목">
                                         <b-form-input type="text" v-model="item.title" size="sm"></b-form-input>
                                     </b-form-group>
@@ -98,9 +101,6 @@
                                         </b-input-group>
                                         <b-button variant="success" size="sm" class="mt-1" @click="item.case.push('')">보기 추가하기</b-button>
                                     </b-form-group>
-                                    <b-card-footer>
-                                        <b-button variant="outline-danger" size="sm" @click="question_en.splice(index, 1)">문항 삭제하기</b-button>
-                                    </b-card-footer>
                                 </b-card>
                             </b-form-group>
                             <b-button variant="primary" size="sm" @click="addArray(question_en, question_type1)">문항 추가하기</b-button>
@@ -323,3 +323,9 @@ module.exports = {
     }
 };
 </script>
+<style scoped>
+    .survey-cardgroup > div > div > div.card-header {
+        padding: 0px 3px 0px 0px;
+        text-align: right;
+    }
+</style>

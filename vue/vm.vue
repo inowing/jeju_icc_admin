@@ -596,7 +596,7 @@
         </b-row>
     </b-modal>
 
-    <!-- 참가자 초정리스트 -->
+    <!-- 참가자 초청리스트 -->
     <b-modal v-model="modal4" hide-footer title="참가자 초정리스트">
          <b-card no-body>
             <b-tabs v-model="attend_tabIndex" small card>
@@ -607,7 +607,7 @@
                             <div class="text-center">{{row.item.id}}</div>
                         </template>
                         <template #cell(email)="row">
-                            <div class="text-center">{{row.item.user.email}}</div>
+                            <div class="text-center" v-if="row.item.user">{{row.item.user.email}}</div>
                         </template>
                         <template #cell(updated_at)="row">
                             <div class="text-center">{{row.item.updated_at}}</div>
@@ -621,7 +621,7 @@
                             <div class="text-center">{{row.item.id}}</div>
                         </template>
                         <template #cell(email)="row">
-                            <div class="text-center">{{row.item.user.email}}</div>
+                            <div class="text-center" v-if="row.item.user">{{row.item.user.email}}</div>
                         </template>
                         <template #cell(updated_at)="row">
                             <div class="text-center">{{row.item.updated_at}}</div>
@@ -635,7 +635,7 @@
                             <div class="text-center">{{row.item.id}}</div>
                         </template>
                         <template #cell(email)="row">
-                            <div class="text-center">{{row.item.user.email}}</div>
+                            <div class="text-center" v-if="row.item.user">{{row.item.user.email}}</div>
                         </template>
                         <template #cell(updated_at)="row">
                             <div class="text-center">{{row.item.updated_at}}</div>
@@ -745,8 +745,11 @@
                     </b-row>
                 </b-tab>
             </b-tabs>
-            
-            
+            <b-row>
+                <b-col class="pl-3">
+                    <b-button @click="overlayModal = true;" size="sm">Launch another modal</b-button>
+                </b-col>
+            </b-row>
             <b-row class="p-1">
                 <b-col>
                     <b-form-group label="VM" label-for="tags-component-select">
@@ -778,6 +781,10 @@
             </b-row>
         </b-card>
     </b-modal>
+
+    <b-modal v-model="overlayModal" title="overlayModal">
+        Vueception
+    </b-modal>
 </section>
 </template>
 
@@ -806,6 +813,7 @@ module.exports = {
             modal2_type: 'Q&A',
             modal3: false,
             modal4: false,
+            overlayModal: false,
 
             logo_file: null,
             logo_prev: this.$store.getters.dummy_image_url(['480x60']),

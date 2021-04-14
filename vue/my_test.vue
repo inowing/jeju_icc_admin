@@ -1,5 +1,14 @@
 <template>
     <div class="container">
+        <div>
+            <b-btn v-b-modal.modal1>Launch demo modal</b-btn>
+            <b-modal id="modal1" title="Bootstrap-Vue">
+                <b-btn v-b-modal.modal2>Launch another modal</b-btn>
+            </b-modal>
+            <b-modal id="modal2" title="Bootstrap-Vue">
+                Vueception
+            </b-modal>
+        </div>
         <base-layout>
             <h1 slot="header">Here might be a page title. is same #header</h1>
             <div slot="default">
@@ -32,7 +41,8 @@ module.exports = {
     },
     data: function (params) {
         return {
-            
+            modal1: false,
+            modal2: false,
         }
     },
     methods: {

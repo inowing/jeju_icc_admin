@@ -170,6 +170,13 @@
                     </div>
                 </template>
 
+                <template #cell(is_visible)="row">
+                    <div class="text-center">
+                        <b-button size="sm" variant="outline-success" v-show="row.item.is_visible == 1" @click="menuShowHide(row.item, 0)"><b-icon-eye></b-icon-eye></b-button>
+                        <b-button size="sm" variant="outline-secondary" v-show="row.item.is_visible == 0" @click="menuShowHide(row.item, 1)"><b-icon-eye-slash></b-icon-eye-slash></b-button>
+                    </div>
+                </template>
+                
                 <!-- 컨텐츠 -->
                 <template #cell(contents)="row">
                     <div class="text-center">
@@ -361,6 +368,10 @@ module.exports = {
                     key: 'order',
                     label: '순서',
                     sortable: true
+                },
+                {
+                    key: 'is_visible',
+                    label: '노출여부'
                 },
                 {
                     key: 'category',
@@ -581,6 +592,22 @@ module.exports = {
         },
         onlySelector(e) {
             this.menuAddParams.overview_type = e;
+        },
+        menuShowHide: async function (item, is_visible) {
+            try {
+                let url = `${this.api_url}/menu/${item.id}`;
+                let formData = new FormData();
+                    formData.append('is_visible', is_visible);
+                let rs = await axios.post(url, formData, {
+                    Headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                this.$showMsgBoxTwo(rs.status);
+                this.loadData();
+            } catch (error) {
+                this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+            }
         }
     }
 }

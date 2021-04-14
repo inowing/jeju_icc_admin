@@ -577,7 +577,8 @@ module.exports = {
         },
         searchCompany: async function() {
             let com = String(this.form.number).replace(/-/g, '');
-            let com_str = parseInt(com.substr(0,3)) + '-'  + parseInt(com.substr(3,2)) + '-'  + parseInt(com.substr(5));
+            let com_str = com.substr(0,3) + '-'  + com.substr(3,2) + '-'  + com.substr(5);
+            // let com_str = parseInt(com.substr(0,3)) + '-'  + parseInt(com.substr(3,2)) + '-'  + parseInt(com.substr(5));
             this.form.number = com_str;
             if (com_str.match(/^\d{3}-\d{2}-\d{5}$/g)) {
                 // console.log('yaho~~~', com_str);

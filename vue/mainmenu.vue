@@ -20,10 +20,19 @@
             <b-form-input size="sm" v-model="menuAddParams.name_en"></b-form-input>
         </b-form>
         <b-table :items="menuItems" :fields="menuFields" bordered head-variant="light" small class="mt-1">
+            <template #cell(type)="data">
+                    <div class="text-center">
+                        {{data.item.type}}
+                    </div>
+            </template>
             <template #cell(name)="data">
                     <b-button size="sm" class="mr-2" block variant="outline-info" @click="selectType(data.item, data.index, $event.target)">{{ data.item.name }}</b-button>
             </template>
-
+            <template #cell(style)="data">
+                    <div class="text-center">
+                        {{data.item.style}}
+                    </div>
+            </template>
             <template #cell(overview_type)="data">
                 <b-form-select v-if="data.item.overview_type" v-model="selected" :options="data.item.overview_type" @change="onlySelector" size="sm"></b-form-select>
             </template>
@@ -58,7 +67,7 @@
         <b-button class="mt-2 inoBtn-150" size="sm" variant="danger" @click="hideModal('mainMenuAdd-modal')">취소</b-button>
     </b-modal>
 
-    <b-modal v-model="colorChange" hide-footer ref="colorChange-modal">
+    <b-modal v-model="colorChange" hide-footer ref="colorChange-modal" title="색상변경">
         <b-card title="메인메뉴 색상">
             <b-card-text>
                 <b-row>
@@ -96,7 +105,7 @@
             </b-card-text>
         </b-card>
 
-        <b-card title="서브메뉴 색상">
+        <b-card title="서브메뉴 색상" class="mt-1">
             <b-card-text>
                 <b-row>
                     <b-col sm="4"><label style="font-size: 10pt;">메뉴배경색</label></b-col>
@@ -205,7 +214,7 @@ module.exports = {
             colorChange: false,
             menuFields: [{
                     key: 'type',
-                    label: '번호'
+                    label: 'Type'
                 },
                 {
                     key: 'name',

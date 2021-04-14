@@ -821,13 +821,7 @@ module.exports = {
             
             form_page: 1,
 
-			lang_options: [
-				{value: 1, text: '박지성'},
-				{value: 2, text: '김종국'},
-				{value: 3, text: '홀란드'},
-				{value: 4, text: '파루크'},
-				{value: 5, text: '이순신'}
-			],
+			lang_options: [],
 			lang_arr: [], // {user_id, language, available}
             available: [],
 
@@ -925,6 +919,7 @@ module.exports = {
             this.setWeek(7);
             await this.getSelects();
             this.getList();
+            this.getUserList();
         })
     },
     methods: {
@@ -944,6 +939,17 @@ module.exports = {
         searchDayList: async function (index, item) {
             this.selected_btn_index = index;
             this.getList(item);
+        },
+        getUserList: async function () {
+            let url = `${this.api_url}/user/in_event?event_id=${this.event_id}`;
+            let rs = await axios.get(url);
+            let arr = rs.data.result;
+            let options = [];
+            for (var i = 0; i < arr.length; i++) {
+                let option = {value: arr[i].id, text: arr[i].name}
+                options.push(option);
+            }
+            this.lang_options = options;
         },
         storeData: async function () {
             console.log(this.form);
@@ -1298,7 +1304,6 @@ module.exports = {
         },
         openModal3: async function (item, invitaion_tabIndex) {
             this.tagValue = [];
-            console.log("open 333333");
             this.conference_item = item;
             this.invitaion_tabIndex = invitaion_tabIndex;
             let url = `${this.api_url}/user/in_event?event_id=${this.event_id}`;
@@ -1310,7 +1315,6 @@ module.exports = {
             this.modal3 = true;
         },
         openModal4: async function(item, index) {
-            console.log(">>>>");
             this.conference_item = item;
             this.attend_tabIndex = index;
             let url = `${this.api_url}/conference_invitation?conference_id=${this.conference_item.id}`;

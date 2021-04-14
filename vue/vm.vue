@@ -747,7 +747,10 @@
             </b-tabs>
             <b-row>
                 <b-col class="pl-3">
-                    <b-button @click="overlayModal = true;" size="sm">Launch another modal</b-button>
+                    <b-button 
+                        v-show="invitaion_tabIndex != 2"
+                        variant="outline-info"
+                        @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
                 </b-col>
             </b-row>
             <b-row class="p-1">
@@ -782,8 +785,24 @@
         </b-card>
     </b-modal>
 
-    <b-modal v-model="overlayModal" title="overlayModal">
-        Vueception
+    <b-modal v-model="overlayModal" title="신규 계정 생성" hide-footer>
+        <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" 
+            label="이름">
+            <b-form-input size="sm" v-model="userForm.name" :state="user_validation.valid1"></b-form-input>
+        </b-form-group>
+        <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" 
+            label="이메일">
+            <b-form-input size="sm" v-model="userForm.email" :state="user_validation.valid2"></b-form-input>
+        </b-form-group>
+        <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" 
+            label="비밀번호">
+            <b-form-input size="sm" type="password" v-model="userForm.password" :state="user_validation.valid3"></b-form-input>
+        </b-form-group>
+        <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" 
+            label="비밀번호 확인">
+            <b-form-input size="sm" type="password" v-model="password_confirm" :state="user_validation.valid3"></b-form-input>
+        </b-form-group>
+        <b-button size="sm" class="inoBtn-150" variant="success" @click="storeUser">생성</b-button>
     </b-modal>
 </section>
 </template>
@@ -875,7 +894,8 @@ module.exports = {
             modal4_fields: [
                 {key: 'id', label: 'No.'},
                 {key: 'email', label: 'E-mail'},
-                {key: 'updated_at', label: '초대일시'}
+                {key: 'updated_at', label: '초대일시'},
+                {key: 'code', label: '입장코드'}
             ],
             modal4_items_1: [],
             modal4_items_2: [],
@@ -891,19 +911,30 @@ module.exports = {
             search: '', // 선택한 vm 키워드
             tagValue: [], // 선택된 vm 키워드 문자 집합
             
-            conference_item: null
+            conference_item: null,
+
+            // 신규유저 추가할 경우.
+            userForm: {},
+            password_confirm: ''
         };
     },
-    watch: {
-        lang_arr: {
-            deep: true,
-            handler: function() {
+    // watch: {
+    //     lang_arr: {
+    //         deep: true,
+    //         handler: function() {
                 
-            }
+    //         }
             
-        }
-    },
+    //     }
+    // },
     computed: {
+        user_validation: function (params) {
+            let valid1 = this.userForm.name ? true : false;
+            let valid2 = this.userForm.email ? true : false;
+            let valid3 = this.userForm.password && (this.userForm.password == this.password_confirm) ? true : false;
+            let valid_result = valid1 && valid2 && valid3;
+            return  { valid1, valid2, valid3, valid_result }
+        },
         validation: function () {
             return this.form.name && this.form.venue && this.form.host && this.event_size
             && this.form.date && this.start_time && this.form.time;
@@ -1371,6 +1402,40 @@ module.exports = {
                     this.search = '';
                     this.$refs.shobal.localValue = '';
                 }
+            }
+        },
+        openOverlayModal: function () {
+            this.userForm = {}
+            this.password_confirm = '';
+            this.overlayModal = true;
+        },
+        storeUser: async function () {
+            if (!this.user_validation.valid_result) {
+                alert('폼을 입력해 주세요.');
+                return;
+            }
+            try {
+                
+                let url = `${this.api_url}/register`;
+                let formData = new FormData();
+                    formData.append('event_id', this.event_id);
+                    formData.append('name', this.userForm.name);
+                    formData.append('email', this.userForm.email);
+                    formData.append('password', this.userForm.password);
+                let rs = await axios.post(url, formData, {
+                    Headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                this.tagValue.push(this.userForm.email);
+                this.$showMsgBoxTwo(rs.status);
+                rs = await axios.get(`${this.api_url}/user/in_event?event_id=${this.event_id}`);
+                this.vm = rs.data.result;
+                this.overlayModal = false;
+
+            } catch (error) {
+                this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
             }
         }
 

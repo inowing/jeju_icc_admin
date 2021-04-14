@@ -179,13 +179,18 @@ module.exports = {
                 let url = `${this.api_url}/company/${item.id}`;
                 let formData = new FormData();
                     formData.append('status', 1);
-                let rs = await axios.post(url, formData, {
-                    Headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                this.getList();
-                this.$showMsgBoxTwo(rs.status);
+
+                try {
+                    let rs = await axios.post(url, formData, {
+                        Headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    this.getList();
+                    this.$showMsgBoxTwo(rs.status, '', '승인이 완료되었습니다. <br> 기업 목록에서 확인하세요.');
+                } catch (error) {
+                    this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+                }
             }
             //
             console.log(item, index, target);

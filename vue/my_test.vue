@@ -1,0 +1,42 @@
+<template>
+    <div class="container">
+        <base-layout>
+            <h1 slot="header">Here might be a page title. is same #header</h1>
+            <div slot="default">
+                <p>A paragraph for the main content.</p>
+                <p>And another one.</p>
+            </div>
+            <p slot="footer">Here's some contact info</p>
+            <!-- <template v-slot:header>
+                <h1>Here might be a page title. is same #header</h1>
+            </template>
+
+            <template #default>
+                <p>A paragraph for the main content.</p>
+                <p>And another one.</p>
+            </template>
+
+            <template #footer>
+                <p>Here's some contact info</p>
+            </template> -->
+        </base-layout>
+    </div>
+</template>
+<script>
+
+module.exports = {
+    // this is layout
+    name: 'my-test',
+    componets: {
+        baseLayout: window.httpVueLoader(`./vue/my_layout.vue`),
+    },
+    data: function (params) {
+        return {
+            
+        }
+    },
+    methods: {
+        
+    }
+}
+</script>

@@ -6,21 +6,25 @@ export default {
         Vue.prototype.$showMsgBoxTwo = function (status, type, inputMessage, callback) {
             let msg = '';
             let okVariant = '';
+            const h = this.$createElement
+
             if (status == 200) {
                 let methodof = {
                     insert: "저장",
                     delete: "삭제",
                     update: "수정"
                 }
-                msg = inputMessage ? inputMessage : `성공적으로 ${methodof[type]||'저장'}되었습니다.`;
+                
+                msg = inputMessage ? h('div', { domProps: { innerHTML: inputMessage } }) : `성공적으로 ${methodof[type]||'저장'}되었습니다.`;
                 okVariant = 'success';
             } else {
                 msg = `${status} : ${inputMessage}`||'실패 하였습니다.';
+                // msg = inputMessage ? h('div', { domProps: { innerHTML: inputMessage } }) : `${status} : 실패 하였습니다.`;
                 okVariant = 'danger';
             }
 
             this.boxTwo = ''
-            this.$bvModal.msgBoxOk(msg, {
+            this.$bvModal.msgBoxOk([msg], {
                 title: 'Confirmation',
                 size: 'sm',
                 buttonSize: 'sm',

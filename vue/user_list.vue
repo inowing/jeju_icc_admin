@@ -38,6 +38,11 @@
                                         {{row.item.phone}}
                                     </div>
                                 </template>
+                                <template #cell(created_at)="row">
+                                    <div class="text-center">
+                                        {{row.item.created_at}}
+                                    </div>
+                                </template>
                                 <template #cell(manageBtn)="row">
                                     <div class="text-center">
                                         <b-button size="sm" variant="outline-success" @click="openModal1($event, row.item)">
@@ -53,7 +58,7 @@
                     </b-tab>
                     <b-tab title="기업회원">
                         <b-card>
-                            <b-table :fields="fields" :items="level40_items" small bordered head-variant="light" class="mt-1">
+                            <b-table :fields="company_fields" :items="level40_items" small bordered head-variant="light" class="mt-1">
                                 <template #cell(id)="row">
                                     <div class="text-center">
                                         {{row.item.id}}
@@ -67,6 +72,26 @@
                                 <template #cell(phone)="row">
                                     <div class="text-center">
                                         {{row.item.phone}}
+                                    </div>
+                                </template>
+                                <template #cell(company_name)="row">
+                                    <div class="text-center">
+                                        {{row.item.company ? row.item.company.name : ''}}
+                                    </div>
+                                </template>
+                                <template #cell(company_number)="row">
+                                    <div class="text-center">
+                                        {{row.item.company ? row.item.company.number : ''}}
+                                    </div>
+                                </template>
+                                <template #cell(company_attend_type)="row">
+                                    <div class="text-center" v-if="row.item.company">
+                                        {{row.item.company.attend_type == 0 ? 'buyer' : 'seller'}}
+                                    </div>
+                                </template>
+                                <template #cell(created_at)="row">
+                                    <div class="text-center">
+                                        {{row.item.created_at}}
                                     </div>
                                 </template>
                                 <template #cell(manageBtn)="row">
@@ -199,7 +224,44 @@ module.exports = {
                     label: '휴대폰번호'
                 },
                 {
-                    key: 'date',
+                    key: 'created_at',
+                    label: '생성일'
+                },
+                {
+                    key: 'manageBtn',
+                    label: '관리항목'
+                },
+            ],
+            company_fields: [{
+                    key: 'id',
+                    label: '번호'
+                },
+                {
+                    key: 'name',
+                    label: '사용자명'
+                },
+                {
+                    key: 'email',
+                    label: '아이디'
+                },
+                {
+                    key: 'phone',
+                    label: '휴대폰번호'
+                },
+                {
+                    key: 'company_name',
+                    label: '기업명'
+                },
+                {
+                    key: 'company_number',
+                    label: '사업자번호'
+                },
+                {
+                    key: 'company_attend_type', // 0 - buyer, 1 - seller
+                    label: '타입'
+                },
+                {
+                    key: 'created_at',
                     label: '생성일'
                 },
                 {
@@ -247,6 +309,7 @@ module.exports = {
         getList: async function () {
             let rs = await axios.get(`${this.api_url}/user/in_event?event_id=${this.event_id}`);
             this.items = rs.data.result;
+            // console.log(this.items);
             // admin_level
             let level40_items = [];
             let level50_items = [];

@@ -153,11 +153,11 @@ module.exports = {
         resetServey: async function () {
             if (confirm('유저가 설문에 응답한 데이터를 삭제하시겠습니까?')) {
                 try {
-                    // let rs = axios.delete(`${this.api_url}/survey/${this.id}`);
+                    let rs = await axios.get(`${this.api_url}/survey/reset_survey?survey_id=${this.id}`);
                     function callback () {
                         this.$router.go(-1);
                     }
-                    // this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
+                    this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
                 } catch (error) {
                     this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
                 }

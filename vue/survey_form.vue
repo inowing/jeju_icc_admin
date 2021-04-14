@@ -41,8 +41,9 @@
 						<b-tab title="국문" active >
                             <b-row>
                                 <b-col>
-                                    <b-button size="sm" @click="goServeyInfo('kor')" variant="outline-success">설문 확인</b-button>
-                                    <b-button size="sm" @click="resetServey"  variant="outline-danger">설문 확인 데이터 초기화</b-button>
+                                    <b-button size="sm" @click="goServeyInfo('kor')" variant="outline-success"><b-icon icon="search"></b-icon>설문 확인</b-button>
+                                    <b-button size="sm" @click="resetServey"  variant="outline-danger">
+                                        <b-icon-x-octagon></b-icon-x-octagon> 설문 확인 데이터 초기화</b-button>
                                 </b-col>
                             </b-row>
                             <b-form-group label="제목" class="mt-1">
@@ -53,6 +54,9 @@
                             </b-form-group>
                             <b-form-group label="설문 문항">
                                 <b-card class="mb-1" bg-variant="light" v-for="(item, index) in question" v-bind:key="index">
+                                    <template #header style="padding:0px;">
+                                        <a class="mb-0" href="#" @click="question.splice(index, 1)"><b-icon-x-square ></b-icon-x-square></a>
+                                    </template>
                                     <b-form-group label="문항 제목">
                                         <b-form-input type="text" v-model="item.title" size="sm"></b-form-input>
                                     </b-form-group>
@@ -67,9 +71,6 @@
                                         </b-input-group>
                                         <b-button variant="success" size="sm" class="mt-1" @click="item.case.push('')">보기 추가하기</b-button>
                                     </b-form-group>
-                                    <b-card-footer>
-                                        <b-button variant="outline-danger" size="sm" @click="question.splice(index, 1)">문항 삭제하기</b-button>
-                                    </b-card-footer>
                                 </b-card>
                             </b-form-group>
                             <b-button variant="primary" size="sm" @click="addArray(question, question_type1)">문항 추가하기</b-button>
@@ -308,11 +309,11 @@ module.exports = {
         resetServey: async function () {
             if (confirm('유저가 설문에 응답한 데이터를 삭제하시겠습니까?')) {
                 try {
-                    // let rs = axios.delete(`${this.api_url}/survey/${this.id}`);
+                    let rs = await axios.get(`${this.api_url}/survey/reset_survey?survey_id=${this.id}`);
                     function callback () {
                         this.$router.go(-1);
                     }
-                    // this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
+                    this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
                 } catch (error) {
                     this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
                 }

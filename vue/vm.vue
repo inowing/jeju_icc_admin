@@ -612,6 +612,9 @@
                         <template #cell(updated_at)="row">
                             <div class="text-center">{{row.item.updated_at}}</div>
                         </template>
+                        <template #cell(passcode)="row">
+                            <div class="text-center">{{row.item.passcode}}</div>
+                        </template>
                     </b-table>
                 </b-tab>
                 <b-tab title="Presenter">
@@ -895,7 +898,7 @@ module.exports = {
                 {key: 'id', label: 'No.'},
                 {key: 'email', label: 'E-mail'},
                 {key: 'updated_at', label: '초대일시'},
-                {key: 'code', label: '입장코드'}
+                {key: 'passcode', label: '입장코드'}
             ],
             modal4_items_1: [],
             modal4_items_2: [],

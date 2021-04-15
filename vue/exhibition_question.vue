@@ -16,12 +16,12 @@
         </b-button>
 
         <b-table :fields="fields" :items="items" small bordered head-variant="light" class="mt-1">
-
-            <template #cell(id)="row">
-                <div class="text-center">
-                    {{row.item.id}}
-                </div>
+             <template #cell(index)="data">
+                 <div class="text-center">
+                    {{ data.index + 1 }}
+                 </div>
             </template>
+
             <template #cell(name)="row">
                 <div class="text-center">
                     {{row.item.name}}
@@ -32,11 +32,12 @@
                     {{row.item.phone}}
                 </div>
             </template>
-            <template #cell(contentInfo)="row">
+            <template #cell(contents)="row">
                 <div class="text-center">
-                    <b-button size="sm" variant="outline-info" @click="containModalOpen(row.item, $event, row.index)">
+                    {{row.item.contents}}
+                    <!-- <b-button size="sm" variant="outline-info" @click="containModalOpen(row.item, $event, row.index)">
                         <b-icon-pencil-square></b-icon-pencil-square> 내용 확인
-                    </b-button>
+                    </b-button> -->
                 </div>
             </template>
             <template #cell(manageBtn)="row">
@@ -98,8 +99,8 @@ module.exports = {
             exhibition_id: 0,
             
             fields: [{
-                    key: 'id',
-                    label: '아이디'
+                    key: 'index',
+                    label: 'NO'
                 },
                 {
                     key: 'name',
@@ -114,8 +115,8 @@ module.exports = {
                     label: '제목'
                 },
                 {
-                    key: 'contentInfo',
-                    label: '내용보기'
+                    key: 'contents',
+                    label: '문의내용'
                 },
                 {
                     key: "manageBtn",

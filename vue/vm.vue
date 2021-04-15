@@ -505,6 +505,21 @@
                     </b-form-group>
                 </b-col>
                 <b-col>
+                    <b-form-group label="Intro Background Image">
+                        <b-card no-body>
+                            <b-card-text class="ino-180-180-wrap mt-1">
+                                <div>
+                                    <b-img :src="form.intro_background||background_prev" fluid></b-img>
+                                </div>
+                            </b-card-text>
+                            <b-card-text class="mt-1 pl-1 pb-1">
+                                <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
+                                <b-form-file v-model="intro_background_file" @change="onFileChange($event, 'intro_background', form)" 
+                                style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
+                                <b-button @click="intro_background_file = null; form.intro_background=''; intro_background_del=true;" size="sm" variant="danger">삭제</b-button>
+                            </b-card-text>
+                        </b-card>
+                    </b-form-group>
                 </b-col>
             </b-row>
             <b-form-group label="Languages">
@@ -848,6 +863,9 @@ module.exports = {
             background_file: null,
             background_prev: this.$store.getters.dummy_image_url(['480x60']),
             background_del: false,
+
+            intro_background_file: null,
+            intro_background_del: false,
             
             form_page: 1,
 
@@ -975,6 +993,7 @@ module.exports = {
                 url = `${url}&date=${item.value}`;
             }
             let rs = await axios.get(url);
+            console.log(rs);
             this.upcoming = rs.data.result.upcoming;
             this.past = rs.data.result.past;
         },
@@ -1008,6 +1027,7 @@ module.exports = {
                 });
                 
                 formData.append('language', JSON.stringify(language));
+                console.log('save language - ', JSON.stringify(language));
 
                 // event size
                 formData.append('event_size', this.event_size);
@@ -1032,6 +1052,7 @@ module.exports = {
                 !this.logo_file && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.logo_file);
                 !this.banner_file && this.banner_del ? formData.append('banner_del', 'Y') : formData.append('banner', this.banner_file);
                 !this.background_file && this.background_del ? formData.append('background_del', 'Y') : formData.append('background', this.background_file);
+                !this.intro_background_file && this.intro_background_del ? formData.append('intro_background_del', 'Y') : formData.append('intro_background', this.intro_background_file);
 
                 // form submit
                 try {
@@ -1052,18 +1073,10 @@ module.exports = {
 
         },
         update: async function() {
-            console.log(this.form);
             
             let url = `${this.api_url}/conference/${this.form.id}`;
             let formData = new FormData();
-                // language
-                let language = [];
-                this.lang_arr.forEach(el => {
-                    language.push({user_id: el.user_id, language: el.language});
-                });
                 
-                formData.append('language', JSON.stringify(language));
-
                 // event size
                 formData.append('event_size', this.event_size);
 
@@ -1071,10 +1084,20 @@ module.exports = {
                     this.form.survey_link = `http://${this.form.survey_link}`;
                 }
                 // etc 
+                let skips = ['language', 'date', 'intro_background'];
                 for (let item in this.form) {
-                    formData.append(item, this.form[item]);
+                    if (!skips.includes(item)) {
+                        formData.append(item, this.form[item]);
+                    }
                 }
-
+                // language
+                let language = [];
+                this.lang_arr.forEach(el => {
+                    language.push({user_id: el.user_id, language: el.language});
+                });
+                let str = JSON.stringify(language);
+                formData.append('language', str);
+                
                 // files
                 formData.delete('logo');
                 formData.delete('banner');
@@ -1088,6 +1111,8 @@ module.exports = {
                 !this.logo_file && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.logo_file);
                 !this.banner_file && this.banner_del ? formData.append('banner_del', 'Y') : formData.append('banner', this.banner_file);
                 !this.background_file && this.background_del ? formData.append('background_del', 'Y') : formData.append('background', this.background_file);
+                !this.intro_background_file && this.intro_background_del ? formData.append('intro_background_del', 'Y') : formData.append('intro_background', this.intro_background_file);
+
 
                 // form submit
                 try {
@@ -1292,12 +1317,13 @@ module.exports = {
                 this.modal1_border = "success";
 
                 // temp test
-                item.language = JSON.stringify([{user_id: 1, language: 'k4eke'},
-                                        {user_id: 2, language: 'keke1'},
-                                        {user_id: 3, language: 'keke3'}]);
+                // item.language = JSON.stringify([{user_id: 1, language: 'k4eke'},
+                //                         {user_id: 2, language: 'keke1'},
+                //                         {user_id: 3, language: 'keke3'}]);
                 // test..... end
                 if (item.language) {
-                    let temp_arr = JSON.parse(item.language); // 저장되어 있는 목록
+                    // let temp_arr = JSON.parse(item.language); // 저장되어 있는 목록
+                    let temp_arr = item.language; // 저장되어 있는 목록
                     if (temp_arr.length) {
                         this.lang_arr = [];
     

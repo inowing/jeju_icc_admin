@@ -614,6 +614,7 @@ module.exports = {
             console.log(url);
             let formData = new FormData();
                 formData.append('title', item.title);
+                formData.append('order', item.order); // 전시자료 1
                 formData.append('type', item.type); // 전시자료 1
                 formData.append('library_type', item.library_type); // photo, youtube, file
                 formData.append('link_message', item.link_message);

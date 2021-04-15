@@ -54,7 +54,7 @@
                                             <b-row>
                                                 <b-col class="text-center">
                                                     <b-card>
-                                                        <b-card-text align="center" class="ino-290-200-wrap">
+                                                        <b-card-text align="center" class="ino-400-320-wrap">
                                                             <div>
                                                                 <b-img :src="logo_preview_local||logo_preview_default" fluid></b-img>
                                                             </div>
@@ -469,7 +469,7 @@
                     <b-row v-show="selected_item.library_type == 1">
                         <!-- Youtube : 썸네일파일이 image_prev -->
                         <b-col>
-                            <span style="font-size:10pt;">썸네일 이미지</span>
+                            <span style="font-size:10pt;">youtube 썸네일 이미지</span>
                             <b-card align="center">
                                 <b-card-text class="ino-180-180-wrap">
                                     <div>
@@ -583,7 +583,7 @@ module.exports = {
             is_top: true, // 0 : 비활성, 1: 활성
 
             // 탭별구분
-            logo_preview_default: this.$store.getters.dummy_image_url(['290x200']),
+            logo_preview_default: this.$store.getters.dummy_image_url(['400x320']),
 
             logo_file: null, // 기업로고 (한글) - 업로드할 파일 저장할 변수
             logo_preview_local: null, // 기업로고 (한글) - 사용자PC 프리뷰
@@ -1046,6 +1046,7 @@ module.exports = {
                     // ***** image_prev_del 안되고 있다... ****
                     // ***** image_prev_del 안되고 있다... ****
                     // ***** image_prev_del 안되고 있다... ****
+                    console.log(item.image_prev);
                     !item.thumb_prev && item.thumb_prev_del ? formData2.append('image_prev_del', 'Y') : formData2.append('image_prev', item.image_prev); // 유튜브 썸네일 프리뷰 파일
                     formData2.append('link', item.link);
                     formData2.append('link_message', item.link_message);
@@ -1071,9 +1072,6 @@ module.exports = {
             });
 
             return rs;
-        },
-        updateFn: async function (item, event) {
-
         },
         introductionNewFn: function (item, event, index) {
             // 기업소개자료 신규 추가
@@ -1122,10 +1120,9 @@ module.exports = {
             // 기업소개자료 수정하기 세팅
             this.isNew = false; // 이제 모달에서 수정 버튼으로 보이도록 값을 바꾼다.
             this.selected_index = index; // 선택한 인덱스 저장해둔다. 바꿀자리 찾기 위해서...
-            this.selected_item = item;
+            this.selected_item = {...item};
 
             this.thumb_prev = item.image_prev; // youtube, movie 썸네일 같이쓴다
-            
             this.selected_item.image_prev = null;
             this.selected_item.file = null;
             this.movie_file_src = item.file;
@@ -1134,7 +1131,7 @@ module.exports = {
             this.selected_item.movie_file_del = false; // 첨부 영상 파일 지울까요
 
 
-            console.log(item.file);
+            console.log(item.image_prev);
 
             this.photo_1_prev = item.photo_1.url;
             this.photo_2_prev = item.photo_2.url;

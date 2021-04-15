@@ -130,7 +130,6 @@ module.exports = {
             let url = `${this.api_url}/menucategory/topcategory?menu_id=${this.form.menu_id}`;
             let response = await axios.get(url);
             this.topcategory = response.data.result;
-
             let top = {};
             this.topcategory.forEach(element => {
                 element.text = element.name;

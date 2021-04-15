@@ -41,6 +41,11 @@
                                 </b-col>
                                 <b-col>
                                     <b-card>
+                                        <b-card-text>
+                                            <b-form-group label="매칭 방향">
+                                                <b-form-radio-group v-model="is_bizmatching_cross_meeting" :options="match_options" button-variant="outline-primary" size="sm" buttons></b-form-radio-group>
+                                            </b-form-group>
+                                        </b-card-text>
                                     </b-card>
                                 </b-col>
                             </b-row>
@@ -76,6 +81,11 @@
                                 </b-col>
                                 <b-col>
                                     <b-card>
+                                        <b-card-text>
+                                            <b-form-group label="매칭 방향">
+                                                <b-form-radio-group v-model="is_bizmatching_cross_meeting" :options="match_options" button-variant="outline-primary" size="sm" buttons></b-form-radio-group>
+                                            </b-form-group>
+                                        </b-card-text>
                                     </b-card>
                                 </b-col>
                             </b-row>
@@ -154,6 +164,11 @@ module.exports = {
 				{ value: 'buyer', text: '바이어' },
 				{ value: 'seller', text: '셀러' }
 			],
+            is_bizmatching_cross_meeting: 0,
+			match_options: [
+				{ value: 0, text: '양방향' },
+				{ value: 1, text: '단방향' }
+			],
             
             fields: [{
                     key: 'id',
@@ -198,8 +213,9 @@ module.exports = {
                 this.logo_del = false;
                 this.logo_en = rs.bizmatching_logo_en;
                 this.logo_en_del = false;
+                this.is_bizmatching_cross_meeting = rs.is_bizmatching_cross_meeting ? 1 : 0;
             //}}
-            console.log(rs.menus);
+            console.log(rs);
             this.items = rs.menus;
         },
         goRegisterForm: function (event, item) {
@@ -235,13 +251,14 @@ module.exports = {
                 if (!this.logo_en_del && this.file1_en) {
                     formData.append('bizmatching_logo_en', this.file1_en);
                 }
-            let rs = await axios.post(url, formData, {
-                Headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }).catch(error => {
-                console.error(error);
-            });
+
+                formData.append('is_bizmatching_cross_meeting', this.is_bizmatching_cross_meeting);
+
+            let rs = await axios
+                    .post(url, formData, { Headers: { 'Content-Type': 'multipart/form-data' }})
+                    .catch(error => {
+                        console.error(error);
+                    });
 
             this.getList();
         },

@@ -1,1 +1,0 @@
-console.log( Date.parse( ("2013-06-15 01:30" + ":00").replace(/\s/g, 'T' ) ) );

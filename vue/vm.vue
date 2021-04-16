@@ -562,7 +562,7 @@
                 </div>
             </b-form-group>
             <b-form-group label="Event 정책설정">
-                <b-form-checkbox v-model="form.is_qna_chat" unchecked-value="1" value="0" variant="success">
+                <b-form-checkbox v-model="form.is_event_chatting" unchecked-value="1" value="0" variant="success">
                     Event Chatting
                 </b-form-checkbox>
                 <div class="pl-4">

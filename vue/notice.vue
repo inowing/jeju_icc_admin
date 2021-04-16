@@ -13,7 +13,7 @@
     </b-row>
     <b-row>
         <b-col>
-            <b-table :fields="fields" :items="items" small responsive="sm" bordered head-variant="light" sticky-header>
+            <b-table :fields="fields" :items="items" small responsive="sm" bordered head-variant="light">
                 <template #cell(id)="row">
                     <div class="text-center">
                         {{row.item.id}}
@@ -83,7 +83,7 @@ module.exports = {
 				query: { menu_id: this.menu_id, id: item.id }
 			});
         },
-        goDelete: async function () {
+        goDelete: async function (id) {
             if (confirm("삭제 하시겠습니까?")) {
                 await axios.delete(`http://14.63.172.119/api/v1/notice/${id}`);
                 this.getList();

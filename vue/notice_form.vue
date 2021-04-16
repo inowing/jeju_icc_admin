@@ -200,6 +200,10 @@ module.exports = {
             });
 
 			this.getTopCategory();
+            function callback () {
+                this.$router.go(-1);
+            }
+            this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
 			
         },
         onFileChange(e, url) {

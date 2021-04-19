@@ -73,7 +73,7 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="openModal4(item, 0)"
+                                                                                    disabled
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
                                                                                 </b-button>&nbsp;{{item.moderator_count}}명
@@ -94,7 +94,7 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="openModal4(item, 1)"
+                                                                                    disabled
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
                                                                                 </b-button>&nbsp;{{item.presenter_count}}명
@@ -115,7 +115,7 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="openModal4(item, 2)"
+                                                                                    disabled
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
                                                                                 </b-button>&nbsp;{{item.attendee_count}}명
@@ -243,7 +243,7 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="openModal4(item, 0)"
+                                                                                    disabled
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
                                                                                 </b-button>&nbsp;{{item.moderator_count}}명
@@ -264,7 +264,7 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="openModal4(item, 1)"
+                                                                                   disabled
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
                                                                                 </b-button>&nbsp;{{item.presenter_count}}명
@@ -285,7 +285,7 @@
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
-                                                                                    @click="openModal4(item, 2)"
+                                                                                    disabled
                                                                                     pill variant="outline-secondary">
                                                                                     <b-icon-people></b-icon-people>
                                                                                 </b-button>&nbsp;{{item.attendee_count}}명

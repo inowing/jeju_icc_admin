@@ -777,10 +777,6 @@
             </b-row>
             <b-row class="p-1">
                 <b-col>
-                    <b-button size="sm" @click="selectAllRows">Select all</b-button>
-                    <b-button size="sm" @click="clearSelected">Clear selected</b-button>
-                    [table의 row를 클릭하여 선택할 수 있습니다.] {{allSelected}}
-                    <!-- :fields="operator_fields"  -->
                     <b-table 
                         :fields="operator_fields"
                         :items="operator_items" 
@@ -802,32 +798,17 @@
                         <template #cell(selected)="row">
                             <template v-if="row.rowSelected">
                                 <div class="text-center">
-                                    <!-- <span aria-hidden="true">&check;</span>
-                                    <span class="sr-only">Selected</span> -->
                                     <b-form-checkbox v-model="row.rowSelected" 
                                       @change="checked(row.index, row.rowSelected, 'selectableTable')">{{row.index}}</b-form-checkbox>
                                 </div>
                             </template>
                             <template v-else>
                                 <div class="text-center">
-                                    <!-- <span aria-hidden="true">&nbsp;</span>
-                                    <span class="sr-only">Not selected</span> -->
                                     <b-form-checkbox v-model="row.rowSelected" 
                                         @change="checked(row.index, row.rowSelected, 'selectableTable')">{{row.index}}</b-form-checkbox>
                                 </div>
                             </template>
                         </template>
-                        <!-- <template #cell(selected)="{ rowSelected }">
-                            <template v-if="rowSelected">
-                                <span aria-hidden="true">&check;</span>
-                                <span class="sr-only">Selected</span>
-                            </template>
-                            <template v-else>
-                                <span aria-hidden="true">&nbsp;</span>
-                                <span class="sr-only">Not selected</span>
-                            </template>
-                        </template> -->
-                        
                     </b-table>
                     <b-pagination
                         v-model="operator_pagination.current_page"

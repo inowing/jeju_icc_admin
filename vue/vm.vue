@@ -69,7 +69,7 @@
                                                                     <b-col class="pr-1">
                                                                         <b-card align="center" no-body class="p-2">
                                                                             <p class="p-0 mb-1">
-                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Moderator</b-button>
+                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Operator</b-button>
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
@@ -90,7 +90,7 @@
                                                                     <b-col class="pl-1">
                                                                         <b-card align="center" no-body class="p-2">
                                                                             <p class="p-0 mb-1">
-                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Presenter</b-button>
+                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Moderator/Presenter</b-button>
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
@@ -239,7 +239,7 @@
                                                                     <b-col class="pr-1">
                                                                         <b-card align="center" no-body class="p-2">
                                                                             <p class="p-0 mb-1">
-                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Moderator</b-button>
+                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Operator</b-button>
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
@@ -260,7 +260,7 @@
                                                                     <b-col class="pl-1">
                                                                         <b-card align="center" no-body class="p-2">
                                                                             <p class="p-0 mb-1">
-                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Presenter</b-button>
+                                                                                <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Moderator/Presenter</b-button>
                                                                             </p>
                                                                             <p class="p-0 mb-1">
                                                                                 <b-button size="sm" 
@@ -615,7 +615,7 @@
     <b-modal v-model="modal4" hide-footer title="참가자 초정리스트">
          <b-card no-body>
             <b-tabs v-model="attend_tabIndex" small card>
-                <b-tab title="Moderator">
+                <b-tab title="Operator">
                     <b-table
                         :fields="modal4_fields" :items="modal4_items_1" small bordered head-variant="light" class="mt-1" style="font-size: 9pt; vertical-align: center; line-height:33px;">
                         <template #cell(id)="row">
@@ -632,7 +632,7 @@
                         </template>
                     </b-table>
                 </b-tab>
-                <b-tab title="Presenter">
+                <b-tab title="Moderator/Presenter">
                     <b-table
                         :fields="modal4_fields" :items="modal4_items_2" small bordered head-variant="light" class="mt-1" style="font-size: 9pt; vertical-align: center; line-height:33px;">
                         <template #cell(id)="row">
@@ -714,7 +714,7 @@
     <b-modal v-model="modal3" hide-footer title="INVITATION">
         <b-card no-body>
             <b-tabs v-model="invitaion_tabIndex" small card>
-                <b-tab title="Moderator">
+                <b-tab title="Operator">
                     좌장을 이메일로 초대합니다.
                     <b-row>
                         <b-col cols="3">
@@ -730,7 +730,7 @@
                         </b-col>
                     </b-row>
                 </b-tab>
-                <b-tab title="Presenter">
+                <b-tab title="Moderator/Presenter">
                     발표자를 이메일로 초대합니다.
                     <b-row>
                         <b-col cols="3">

@@ -729,6 +729,67 @@
                             </p>
                         </b-col>
                     </b-row>
+                    <b-row class="p-1" style="height: 42px;">
+                        <b-col cols="auto" class="mr-auto">
+                            <b-button 
+                                v-show="invitaion_tabIndex != 2"
+                                variant="outline-success"
+                                @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
+                            <b-button href="#" variant="outline-success" size="sm" @click="excelDownload"><b-icon-upload></b-icon-upload> 엑셀 업로드</b-button>
+
+                            <b-button href="#" variant="outline-info" size="sm" @click="excelDownload"><b-icon-download></b-icon-download> 엑셀 템플릿 다운로드</b-button>
+                            <b-button size="sm" variant="primary" @click="sendEmail"><b-icon-envelope></b-icon-envelope> 초대메일 전송</b-button>
+                        </b-col>
+                        <b-col cols="auto">
+                            <div align="right">
+                                <b-pagination
+                                    v-model="operator_pagination.current_page"
+                                    :total-rows="operator_pagination.total_count"
+                                    :per-page="operator_pagination.limit"
+                                    size="sm"
+                                    @change="paginationFn($event, 'Operate')"
+                                ></b-pagination>
+                            </div>
+                        </b-col>
+                    </b-row>
+                    <b-row class="p-1">
+                        <b-col>
+                            <b-table 
+                                :fields="operator_fields"
+                                :items="operator_items" 
+                                selectable
+                                select-mode="multi"
+                                @row-selected="onRowSelected"
+                                ref="selectableTable"
+                                small bordered head-variant="light">
+
+                                <template #head(selected)="scope">
+                                    <div class="text-center">
+                                        <b-form-checkbox 
+                                            v-model="operator_all" 
+                                            :indeterminate="operator_indeterminate"
+                                            @change="toggleAll($event)"
+                                            > {{ scope.label }}</b-form-checkbox>
+                                    </div>
+                                </template>
+                                
+                                <template #cell(selected)="row">
+                                    <template v-if="row.rowSelected">
+                                        <div class="text-center">
+                                            <b-form-checkbox v-model="row.rowSelected" 
+                                            @change="checked(row.index, row.rowSelected, 'selectableTable')">{{row.index}}</b-form-checkbox>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="text-center">
+                                            <b-form-checkbox v-model="row.rowSelected" 
+                                                @change="checked(row.index, row.rowSelected, 'selectableTable')">{{row.index}}</b-form-checkbox>
+                                        </div>
+                                    </template>
+                                </template>
+                            </b-table>
+                        </b-col>
+                    </b-row>
                 </b-tab>
                 <b-tab title="Moderator/Presenter">
                     발표자를 이메일로 초대합니다.
@@ -743,6 +804,67 @@
                                 <input type="hidden" ref="email2" :value="conference_item ? conference_item.link : ''">
                                 <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email2')" ><b-icon-clipboard-plus></b-icon-clipboard-plus></b-button>
                             </p>
+                        </b-col>
+                    </b-row>
+                    <b-row class="p-1" style="height: 42px;">
+                        <b-col cols="auto" class="mr-auto">
+                            <b-button 
+                                v-show="invitaion_tabIndex != 2"
+                                variant="outline-success"
+                                @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
+                            <b-button href="#" variant="outline-success" size="sm" @click="excelDownload"><b-icon-upload></b-icon-upload> 엑셀 업로드</b-button>
+
+                            <b-button href="#" variant="outline-info" size="sm" @click="excelDownload"><b-icon-download></b-icon-download> 엑셀 템플릿 다운로드</b-button>
+                            <b-button size="sm" variant="primary" @click="sendEmail"><b-icon-envelope></b-icon-envelope> 초대메일 전송</b-button>
+                        </b-col>
+                        <b-col cols="auto">
+                            <div align="right">
+                                <b-pagination
+                                    v-model="operator_pagination.current_page"
+                                    :total-rows="operator_pagination.total_count"
+                                    :per-page="operator_pagination.limit"
+                                    size="sm"
+                                    @change="paginationFn($event, 'Operate')"
+                                ></b-pagination>
+                            </div>
+                        </b-col>
+                    </b-row>
+                    <b-row class="p-1">
+                        <b-col>
+                            <b-table 
+                                :fields="moderator_fields"
+                                :items="moderator_items" 
+                                selectable
+                                select-mode="multi"
+                                @row-selected="onModeratorSelected"
+                                ref="ModeraterSelectableTable"
+                                small bordered head-variant="light">
+
+                                <template #head(selected)="scope">
+                                    <div class="text-center">
+                                        <b-form-checkbox 
+                                            v-model="moderator_all" 
+                                            :indeterminate="moderator_indeterminate"
+                                            @change="toggleAllModerator($event)"
+                                            > {{ scope.label }}</b-form-checkbox>
+                                    </div>
+                                </template>
+                                
+                                <template #cell(selected)="row">
+                                    <template v-if="row.rowSelected">
+                                        <div class="text-center">
+                                            <b-form-checkbox v-model="row.rowSelected" 
+                                            @change="checked(row.index, row.rowSelected, 'ModeraterSelectableTable')">{{row.index}}</b-form-checkbox>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="text-center">
+                                            <b-form-checkbox v-model="row.rowSelected" 
+                                                @change="checked(row.index, row.rowSelected, 'ModeraterSelectableTable')">{{row.index}}</b-form-checkbox>
+                                        </div>
+                                    </template>
+                                </template>
+                            </b-table>
                         </b-col>
                     </b-row>
                 </b-tab>
@@ -761,18 +883,90 @@
                             </p>
                         </b-col>
                     </b-row>
+                    <b-row class="p-1" style="height: 42px;">
+                        <b-col cols="auto" class="mr-auto">
+                            <b-button 
+                                v-show="invitaion_tabIndex != 2"
+                                variant="outline-success"
+                                @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
+                            <b-button href="#" variant="outline-success" size="sm" @click="excelDownload"><b-icon-upload></b-icon-upload> 엑셀 업로드</b-button>
+
+                            <b-button href="#" variant="outline-info" size="sm" @click="excelDownload"><b-icon-download></b-icon-download> 엑셀 템플릿 다운로드</b-button>
+                            <b-button size="sm" variant="primary" @click="sendEmail"><b-icon-envelope></b-icon-envelope> 초대메일 전송</b-button>
+                        </b-col>
+                        <b-col cols="auto">
+                            <div align="right">
+                                <b-pagination
+                                    v-model="operator_pagination.current_page"
+                                    :total-rows="operator_pagination.total_count"
+                                    :per-page="operator_pagination.limit"
+                                    size="sm"
+                                    @change="paginationFn($event, 'Operate')"
+                                ></b-pagination>
+                            </div>
+                        </b-col>
+                    </b-row>
+                    <b-row class="p-1">
+                        <b-col>
+                            <b-table 
+                                :fields="attendee_fields"
+                                :items="attendee_items" 
+                                selectable
+                                select-mode="multi"
+                                @row-selected="onAttendeeSelected"
+                                ref="AttendeeSelectableTable"
+                                small bordered head-variant="light">
+
+                                <template #head(selected)="scope">
+                                    <div class="text-center">
+                                        <b-form-checkbox 
+                                            v-model="attendee_all" 
+                                            :indeterminate="attendee_indeterminate"
+                                            @change="toggleAllAttendee($event)"> {{ scope.label }}</b-form-checkbox>
+                                    </div>
+                                </template>
+                                
+                                <template #cell(selected)="row">
+                                    <template v-if="row.rowSelected">
+                                        <div class="text-center">
+                                            <b-form-checkbox v-model="row.rowSelected" 
+                                            @change="checked(row.index, row.rowSelected, 'AttendeeSelectableTable')">{{row.index}}</b-form-checkbox>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="text-center">
+                                            <b-form-checkbox v-model="row.rowSelected" 
+                                                @change="checked(row.index, row.rowSelected, 'AttendeeSelectableTable')">{{row.index}}</b-form-checkbox>
+                                        </div>
+                                    </template>
+                                </template>
+                            </b-table>
+                        </b-col>
+                    </b-row>
                 </b-tab>
             </b-tabs>
-            <b-row>
-                <b-col class="pl-3">
+<!-- 
+            <b-row class="p-1" style="height: 42px;">
+                <b-col cols="auto" class="mr-auto">
                     <b-button 
                         v-show="invitaion_tabIndex != 2"
-                        variant="outline-info"
+                        variant="outline-success"
                         @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
-                    <b-button 
-                        v-show="invitaion_tabIndex != 2"
-                        variant="outline-info"
-                        @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
+                    <b-button href="#" variant="outline-success" size="sm" @click="excelDownload"><b-icon-upload></b-icon-upload> 엑셀 업로드</b-button>
+
+                    <b-button href="#" variant="outline-info" size="sm" @click="excelDownload"><b-icon-download></b-icon-download> 엑셀 템플릿 다운로드</b-button>
+                    <b-button size="sm" variant="primary" @click="sendEmail"><b-icon-envelope></b-icon-envelope> 초대메일 전송</b-button>
+                </b-col>
+                <b-col cols="auto">
+                    <div align="right">
+                        <b-pagination
+                            v-model="operator_pagination.current_page"
+                            :total-rows="operator_pagination.total_count"
+                            :per-page="operator_pagination.limit"
+                            size="sm"
+                            @change="paginationFn($event, 'Operate')"
+                        ></b-pagination>
+                    </div>
                 </b-col>
             </b-row>
             <b-row class="p-1">
@@ -821,11 +1015,13 @@
                     ></b-pagination>
                 </b-col>
             </b-row>
+
             <b-row class="mb-1 text-center">
                 <b-col>
                     <b-button size="sm" variant="primary" @click="sendEmail">초대메일 전송</b-button>
                 </b-col>
             </b-row>
+             -->
         </b-card>
     </b-modal>
 
@@ -1040,16 +1236,113 @@ module.exports = {
                 "total_count": 6,
                 "count_pages": 1,
                 "current_page": 1,
-                "limit": 5
+                "limit": 100
             },
-            allSelected: [],
+            operator_allSelected: [],
             operator_all: false,
             operator_indeterminate: false,
-            // toggleSelected: []
+
+            /** moderator,presenter */
+            moderator_items: [
+                {
+                    id: 1,
+                    name: 'hello name',
+                    email: 'hello@inowing.com',
+                    part: '개발팀',
+                    grade: '과장',
+                    created_at: '2020-04-16',
+                    invited_at: '2020-04-16',
+                    passcode: 'zepd1235'
+                },
+                {
+                    id: 2,
+                    name: 'hello name',
+                    email: 'hello@inowing.com',
+                    part: '개발팀',
+                    grade: '과장',
+                    created_at: '2020-04-16',
+                    invited_at: '2020-04-16',
+                    passcode: 'zepd1235'
+                }
+            ],
+            moderator_fields: [
+                {key: 'selected', label: 'No'},
+                {key: 'name', label: '이름'},
+                {key: 'email', label: '이메일'},
+                {key: 'part', label: '소속'},
+                {key: 'grade', label: '직책'},
+                {key: 'created_at', label: '생성시간'},
+                {key: 'invited_at', label: '초대시간'},
+                {key: 'passcode', label: 'passcode'}
+            ],
+            moderator_pagination: {
+                "total_count": 6,
+                "count_pages": 1,
+                "current_page": 1,
+                "limit": 100
+            },
+            moderator_allSelected: [],
+            moderator_all: false,
+            moderator_indeterminate: false,
+            /** moderator,presenter */
+
+            /** attendee */
+            attendee_items: [
+                {
+                    id: 1,
+                    name: 'hello name',
+                    email: 'hello@inowing.com',
+                    part: '개발팀',
+                    grade: '과장',
+                    created_at: '2020-04-16',
+                    invited_at: '2020-04-16',
+                    passcode: 'zepd1235'
+                },
+                {
+                    id: 2,
+                    name: 'hello name',
+                    email: 'hello@inowing.com',
+                    part: '개발팀',
+                    grade: '과장',
+                    created_at: '2020-04-16',
+                    invited_at: '2020-04-16',
+                    passcode: 'zepd1235'
+                },
+                {
+                    id: 3,
+                    name: 'hello name',
+                    email: 'hello@inowing.com',
+                    part: '개발팀',
+                    grade: '과장',
+                    created_at: '2020-04-16',
+                    invited_at: '2020-04-16',
+                    passcode: 'zepd1235'
+                }
+            ],
+            attendee_fields: [
+                {key: 'selected', label: 'No'},
+                {key: 'name', label: '이름'},
+                {key: 'email', label: '이메일'},
+                {key: 'part', label: '소속'},
+                {key: 'grade', label: '직책'},
+                {key: 'created_at', label: '생성시간'},
+                {key: 'invited_at', label: '초대시간'},
+                {key: 'passcode', label: 'passcode'}
+            ],
+            attendee_pagination: {
+                "total_count": 6,
+                "count_pages": 1,
+                "current_page": 1,
+                "limit": 100
+            },
+            attendee_allSelected: [],
+            attendee_all: false,
+            attendee_indeterminate: false,
+            /** attendee */
         };
     },
     watch: {
-        allSelected (newValue, oldValue) {
+        operator_allSelected (newValue, oldValue) {
             // Handle changes in individual flavour checkboxes
             console.log(newValue, oldValue);
             if (newValue.length === 0) {
@@ -1061,6 +1354,34 @@ module.exports = {
             } else {
                 this.operator_indeterminate = true
                 this.operator_all = false
+            }
+        },
+        moderator_allSelected (newValue, oldValue) {
+            // Handle changes in individual flavour checkboxes
+            console.log(newValue, oldValue);
+            if (newValue.length === 0) {
+                this.moderator_indeterminate = false
+                this.moderator_all = false
+            } else if (newValue.length === this.moderator_items.length) {
+                this.moderator_indeterminate = false
+                this.moderator_all = true
+            } else {
+                this.moderator_indeterminate = true
+                this.moderator_all = false
+            }
+        },
+        attendee_allSelected (newValue, oldValue) {
+            // Handle changes in individual flavour checkboxes
+            console.log(newValue, oldValue);
+            if (newValue.length === 0) {
+                this.attendee_indeterminate = false
+                this.attendee_all = false
+            } else if (newValue.length === this.attendee_items.length) {
+                this.attendee_indeterminate = false
+                this.attendee_all = true
+            } else {
+                this.attendee_indeterminate = true
+                this.attendee_all = false
             }
       }
     },
@@ -1587,19 +1908,20 @@ module.exports = {
             // await getOperationList()
             console.log('requestPage ', requestPage, type);
         },
-        toggleSelected: function (params) {
-            console.log(params);
-            this.allSelected.push(params.id);
-            console.log(this.allSelected);
-        },
         onRowSelected(items) {
-            this.allSelected = items
+            this.operator_allSelected = items
         },
-        selectAllRows() {
-            this.$refs.selectableTable.selectAllRows()
+        onModeratorSelected(items) {
+            this.moderator_allSelected = items
         },
-        clearSelected() {
-            this.$refs.selectableTable.clearSelected()
+        onAttendeeSelected(items) {
+            this.attendee_allSelected = items
+        },
+        selectAllRows(target) {
+            this.$refs[target].selectAllRows()
+        },
+        clearSelected(target) {
+            this.$refs[target].clearSelected()
         },
         checked(index, checked, selectableTable) {
             let tableRef = this.$refs[selectableTable]
@@ -1613,7 +1935,15 @@ module.exports = {
         },
         toggleAll(checked) {
             this.operator_all = checked;
-            checked ? this.selectAllRows() : this.clearSelected();
+            checked ? this.selectAllRows('selectableTable') : this.clearSelected('selectableTable');
+        },
+        toggleAllModerator(checked) {
+            this.moderator_all = checked;
+            checked ? this.selectAllRows('ModeraterSelectableTable') : this.clearSelected('ModeraterSelectableTable');
+        },
+        toggleAllAttendee(checked) {
+            this.attendee_all = checked;
+            checked ? this.selectAllRows('AttendeeSelectableTable') : this.clearSelected('AttendeeSelectableTable');
         }
 
     },

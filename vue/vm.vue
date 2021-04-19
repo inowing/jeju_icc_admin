@@ -714,83 +714,7 @@
     <b-modal v-model="modal3" hide-footer title="INVITATION" size="xl">
         <b-card no-body>
             <b-tabs v-model="invitaion_tabIndex" small card>
-                <b-tab title="Operator">
-                    좌장을 이메일로 초대합니다.
-                    <b-row>
-                        <b-col cols="3">
-                            <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
-                        </b-col>
-                        <b-col cols="9">
-                            <p class="m-0">Join URL</p>
-                            <p class="m-0 text-primary">
-                                <span>{{conference_item ? conference_item.link : ''}}</span>
-                                <input type="hidden" ref="email1" :value="conference_item ? conference_item.link : ''">
-                                <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email1')" ><b-icon-clipboard-plus></b-icon-clipboard-plus></b-button>
-                            </p>
-                        </b-col>
-                    </b-row>
-                    <b-row class="p-1" style="height: 42px;">
-                        <b-col cols="auto" class="mr-auto">
-                            <b-button 
-                                v-show="invitaion_tabIndex != 2"
-                                variant="outline-success"
-                                @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
-                            <b-button href="#" variant="outline-success" size="sm" @click="excelDownload"><b-icon-upload></b-icon-upload> 엑셀 업로드</b-button>
-
-                            <b-button href="#" variant="outline-info" size="sm" @click="excelDownload"><b-icon-download></b-icon-download> 엑셀 템플릿 다운로드</b-button>
-                            <b-button size="sm" variant="primary" @click="sendEmail"><b-icon-envelope></b-icon-envelope> 초대메일 전송</b-button>
-                        </b-col>
-                        <b-col cols="auto">
-                            <div align="right">
-                                <b-pagination
-                                    v-model="operator_pagination.current_page"
-                                    :total-rows="operator_pagination.total_count"
-                                    :per-page="operator_pagination.limit"
-                                    size="sm"
-                                    @change="paginationFn($event, 'Operate')"
-                                ></b-pagination>
-                            </div>
-                        </b-col>
-                    </b-row>
-                    <b-row class="p-1">
-                        <b-col>
-                            <b-table 
-                                :fields="operator_fields"
-                                :items="operator_items" 
-                                selectable
-                                select-mode="multi"
-                                @row-selected="onRowSelected"
-                                ref="selectableTable"
-                                small bordered head-variant="light">
-
-                                <template #head(selected)="scope">
-                                    <div class="text-center">
-                                        <b-form-checkbox 
-                                            v-model="operator_all" 
-                                            :indeterminate="operator_indeterminate"
-                                            @change="toggleAll($event)"
-                                            > {{ scope.label }}</b-form-checkbox>
-                                    </div>
-                                </template>
-                                
-                                <template #cell(selected)="row">
-                                    <template v-if="row.rowSelected">
-                                        <div class="text-center">
-                                            <b-form-checkbox v-model="row.rowSelected" 
-                                            @change="checked(row.index, row.rowSelected, 'selectableTable')">{{row.index}}</b-form-checkbox>
-                                        </div>
-                                    </template>
-                                    <template v-else>
-                                        <div class="text-center">
-                                            <b-form-checkbox v-model="row.rowSelected" 
-                                                @change="checked(row.index, row.rowSelected, 'selectableTable')">{{row.index}}</b-form-checkbox>
-                                        </div>
-                                    </template>
-                                </template>
-                            </b-table>
-                        </b-col>
-                    </b-row>
-                </b-tab>
+                
                 <b-tab title="Moderator/Presenter">
                     발표자를 이메일로 초대합니다.
                     <b-row>
@@ -809,7 +733,7 @@
                     <b-row class="p-1" style="height: 42px;">
                         <b-col cols="auto" class="mr-auto">
                             <b-button 
-                                v-show="invitaion_tabIndex != 2"
+                                v-show="invitaion_tabIndex != 1"
                                 variant="outline-success"
                                 @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
                             <b-button href="#" variant="outline-success" size="sm" @click="excelDownload"><b-icon-upload></b-icon-upload> 엑셀 업로드</b-button>
@@ -886,7 +810,7 @@
                     <b-row class="p-1" style="height: 42px;">
                         <b-col cols="auto" class="mr-auto">
                             <b-button 
-                                v-show="invitaion_tabIndex != 2"
+                                v-show="invitaion_tabIndex != 1"
                                 variant="outline-success"
                                 @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
                             <b-button href="#" variant="outline-success" size="sm" @click="excelDownload"><b-icon-upload></b-icon-upload> 엑셀 업로드</b-button>
@@ -937,6 +861,83 @@
                                         <div class="text-center">
                                             <b-form-checkbox v-model="row.rowSelected" 
                                                 @change="checked(row.index, row.rowSelected, 'AttendeeSelectableTable')">{{row.index}}</b-form-checkbox>
+                                        </div>
+                                    </template>
+                                </template>
+                            </b-table>
+                        </b-col>
+                    </b-row>
+                </b-tab>
+                <b-tab title="Operator">
+                    좌장을 이메일로 초대합니다.
+                    <b-row>
+                        <b-col cols="3">
+                            <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
+                        </b-col>
+                        <b-col cols="9">
+                            <p class="m-0">Join URL</p>
+                            <p class="m-0 text-primary">
+                                <span>{{conference_item ? conference_item.link : ''}}</span>
+                                <input type="hidden" ref="email1" :value="conference_item ? conference_item.link : ''">
+                                <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email1')" ><b-icon-clipboard-plus></b-icon-clipboard-plus></b-button>
+                            </p>
+                        </b-col>
+                    </b-row>
+                    <b-row class="p-1" style="height: 42px;">
+                        <b-col cols="auto" class="mr-auto">
+                            <b-button 
+                                v-show="invitaion_tabIndex != 1"
+                                variant="outline-success"
+                                @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
+                            <b-button href="#" variant="outline-success" size="sm" @click="excelDownload"><b-icon-upload></b-icon-upload> 엑셀 업로드</b-button>
+
+                            <b-button href="#" variant="outline-info" size="sm" @click="excelDownload"><b-icon-download></b-icon-download> 엑셀 템플릿 다운로드</b-button>
+                            <b-button size="sm" variant="primary" @click="sendEmail"><b-icon-envelope></b-icon-envelope> 초대메일 전송</b-button>
+                        </b-col>
+                        <b-col cols="auto">
+                            <div align="right">
+                                <b-pagination
+                                    v-model="operator_pagination.current_page"
+                                    :total-rows="operator_pagination.total_count"
+                                    :per-page="operator_pagination.limit"
+                                    size="sm"
+                                    @change="paginationFn($event, 'Operate')"
+                                ></b-pagination>
+                            </div>
+                        </b-col>
+                    </b-row>
+                    <b-row class="p-1">
+                        <b-col>
+                            <b-table 
+                                :fields="operator_fields"
+                                :items="operator_items" 
+                                selectable
+                                select-mode="multi"
+                                @row-selected="onRowSelected"
+                                ref="selectableTable"
+                                small bordered head-variant="light">
+
+                                <template #head(selected)="scope">
+                                    <div class="text-center">
+                                        <b-form-checkbox 
+                                            v-model="operator_all" 
+                                            :indeterminate="operator_indeterminate"
+                                            @change="toggleAll($event)"
+                                            > {{ scope.label }}</b-form-checkbox>
+                                    </div>
+                                </template>
+                                
+                                <template #cell(selected)="row">
+                                    <template v-if="row.rowSelected">
+                                        <div class="text-center">
+                                            <b-form-checkbox v-model="row.rowSelected" 
+                                            @change="checked(row.index, row.rowSelected, 'selectableTable')">{{row.index}}</b-form-checkbox>
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="text-center">
+                                            <b-form-checkbox v-model="row.rowSelected" 
+                                                @change="checked(row.index, row.rowSelected, 'selectableTable')">{{row.index}}</b-form-checkbox>
                                         </div>
                                     </template>
                                 </template>

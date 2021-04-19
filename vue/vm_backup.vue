@@ -711,7 +711,7 @@
     </b-modal>
 
     <!-- Invitation -->
-    <b-modal v-model="modal3" hide-footer title="INVITATION" size="xl">
+    <b-modal v-model="modal3" hide-footer title="INVITATION">
         <b-card no-body>
             <b-tabs v-model="invitaion_tabIndex" small card>
                 <b-tab title="Operator">
@@ -769,75 +769,30 @@
                         v-show="invitaion_tabIndex != 2"
                         variant="outline-info"
                         @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
-                    <b-button 
-                        v-show="invitaion_tabIndex != 2"
-                        variant="outline-info"
-                        @click="openOverlayModal" size="sm">신규 계정 생성</b-button>
                 </b-col>
             </b-row>
             <b-row class="p-1">
                 <b-col>
-                    <b-button size="sm" @click="selectAllRows">Select all</b-button>
-                    <b-button size="sm" @click="clearSelected">Clear selected</b-button>
-                    [table의 row를 클릭하여 선택할 수 있습니다.] {{allSelected}}
-                    <!-- :fields="operator_fields"  -->
-                    <b-table 
-                        :fields="operator_fields"
-                        :items="operator_items" 
-                        selectable
-                        select-mode="multi"
-                        @row-selected="onRowSelected"
-                        ref="selectableTable"
-                        small bordered head-variant="light">
+                    <b-form-group label="VM" label-for="tags-component-select">
+                        <b-form-tags id="tags-component-select" v-model="tagValue" size="sm" add-on-change no-outer-focus>
+                            <template v-slot="{ tags, addTag, disabled, removeTag }">
 
-                        <template #head(selected)="scope">
-                            <div class="text-center">
-                                <b-form-checkbox 
-                                    v-model="operator_all" 
-                                    :indeterminate="operator_indeterminate"
-                                    @change="toggleAll"> {{ scope.label }}</b-form-checkbox>
-                            </div>
-                        </template>
-                         
-                        <template #cell(selected)="row">
-                            <template v-if="row.rowSelected">
-                                <div class="text-center">
-                                    <!-- <span aria-hidden="true">&check;</span>
-                                    <span class="sr-only">Selected</span> -->
-                                    <b-form-checkbox v-model="row.rowSelected" 
-                                      @change="checked(row.index, row.rowSelected, 'selectableTable')">{{row.index}}</b-form-checkbox>
-                                </div>
+                                <ul v-if="tags.length > 0" class="list-inline d-inline-block mb-2">
+                                    <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                                        <b-form-tag @remove="removeTag(tag)" :title="tag" :disabled="disabled" variant="info">{{ tag }}</b-form-tag>
+                                    </li>
+                                </ul>
+                                
+                                <b-form-input v-model="search" id="tag-search-input" type="search" size="sm" autocomplete="off" list="input-list" ref="shobal" @update="multi_onOptionClick({ search, addTag, removeTag })"></b-form-input>
+                                <datalist id="input-list">
+                                    <option v-for="option in availableOptions" :key="option.id">{{ option.email }}</option>
+                                    <option v-if="availableOptions.length === 0">There are no tags available to select</option>
+                                </datalist>
+
                             </template>
-                            <template v-else>
-                                <div class="text-center">
-                                    <!-- <span aria-hidden="true">&nbsp;</span>
-                                    <span class="sr-only">Not selected</span> -->
-                                    <b-form-checkbox v-model="row.rowSelected" 
-                                        @change="checked(row.index, row.rowSelected, 'selectableTable')">{{row.index}}</b-form-checkbox>
-                                </div>
-                            </template>
-                        </template>
-                        <!-- <template #cell(selected)="{ rowSelected }">
-                            <template v-if="rowSelected">
-                                <span aria-hidden="true">&check;</span>
-                                <span class="sr-only">Selected</span>
-                            </template>
-                            <template v-else>
-                                <span aria-hidden="true">&nbsp;</span>
-                                <span class="sr-only">Not selected</span>
-                            </template>
-                        </template> -->
-                        
-                    </b-table>
-                    <b-pagination
-                        v-model="operator_pagination.current_page"
-                        :total-rows="operator_pagination.total_count"
-                        :per-page="operator_pagination.limit"
-                        align="center"
-                        size="sm"
-                        class="my-0"
-                        @change="paginationFn($event, 'Operate')"
-                    ></b-pagination>
+                        </b-form-tags>
+                    </b-form-group>
+
                 </b-col>
             </b-row>
             <b-row class="mb-1 text-center">
@@ -981,108 +936,18 @@ module.exports = {
 
             // 신규유저 추가할 경우.
             userForm: {},
-            password_confirm: '',
-
-            operator_items: [
-                {
-                    id: 1,
-                    name: 'hello name',
-                    email: 'hello@inowing.com',
-                    part: '개발팀',
-                    grade: '과장',
-                    created_at: '2020-04-16',
-                    invited_at: '2020-04-16',
-                    passcode: 'zepd1235'
-                },
-                {
-                    id: 2,
-                    name: 'hello name',
-                    email: 'hello@inowing.com',
-                    part: '개발팀',
-                    grade: '과장',
-                    created_at: '2020-04-16',
-                    invited_at: '2020-04-16',
-                    passcode: 'zepd1235'
-                },
-                {
-                    id: 3,
-                    name: 'hello name',
-                    email: 'hello@inowing.com',
-                    part: '개발팀',
-                    grade: '과장',
-                    created_at: '2020-04-16',
-                    invited_at: '2020-04-16',
-                    passcode: 'zepd1235'
-                },
-                {
-                    id: 4,
-                    name: 'hello name',
-                    email: 'hello@inowing.com',
-                    part: '개발팀',
-                    grade: '과장',
-                    created_at: '2020-04-16',
-                    invited_at: '2020-04-16',
-                    passcode: 'zepd1235'
-                },
-                {
-                    id: 5,
-                    name: 'hello name',
-                    email: 'hello@inowing.com',
-                    part: '개발팀',
-                    grade: '과장',
-                    created_at: '2020-04-16',
-                    invited_at: '2020-04-16',
-                    passcode: 'zepd1235'
-                },
-                {
-                    id: 6,
-                    name: 'hello name',
-                    email: 'hello@inowing.com',
-                    part: '개발팀',
-                    grade: '과장',
-                    created_at: '2020-04-16',
-                    invited_at: '2020-04-16',
-                    passcode: 'zepd1235'
-                },
-            ],
-            operator_fields: [
-                {key: 'selected', label: 'No'},
-                {key: 'name', label: '이름'},
-                {key: 'email', label: '이메일'},
-                {key: 'part', label: '소속'},
-                {key: 'grade', label: '직책'},
-                {key: 'created_at', label: '생성시간'},
-                {key: 'invited_at', label: '초대시간'},
-                {key: 'passcode', label: 'passcode'}
-            ],
-            operator_pagination: {
-                "total_count": 6,
-                "count_pages": 1,
-                "current_page": 1,
-                "limit": 5
-            },
-            allSelected: [],
-            operator_all: false,
-            operator_indeterminate: false,
-            // toggleSelected: []
+            password_confirm: ''
         };
     },
-    watch: {
-        allSelected (newValue, oldValue) {
-            // Handle changes in individual flavour checkboxes
-            console.log(newValue, oldValue);
-            if (newValue.length === 0) {
-                this.operator_indeterminate = false
-                this.operator_all = false
-            } else if (newValue.length === this.operator_items.length) {
-                this.operator_indeterminate = false
-                this.operator_all = true
-            } else {
-                this.operator_indeterminate = true
-                this.operator_all = false
-            }
-      }
-    },
+    // watch: {
+    //     lang_arr: {
+    //         deep: true,
+    //         handler: function() {
+                
+    //         }
+            
+    //     }
+    // },
     computed: {
         user_validation: function (params) {
             let valid1 = this.userForm.name ? true : false;
@@ -1601,38 +1466,6 @@ module.exports = {
             } catch (error) {
                 this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
             }
-        },
-        paginationFn: async function(requestPage, type) {
-            // await getOperationList()
-            console.log('requestPage ', requestPage, type);
-        },
-        toggleSelected: function (params) {
-            console.log(params);
-            this.allSelected.push(params.id);
-            console.log(this.allSelected);
-        },
-        onRowSelected(items) {
-            this.allSelected = items
-        },
-        selectAllRows() {
-            this.$refs.selectableTable.selectAllRows()
-        },
-        clearSelected() {
-            this.$refs.selectableTable.clearSelected()
-        },
-        checked(index, checked, selectableTable) {
-            let tableRef = this.$refs[selectableTable]
-            // to select all use tableRef.selectAllRows()
-            // to see all availabe table properties just do a console.log(tableRef)
-            if (checked === true){
-                tableRef.selectRow(index)
-            } else {
-                tableRef.unselectRow(index)
-            }
-        },
-        toggleAll(checked) {
-            this.operator_all = checked;
-            checked ? this.selectAllRows() : this.clearSelected();
         }
 
     },

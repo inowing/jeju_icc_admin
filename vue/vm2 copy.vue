@@ -1,359 +1,350 @@
 <template>
   <section>
-    <b-row>
-      <b-col>
-        <b-button href="#" variant="primary" size="sm" @click="openModal1">
-          <b-icon-plus></b-icon-plus> VM 생성
-        </b-button>
-      </b-col>
-    </b-row>
-    <b-row class="mt-3">
-      <b-col>
-        <b-card no-body>
-          <b-tabs v-model="tabIndex" small card>
-            <b-tab title="Upcoming Events">
-              <b-row class="mb-2">
-                <b-col cols="9">
-                  <b-button href="#" :variant="selected_btn_index == 0 ? primary : outline_primary" size="sm"
-                    @click="searchDayList(0)">ALL</b-button>
-                  <span v-for="(item, index) in weeks" :key="index">
-                    <b-button href="#" :variant="selected_btn_index == (index+1) ? primary : outline_primary" size="sm"
-                      class="mr-1" @click="searchDayList(index+1, item);">{{item.text}}
-                    </b-button>
-                  </span>
-                </b-col>
-                <b-col>
-                  <b-input-group size="sm" align-v="baseline">
-                    <b-form-input aria-placeholder="검색어를 입력하세요."></b-form-input>
-                    <b-input-group-append>
-                      <b-button variant="info" size="sm">
-                        <b-icon-search></b-icon-search>
-                      </b-button>
-                    </b-input-group-append>
-                  </b-input-group>
-                </b-col>
-              </b-row>
+    <b-button href="#" variant="primary" size="sm" @click="openModal1">
+      <b-icon-plus></b-icon-plus> VM 생성
+    </b-button>
+    
+    <b-card no-body class="mt-3">
+      <b-tabs v-model="tabIndex" small card>
+        <b-tab title="Upcoming Events">
+          <b-row class="mb-2">
+            <b-col cols="9">
+              <b-button href="#" :variant="selected_btn_index == 0 ? primary : outline_primary" size="sm"
+                @click="searchDayList(0)">ALL</b-button>
+              <span v-for="(item, index) in weeks" :key="index">
+                <b-button href="#" :variant="selected_btn_index == (index+1) ? primary : outline_primary" size="sm"
+                  class="mr-1" @click="searchDayList(index+1, item);">{{item.text}}
+                </b-button>
+              </span>
+            </b-col>
+            <b-col>
+              <b-input-group size="sm" align-v="baseline">
+                <b-form-input aria-placeholder="검색어를 입력하세요."></b-form-input>
+                <b-input-group-append>
+                  <b-button variant="info" size="sm">
+                    <b-icon-search></b-icon-search>
+                  </b-button>
+                </b-input-group-append>
+              </b-input-group>
+            </b-col>
+          </b-row>
 
-              <!-- 반복할 리스트 -->
-              <b-row class="mt-1" v-for="item in upcoming" :key="item.id">
-                <b-col>
-                  <b-card no-body>
-                    <b-row>
-                      <b-col cols="2" class="text-center vm_card_v_left">
-                        <div>
-                          <span class="vm_smaller">{{item.date.split(' ')[0]}}</span><br>
-                          <span
-                            class="vm_smaller">({{ week[(new Date(Date.parse(item.date.split(' ')[0]))).getDay()] }})</span><br>
-                          <b-button variant="danger" pill size="sm">Broadcast START</b-button>
-                        </div>
+          <!-- 반복할 리스트 -->
+          <b-row class="mt-1" v-for="item in upcoming" :key="item.id">
+            <b-col>
+              <b-card no-body>
+                <b-row>
+                  <b-col cols="2" class="text-center vm_card_v_left">
+                    <div>
+                      <span class="vm_smaller">{{item.date.split(' ')[0]}}</span><br>
+                      <span
+                        class="vm_smaller">({{ week[(new Date(Date.parse(item.date.split(' ')[0]))).getDay()] }})</span><br>
+                      <b-button variant="danger" pill size="sm">Broadcast START</b-button>
+                    </div>
+                  </b-col>
+                  <b-col cols="8" class="vm_card_v_center">
+                    <b-row style="min-height: 90px;">
+                      <b-col cols="9">
+                        <span class="vm_smaller">vm id : {{item.id}}</span>
+                        <h5 class="text-primary">{{item.name}}</h5>
+                        <br>
+                        <span class="text-secondary">{{item.venue}}
+                          {{item.date.substr(5,5).replace('-', '/')}}
+                          {{item.date.split(' ')[1]}} ~ {{item.time}}m / GMT +09:00
+                          SEOUL</span>
                       </b-col>
-                      <b-col cols="8" class="vm_card_v_center">
-                        <b-row style="min-height: 90px;">
-                          <b-col cols="9">
-                            <span class="vm_smaller">vm id : {{item.id}}</span>
-                            <h5 class="text-primary">{{item.name}}</h5>
-                            <br>
-                            <span class="text-secondary">{{item.venue}}
-                              {{item.date.substr(5,5).replace('-', '/')}}
-                              {{item.date.split(' ')[1]}} ~ {{item.time}}m / GMT +09:00
-                              SEOUL</span>
-                          </b-col>
-                          <b-col cols="3" class="p-1">
-                            <p class="text-secondary vm_host">
-                              <span>{{item.host}}</span>
-                            </p>
-                          </b-col>
-                        </b-row>
-                        <hr style="padding: 0; margin: 0">
-                        <b-row class="mt-1">
-                          <b-col>
-                            <b-collapse :id="'toggle_'+item.id" style="width:100%;">
-                              <b-row>
-                                <b-col class="pr-1">
-                                  <b-card align="center" no-body class="p-2">
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" variant="primary" class="inoBtn-200" disabled>
-                                        Operator</b-button>
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" disabled pill variant="outline-secondary">
-                                        <b-icon-people></b-icon-people>
-                                      </b-button>
-                                      &nbsp;{{item.moderator_count}}명
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" @click="openModal3(item, 0)" pill variant="outline-primary">
-                                        <b-icon-envelope>
-                                        </b-icon-envelope> Invitation
-                                      </b-button>
-                                    </p>
-                                  </b-card>
-                                </b-col>
-                                <b-col class="pl-1">
-                                  <b-card align="center" no-body class="p-2">
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" variant="primary" class="inoBtn-200" disabled>
-                                        Moderator/Presenter</b-button>
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" disabled pill variant="outline-secondary">
-                                        <b-icon-people></b-icon-people>
-                                      </b-button>
-                                      &nbsp;{{item.presenter_count}}명
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" @click="openModal3(item, 1)" pill variant="outline-primary">
-                                        <b-icon-envelope></b-icon-envelope> Invitation
-                                      </b-button>
-                                    </p>
-                                  </b-card>
-                                </b-col>
-                                <b-col class="pl-1">
-                                  <b-card align="center" no-body class="p-2">
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Attendee
-                                      </b-button>
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" disabled pill variant="outline-secondary">
-                                        <b-icon-people></b-icon-people>
-                                      </b-button>
-                                      &nbsp;{{item.attendee_count}}명
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" @click="openModal3(item, 2)" pill variant="outline-primary">
-                                        <b-icon-envelope></b-icon-envelope> Invitation
-                                      </b-button>
-                                    </p>
-                                  </b-card>
-                                </b-col>
-                              </b-row>
-                              <b-row class="mt-3">
-                                <b-col align="center">
-                                  <b-button size="sm" variant="outline-secondary" @click="goVmNotice(item)">
-                                    <b-icon-info-circle></b-icon-info-circle> 공지사항
-                                  </b-button>
-                                  <b-button size="sm" variant="outline-secondary" @click="openModal2(item, 'Q&A')">
-                                    <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A({{item.qna_count}})
-                                  </b-button>
-                                  <b-button size="sm" variant="outline-secondary" @click="openModal2(item, '참가자')">
-                                    <b-icon-people></b-icon-people> 참가자({{item.user_count}})
-                                  </b-button>
-                                </b-col>
-                              </b-row>
-                              <hr>
-                              <b-row>
-                                <b-col align="center">
-                                  <p>
-                                    <b-button size="sm" pill variant="outline-primary">
-                                      <b-icon-people></b-icon-people>
-                                    </b-button>
-                                    예상 참가자수 <strong class="text-primary">{{ item.event_size }}</strong> 명
-                                  </p>
-                                  <p class="mb-1">
-                                    <b-button size="sm" variant="danger" class="inoBtn-200">
-                                      <b-icon-stop-circle></b-icon-stop-circle> BroadCast 멈추기
-                                    </b-button>
-                                  </p>
-                                  <p class="mb-1">
-                                    <b-button size="sm" variant="success" class="inoBtn-200"
-                                      @click="openModal1($event, item)">
-                                      <b-icon-files-alt></b-icon-files-alt> 수정
-                                    </b-button>
-                                  </p>
-                                </b-col>
-                              </b-row>
-                            </b-collapse>
-                          </b-col>
-                        </b-row>
-
-                        <b-row class="text-right mb-1">
-                          <b-col>
-                            <b-button v-b-toggle="'toggle_'+item.id" size="sm" variant="outline-primary"
-                              @click="openId.includes(item.id) ? openId.splice(openId.indexOf(item.id), 1) : openId.push(item.id);">
-                              <b-icon-chevron-down v-show="!openId.includes(item.id)"></b-icon-chevron-down>
-                              <b-icon-chevron-up v-show="openId.includes(item.id)"></b-icon-chevron-up>
-                            </b-button>
-                            <b-button size="sm" variant="outline-danger" @click="deleteData(item)">
-                              <b-icon-trash></b-icon-trash>
-                            </b-button>
-                          </b-col>
-                        </b-row>
-                      </b-col>
-                      <b-col cols="2" class="vm_card_v_right ino-180-180-wrap">
-                        <div style="border: none; padding: 0px;">
-                          <b-img :src="item.logo||logo_prev" fluid></b-img>
-                        </div>
+                      <b-col cols="3" class="p-1">
+                        <p class="text-secondary vm_host">
+                          <span>{{item.host}}</span>
+                        </p>
                       </b-col>
                     </b-row>
-                  </b-card>
-                </b-col>
-              </b-row>
-            </b-tab>
-
-            <b-tab title="Past Events">
-              <b-row class="mt-1" v-for="item in past" :key="item.id">
-                <b-col>
-                  <b-card no-body>
-                    <b-row>
-                      <b-col cols="2" class="text-center vm_card_v_left">
-                        <div>
-                          <span class="vm_smaller">{{item.date.split(' ')[0]}}</span><br>
-                          <span
-                            class="vm_smaller">({{ week[(new Date(Date.parse(item.date.split(' ')[0]))).getDay()] }})</span><br>
-                          <b-button variant="danger" pill size="sm">Broadcast START</b-button>
-                        </div>
-                      </b-col>
-                      <b-col cols="8" class="vm_card_v_center">
-                        <b-row style="min-height: 90px;">
-                          <b-col cols="9">
-                            <span class="vm_smaller">vm id : {{item.id}}</span>
-                            <h5 class="text-primary">{{item.name}}</h5>
-                            <br>
-                            <span class="text-secondary">{{item.venue}}
-                              {{item.date.substr(5,5).replace('-', '/')}}
-                              {{item.date.split(' ')[1]}} ~ {{item.time}}m / GMT +09:00
-                              SEOUL</span>
-                          </b-col>
-                          <b-col cols="3" class="p-1">
-                            <p class="text-secondary vm_host">
-                              <span>{{item.host}}</span>
-                            </p>
-                          </b-col>
-                        </b-row>
-                        <hr style="padding: 0; margin: 0">
-                        <b-row class="mt-1">
-                          <b-col>
-                            <b-collapse :id="'toggle_'+item.id" style="width:100%;">
-                              <b-row>
-                                <b-col class="pr-1">
-                                  <b-card align="center" no-body class="p-2">
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" variant="primary" class="inoBtn-200" disabled>
-                                        Operator</b-button>
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" disabled pill variant="outline-secondary">
-                                        <b-icon-people></b-icon-people>
-                                      </b-button>
-                                      &nbsp;{{item.moderator_count}}명
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" @click="openModal3(item, 0)" pill variant="outline-primary">
-                                        <b-icon-envelope>
-                                        </b-icon-envelope> Invitation
-                                      </b-button>
-                                    </p>
-                                  </b-card>
-                                </b-col>
-                                <b-col class="pl-1">
-                                  <b-card align="center" no-body class="p-2">
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" variant="primary" class="inoBtn-200" disabled>
-                                        Moderator/Presenter</b-button>
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" disabled pill variant="outline-secondary">
-                                        <b-icon-people></b-icon-people>
-                                      </b-button>
-                                      &nbsp;{{item.presenter_count}}명
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" @click="openModal3(item, 1)" pill variant="outline-primary">
-                                        <b-icon-envelope></b-icon-envelope> Invitation
-                                      </b-button>
-                                    </p>
-                                  </b-card>
-                                </b-col>
-                                <b-col class="pl-1">
-                                  <b-card align="center" no-body class="p-2">
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Attendee
-                                      </b-button>
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" disabled pill variant="outline-secondary">
-                                        <b-icon-people></b-icon-people>
-                                      </b-button>
-                                      &nbsp;{{item.attendee_count}}명
-                                    </p>
-                                    <p class="p-0 mb-1">
-                                      <b-button size="sm" @click="openModal3(item, 2)" pill variant="outline-primary">
-                                        <b-icon-envelope></b-icon-envelope> Invitation
-                                      </b-button>
-                                    </p>
-                                  </b-card>
-                                </b-col>
-                              </b-row>
-                              <b-row class="mt-3">
-                                <b-col align="center">
-                                  <b-button size="sm" variant="outline-secondary" @click="goVmNotice(item)">
-                                    <b-icon-info-circle></b-icon-info-circle> 공지사항
+                    <hr style="padding: 0; margin: 0">
+                    <b-row class="mt-1">
+                      <b-col>
+                        <b-collapse :id="'toggle_'+item.id" style="width:100%;">
+                          <b-row>
+                            <b-col class="pr-1">
+                              <b-card align="center" no-body class="p-2">
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" variant="primary" class="inoBtn-200" disabled>
+                                    Operator</b-button>
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" disabled pill variant="outline-secondary">
+                                    <b-icon-people></b-icon-people>
                                   </b-button>
-                                  <b-button size="sm" variant="outline-secondary" @click="openModal2(item, 'Q&A')">
-                                    <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A({{item.qna_count}})
+                                  &nbsp;{{item.moderator_count}}명
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" @click="openModal3(item, 0)" pill variant="outline-primary">
+                                    <b-icon-envelope>
+                                    </b-icon-envelope> Invitation
                                   </b-button>
-                                  <b-button size="sm" variant="outline-secondary" @click="openModal2(item, '참가자')">
-                                    <b-icon-people></b-icon-people> 참가자({{item.user_count}})
+                                </p>
+                              </b-card>
+                            </b-col>
+                            <b-col class="pl-1">
+                              <b-card align="center" no-body class="p-2">
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" variant="primary" class="inoBtn-200" disabled>
+                                    Moderator/Presenter</b-button>
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" disabled pill variant="outline-secondary">
+                                    <b-icon-people></b-icon-people>
                                   </b-button>
-                                </b-col>
-                              </b-row>
-                              <hr>
-                              <b-row>
-                                <b-col align="center">
-                                  <p>
-                                    <b-button size="sm" pill variant="outline-primary">
-                                      <b-icon-people></b-icon-people>
-                                    </b-button>
-                                    예상 참가자수 <strong class="text-primary">{{ item.event_size }}</strong> 명
-                                  </p>
-                                  <p class="mb-1">
-                                    <b-button size="sm" variant="danger" class="inoBtn-200">
-                                      <b-icon-stop-circle></b-icon-stop-circle> BroadCast 멈추기
-                                    </b-button>
-                                  </p>
-                                  <p class="mb-1">
-                                    <b-button size="sm" variant="success" class="inoBtn-200"
-                                      @click="openModal1($event, item)">
-                                      <b-icon-files-alt></b-icon-files-alt> 수정
-                                    </b-button>
-                                  </p>
-                                </b-col>
-                              </b-row>
-                            </b-collapse>
-                          </b-col>
-                        </b-row>
-
-                        <b-row class="text-right mb-1">
-                          <b-col>
-                            <b-button v-b-toggle="'toggle_'+item.id" size="sm" variant="outline-primary"
-                              @click="openId.includes(item.id) ? openId.splice(openId.indexOf(item.id), 1) : openId.push(item.id);">
-                              <b-icon-chevron-down v-show="!openId.includes(item.id)"></b-icon-chevron-down>
-                              <b-icon-chevron-up v-show="openId.includes(item.id)"></b-icon-chevron-up>
-                            </b-button>
-                            <b-button size="sm" variant="outline-danger" @click="deleteData(item)">
-                              <b-icon-trash></b-icon-trash>
-                            </b-button>
-                          </b-col>
-                        </b-row>
-                      </b-col>
-                      <b-col cols="2" class="vm_card_v_right ino-180-180-wrap">
-                        <div style="border: none; padding: 0px;">
-                          <b-img :src="item.logo||logo_prev" fluid></b-img>
-                        </div>
+                                  &nbsp;{{item.presenter_count}}명
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" @click="openModal3(item, 1)" pill variant="outline-primary">
+                                    <b-icon-envelope></b-icon-envelope> Invitation
+                                  </b-button>
+                                </p>
+                              </b-card>
+                            </b-col>
+                            <b-col class="pl-1">
+                              <b-card align="center" no-body class="p-2">
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Attendee
+                                  </b-button>
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" disabled pill variant="outline-secondary">
+                                    <b-icon-people></b-icon-people>
+                                  </b-button>
+                                  &nbsp;{{item.attendee_count}}명
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" @click="openModal3(item, 2)" pill variant="outline-primary">
+                                    <b-icon-envelope></b-icon-envelope> Invitation
+                                  </b-button>
+                                </p>
+                              </b-card>
+                            </b-col>
+                          </b-row>
+                          <b-row class="mt-3">
+                            <b-col align="center">
+                              <b-button size="sm" variant="outline-secondary" @click="goVmNotice(item)">
+                                <b-icon-info-circle></b-icon-info-circle> 공지사항
+                              </b-button>
+                              <b-button size="sm" variant="outline-secondary" @click="openModal2(item, 'Q&A')">
+                                <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A({{item.qna_count}})
+                              </b-button>
+                              <b-button size="sm" variant="outline-secondary" @click="openModal2(item, '참가자')">
+                                <b-icon-people></b-icon-people> 참가자({{item.user_count}})
+                              </b-button>
+                            </b-col>
+                          </b-row>
+                          <hr>
+                          <b-row>
+                            <b-col align="center">
+                              <p>
+                                <b-button size="sm" pill variant="outline-primary">
+                                  <b-icon-people></b-icon-people>
+                                </b-button>
+                                예상 참가자수 <strong class="text-primary">{{ item.event_size }}</strong> 명
+                              </p>
+                              <p class="mb-1">
+                                <b-button size="sm" variant="danger" class="inoBtn-200">
+                                  <b-icon-stop-circle></b-icon-stop-circle> BroadCast 멈추기
+                                </b-button>
+                              </p>
+                              <p class="mb-1">
+                                <b-button size="sm" variant="success" class="inoBtn-200"
+                                  @click="openModal1($event, item)">
+                                  <b-icon-files-alt></b-icon-files-alt> 수정
+                                </b-button>
+                              </p>
+                            </b-col>
+                          </b-row>
+                        </b-collapse>
                       </b-col>
                     </b-row>
-                  </b-card>
 
-                </b-col>
-              </b-row>
-            </b-tab>
+                    <b-row class="text-right mb-1">
+                      <b-col>
+                        <b-button v-b-toggle="'toggle_'+item.id" size="sm" variant="outline-primary"
+                          @click="openId.includes(item.id) ? openId.splice(openId.indexOf(item.id), 1) : openId.push(item.id);">
+                          <b-icon-chevron-down v-show="!openId.includes(item.id)"></b-icon-chevron-down>
+                          <b-icon-chevron-up v-show="openId.includes(item.id)"></b-icon-chevron-up>
+                        </b-button>
+                        <b-button size="sm" variant="outline-danger" @click="deleteData(item)">
+                          <b-icon-trash></b-icon-trash>
+                        </b-button>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col cols="2" class="vm_card_v_right ino-180-180-wrap">
+                    <div style="border: none; padding: 0px;">
+                      <b-img :src="item.logo||logo_prev" fluid></b-img>
+                    </div>
+                  </b-col>
+                </b-row>
+              </b-card>
+            </b-col>
+          </b-row>
+        </b-tab>
 
-          </b-tabs>
-        </b-card>
+        <b-tab title="Past Events">
+          <b-row class="mt-1" v-for="item in past" :key="item.id">
+            <b-col>
+              <b-card no-body>
+                <b-row>
+                  <b-col cols="2" class="text-center vm_card_v_left">
+                    <div>
+                      <span class="vm_smaller">{{item.date.split(' ')[0]}}</span><br>
+                      <span
+                        class="vm_smaller">({{ week[(new Date(Date.parse(item.date.split(' ')[0]))).getDay()] }})</span><br>
+                      <b-button variant="danger" pill size="sm">Broadcast START</b-button>
+                    </div>
+                  </b-col>
+                  <b-col cols="8" class="vm_card_v_center">
+                    <b-row style="min-height: 90px;">
+                      <b-col cols="9">
+                        <span class="vm_smaller">vm id : {{item.id}}</span>
+                        <h5 class="text-primary">{{item.name}}</h5>
+                        <br>
+                        <span class="text-secondary">{{item.venue}}
+                          {{item.date.substr(5,5).replace('-', '/')}}
+                          {{item.date.split(' ')[1]}} ~ {{item.time}}m / GMT +09:00
+                          SEOUL</span>
+                      </b-col>
+                      <b-col cols="3" class="p-1">
+                        <p class="text-secondary vm_host">
+                          <span>{{item.host}}</span>
+                        </p>
+                      </b-col>
+                    </b-row>
+                    <hr style="padding: 0; margin: 0">
+                    <b-row class="mt-1">
+                      <b-col>
+                        <b-collapse :id="'toggle_'+item.id" style="width:100%;">
+                          <b-row>
+                            <b-col class="pr-1">
+                              <b-card align="center" no-body class="p-2">
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" variant="primary" class="inoBtn-200" disabled>
+                                    Operator</b-button>
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" disabled pill variant="outline-secondary">
+                                    <b-icon-people></b-icon-people>
+                                  </b-button>
+                                  &nbsp;{{item.moderator_count}}명
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" @click="openModal3(item, 0)" pill variant="outline-primary">
+                                    <b-icon-envelope>
+                                    </b-icon-envelope> Invitation
+                                  </b-button>
+                                </p>
+                              </b-card>
+                            </b-col>
+                            <b-col class="pl-1">
+                              <b-card align="center" no-body class="p-2">
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" variant="primary" class="inoBtn-200" disabled>
+                                    Moderator/Presenter</b-button>
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" disabled pill variant="outline-secondary">
+                                    <b-icon-people></b-icon-people>
+                                  </b-button>
+                                  &nbsp;{{item.presenter_count}}명
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" @click="openModal3(item, 1)" pill variant="outline-primary">
+                                    <b-icon-envelope></b-icon-envelope> Invitation
+                                  </b-button>
+                                </p>
+                              </b-card>
+                            </b-col>
+                            <b-col class="pl-1">
+                              <b-card align="center" no-body class="p-2">
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Attendee
+                                  </b-button>
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" disabled pill variant="outline-secondary">
+                                    <b-icon-people></b-icon-people>
+                                  </b-button>
+                                  &nbsp;{{item.attendee_count}}명
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" @click="openModal3(item, 2)" pill variant="outline-primary">
+                                    <b-icon-envelope></b-icon-envelope> Invitation
+                                  </b-button>
+                                </p>
+                              </b-card>
+                            </b-col>
+                          </b-row>
+                          <b-row class="mt-3">
+                            <b-col align="center">
+                              <b-button size="sm" variant="outline-secondary" @click="goVmNotice(item)">
+                                <b-icon-info-circle></b-icon-info-circle> 공지사항
+                              </b-button>
+                              <b-button size="sm" variant="outline-secondary" @click="openModal2(item, 'Q&A')">
+                                <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A({{item.qna_count}})
+                              </b-button>
+                              <b-button size="sm" variant="outline-secondary" @click="openModal2(item, '참가자')">
+                                <b-icon-people></b-icon-people> 참가자({{item.user_count}})
+                              </b-button>
+                            </b-col>
+                          </b-row>
+                          <hr>
+                          <b-row>
+                            <b-col align="center">
+                              <p>
+                                <b-button size="sm" pill variant="outline-primary">
+                                  <b-icon-people></b-icon-people>
+                                </b-button>
+                                예상 참가자수 <strong class="text-primary">{{ item.event_size }}</strong> 명
+                              </p>
+                              <p class="mb-1">
+                                <b-button size="sm" variant="danger" class="inoBtn-200">
+                                  <b-icon-stop-circle></b-icon-stop-circle> BroadCast 멈추기
+                                </b-button>
+                              </p>
+                              <p class="mb-1">
+                                <b-button size="sm" variant="success" class="inoBtn-200"
+                                  @click="openModal1($event, item)">
+                                  <b-icon-files-alt></b-icon-files-alt> 수정
+                                </b-button>
+                              </p>
+                            </b-col>
+                          </b-row>
+                        </b-collapse>
+                      </b-col>
+                    </b-row>
 
-      </b-col>
-    </b-row>
+                    <b-row class="text-right mb-1">
+                      <b-col>
+                        <b-button v-b-toggle="'toggle_'+item.id" size="sm" variant="outline-primary"
+                          @click="openId.includes(item.id) ? openId.splice(openId.indexOf(item.id), 1) : openId.push(item.id);">
+                          <b-icon-chevron-down v-show="!openId.includes(item.id)"></b-icon-chevron-down>
+                          <b-icon-chevron-up v-show="openId.includes(item.id)"></b-icon-chevron-up>
+                        </b-button>
+                        <b-button size="sm" variant="outline-danger" @click="deleteData(item)">
+                          <b-icon-trash></b-icon-trash>
+                        </b-button>
+                      </b-col>
+                    </b-row>
+                  </b-col>
+                  <b-col cols="2" class="vm_card_v_right ino-180-180-wrap">
+                    <div style="border: none; padding: 0px;">
+                      <b-img :src="item.logo||logo_prev" fluid></b-img>
+                    </div>
+                  </b-col>
+                </b-row>
+              </b-card>
+            </b-col>
+          </b-row>
+        </b-tab>
+      </b-tabs>
+    </b-card>
+      
 
     <b-modal v-model="modal1" hide-footer title="Event Information" body-bg-variant="light">
       <b-card no-body class="p-1" :border-variant="modal1_border" v-show="form_page == 1">
@@ -624,61 +615,6 @@
       </b-row>
     </b-modal>
 
-    <!-- 참가자 초청리스트 -->
-    <b-modal v-model="modal4" hide-footer title="참가자 초정리스트">
-      <b-card no-body>
-        <b-tabs v-model="attend_tabIndex" small card>
-          <b-tab title="Operator">
-            <b-table :fields="modal4_fields" :items="modal4_items_1" small bordered head-variant="light"
-              class="mt-1 vm_modal4_table">
-              <template #cell(id)="row">
-                <div class="text-center">{{row.item.id}}</div>
-              </template>
-              <template #cell(email)="row">
-                <div class="text-center" v-if="row.item.user">{{row.item.user.email}}</div>
-              </template>
-              <template #cell(updated_at)="row">
-                <div class="text-center">{{row.item.updated_at}}</div>
-              </template>
-              <template #cell(passcode)="row">
-                <div class="text-center">{{row.item.passcode}}</div>
-              </template>
-            </b-table>
-          </b-tab>
-          <b-tab title="Moderator/Presenter">
-            <b-table :fields="modal4_fields" :items="modal4_items_2" small bordered head-variant="light"
-              class="mt-1 vm_modal4_table">
-              <template #cell(id)="row">
-                <div class="text-center">{{row.item.id}}</div>
-              </template>
-              <template #cell(email)="row">
-                <div class="text-center" v-if="row.item.user">{{row.item.user.email}}</div>
-              </template>
-              <template #cell(updated_at)="row">
-                <div class="text-center">{{row.item.updated_at}}</div>
-              </template>
-            </b-table>
-          </b-tab>
-          <b-tab title="Attendee">
-            <b-table :fields="modal4_fields" :items="modal4_items_3" small bordered head-variant="light"
-              class="mt-1 vm_modal4_table">
-              <template #cell(id)="row">
-                <div class="text-center">{{row.item.id}}</div>
-              </template>
-              <template #cell(email)="row">
-                <div class="text-center" v-if="row.item.user">{{row.item.user.email}}</div>
-              </template>
-              <template #cell(updated_at)="row">
-                <div class="text-center">{{row.item.updated_at}}</div>
-              </template>
-            </b-table>
-          </b-tab>
-
-        </b-tabs>
-      </b-card>
-
-    </b-modal>
-
     <!-- qna, 참가자 -->
     <b-modal v-model="modal2" hide-footer :title="modal2_type">
       <b-row class="text-right">
@@ -725,255 +661,22 @@
 
     <!-- Invitation -->
     <b-modal v-model="modal3" hide-footer title="INVITATION" size="xl">
-      <b-card no-body>
-        <b-tabs v-model="invitaion_tabIndex" small card>
-
-          <b-tab title="Moderator/Presenter">
-            발표자를 이메일로 초대합니다.
-            <b-row>
-              <b-col cols="3">
-                <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
-              </b-col>
-              <b-col cols="9">
-                <p class="m-0">Join URL</p>
-                <p class="m-0 text-primary">
-                  <span>{{conference_item ? conference_item.link : ''}}</span>
-                  <input type="hidden" ref="email2" :value="conference_item ? conference_item.link : ''">
-                  <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email2')">
-                    <b-icon-clipboard-plus></b-icon-clipboard-plus>
-                  </b-button>
-                </p>
-              </b-col>
-            </b-row>
-            <b-row class="p-1" style="height: 42px;">
-              <b-col cols="auto" class="mr-auto">
-                <b-button v-show="invitaion_tabIndex != 1" variant="outline-success" @click="openOverlayModal"
-                  size="sm">신규 계정 생성</b-button>
-                <b-button href="#" variant="outline-success" size="sm" @click="excelDownload">
-                  <b-icon-upload></b-icon-upload> 엑셀 업로드
-                </b-button>
-
-                <b-button href="#" variant="outline-info" size="sm" @click="excelDownload">
-                  <b-icon-download></b-icon-download> 엑셀 템플릿 다운로드
-                </b-button>
-                <b-button size="sm" variant="primary" @click="sendEmail">
-                  <b-icon-envelope></b-icon-envelope> 초대메일 전송
-                </b-button>
-              </b-col>
-              <b-col cols="auto">
-                <div align="right">
-                  <b-pagination v-model="operator_pagination.current_page" :total-rows="operator_pagination.total_count"
-                    :per-page="operator_pagination.limit" size="sm" @change="paginationFn($event, 'Operate')">
-                  </b-pagination>
-                </div>
-              </b-col>
-            </b-row>
-            <b-row class="p-1">
-              <b-col>
-                <b-table :fields="moderator_fields" :items="moderator_items" selectable select-mode="multi"
-                  @row-selected="onModeratorSelected" ref="ModeraterSelectableTable" small bordered
-                  head-variant="light">
-
-                  <template #head(selected)="scope">
-                    <div class="text-center">
-                      <b-form-checkbox v-model="moderator_all" :indeterminate="moderator_indeterminate"
-                        @change="toggleAllModerator($event)"> {{ scope.label }}
-                      </b-form-checkbox>
-                    </div>
-                  </template>
-
-                  <template #cell(selected)="row">
-                    <template v-if="row.rowSelected">
-                      <div class="text-center">
-                        <b-form-checkbox v-model="row.rowSelected"
-                          @change="checked(row.index, row.rowSelected, 'ModeraterSelectableTable')">
-                          {{row.index}}</b-form-checkbox>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <div class="text-center">
-                        <b-form-checkbox v-model="row.rowSelected"
-                          @change="checked(row.index, row.rowSelected, 'ModeraterSelectableTable')">
-                          {{row.index}}</b-form-checkbox>
-                      </div>
-                    </template>
-                  </template>
-                </b-table>
-              </b-col>
-            </b-row>
-          </b-tab>
-          <b-tab title="Attendee">
-            참석자를 이메일로 초대합니다.
-            <b-row>
-              <b-col cols="3">
-                <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
-              </b-col>
-              <b-col cols="9">
-                <p class="m-0">Join URL</p>
-                <p class="m-0 text-primary">
-                  <span>{{conference_item ? conference_item.link : ''}}</span>
-                  <input type="hidden" ref="email3" :value="conference_item ? conference_item.link : ''">
-                  <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email3')">
-                    <b-icon-clipboard-plus></b-icon-clipboard-plus>
-                  </b-button>
-                </p>
-              </b-col>
-            </b-row>
-            <b-row class="p-1" style="height: 42px;">
-              <b-col cols="auto" class="mr-auto">
-                <b-button v-show="invitaion_tabIndex != 1" variant="outline-success" @click="openOverlayModal"
-                  size="sm">신규 계정 생성</b-button>
-                <b-button href="#" variant="outline-success" size="sm" @click="excelDownload">
-                  <b-icon-upload></b-icon-upload> 엑셀 업로드
-                </b-button>
-
-                <b-button href="#" variant="outline-info" size="sm" @click="excelDownload">
-                  <b-icon-download></b-icon-download> 엑셀 템플릿 다운로드
-                </b-button>
-                <b-button size="sm" variant="primary" @click="sendEmail">
-                  <b-icon-envelope></b-icon-envelope> 초대메일 전송
-                </b-button>
-              </b-col>
-              <b-col cols="auto">
-                <div align="right">
-                  <b-pagination v-model="operator_pagination.current_page" :total-rows="operator_pagination.total_count"
-                    :per-page="operator_pagination.limit" size="sm" @change="paginationFn($event, 'Operate')">
-                  </b-pagination>
-                </div>
-              </b-col>
-            </b-row>
-            <b-row class="p-1">
-              <b-col>
-                <b-table :fields="attendee_fields" :items="attendee_items" selectable select-mode="multi"
-                  @row-selected="onAttendeeSelected" ref="AttendeeSelectableTable" small bordered head-variant="light">
-
-                  <template #head(selected)="scope">
-                    <div class="text-center">
-                      <b-form-checkbox v-model="attendee_all" :indeterminate="attendee_indeterminate"
-                        @change="toggleAllAttendee($event)"> {{ scope.label }}</b-form-checkbox>
-                    </div>
-                  </template>
-
-                  <template #cell(selected)="row">
-                    <template v-if="row.rowSelected">
-                      <div class="text-center">
-                        <b-form-checkbox v-model="row.rowSelected"
-                          @change="checked(row.index, row.rowSelected, 'AttendeeSelectableTable')">
-                          {{row.index}}</b-form-checkbox>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <div class="text-center">
-                        <b-form-checkbox v-model="row.rowSelected"
-                          @change="checked(row.index, row.rowSelected, 'AttendeeSelectableTable')">
-                          {{row.index}}</b-form-checkbox>
-                      </div>
-                    </template>
-                  </template>
-                </b-table>
-              </b-col>
-            </b-row>
-          </b-tab>
-          <b-tab title="Operator">
-            좌장을 이메일로 초대합니다.
-            <b-row>
-              <b-col cols="3">
-                <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
-              </b-col>
-              <b-col cols="9">
-                <p class="m-0">Join URL</p>
-                <p class="m-0 text-primary">
-                  <span>{{conference_item ? conference_item.link : ''}}</span>
-                  <input type="hidden" ref="email1" :value="conference_item ? conference_item.link : ''">
-                  <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email1')">
-                    <b-icon-clipboard-plus></b-icon-clipboard-plus>
-                  </b-button>
-                </p>
-              </b-col>
-            </b-row>
-            <b-row class="p-1" style="height: 42px;">
-              <b-col cols="auto" class="mr-auto">
-                <b-button v-show="invitaion_tabIndex != 1" variant="outline-success" @click="openOverlayModal"
-                  size="sm">신규 계정 생성</b-button>
-                <b-button href="#" variant="outline-success" size="sm" @click="excelDownload">
-                  <b-icon-upload></b-icon-upload> 엑셀 업로드
-                </b-button>
-
-                <b-button href="#" variant="outline-info" size="sm" @click="excelDownload">
-                  <b-icon-download></b-icon-download> 엑셀 템플릿 다운로드
-                </b-button>
-                <b-button size="sm" variant="primary" @click="sendEmail">
-                  <b-icon-envelope></b-icon-envelope> 초대메일 전송
-                </b-button>
-              </b-col>
-              <b-col cols="auto">
-                <div align="right">
-                  <b-pagination v-model="operator_pagination.current_page" :total-rows="operator_pagination.total_count"
-                    :per-page="operator_pagination.limit" size="sm" @change="paginationFn($event, 'Operate')">
-                  </b-pagination>
-                </div>
-              </b-col>
-            </b-row>
-            <b-row class="p-1">
-              <b-col>
-                <b-table :fields="operator_fields" :items="operator_items" selectable select-mode="multi"
-                  @row-selected="onRowSelected" ref="selectableTable" small bordered head-variant="light">
-
-                  <template #head(selected)="scope">
-                    <div class="text-center">
-                      <b-form-checkbox v-model="operator_all" :indeterminate="operator_indeterminate"
-                        @change="toggleAll($event)">
-                        {{ scope.label }}</b-form-checkbox>
-                    </div>
-                  </template>
-
-                  <template #cell(selected)="row">
-                    <template v-if="row.rowSelected">
-                      <div class="text-center">
-                        <b-form-checkbox v-model="row.rowSelected"
-                          @change="checked(row.index, row.rowSelected, 'selectableTable')">
-                          {{row.index}}</b-form-checkbox>
-                      </div>
-                    </template>
-                    <template v-else>
-                      <div class="text-center">
-                        <b-form-checkbox v-model="row.rowSelected"
-                          @change="checked(row.index, row.rowSelected, 'selectableTable')">
-                          {{row.index}}</b-form-checkbox>
-                      </div>
-                    </template>
-                  </template>
-                </b-table>
-              </b-col>
-            </b-row>
-          </b-tab>
-        </b-tabs>
-      </b-card>
+      <!-- 숫자가 안넘어가서 객체로 넘겼음. -->
+      <vm-invitation-modal :params="{conference_item, invitaion_tabIndex}" @get-list="getList"></vm-invitation-modal>
     </b-modal>
 
-    <b-modal v-model="overlayModal" title="신규 계정 생성" hide-footer>
-      <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="이름">
-        <b-form-input size="sm" v-model="userForm.name" :state="user_validation.valid1"></b-form-input>
-      </b-form-group>
-      <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="이메일">
-        <b-form-input size="sm" v-model="userForm.email" :state="user_validation.valid2"></b-form-input>
-      </b-form-group>
-      <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="비밀번호">
-        <b-form-input size="sm" type="password" v-model="userForm.password" :state="user_validation.valid3">
-        </b-form-input>
-      </b-form-group>
-      <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="비밀번호 확인">
-        <b-form-input size="sm" type="password" v-model="password_confirm" :state="user_validation.valid3">
-        </b-form-input>
-      </b-form-group>
-      <b-button size="sm" class="inoBtn-150" variant="success" @click="storeUser">생성</b-button>
-    </b-modal>
   </section>
 </template>
 
 <script>
   module.exports = {
     name: "Vm",
+    components: {
+        'vm-form-modal': window.httpVueLoader(`./vue/vm_invitation_modal.vue`),
+				'vm-invitation-modal': window.httpVueLoader(`./vue/vm_invitation_modal.vue`),
+				'qna-modal': window.httpVueLoader(`./vue/vm_invitation_modal.vue`),
+				'attendee-modal': window.httpVueLoader(`./vue/vm_invitation_modal.vue`)
+    },
     data: function () {
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -995,7 +698,7 @@
         modal2: false,
         modal2_type: "Q&A",
         modal3: false,
-        modal4: false,
+        
         overlayModal: false,
 
         logo_file: null,
@@ -1083,26 +786,7 @@
         attend_tabIndex: 0,
         email_content: "",
 
-        modal4_fields: [{
-            key: "id",
-            label: "No."
-          },
-          {
-            key: "email",
-            label: "E-mail"
-          },
-          {
-            key: "updated_at",
-            label: "초대일시"
-          },
-          {
-            key: "passcode",
-            label: "입장코드"
-          },
-        ],
-        modal4_items_1: [],
-        modal4_items_2: [],
-        modal4_items_3: [],
+        
         event_id: 0,
         api_url: ``,
 
@@ -1367,67 +1051,7 @@
         /** attendee */
       };
     },
-    watch: {
-      operator_allSelected(newValue, oldValue) {
-        // Handle changes in individual flavour checkboxes
-        console.log(newValue, oldValue);
-        if (newValue.length === 0) {
-          this.operator_indeterminate = false;
-          this.operator_all = false;
-        } else if (newValue.length === this.operator_items.length) {
-          this.operator_indeterminate = false;
-          this.operator_all = true;
-        } else {
-          this.operator_indeterminate = true;
-          this.operator_all = false;
-        }
-      },
-      moderator_allSelected(newValue, oldValue) {
-        // Handle changes in individual flavour checkboxes
-        console.log(newValue, oldValue);
-        if (newValue.length === 0) {
-          this.moderator_indeterminate = false;
-          this.moderator_all = false;
-        } else if (newValue.length === this.moderator_items.length) {
-          this.moderator_indeterminate = false;
-          this.moderator_all = true;
-        } else {
-          this.moderator_indeterminate = true;
-          this.moderator_all = false;
-        }
-      },
-      attendee_allSelected(newValue, oldValue) {
-        // Handle changes in individual flavour checkboxes
-        console.log(newValue, oldValue);
-        if (newValue.length === 0) {
-          this.attendee_indeterminate = false;
-          this.attendee_all = false;
-        } else if (newValue.length === this.attendee_items.length) {
-          this.attendee_indeterminate = false;
-          this.attendee_all = true;
-        } else {
-          this.attendee_indeterminate = true;
-          this.attendee_all = false;
-        }
-      },
-    },
     computed: {
-      user_validation: function (params) {
-        let valid1 = this.userForm.name ? true : false;
-        let valid2 = this.userForm.email ? true : false;
-        let valid3 =
-          this.userForm.password &&
-          this.userForm.password == this.password_confirm ?
-          true :
-          false;
-        let valid_result = valid1 && valid2 && valid3;
-        return {
-          valid1,
-          valid2,
-          valid3,
-          valid_result
-        };
-      },
       validation: function () {
         return (
           this.form.name &&
@@ -1460,7 +1084,7 @@
         this.event_id = this.$store.getters.event_id;
         this.api_url = this.$store.getters.api_url;
         this.setWeek(7);
-        await this.getSelects();
+        
         this.getList();
         this.getUserList();
       });
@@ -1470,6 +1094,7 @@
        * 기본
        */
       getList: async function (item) {
+        console.log('hola~~~');
         let url = `${this.api_url}/conference?event_id=${this.event_id}`;
         if (item) {
           url = `${url}&date=${item.value}`;
@@ -1928,28 +1553,21 @@
         this.modal2 = true;
       },
       openModal3: async function (item, invitaion_tabIndex) {
-        this.tagValue = [];
+        // this.tagValue = [];
+        console.log(invitaion_tabIndex);
+        console.log(invitaion_tabIndex);
+        console.log(invitaion_tabIndex);
         this.conference_item = item;
         this.invitaion_tabIndex = invitaion_tabIndex;
-        let url = `${this.api_url}/user/in_event?event_id=${this.event_id}`;
-        let rs = await axios.get(url);
-        console.log(rs);
-        this.vm = rs.data.result;
+        // let url = `${this.api_url}/user/in_event?event_id=${this.event_id}`;
+        // let rs = await axios.get(url);
+        // console.log(rs);
+        // this.vm = rs.data.result;
 
         // availableOptions
         this.modal3 = true;
       },
-      openModal4: async function (item, index) {
-        this.conference_item = item;
-        this.attend_tabIndex = index;
-        let url = `${this.api_url}/conference_invitation?conference_id=${this.conference_item.id}`;
-        let rs = await axios.get(url);
-        this.modal4_items_1 = rs.data.result.moderator;
-        this.modal4_items_2 = rs.data.result.presenter;
-        this.modal4_items_3 = rs.data.result.attendee;
-        console.log("openModal4 ", rs);
-        this.modal4 = true;
-      },
+      
       exeCopy: function (event, ref_id) {
         // 이메일 주소 복사
         let testingCodeToCopy = this.$refs[ref_id];
@@ -1969,121 +1587,8 @@
         window.getSelection().removeAllRanges();
       },
 
-      getSelects: async function () {
-        // modal select options 초기화
-        let url = `${this.api_url}/menu_conference/get_item_list?menu_id=${this.menu_id}`;
-        let rs = await axios.get(url);
-
-        this.vm = rs.data.result.conference;
-        this.vm = [{
-          id: "a",
-          name: "dezcao@gmail.com"
-        }];
-        console.log("this.vm ", this.vm);
-      },
-
-      multi_onOptionClick({
-        search,
-        addTag
-      }) {
-        // VM 목록에서 클릭시 태그 추가.
-        for (let option of this.vm) {
-          if (option.email == search) {
-            addTag(option.email); // string만 되는듯하다...
-            this.conference_id = option.id;
-            this.search = "";
-            this.$refs.shobal.localValue = "";
-          }
-        }
-      },
-      openOverlayModal: function () {
-        this.userForm = {};
-        this.password_confirm = "";
-        this.overlayModal = true;
-      },
-      storeUser: async function () {
-        if (!this.user_validation.valid_result) {
-          alert("폼을 입력해 주세요.");
-          return;
-        }
-        try {
-          let url = `${this.api_url}/register`;
-          let formData = new FormData();
-          formData.append("event_id", this.event_id);
-          formData.append("name", this.userForm.name);
-          formData.append("email", this.userForm.email);
-          formData.append("password", this.userForm.password);
-          let rs = await axios.post(url, formData, {
-            Headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          this.tagValue.push(this.userForm.email);
-          this.$showMsgBoxTwo(rs.status);
-          rs = await axios.get(
-            `${this.api_url}/user/in_event?event_id=${this.event_id}`
-          );
-          this.vm = rs.data.result;
-          this.overlayModal = false;
-        } catch (error) {
-          this.$showMsgBoxTwo(
-            error.response.status,
-            "",
-            error.response.statusText
-          );
-        }
-      },
-      paginationFn: async function (requestPage, type) {
-        // await getOperationList()
-        console.log("requestPage ", requestPage, type);
-      },
-      onRowSelected(items) {
-        this.operator_allSelected = items;
-      },
-      onModeratorSelected(items) {
-        this.moderator_allSelected = items;
-      },
-      onAttendeeSelected(items) {
-        this.attendee_allSelected = items;
-      },
-      selectAllRows(target) {
-        this.$refs[target].selectAllRows();
-      },
-      clearSelected(target) {
-        this.$refs[target].clearSelected();
-      },
-      checked(index, checked, selectableTable) {
-        let tableRef = this.$refs[selectableTable];
-        // to select all use tableRef.selectAllRows()
-        // to see all availabe table properties just do a console.log(tableRef)
-        if (checked === true) {
-          tableRef.selectRow(index);
-        } else {
-          tableRef.unselectRow(index);
-        }
-      },
-      toggleAll(checked) {
-        this.operator_all = checked;
-        checked
-          ?
-          this.selectAllRows("selectableTable") :
-          this.clearSelected("selectableTable");
-      },
-      toggleAllModerator(checked) {
-        this.moderator_all = checked;
-        checked
-          ?
-          this.selectAllRows("ModeraterSelectableTable") :
-          this.clearSelected("ModeraterSelectableTable");
-      },
-      toggleAllAttendee(checked) {
-        this.attendee_all = checked;
-        checked
-          ?
-          this.selectAllRows("AttendeeSelectableTable") :
-          this.clearSelected("AttendeeSelectableTable");
-      },
+      
+      
     },
   };
 </script>

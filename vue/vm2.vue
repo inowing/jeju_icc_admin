@@ -346,7 +346,7 @@
     
     <!-- VM 생성 -->
     <b-modal v-model="modal1" hide-footer title="Event Information" body-bg-variant="light">
-      <vm-form-modal :params="{conference_item}"></vm-form-modal>
+      <vm-form-modal :params="{conference_item}" @get-list="getList"></vm-form-modal>
     </b-modal>
 
     <!-- qna -->
@@ -420,6 +420,7 @@
         let rs = await axios.get(url);
         this.upcoming = rs.data.result.upcoming;
         this.past = rs.data.result.past;
+        this.modal1 = false;
       },
       searchDayList: async function (index, item) {
         this.selected_btn_index = index;
@@ -456,7 +457,6 @@
         }
       },
       openModal1: function (event, item) {
-        console.log('gogo modal 1')
         this.conference_item = item;
         this.modal1 = true;
       },
@@ -472,7 +472,23 @@
         this.conference_item = item;
         this.invitaion_tabIndex = invitaion_tabIndex;
         this.modal4 = true;
-      }
+      },
+      deleteData: async function (item) {
+        if (confirm("삭제 하시겠습니까?")) {
+          try {
+            let rs = await axios.delete(`${this.api_url}/conference/${item.id}`);
+            if (rs.data.code == 412) {
+              this.$showMsgBoxTwo(rs.data.code, "", "컨퍼런스 메뉴에서 사용중인 VM 입니다.");
+              return;
+            }
+            // this.getList();
+            this.$showMsgBoxTwo(rs.status);
+            this.$emit('get-list'); // 이름이 같으면 동작 안된다.
+          } catch (error) {
+            this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);
+          }
+        }
+      },
     },
   };
 </script>

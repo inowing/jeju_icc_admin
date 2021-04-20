@@ -162,20 +162,19 @@
         </b-col>
       </b-row>
       <b-form-group label="Languages">
-        <b-input-group v-for="(item, index) in lang_arr" :key="item.user_id" class="mb-1">
-          <b-form-input v-model="item.language" type="text"></b-form-input>
-          <b-form-select v-model="item.user_id" @change="selectedChange(item, index)">
-            <b-form-select-option :value="item.user_id">{{item.name}}</b-form-select-option>
-            <b-form-select-option v-for="user in available" :key="user.value" :value="user.value">
-              {{user.text}}</b-form-select-option>
+        <b-input-group v-for="(item, index) in select_arr" :key="item.user_id" class="mb-1">
+          <b-form-input v-model="item.language" type="text" size="sm"></b-form-input>
+          <b-form-select size="sm" v-model="item.user_id" @change.native="selectedChange($event, item, index)">
+            <b-form-select-option size="sm" v-for="(user) in item.available" :key="user.user_id" :value="user.user_id" @click="selectedChange">{{ user.name }}</b-form-select-option>
           </b-form-select>
+
           <b-input-group-append>
-            <b-button size="sm" variant="danger" @click="removeLang(item, index)">X</b-button>
+            <b-button size="sm" variant="danger" @click="removeList(item, index)">X</b-button>
           </b-input-group-append>
         </b-input-group>
         <b-row class="text-center">
           <b-col>
-            <b-button size="sm" variant="info" @click="addLanguage">
+            <b-button size="sm" variant="info" @click="addList">
               <b-icon-plus></b-icon-plus> 언어추가
             </b-button>
           </b-col>
@@ -282,23 +281,18 @@
         api_url: '',
 
         conference_item: this.params.conference_item, // 선택된 아이템이 있으면 수정폼이 되게 된다.
+
         lang_options: [], // 로딩 되면, 유저목록을 가져온다. getUserList()
+        lang_options_obj: {},
+        lang_options_values: [],
+        select_arr: [], // {user_id, language, available}
+        available: [],
 
-        vm: [],
-        search: "", // 선택한 vm 키워드
-        tagValue: [], // 선택된 vm 키워드 문자 집합
-
-        // primary: "primary",
-        // outline_primary: "outline-primary",
         modal1_border: "primary",
         form_page: 1,
         datepicker_state: "normal", // disabled, readonly, normal
 
         event_size: 0, // 예상 참가자 수
-
-        
-        lang_arr: [], // {user_id, language, available}
-        available: [],
 
         login: 0,
         login_type: 0,
@@ -318,7 +312,6 @@
         form: {},
         min: minDate,
 
-
         logo_file: null,
         logo_prev: this.$store.getters.dummy_image_url(["480x60"]),
         logo_del: false,
@@ -332,33 +325,49 @@
         background_del: false,
 
         intro_background_file: null,
-        intro_background_del: false,
-
-        
-
+        intro_background_del: false
       };
     },
-    created: function () {
+    created: async function () {
       this.event_id = this.$store.getters.event_id;
       this.api_url = this.$store.getters.api_url;
-      this.getUserList();
+      await this.getUserList();
+    },
+    computed: {
+      validation: function () {
+        return (
+          this.form.name &&
+          this.form.venue &&
+          this.form.host &&
+          this.event_size &&
+          this.form.date &&
+          this.start_time &&
+          this.form.time
+        );
+      }
     },
     methods: {
       getUserList: async function () {
         let url = `${this.api_url}/user/in_event?event_id=${this.event_id}`;
         let rs = await axios.get(url);
         let arr = rs.data.result;
-        let options = [];
+        this.lang_options = [];
+        this.lang_options_values = [];
+        this.lang_options_obj = {};
         for (var i = 0; i < arr.length; i++) {
-          let option = {
-            value: arr[i].id,
-            text: arr[i].name
-          };
-          options.push(option);
+          this.lang_options.push({
+            user_id: arr[i].id,
+            name: arr[i].name
+          }); // select 박스의 옵션에서 꺼내기 좋은 형태로
+          this.lang_options_values.push(arr[i].id); // user_id만
+          arr[i].user_id = arr[i].id; // 아아아.... this.conference_item.language 속에 user_id로 들어있어서 통일함.
+          this.lang_options_obj[arr[i].id] = arr[i]; // user_id를 키로하는 object
         }
-        this.lang_options = options;
+        
+        this.conference_item ? this.setOldForm() : this.setNewForm();
+        this.form_page = 1;
       },
-            storeData: async function () {
+      storeData: async function () {
         console.log(this.form);
 
         let url = `${this.api_url}/conference`;
@@ -367,7 +376,7 @@
 
         // language
         let language = [];
-        this.lang_arr.forEach((el) => {
+        this.select_arr.forEach((el) => {
           language.push({
             user_id: el.user_id,
             language: el.language
@@ -420,16 +429,16 @@
           // function callback () {
           //     this.$router.go(-1);
           // }
-          this.getList();
-          this.$showMsgBoxTwo(rs.status);
+          // this.getList();
+          function callback () {
+              this.$emit('get-list'); // 이름이 같으면 동작 안된다.
+          }
+          this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
         } catch (error) {
-          this.$showMsgBoxTwo(
-            error.response.status,
-            "",
-            error.response.statusText
-          );
+          this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);
         } finally {
-          this.modal1 = false;
+          // this.$parent.modal1 = false;
+          // this.modal1 = false;
         }
       },
       update: async function () {
@@ -451,14 +460,16 @@
         }
         // language
         let language = [];
-        this.lang_arr.forEach((el) => {
+        console.log(this.select_arr);
+        this.select_arr.forEach((el) => {
           language.push({
             user_id: el.user_id,
             language: el.language
           });
         });
-        let str = JSON.stringify(language);
-        formData.append("language", str);
+
+        
+        formData.append("language", JSON.stringify(language));
 
         // files
         formData.delete("logo");
@@ -488,99 +499,160 @@
               "Content-Type": "multipart/form-data"
             },
           });
-          this.getList();
-          this.$showMsgBoxTwo(rs.status);
+          console.log(rs);
+
+          function callback () {
+              this.$emit('get-list'); // 이름이 같으면 동작 안된다.
+          }
+          this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
+          // this.$showMsgBoxTwo(rs.status);
+          // await this.getList();
+          
+          
         } catch (error) {
           this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);
         } finally {
-          this.modal1 = false;
-        }
-      },
-      deleteData: async function (item) {
-        if (confirm("삭제 하시겠습니까?")) {
-          try {
-            let rs = await axios.delete(`${this.api_url}/conference/${item.id}`);
-            if (rs.data.code == 412) {
-              this.$showMsgBoxTwo(rs.data.code, "", "컨퍼런스 메뉴에서 사용중인 VM 입니다.");
-              return;
-            }
-            this.getList();
-            this.$showMsgBoxTwo(rs.status);
-          } catch (error) {
-            this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);
-          }
+          // this.modal1 = false;
+          // console.log(this.$parent.modal);
+          // this.$parent.modal1 = false;
         }
       },
       
-      addLanguage: function () {
-        console.log(this.lang_arr);
+      setNewForm: function () {
+        this.modal1_border ='primary';
+        this.select_arr = [];
+        this.form = {};
+        const now = new Date();
+        let month = now.getMonth() + 1;
+            month = month < 10 ? `0${month}` : month;
 
-        // lang_arr를 만들어준다. {user_id, name, language, available: [{text: user_id, value: name}]}
-        let user_id = ""; // 요소 1
-        let name = "";
-        let language = "";
-        if (!this.lang_arr.length) {
-          user_id = this.lang_options[0].value;
-          name = this.lang_options[0].text;
-          language = "";
-          this.available = [...this.lang_options];
-          this.available.splice(0, 1);
-          this.lang_arr.push({
-            user_id,
-            name,
-            language
+        let date = now.getDate();
+            date = date < 10 ? `0${date}` : date;
+
+        this.form.date = `${now.getFullYear()}-${month}-${date}`;
+        this.form.is_login_attendee = 0;
+        this.event_size = 100;
+      },
+      setOldForm: function () {
+        this.modal1_border ='success';
+        this.form = {...this.conference_item};
+        let times = this.form.date.split(" ");
+        this.form.date = times[0];
+        this.start_time = times[1];
+        this.event_size = this.form.event_size;
+        
+        if (this.conference_item.language && !this.conference_item.language.length) {
+          return;
+        }
+        
+        this.select_arr = []; // 목록을 준비한다.
+        let save_array = this.conference_item.language; // 저장되어 있는 목록
+        let selected_value = []; // 저장된 아이디만 추려냄
+        save_array.forEach((el) => {
+          selected_value.push(el.user_id);
+        });
+
+        let vanila_available = []; // 저장안된 아이디 목록 [value, value, value]
+        for (let item of this.lang_options_values) {
+          // 전체목록을 순회하면서 저장되지 않은 값은 저장 안된 목록에 추가
+          if (!selected_value.includes(item)) {
+            vanila_available.push(this.lang_options_obj[item]);
+          }
+        }
+        console.log('저장 안된 목록 (선택 가능하다.) : ', vanila_available);
+
+        // select_arr 저장된 아이디를 토대로 화면에 그려줄 셀렉트 옵션 배열을 만들어 준다.
+        save_array.forEach((el) => {
+          // el = 이미 저장된 값의 본체
+          let net_obj = this.lang_options_obj[el.user_id];
+          let availabe = [net_obj, ...vanila_available]; // 저장된 본체(자기자신) + 전혀 선택되지 않은 값.
+          this.select_arr.push({
+            user_id: el.user_id,
+            name: net_obj.name,
+            language: el.language,
+            available: availabe
           });
+        });
+        console.log('새로 구성된 목록 : ', this.select_arr);
+      },
+      
+      reset_available: function (type) {
+        if (this.select_arr[0].available.length == 0) { // 가능한 목록이 없으면 그만한다.
+          return;
+        }
+        let selected_value = [];
+        for (let item of this.select_arr) {
+          selected_value.push(item.user_id);
+        }
+        console.log('selected ', selected_value);
+        
+        let vanila_values = []; // [value, value, value]
+        for (let item of this.lang_options_values) {
+          if (!selected_value.includes(item)) {
+            vanila_values.push(item);
+          }
+        }
+        console.log('vanila_values ', vanila_values);
+
+        let vanila_available = [];
+        for (let item of this.lang_options) {
+          if (vanila_values.includes(item.user_id)) {
+            vanila_available.push(item);
+          }
+        }
+        console.log('vanila_available ', vanila_available);
+
+
+        if (type == 'add') {
+          console.log('add, ', vanila_available);
+          selected_value.push(vanila_available[0].user_id); // 추가할 아이템 넣어준다.
+          vanila_available.splice(0, 1); // 바닐라에서 하나 빼준다.
+        }
+        let new_arr = []; // init
+        for (var i = 0; i < selected_value.length; i++) {
+          let value = selected_value[i];
+          let item_available = [this.lang_options_obj[value], ...vanila_available]; // 자기 자신과 바닐라 = 리스트별 선택 가능목록
+          let language = this.lang_options_obj[value].language;
+          if (this.select_arr[i]) {
+            language = this.select_arr[i].language;
+          }
+          let new_item = {user_id: value, name: this.lang_options_obj[value].name, language, available: item_available};
+          new_arr.push(new_item);
+        }
+        this.select_arr = new_arr;
+      },
+      selectedChange: function (event, item, index) {
+        console.log('event  ', event.target.value);
+        item.user_id = event.target.value*1; // 순수한 숫자를 key에 해당하는 id로 사용할 경우, 오류가 발생한다.
+        // key값을 단순 숫자 나열로 쓰지말았으면 좋겠다......
+        this.reset_available();
+      },
+      addList: function () {
+        if (this.select_arr.length == 0) {
+          console.log('this.lang_options[0] - ', this.lang_options[0]);
+          console.log('this.lang_options - ', this.lang_options);
+          let user_id = this.lang_options[0].user_id;
+          let name = this.lang_options[0].name;
+          let language = '';
+          let available = [...this.lang_options];
+          
+          this.select_arr.push({user_id, name, language, available});
+          console.log(this.select_arr);
           return;
         }
         // 최초순환 끝
+      
+        // 두번째부터 수행 -- available을 모두 재생산 하는것이 관건이다.
+        this.reset_available('add');
+        
 
-        // 두번째부터 수행
-        let selected = [];
-        let selected_name = {};
-        this.lang_arr.forEach((el) => {
-          selected.push(el.user_id);
-          selected_name[el.user_id] = {
-            name: el.name,
-            language: el.language
-          };
-        });
-
-        this.available = [];
-        this.lang_options.forEach((el) => {
-          if (!selected.includes(el.value)) {
-            this.available.push(el); // 순수한 선택옵션들로 재구성
-          }
-        });
-
-        if (!this.available.length) {
-          return;
-        }
-
-        selected.push(this.available[0].value); // 가능목록 중 1번을 선택됨에 추가
-        selected_name[this.available[0].value] = {
-          name: this.available[0].text,
-          language: "",
-        }; // 가능목록 중 1번 이름을 선택됨에 추가
-        this.available.splice(0, 1); // 추가시킨 항목을 가능 목록에서 제거
-
-        this.lang_arr = []; // 초기화
-        // 선택됨을 토대로 다시 그려줌.
-        selected.forEach((user_id) => {
-          let obj = selected_name[user_id];
-          this.lang_arr.push({
-            user_id,
-            name: obj.name,
-            language: obj.language
-          });
-        });
       },
-      removeLang: function (item, index) {
-        let revive = {
-          value: item.user_id,
-          text: item.name
-        }; // 되살릴 아이템 구성
-        this.lang_arr.splice(index, 1); // 일단 목록에서 줄어든다.
-        this.available.push(revive); // 남은 목록 안에 선택 가능한 옵션으로 되살린 아이템 넣어준다.
+      removeList: function (item, index) {
+        this.select_arr.splice(index, 1);
+        let revive = { user_id: item.user_id, name: item.name, language: item.language }; // 되살릴 아이템 구성
+        for (let item of this.select_arr) {
+          item.available.push(revive); // 남은 목록 안에 선택 가능한 옵션으로 되살린 아이템 넣어준다.
+        }
       },
       goNext: function () {
         if (this.validation) {

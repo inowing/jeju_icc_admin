@@ -370,7 +370,7 @@
 
 <script>
   module.exports = {
-    name: "vm2",
+    name: "vm",
     components: {
         'vm-form-modal': window.httpVueLoader(`./vue/vm_form_modal.vue`),
 				'vm-qna-modal': window.httpVueLoader(`./vue/vm_qna_modal.vue`),
@@ -481,9 +481,8 @@
               this.$showMsgBoxTwo(rs.data.code, "", "컨퍼런스 메뉴에서 사용중인 VM 입니다.");
               return;
             }
-            // this.getList();
             this.$showMsgBoxTwo(rs.status);
-            this.$emit('get-list'); // 이름이 같으면 동작 안된다.
+            this.getList();
           } catch (error) {
             this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);
           }

@@ -491,36 +491,3 @@
     },
   };
 </script>
-
-<style scoped>
-  .vm_card_v_left {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    /* min-height: 136px; */
-    padding-right: 0px;
-  }
-
-  .vm_card_v_center {
-    border-left: 1px solid silver;
-    border-right: 1px solid silver;
-  }
-
-  .vm_card_v_right {
-    padding-left: 0px;
-  }
-
-  .vm_smaller {
-    font-size:smaller;
-  }
-  .vm_host {
-    font-size:smaller; width: 100%; height: 100%; padding: 5px; border-left:1px solid silver; line-height: 85px; margin-bottom:0px;
-  }
-  .vm_host > span {
-    margin-top: 15px;
-  }
-  .vm_modal4_table {
-    font-size: 9pt; vertical-align: center; line-height:33px;
-  }
-</style>

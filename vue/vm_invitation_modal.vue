@@ -22,7 +22,7 @@
             <b-col cols="auto" class="mr-auto">
               <b-button v-show="invitaion_tabIndex != 1" variant="outline-success" @click="openOverlayModal" size="sm">
                 신규 계정 생성</b-button>
-              <b-button href="#" variant="outline-success" size="sm" @click="excelDownload">
+              <b-button href="#" variant="outline-success" size="sm" @click="excelUpload">
                 <b-icon-upload></b-icon-upload> 엑셀 업로드
               </b-button>
 
@@ -95,7 +95,7 @@
             <b-col cols="auto" class="mr-auto">
               <b-button v-show="invitaion_tabIndex != 1" variant="outline-success" @click="openOverlayModal" size="sm">
                 신규 계정 생성</b-button>
-              <b-button href="#" variant="outline-success" size="sm" @click="excelDownload">
+              <b-button href="#" variant="outline-success" size="sm" @click="excelUpload">
                 <b-icon-upload></b-icon-upload> 엑셀 업로드
               </b-button>
 
@@ -167,7 +167,7 @@
             <b-col cols="auto" class="mr-auto">
               <b-button v-show="invitaion_tabIndex != 1" variant="outline-success" @click="openOverlayModal" size="sm">
                 신규 계정 생성</b-button>
-              <b-button href="#" variant="outline-success" size="sm" @click="excelDownload">
+              <b-button href="#" variant="outline-success" size="sm" @click="excelUpload">
                 <b-icon-upload></b-icon-upload> 엑셀 업로드
               </b-button>
 
@@ -625,6 +625,9 @@
         } catch (error) {
           this.$showMsgBoxTwo(error.response.status,"",error.response.statusText);
         }
+      },
+      excelUpload: function () {
+        console.log('upload');
       },
       excelDownload: function () {
         let url = this.modal2_type == "Q&A" ? `${this.api_url}/conference_qna/excel?conference_id=${this.conference_item.id}` : `${this.api_url}/conference_log/excel?conference_id=${this.conference_item.id}`;

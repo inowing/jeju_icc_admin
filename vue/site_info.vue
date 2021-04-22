@@ -678,6 +678,7 @@ module.exports = {
         this.$nextTick(function () {
             this.event_id = this.$store.getters.event_id;
             this.api_url = this.$store.getters.api_url;
+            console.log(this.event_id, ' - ', this.api_url);
             this.page_url = this.$store.getters.page_url;
             this.getData();
         })

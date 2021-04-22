@@ -191,9 +191,9 @@
         </b-collapse>
 
     </b-card>
-
-    <a href="#" v-show="$store.getters.event_id == 106" @click='goReload("http://14.63.172.119/admin/vue_main.html#/?event_id=105")'>테스트버전(105) 가기</a>
-    <a href="#" v-show="$store.getters.event_id == 105" @click='goReload("http://14.63.172.119/admin/vue_main.html#/?event_id=106")'>운영버전(106) 가기</a>
+        
+    <a href="#" v-show="$store.getters.event_id == 106" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=105`)'>테스트버전(105) 가기</a>
+    <a href="#" v-show="$store.getters.event_id == 105" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=106`)'>운영버전(106) 가기</a>
 </div>
 </template>
 

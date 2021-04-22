@@ -3,8 +3,8 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
     state: {
         event_id: 105,
-        api_url: 'http://14.63.172.119/api/v1',
-        page_url: 'http://14.63.172.119',
+        api_url: `${window.location.origin}/api/v1`,
+        page_url: `${window.location.origin}`,
         selected_item: null,
         logo_url: '',
         dummy_image_url: 'https://via.placeholder.com/'

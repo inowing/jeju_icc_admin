@@ -180,7 +180,7 @@ module.exports = {
 	data: function () {
 		return {
 			event_id: 0,
-			apiUrl: `${this.api_url}/banner`,
+			// apiUrl: `${this.api_url}/banner`,
 			url: null,
 			defaultImage250: this.$store.getters.dummy_image_url(['250x420']),
 			banner: {
@@ -348,7 +348,7 @@ module.exports = {
 		},
 		async deleteBanner() {
 			try {
-				let result = await axios.delete(`${this.apiUrl}/${this.deleteItem.id}`);
+				let result = await axios.delete(`${this.api_url}/banner/${this.deleteItem.id}`);
 				this.getList();
 				this.hideModal('bottomBanner-modal');
 			} catch (error) {

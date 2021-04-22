@@ -40,10 +40,12 @@ module.exports = {
             fields: [{
                     key: "id",
                     label: "번호",
+                    sortable: true
                 },
                 {
                     key: "top_category",
                     label: "대분류",
+                    sortable: true
                 },
                 {
                     key: "sub_category",
@@ -59,17 +61,19 @@ module.exports = {
                 },
             ],
             items: [],
+            api_url: ''
         }
     },
     mounted: function () {
         this.$nextTick(function () {
             this.menu_id = this.$route.query.menu_id;
+            this.api_url = this.$store.getters.api_url;
             this.getList();
         })
     },
     methods: {
         getList: async function () {
-            let url = `http://14.63.172.119/api/v1/notice?menu_id=${this.menu_id}`;
+            let url = `${this.api_url}/notice?menu_id=${this.menu_id}`;
             let data = (await axios.get(url)).data;
             this.items = data.result;
             console.log('-----------------------------');
@@ -85,7 +89,7 @@ module.exports = {
         },
         goDelete: async function (id) {
             if (confirm("삭제 하시겠습니까?")) {
-                await axios.delete(`http://14.63.172.119/api/v1/notice/${id}`);
+                await axios.delete(`${this.api_url}/notice/${id}`);
                 this.getList();
             }
         }

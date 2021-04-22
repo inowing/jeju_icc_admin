@@ -71,7 +71,8 @@ module.exports = {
         return {
             event_id: null,
             menu_id: null,
-            url: `http://14.63.172.119/api/v1/movie`,
+            api_url: '',
+            url: `${this.api_url}/movie`,
             form: {
                 category_id: null
             },
@@ -93,6 +94,7 @@ module.exports = {
     mounted: function () {
         this.$nextTick(function () {
             this.event_id = this.$store.getters.event_id;
+            this.api_url = this.$store.getters.api_url;
             this.menu_id = this.$route.query.menu_id;
             this.getTopCategory();
         })
@@ -100,13 +102,13 @@ module.exports = {
     methods: {
         getTopCategory: async function () {
             // movie 형식으로 menu_id에 등록된 대분류
-            let url = `http://14.63.172.119/api/v1/menucategory/topcategory?menu_id=${this.menu_id}`;
+            let url = `${this.api_url}/menucategory/topcategory?menu_id=${this.menu_id}`;
             let response = await axios.get(url);
             this.topcategory = response.data.result;
         },
         getSubcategory: async function () {
             // movie 형식으로 menu_id에 등록된 대분류의 소분류
-            let url = `http://14.63.172.119/api/v1/menucategory/subcategory?menu_id=${this.menu_id}&category_id=${this.top_selected.id}`;
+            let url = `${this.api_url}/menucategory/subcategory?menu_id=${this.menu_id}&category_id=${this.top_selected.id}`;
             let response = await axios.get(url);
             this.subcategory = response.data.result;
         },

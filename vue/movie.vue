@@ -181,7 +181,7 @@ module.exports = {
                 },
             ],
             items: [],
-            url: `http://14.63.172.119/api/v1/movie`,
+            url: `${this.api_url}/movie`,
             modal1: false,
             modal1_title: "컨텐츠 추가",
             form: {
@@ -210,11 +210,13 @@ module.exports = {
             subcategory: [],
             sub_id_key_store: {},
             selected_sub: '',
+            api_url: ''
         };
     },
     mounted: function () {
         this.$nextTick(function () {
             this.event_id = this.$store.getters.event_id;
+            this.api_url = this.$store.getters.api_url;
             this.menu_id = this.$route.query.menu_id;
             this.getTopCategory();
             this.getList();
@@ -222,7 +224,7 @@ module.exports = {
     },
     methods: {
         getList: async function () {
-            let url = `http://14.63.172.119/api/v1/movie?menu_id=${this.menu_id}`;
+            let url = `${this.api_url}/movie?menu_id=${this.menu_id}`;
             let data = (await axios.get(url)).data;
             this.items = data.result;
         },
@@ -276,7 +278,7 @@ module.exports = {
         },
         storeData: async function () {
             // 모달 저장 클릭시 작업
-			let url = this.isNew ? `http://14.63.172.119/api/v1/movie` : `http://14.63.172.119/api/v1/movie/${this.selectedItem.id}`;
+			let url = this.isNew ? `${this.api_url}/movie` : `${this.api_url}/movie/${this.selectedItem.id}`;
 			let formData = new FormData();
 				formData.append('order', this.form.order);
 				formData.append('name', this.form.name);
@@ -311,13 +313,13 @@ module.exports = {
         },
         goDelete: async function (id) {
             if (confirm("삭제 하시겠습니까?")) {
-                await axios.delete(`http://14.63.172.119/api/v1/movie/${id}`);
+                await axios.delete(`${this.api_url}/movie/${id}`);
                 this.getList();
             }
         },
         getTopCategory: async function () {
             // movie 형식으로 menu_id에 등록된 대분류
-            let url = `http://14.63.172.119/api/v1/menucategory/topcategory?menu_id=${this.menu_id}`;
+            let url = `${this.api_url}/menucategory/topcategory?menu_id=${this.menu_id}`;
             
             let response = await axios.get(url);
             let temArr = response.data.result;
@@ -333,7 +335,7 @@ module.exports = {
         },
         getSubcategory: async function () {
             // movie 형식으로 menu_id에 등록된 대분류의 소분류
-            let url = `http://14.63.172.119/api/v1/menucategory/subcategory?menu_id=${this.menu_id}&category_id=${this.selected_top}`;
+            let url = `${this.api_url}/menucategory/subcategory?menu_id=${this.menu_id}&category_id=${this.selected_top}`;
             let response = await axios.get(url);
             let temArr = response.data.result;
             let sub = {};

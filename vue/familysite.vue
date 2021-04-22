@@ -2,7 +2,7 @@
 	<section>
 		<b-row>
 			<b-col>
-				<b-button variant="primary" size="sm" @click="familyPost = !familyPost; url=apiUrl;"><b-icon-plus></b-icon-plus>사이트 추가</b-button>
+				<b-button variant="primary" size="sm" @click="familyPost = !familyPost; url=api_url;"><b-icon-plus></b-icon-plus>사이트 추가</b-button>
 				<b-modal v-model="familyPost" hide-footer ref="familysite-modal" title="사이트 추가">
 					<b-form inline>순서&nbsp;<b-form-input v-model="order" size="sm" placeholder="0"></b-form-input></b-form>
 					<b-card no-body class="mt-3">
@@ -76,7 +76,8 @@ module.exports = {
 	data: function () {
 	return {
 		event_id: null,
-		apiUrl: `http://14.63.172.119/api/v1/familysite`,
+		api_url: '',
+		// apiUrl: `${api_url}/familysite`,
 		url: null,
 		familyPost: false,
 		
@@ -101,12 +102,14 @@ module.exports = {
 	mounted() {
 		this.$nextTick(function () {
 			this.event_id = this.$store.getters.event_id;
+			this.api_url = this.$store.getters.api_url;
+			console.log(this.api_url);
 			this.getList();
 		})
 	},
 	methods: {
 		getList: async function() {
-			let url = `${this.apiUrl}?event_id=${this.event_id}`;
+			let url = `${this.api_url}/familysite?event_id=${this.event_id}`;
 			this.items = (await axios.get(url)).data.result.familysite;
 		},
 		save: async function () {
@@ -132,7 +135,7 @@ module.exports = {
 			this.$refs[id].hide()
 		},
 		updatePopup(item, index, target) {
-			this.url = `${this.apiUrl}/${item.id}`;
+			this.url = `${this.api_url}/familysite/${item.id}`;
 			this.order = item.order;
 			this.name = item.name;
 			this.name_en = item.name_en;
@@ -146,7 +149,7 @@ module.exports = {
 		},
 		async deleteFamilySite() {
 			try {
-				let result = await axios.delete(`${this.apiUrl}/${this.deleteItem.id}`);
+				let result = await axios.delete(`${this.api_url}/familysite/${this.deleteItem.id}`);
 				this.getList();
 				this.hideModal('familysite-modal');
 			} catch (error) {

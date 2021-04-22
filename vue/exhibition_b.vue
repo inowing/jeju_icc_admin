@@ -176,6 +176,7 @@ module.exports = {
         return {
             event_id: null,
             menu_id: null,
+            api_url: '',
 
             exibition_b: {}, // getList 전체 결과값
             overview_id: null,
@@ -254,6 +255,7 @@ module.exports = {
         this.$nextTick(function () {
             this.event_id = this.$store.getters.event_id;
             this.menu_id = this.$route.query.menu_id;
+            this.api_url = this.$store.getters.api_url;
             this.getList();
         });
     },
@@ -264,7 +266,7 @@ module.exports = {
     },
     methods: {
         getList: async function () {
-            let url = `http://14.63.172.119/api/v1/e_overview?menu_id=${this.menu_id}`;
+            let url = `${this.api_url}/e_overview?menu_id=${this.menu_id}`;
             let rs = (await axios.get(url)).data.result;
             this.exibition_b = rs[0];
             console.log(rs);
@@ -285,7 +287,7 @@ module.exports = {
         },
         save: async function () {
             // 상단 내용 저장
-            let url = `http://14.63.172.119/api/v1/e_overview`;
+            let url = `${this.api_url}/e_overview`;
             var formData = new FormData();
 						formData.append('menu_id', this.menu_id); // 필수
 						// formData.append('overview_id', this.overview_id); // 필수
@@ -312,12 +314,12 @@ module.exports = {
             let url = null;
 						var formData = new FormData();
             if (this.isNewModal) {
-                url = `http://14.63.172.119/api/v1/overviewcontents`;
+                url = `${this.api_url}/overviewcontents`;
 								formData.append('overview_id', this.overview_id); // 필수
 								formData.append('overview_type', this.overview_type);
             } else {
                 // 수정요청 url
-                url = `http://14.63.172.119/api/v1/overviewcontents/${this.updateItem.id}`;
+                url = `${this.api_url}/overviewcontents/${this.updateItem.id}`;
             }
             
             for (let key in this.photoParams) {
@@ -364,7 +366,7 @@ module.exports = {
         },
         deleteContent: async function (item, index, target) {
             if (confirm('삭제 하시겠습니까?')) {
-                let url = `http://14.63.172.119/api/v1/overviewcontents/${item.id}`;
+                let url = `${this.api_url}/overviewcontents/${item.id}`;
                 let rs = await axios.delete(url);
 								console.log('deleted --> ', rs);
 								this.getList();

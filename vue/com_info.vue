@@ -5,7 +5,7 @@
             <b-button variant="dark" size="sm" @click="PCPreview = !PCPreview">PC버전 보기</b-button>
             <b-modal v-model="PCPreview" hide-footer ref="pc-modal" size="xl">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="http://14.63.172.119/admin/preivew/exhibition.html" allowfullscreen></iframe>
+                    <iframe class="embed-responsive-item" src="http://jejueatsuda.com/admin/preivew/exhibition.html" allowfullscreen></iframe>
                 </div>
                 <b-button class="mt-3" variant="outline-danger" block @click="$refs['pc-modal'].hide()">Close Me</b-button>
             </b-modal>
@@ -13,7 +13,7 @@
             <b-button variant="dark" @click="MobilePreview = !MobilePreview" size="sm">Mobile버전 보기</b-button>
             <b-modal v-model="MobilePreview" hide-footer ref="mobile-modal" class="modal-dialog modal-30size" role="document">
                 <div class="embed-responsive embed-responsive-16by9 modal-content modal-30size" style="min-height:600px;">
-                    <iframe class="embed-responsive-item" src="http://14.63.172.119/admin/preivew/exhibition.html" allowfullscreen></iframe>
+                    <iframe class="embed-responsive-item" src="http://jejueatsuda.com/admin/preivew/exhibition.html" allowfullscreen></iframe>
                 </div>
                 <b-button class="mt-3" variant="outline-danger" block @click="$refs['mobile-modal'].hide()">Close Me</b-button>
             </b-modal>
@@ -673,7 +673,7 @@ module.exports = {
         
         deletePhoto: async function (item, index, target) {
             if (confirm('삭제하시겠습니까?')) {
-                await axios.delete(`http://14.63.172.119/api/v1/overview/${item.id}`);
+                await axios.delete(`http://jejueatsuda.com/api/v1/overview/${item.id}`);
                 this.getList();
             }
         },

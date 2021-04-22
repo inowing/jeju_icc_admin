@@ -34,7 +34,19 @@
                                 <b-form-input v-model="title" placeholder="제목을 입력하세요." size="sm" block class="mb-3"></b-form-input>
                                 <span>서브 타이틀:</span>
                                 <b-form-input v-model="subtitle" placeholder="제목을 입력하세요." size="sm" block></b-form-input>
-
+                            </b-col>
+                        </b-row>
+                        <b-row class="mb-3">
+                            <b-col>
+                                <span>첨부파일:</span>
+                                  <b-input-group v-show="file_1_url" prepend="file" class="mt-3">
+                                        <b-form-input disabled :value="file_1_url"></b-form-input>
+                                        <b-input-group-append>
+                                            <b-button variant="outline-success" @click="fileDownload(file_1_url)">Download</b-button>
+                                            <b-button variant="danger" @click="file_1_url = ''; file_1_del = true;">Delete</b-button>
+                                        </b-input-group-append>
+                                    </b-input-group>
+                                <b-form-file v-show="!file_1_url" v-model="file_1" size="sm"></b-form-file>
                             </b-col>
                         </b-row>
                         <b-row class="mb-3">
@@ -55,6 +67,19 @@
                                 <span>서브 타이틀:</span>
                                 <b-form-input v-model="subtitle_en" placeholder="제목을 입력하세요." size="sm" block></b-form-input>
 
+                            </b-col>
+                        </b-row>
+                        <b-row class="mb-3">
+                            <b-col>
+                                <span>첨부파일:</span>
+                                  <b-input-group v-show="file_1_en_url" prepend="file" class="mt-3">
+                                        <b-form-input disabled :value="file_1_en_url"></b-form-input>
+                                        <b-input-group-append>
+                                            <b-button variant="outline-success" @click="fileDownload(file_1_en_url)">Download</b-button>
+                                            <b-button variant="danger" @click="file_1_en_url = ''; file_1_en_del = true;">Delete</b-button>
+                                        </b-input-group-append>
+                                    </b-input-group>
+                                <b-form-file v-show="!file_1_en_url" v-model="file_1_en" size="sm"></b-form-file>
                             </b-col>
                         </b-row>
                         <b-row>
@@ -109,7 +134,15 @@ module.exports = {
                 theme: "snow",
             },
             preview_1: 'https://picsum.photos/400/400/?image=20',
-            preview_basic: `https://picsum.photos/400/400/?image=20`
+            preview_basic: `https://picsum.photos/400/400/?image=20`,
+
+            file_1: null,
+            file_1_url: '',
+            file_1_del: false,
+
+            file_1_en: null,
+            file_1_en_url: '',
+            file_1_en_del: false
         }
     },
     mounted: function () {
@@ -163,6 +196,9 @@ module.exports = {
             this.subtitle_en = rs.subtitle_en;
             this.editor_content = rs.contents;
             this.editor_content_en = rs.contents_en;
+
+            this.file_1_url = rs.file_1;
+            this.file_2_url = rs.file_2;
             
             // 탑검색 -- 주신값1
             this.selected_top = rs.top_category_id
@@ -195,9 +231,13 @@ module.exports = {
             formData.append('subtitle_en', this.subtitle_en);
             formData.append('contents', this.editor_content);
             formData.append('contents_en', this.editor_content_en);
+
+            !this.file_1 && this.file_1_del ? formData.append('file_1_del', 'Y') : formData.append('file_1', this.file_1);
+            !this.file_1_en && this.file_1_en_del ? formData.append('file_1_en_del', 'Y') : formData.append('file_1_en', this.file_1_en);
+
             let rs = await axios.post(url, formData, {
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "multipart-form/data",
                 }
             });
             console.log(this.api_url, rs);
@@ -208,6 +248,14 @@ module.exports = {
             }
             this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
 			
+        },
+        fileDownload(url) {
+            var link = document.createElement("a");
+            link.setAttribute('download', '');
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
         },
         onFileChange(e, url) {
             const file = e.target.files[0];

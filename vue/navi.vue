@@ -189,7 +189,7 @@
             </b-card-body>
         </b-collapse>
 
-        <b-button variant="danger" @click="logoutFn">Logout</b-button>
+        <b-button variant="outline-danger" @click="logoutFn">Logout</b-button>
     </b-card>
         
     <a href="#" v-show="$store.getters.event_id == 106" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=105`)'>테스트버전(105) 가기</a>
@@ -226,7 +226,7 @@ module.exports = {
         }
     },
     watch: {
-        $route: function (to, from) {
+        $route: async function (to, from) {
             this.routePath = to.path;
             let aco1 = ['/', '/site_info', '/familysite', '/popup', '/banner', '/copy'];
             let aco3 = ['/company/list', '/com_request', '/company/admin'];
@@ -273,6 +273,7 @@ module.exports = {
                 this.accordion9 = false;
             }
             if (to.query.event_id) {
+                
                 if (to.query.event_id != this.$store.getters.event_id) {
                     this.$store.commit('event_id', {event_id: to.query.event_id});
                     // this.$router.go();
@@ -309,11 +310,10 @@ module.exports = {
         },
         logoutFn: async function () {
             // cookie delete
-            // document.cookie = 'laravel_session' + '=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
+            document.cookie = 'laravel_session' + '=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
             let rs = await axios.get(`${this.api_url}/auth/logout`)
             if (rs.status == 200) {
-                let targetUrl = `${window.location.origin}/cms`
-                window.location.href = targetUrl;
+                window.location.href = '';
             } else {
                 alert('logout 실패');
             }

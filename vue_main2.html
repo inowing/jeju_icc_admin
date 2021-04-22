@@ -135,13 +135,6 @@
 				EventBus.$on('change_logo', (payload)=>{
 					this.logo_url = payload;
 				});
-				
-				// let rs = await axios.get(`${window.location.origin}/api/v1/event/main_page?event_id=${this.event_id}`);
-				// if (rs.data.code == 401) {
-				// 	let targetUrl = `${window.location.origin}/cms`
-				// 	window.location.href = targetUrl;
-				// 	return;
-				// }
 			},
 			mounted: function () {
 				this.$nextTick(async function () {
@@ -236,7 +229,7 @@
 				},
 				getData: async function () {
 					let rs = await axios.get(`${this.api_url}/event/main_page?event_id=${this.event_id}`);
-					console.log('vue_main ', rs);
+					console.log(rs);
 					
 					this.site_url = rs.data.result.link;
 					return rs;

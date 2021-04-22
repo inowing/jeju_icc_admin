@@ -14,6 +14,11 @@
     <b-row>
         <b-col>
             <b-table :fields="fields" :items="items" small responsive="sm" bordered head-variant="light">
+                <template #cell(index)="row">
+                    <div class="text-center">
+                        {{items.length - row.index}}
+                    </div>
+                </template>
                 <template #cell(id)="row">
                     <div class="text-center">
                         {{row.item.id}}
@@ -37,9 +42,15 @@ module.exports = {
     data: function () {
         return {
             menu_id: null,
-            fields: [{
+            fields: [
+                {
+                    key: "index",
+                    label: "No",
+                    sortable: true
+                },
+                {
                     key: "id",
-                    label: "번호",
+                    label: "아이디",
                     sortable: true
                 },
                 {

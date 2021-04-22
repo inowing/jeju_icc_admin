@@ -186,10 +186,10 @@
                         </b-card-body>
                     </b-collapse>
                 </b-card>
-
             </b-card-body>
         </b-collapse>
 
+        <b-button variant="danger" @click="logoutFn">Logout</b-button>
     </b-card>
         
     <a href="#" v-show="$store.getters.event_id == 106" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=105`)'>테스트버전(105) 가기</a>
@@ -222,6 +222,7 @@ module.exports = {
             accordion7: false,
             accordion8: false,
             accordion9: false,
+            api_url: ''
         }
     },
     watch: {
@@ -284,6 +285,7 @@ module.exports = {
     mounted: function () {
         this.$nextTick(function () {
             // this.routePath = this.$route.path;	// 네비게이션의 패스 감지용
+            this.api_url = this.$store.getters.api_url;
             this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
                 // console.log('collapseId:', collapseId)
                 // console.log('isJustShown:', isJustShown)
@@ -304,6 +306,17 @@ module.exports = {
             window.location.href = url;
             this.$router.go(url);
             
+        },
+        logoutFn: async function () {
+            // cookie delete
+            // document.cookie = 'laravel_session' + '=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
+            let rs = await axios.get(`${this.api_url}/auth/logout`)
+            if (rs.status == 200) {
+                let targetUrl = `${window.location.origin}/cms`
+                window.location.href = targetUrl;
+            } else {
+                alert('logout 실패');
+            }
         }
     }
 }

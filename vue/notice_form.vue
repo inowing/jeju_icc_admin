@@ -38,9 +38,9 @@
                         </b-row>
                         <b-row class="mb-3">
                             <b-col>
-                                <span>첨부파일:</span>
+                                <span>첨부파일: 여러개파일을 업로드 하고자할 경우  zip  파일로 묶어서 올려주세요. 최대 (20MB)</span>
                                   <b-input-group v-show="file_1_url" prepend="file" class="mt-3">
-                                        <b-form-input disabled :value="file_1_url"></b-form-input>
+                                        <b-form-input disabled :value="file_1_name"></b-form-input>
                                         <b-input-group-append>
                                             <b-button variant="outline-success" @click="fileDownload(file_1_url)">Download</b-button>
                                             <b-button variant="danger" @click="file_1_url = ''; file_1_del = true;">Delete</b-button>
@@ -71,9 +71,9 @@
                         </b-row>
                         <b-row class="mb-3">
                             <b-col>
-                                <span>첨부파일:</span>
+                                <span>첨부파일: 여러개파일을 업로드 하고자할 경우  zip  파일로 묶어서 올려주세요. 최대 (20MB)</span>
                                   <b-input-group v-show="file_1_en_url" prepend="file" class="mt-3">
-                                        <b-form-input disabled :value="file_1_en_url"></b-form-input>
+                                        <b-form-input disabled :value="file_1_en_name"></b-form-input>
                                         <b-input-group-append>
                                             <b-button variant="outline-success" @click="fileDownload(file_1_en_url)">Download</b-button>
                                             <b-button variant="danger" @click="file_1_en_url = ''; file_1_en_del = true;">Delete</b-button>
@@ -138,10 +138,12 @@ module.exports = {
 
             file_1: null,
             file_1_url: '',
+            file_1_name: '',
             file_1_del: false,
 
             file_1_en: null,
             file_1_en_url: '',
+            file_1_en_name: '',
             file_1_en_del: false
         }
     },
@@ -190,6 +192,7 @@ module.exports = {
             let url = `${this.api_url}/notice/${this.$route.query.id}`;
             let response = await axios.get(url);
             let rs = response.data.result;
+            console.log('get notice ', rs);
             this.title = rs.title;
             this.title_en = rs.title_en;
             this.subtitle = rs.subtitle;
@@ -197,8 +200,10 @@ module.exports = {
             this.editor_content = rs.contents;
             this.editor_content_en = rs.contents_en;
 
-            this.file_1_url = rs.file_1;
-            this.file_2_url = rs.file_2;
+            this.file_1_url = rs.file_1.url;
+            this.file_1_en_url = rs.file_1_en.url;
+            this.file_1_name = rs.file_1.name;
+            this.file_1_en_name = rs.file_1_en.name;
             
             // 탑검색 -- 주신값1
             this.selected_top = rs.top_category_id

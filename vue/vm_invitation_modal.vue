@@ -2,7 +2,7 @@
     <b-card no-body>
       <b-tabs v-model="invitaion_tabIndex" small card>
         <b-tab title="Moderator/Presenter">
-          발표자를 이메일로 초대합니다.
+          좌장/발표자를 이메일로 초대합니다.
           <b-row>
             <b-col cols="3">
               <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
@@ -147,7 +147,7 @@
           </b-row>
         </b-tab>
         <b-tab title="Operator">
-          좌장을 이메일로 초대합니다.
+          운영자를 이메일로 초대합니다.
           <b-row>
             <b-col cols="3">
               <b-img class="ml-4" src="./static/images/img_url.png" alt=""></b-img>
@@ -581,7 +581,7 @@
         try {
           var successful = document.execCommand("copy");
           if (successful) {
-            this.$toast("Good", "email address copied", "success");
+            this.$toast("Good", "VM address copied", "success");
           } else {
             this.$toast("Ooops", "unable to copy", "danger");
           }

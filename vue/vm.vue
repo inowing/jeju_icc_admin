@@ -6,7 +6,7 @@
     
     <b-card no-body class="mt-3">
       <b-tabs v-model="tabIndex" small card>
-        <b-tab title="Upcoming Events">
+        <b-tab title="Upcoming Events" title-item-class="tab-title-class">
           <b-row class="mb-2">
             <b-col cols="9">
               <b-button href="#" :variant="selected_btn_index == 0 ? 'primary' : 'outline-primary'" size="sm"
@@ -64,25 +64,7 @@
                       <b-col>
                         <b-collapse :id="'toggle_'+item.id" style="width:100%;">
                           <b-row>
-                            <b-col class="pr-1">
-                              <b-card align="center" no-body class="p-2">
-                                <p class="p-0 mb-1">
-                                  <b-button size="sm" variant="primary" class="inoBtn-200" disabled>
-                                    Operator</b-button>
-                                </p>
-                                <p class="p-0 mb-1">
-                                  <b-button size="sm" disabled pill variant="outline-secondary">
-                                    <b-icon-people></b-icon-people>
-                                  </b-button>
-                                  &nbsp;{{item.moderator_count}}명
-                                </p>
-                                <p class="p-0 mb-1">
-                                  <b-button size="sm" @click="openModal4(item, 0)" pill variant="outline-primary">
-                                    <b-icon-envelope></b-icon-envelope> Invitation
-                                  </b-button>
-                                </p>
-                              </b-card>
-                            </b-col>
+                            
                             <b-col class="pl-1">
                               <b-card align="center" no-body class="p-2">
                                 <p class="p-0 mb-1">
@@ -96,7 +78,7 @@
                                   &nbsp;{{item.presenter_count}}명
                                 </p>
                                 <p class="p-0 mb-1">
-                                  <b-button size="sm" @click="openModal4(item, 1)" pill variant="outline-primary">
+                                  <b-button size="sm" @click="openModal4(item, 0)" pill variant="outline-primary">
                                     <b-icon-envelope></b-icon-envelope> Invitation
                                   </b-button>
                                 </p>
@@ -113,6 +95,24 @@
                                     <b-icon-people></b-icon-people>
                                   </b-button>
                                   &nbsp;{{item.attendee_count}}명
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" @click="openModal4(item, 1)" pill variant="outline-primary">
+                                    <b-icon-envelope></b-icon-envelope> Invitation
+                                  </b-button>
+                                </p>
+                              </b-card>
+                            </b-col>
+                            <b-col class="pr-1">
+                              <b-card align="center" no-body class="p-2">
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Operator</b-button>
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" disabled pill variant="outline-secondary">
+                                    <b-icon-people></b-icon-people>
+                                  </b-button>
+                                  &nbsp;{{item.moderator_count}}명
                                 </p>
                                 <p class="p-0 mb-1">
                                   <b-button size="sm" @click="openModal4(item, 2)" pill variant="outline-primary">
@@ -185,7 +185,7 @@
           </b-row>
         </b-tab>
 
-        <b-tab title="Past Events">
+        <b-tab title="Past Events" title-item-class="tab-title-class">
           <b-row class="mt-1" v-for="item in past" :key="item.id">
             <b-col>
               <b-card no-body>
@@ -220,26 +220,6 @@
                       <b-col>
                         <b-collapse :id="'toggle_'+item.id" style="width:100%;">
                           <b-row>
-                            <b-col class="pr-1">
-                              <b-card align="center" no-body class="p-2">
-                                <p class="p-0 mb-1">
-                                  <b-button size="sm" variant="primary" class="inoBtn-200" disabled>
-                                    Operator</b-button>
-                                </p>
-                                <p class="p-0 mb-1">
-                                  <b-button size="sm" disabled pill variant="outline-secondary">
-                                    <b-icon-people></b-icon-people>
-                                  </b-button>
-                                  &nbsp;{{item.moderator_count}}명
-                                </p>
-                                <p class="p-0 mb-1">
-                                  <b-button size="sm" @click="openModal4(item, 0)" pill variant="outline-primary">
-                                    <b-icon-envelope>
-                                    </b-icon-envelope> Invitation
-                                  </b-button>
-                                </p>
-                              </b-card>
-                            </b-col>
                             <b-col class="pl-1">
                               <b-card align="center" no-body class="p-2">
                                 <p class="p-0 mb-1">
@@ -253,7 +233,7 @@
                                   &nbsp;{{item.presenter_count}}명
                                 </p>
                                 <p class="p-0 mb-1">
-                                  <b-button size="sm" @click="openModal4(item, 1)" pill variant="outline-primary">
+                                  <b-button size="sm" @click="openModal4(item, 0)" pill variant="outline-primary">
                                     <b-icon-envelope></b-icon-envelope> Invitation
                                   </b-button>
                                 </p>
@@ -272,8 +252,27 @@
                                   &nbsp;{{item.attendee_count}}명
                                 </p>
                                 <p class="p-0 mb-1">
-                                  <b-button size="sm" @click="openModal4(item, 2)" pill variant="outline-primary">
+                                  <b-button size="sm" @click="openModal4(item, 1)" pill variant="outline-primary">
                                     <b-icon-envelope></b-icon-envelope> Invitation
+                                  </b-button>
+                                </p>
+                              </b-card>
+                            </b-col>
+                            <b-col class="pr-1">
+                              <b-card align="center" no-body class="p-2">
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" variant="primary" class="inoBtn-200" disabled>Operator</b-button>
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" disabled pill variant="outline-secondary">
+                                    <b-icon-people></b-icon-people>
+                                  </b-button>
+                                  &nbsp;{{item.moderator_count}}명
+                                </p>
+                                <p class="p-0 mb-1">
+                                  <b-button size="sm" @click="openModal4(item, 2)" pill variant="outline-primary">
+                                    <b-icon-envelope>
+                                    </b-icon-envelope> Invitation
                                   </b-button>
                                 </p>
                               </b-card>
@@ -491,3 +490,9 @@
     },
   };
 </script>
+
+<style scoped>
+  .tab-title-class {
+    font-size: 18px;
+  }
+</style>

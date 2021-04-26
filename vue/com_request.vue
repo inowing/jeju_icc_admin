@@ -11,7 +11,9 @@
         <b-col cols="8">
             <b-input-group size="sm" align-v="baseline">
                 <b-form-select v-model="selected" :options="options" size="sm" style="max-width: 150px;" class="mr-2"></b-form-select>
-                <b-form-input v-model="search_key" aria-placeholder="검색어를 입력하세요." style="max-width: 300px;" class="ml-2"></b-form-input>
+                <b-form-input v-model="search_key" 
+                    @keydown.enter="getList(search_key)"
+                    aria-placeholder="검색어를 입력하세요." style="max-width: 300px;" class="ml-2"></b-form-input>
                 <b-input-group-append>
                     <b-button variant="info" size="sm" @click="getList(search_key)">검색하기</b-button>
                 </b-input-group-append>
@@ -160,7 +162,7 @@ module.exports = {
         getList: async function (search_key) {
             let url = `${this.api_url}/company?event_id=${this.event_id}&status=0`;
             if (search_key) {
-                url + `&search_key=${search_key}`;
+                url = url + `&search_key=${search_key}`;
             }
             let rs = await axios.get(url); // 미승인 리스트만 가져오기
             this.items = rs.data.result;

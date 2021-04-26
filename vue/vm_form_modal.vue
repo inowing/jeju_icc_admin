@@ -161,7 +161,13 @@
           </b-form-group>
         </b-col>
       </b-row>
-      <b-form-group label="Languages">
+      <b-form-group>
+        <b-row class="mb-1">
+          <b-col><span>Languages</span></b-col>
+          <b-col class="text-right">
+            <b-button size="sm" variant="primary" @click="language_form={}; modal1=true;">신규생성</b-button>
+          </b-col>
+        </b-row>
         <b-input-group v-for="(item, index) in select_arr" :key="item.user_id" class="mb-1">
           <b-form-input v-model="item.language" type="text" size="sm"></b-form-input>
           <b-form-select size="sm" v-model="item.user_id" @change.native="selectedChange($event, item, index)">
@@ -264,6 +270,20 @@
         </b-button>
       </b-col>
     </b-row>
+
+    <b-modal v-model="modal1" hide-footer title="Language 추가">
+      <b-form-group label="이름" label-variant="primary">
+        <b-form-input v-model="language_form.name" size="sm" :state="language_form.name ? true: false"></b-form-input>
+      </b-form-group>
+      <b-form-group label="이메일">
+        <b-form-input v-model="language_form.email" size="sm" :state="language_form.email ? true: false"></b-form-input>
+      </b-form-group>
+      <b-form-group label="입장코드">
+        <b-form-input v-model="language_form.passcode" size="sm" :state="language_form.passcode ? true: false">
+        </b-form-input>
+      </b-form-group>
+      <b-button size="sm" variant="danger" @click="languageFormSubmit">생성하기</b-button>
+    </b-modal>
   </div>
 </template>
 
@@ -279,7 +299,8 @@
       return {
         event_id: 0,
         api_url: '',
-
+        modal1: false, // 언어통역사 생성모달
+        language_form: {}, // 언어통역사 생성폼
         conference_item: this.params.conference_item, // 선택된 아이템이 있으면 수정폼이 되게 된다.
 
         lang_options: [], // 로딩 되면, 유저목록을 가져온다. getUserList()
@@ -348,6 +369,7 @@
     },
     methods: {
       getUserList: async function () {
+        // todo. 통역유저 리스팅 API 필요함.
         let url = `${this.api_url}/user/in_event?event_id=${this.event_id}`;
         let rs = await axios.get(url);
         let arr = rs.data.result;
@@ -518,6 +540,52 @@
         }
       },
       
+      languageFormSubmit: async function () {
+        // todo. 통역유저 생성 API 필요함.
+        console.log(this.language_form);
+        console.log('do API ...');
+        let url = `${this.api_url}/register`;
+        
+        let formData = new FormData();
+            formData.append('event_id', this.event_id);
+            formData.append('email', this.language_form.email);
+            formData.append('name', this.language_form.name);
+            // formData.append('passcode', this.form.phone);
+        let rs = await axios.post(url, formData, {
+            Headers: { 'Content-Type': 'application/json' }
+        }).catch(error => {
+            this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+        });
+        
+        if (rs.data.code == 200) {
+            this.$showMsgBoxTwo(rs.status);
+        } else {
+            this.$showMsgBoxTwo(rs.data.code, '', rs.data.result);
+        }
+
+        if (this.select_arr.length == 0) {
+          await this.getUserList();
+        } else {
+          let user_id = rs.data.result.id;
+          let email = rs.data.result.email;
+          let name = rs.data.result.name;
+
+          this.lang_options.push({
+            user_id: user_id,
+            name: name
+          }); // select 박스의 옵션에서 꺼내기 좋은 형태로
+          this.lang_options_values.push(user_id); // user_id만
+          this.lang_options_obj[user_id] = {
+            user_id: user_id,
+            id: user_id,
+            name: name
+          }; // user_id를 키로하는 object
+          this.reset_available();
+        }
+        
+        this.modal1 = false;
+      },
+
       setNewForm: function () {
         this.modal1_border ='primary';
         this.select_arr = [];
@@ -577,7 +645,7 @@
       },
       
       reset_available: function (type) {
-        if (this.select_arr[0].available.length == 0) { // 가능한 목록이 없으면 그만한다.
+        if (this.select_arr.length && this.select_arr[0].available.length == 0) { // 가능한 목록이 없으면 그만한다.
           return;
         }
         let selected_value = [];

@@ -119,11 +119,16 @@
                     </b-card-text>
                 </router-link>
                 <hr class="m-0 p-0" />
-                <router-link to="/biz/link">
+                <b-card-text class="m-0 p-2">
+                    <span @click="goRedirect">
+                        <a href="#">바로가기</a>
+                    </span>
+                </b-card-text>
+                <!-- <router-link to="/biz/link">
                     <b-card-text class="m-0 p-2">
                         <span v-bind:class="[ routePath == '/biz/link' ? classObject : '' ]">바로가기</span>
                     </b-card-text>
-                </router-link>
+                </router-link> -->
             </b-card-body>
         </b-collapse>
     </b-card>
@@ -191,9 +196,10 @@
 
         <b-button variant="outline-danger" @click="logoutFn">Logout</b-button>
     </b-card>
-        
-    <a href="#" v-show="$store.getters.event_id == 106" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=105`)'>테스트버전(105) 가기</a>
-    <a href="#" v-show="$store.getters.event_id == 105" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=106`)'>운영버전(106) 가기</a>
+    
+    <b-button href="#" v-show="$store.getters.event_id == 106" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=105`)'>테스트버전(105) 가기</b-button>
+    <b-button href="#" v-show="$store.getters.event_id == 105" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=106`)'>운영버전(106) 가기</b-button>
+
 </div>
 </template>
 
@@ -222,7 +228,8 @@ module.exports = {
             accordion7: false,
             accordion8: false,
             accordion9: false,
-            api_url: ''
+            api_url: '',
+            event_id: 0
         }
     },
     watch: {
@@ -287,6 +294,7 @@ module.exports = {
         this.$nextTick(function () {
             // this.routePath = this.$route.path;	// 네비게이션의 패스 감지용
             this.api_url = this.$store.getters.api_url;
+            this.event_id = this.$store.getters.event_id;
             this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
                 // console.log('collapseId:', collapseId)
                 // console.log('isJustShown:', isJustShown)
@@ -317,6 +325,13 @@ module.exports = {
             } else {
                 alert('logout 실패');
             }
+        },
+        goRedirect: async function () {
+            let url = `${this.api_url}/event/${this.event_id}/get_url`;
+            let rs = await axios.get(url);
+            let redirectUrl = rs.data.result;
+            // window.location.href = redirectUrl;
+            window.open(redirectUrl, '_blank');
         }
     }
 }

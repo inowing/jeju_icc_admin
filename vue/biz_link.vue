@@ -23,12 +23,19 @@ module.exports = {
         this.$nextTick(async function () {
             this.api_url = this.$store.getters.api_url;
             this.event_id = this.$store.getters.event_id;
-            
+            this.goRedirect();
         })
     },
 
     methods: {
-        
+        goRedirect: async function ()  {
+
+            let url = `${this.api_url}/event/${this.event_id}/get_url`;
+            let rs = await axios.get(url);
+            let redirectUrl = rs.data.result;
+            window.location.href = redirectUrl;
+
+        }
     }
 }
 </script>

@@ -17,9 +17,9 @@
                     <b-link to="/company/regist">
                         <b-button size="sm" variant="primary"><b-icon-plus></b-icon-plus>기업추가하기</b-button>
                     </b-link>
-					<b-form-input aria-placeholder="검색어를 입력하세요." style="max-width: 300px;" class="ml-2"></b-form-input>
+					<b-form-input v-model="search_key" aria-placeholder="검색어를 입력하세요." style="max-width: 300px;" class="ml-2"></b-form-input>
 					<b-input-group-append>
-						<b-button variant="info" size="sm">검색하기</b-button>
+						<b-button variant="info" size="sm" @click="getList(search_key)">검색하기</b-button>
 					</b-input-group-append>
 				</b-input-group>
             </b-col>
@@ -52,6 +52,9 @@
             </template>
             <template #cell(sectors)="row">
                 <div class="text-center">{{row.item.sectors}}</div>
+            </template>
+            <template #cell(delivery_price)="row">
+                <div class="text-right">{{ row.item.delivery_price.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")}}</div>
             </template>
             <template #cell(event_type)="row">
                 <div class="text-center">{{row.item.event_type == 0 ? 'Exhibition' : row.item.event_type == 1 ? 'Bizmatching' : 'Exhibition + Bizmatching'}}</div>
@@ -127,7 +130,7 @@ module.exports = {
             menu_id: null,
             company_id: null,
             company_name: null,
-
+            search_key: '',
             selected: null,
 			options: [
 				{ value: null, text: '전체' },
@@ -176,6 +179,10 @@ module.exports = {
                     label: '업종'
                 },
                 {
+                    key: 'delivery_price',
+                    label: '배송비'
+                },
+                {
                     key: 'event_type',
                     label: '행사 참여구분'
                 },
@@ -210,8 +217,12 @@ module.exports = {
     },
 
     methods: {
-        getList: async function () {
-            let response = await axios.get(`${this.api_url}/company?event_id=${this.event_id}`);
+        getList: async function (search_key) {
+            let url = `${this.api_url}/company?event_id=${this.event_id}`;
+            if (search_key) {
+                url + `&search_key=${search_key}`;
+            }
+            let response = await axios.get(url);
             console.log(this.event_id);
             let rs = response.data.result;
             console.log('company list data ', response);

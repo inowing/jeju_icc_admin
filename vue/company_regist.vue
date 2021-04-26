@@ -19,7 +19,7 @@
                             <b-col>
                                 <b-form-group label="사업자등록번호">
                                     <b-input-group>
-                                        <b-form-input size="sm" v-model="form.number" @change="ditectNumberChange" :state="validation.valid1" :disabled="!isNew"></b-form-input>
+                                        <b-form-input size="sm" v-model="form.number" @change="ditectNumberChange" :state="validation.valid1"></b-form-input>
                                         <b-input-group-append>
                                             <b-button variant="info" size="sm" @click="searchCompany">중복 체크</b-button>
                                         </b-input-group-append>
@@ -210,7 +210,7 @@
                             <b-col>
                                 <b-form-group label="사업자등록번호">
                                     <b-input-group>
-                                        <b-form-input size="sm" v-model="form.number" @change="ditectNumberChange" :state="validation.valid1" :disabled="!isNew"></b-form-input>
+                                        <b-form-input size="sm" v-model="form.number" @change="ditectNumberChange" :state="validation.valid1"></b-form-input>
                                         <b-input-group-append>
                                             <b-button variant="info" size="sm" @click="searchCompany">중복 체크</b-button>
                                         </b-input-group-append>
@@ -618,10 +618,10 @@ module.exports = {
             this.isNew = false;
         },
         storeData: async function () {
-            if (!this.validation.valid_result && !this.validation.valid_result_en) {
-                return;
-            }
-
+            // if (!this.validation.valid_result && !this.validation.valid_result_en) {
+            //     return;
+            // }
+            
             let url =  `${this.api_url}/company`;
             let formData = new FormData();
             for (let key in this.form) {
@@ -648,9 +648,9 @@ module.exports = {
         }
 
         ,updateData: async function () {
-            if (!this.validation.valid_result && !this.validation.valid_result_en) {
-                return;
-            }
+            // if (!this.validation.valid_result && !this.validation.valid_result_en) {
+            //     return;
+            // }
 
             let url =  `${this.api_url}/company/${this.company_id}`;
             let formData = new FormData();

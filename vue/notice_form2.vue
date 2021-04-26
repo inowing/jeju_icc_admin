@@ -52,13 +52,10 @@
                         <b-row class="mb-3">
                             <b-col>
                                 <span>내용</span>
-                                <quill-editor 
-                                    ref="quillEditor" 
-                                    class="editor" 
-                                    :options="editorOption" 
-                                    v-model="editor_content" 
-                                    @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" 
-                                />
+                                 <div id="editor" >
+                                    <p>This is some sample content.</p>
+                                </div>
+                                <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
                                 <br>
                                 <div class="content ql-editor" v-html="editor_content"></div>
                             </b-col>
@@ -91,7 +88,7 @@
                         <b-row>
                             <b-col>
                                 <span>내용</span>
-                                <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+                                <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" /> -->
                                 <br>
                                 <div class="content ql-editor" v-html="editor_content_en"></div>
                             </b-col>
@@ -113,11 +110,18 @@
 
 <script>
 module.exports = {
-    name: 'notice_form',
+    name: 'notice_form2',
     data: function () {
         return {
             menu_id: null,
             api_url: '',
+
+            editor: ClassicEditor,
+        
+            editorConfig: {
+                // The configuration of the editor.
+            },
+
             url: `${this.api_url}/movie`,
             form: {
                 category_id: null
@@ -133,10 +137,12 @@ module.exports = {
             title_en: '',
             subtitle: '',
             subtitle_en: '',
-            // 에디터 옵션
+            // 퀼 에디터 옵션
             editor_content: ``,
             editor_content_en: ``,
-            editorOption: {},
+            editorOption: {
+                theme: "snow",
+            },
             preview_1: 'https://picsum.photos/400/400/?image=20',
             preview_basic: `https://picsum.photos/400/400/?image=20`,
 
@@ -156,8 +162,14 @@ module.exports = {
             this.menu_id = this.$route.query.menu_id;
             this.api_url = this.$store.getters.api_url;
             console.log(this.menu_id);
+            
             this.getTopCategory();
             this.getNotice();
+            ClassicEditor
+            .create( document.querySelector( '#editor' ) )
+            .catch( error => {
+                console.error( error );
+            } );
         })
     },
     methods: {

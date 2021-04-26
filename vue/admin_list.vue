@@ -65,7 +65,7 @@
                         <b-form-group label="이름 영문">
                             <b-form-input size="sm" v-model="form.name_en"></b-form-input>
                         </b-form-group>
-                        <b-form-group label="휴태폰 번호">
+                        <b-form-group label="휴대폰 번호">
                             <b-form-input size="sm" v-model="form.phone"></b-form-input>
                         </b-form-group>
                     </b-card>

@@ -11,9 +11,9 @@
         <b-col cols="8">
             <b-input-group size="sm" align-v="baseline">
                 <b-form-select v-model="selected" :options="options" size="sm" style="max-width: 150px;" class="mr-2"></b-form-select>
-                <b-form-input aria-placeholder="검색어를 입력하세요." style="max-width: 300px;" class="ml-2"></b-form-input>
+                <b-form-input v-model="search_key" aria-placeholder="검색어를 입력하세요." style="max-width: 300px;" class="ml-2"></b-form-input>
                 <b-input-group-append>
-                    <b-button variant="info" size="sm">검색하기</b-button>
+                    <b-button variant="info" size="sm" @click="getList(search_key)">검색하기</b-button>
                 </b-input-group-append>
             </b-input-group>
         </b-col>
@@ -145,8 +145,8 @@ module.exports = {
                     label: '관리항목'
                 },
             ],
-            items: []
-
+            items: [],
+            search_key: ''
         };
     },
     mounted: function () {
@@ -157,8 +157,12 @@ module.exports = {
         });
     },
     methods: {
-        getList: async function () {
-            let rs = await axios.get(`${this.api_url}/company?event_id=${this.event_id}&status=0`); // 미승인 리스트만 가져오기
+        getList: async function (search_key) {
+            let url = `${this.api_url}/company?event_id=${this.event_id}&status=0`;
+            if (search_key) {
+                url + `&search_key=${search_key}`;
+            }
+            let rs = await axios.get(url); // 미승인 리스트만 가져오기
             this.items = rs.data.result;
         },
         goRegisterForm: function (item) {

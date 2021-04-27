@@ -1,5 +1,6 @@
 <template>
     <b-card no-body>
+      <b-overlay :show="spin_show2" rounded="sm">
       <b-tabs v-model="invitaion_tabIndex" small card>
         <b-tab title="Moderator/Presenter">
           좌장/발표자를 이메일로 초대합니다.
@@ -35,8 +36,8 @@
             </b-col>
             <b-col cols="auto">
               <div align="right">
-                <b-pagination v-model="operator_pagination.current_page" :total-rows="operator_pagination.total_count"
-                  :per-page="operator_pagination.limit" size="sm" @change="paginationFn($event, 'Operate')">
+                <b-pagination v-model="moderator_pagination.current_page" :total-rows="moderator_pagination.total_count"
+                  :per-page="moderator_pagination.limit" size="sm" @change="paginationFn($event, 1)">
                 </b-pagination>
               </div>
             </b-col>
@@ -59,14 +60,14 @@
                     <div class="text-center">
                       <b-form-checkbox v-model="row.rowSelected"
                         @change="checked(row.index, row.rowSelected, 'ModeraterSelectableTable')">
-                        {{row.index}}</b-form-checkbox>
+                        {{ moderator_pagination.total_count - (moderator_pagination.limit*(moderator_pagination.current_page-1) + row.index) }}</b-form-checkbox>
                     </div>
                   </template>
                   <template v-else>
                     <div class="text-center">
                       <b-form-checkbox v-model="row.rowSelected"
                         @change="checked(row.index, row.rowSelected, 'ModeraterSelectableTable')">
-                        {{row.index}}</b-form-checkbox>
+                        {{ moderator_pagination.total_count - (moderator_pagination.limit*(moderator_pagination.current_page-1) + row.index) }}</b-form-checkbox>
                     </div>
                   </template>
                 </template>
@@ -108,8 +109,8 @@
             </b-col>
             <b-col cols="auto">
               <div align="right">
-                <b-pagination v-model="operator_pagination.current_page" :total-rows="operator_pagination.total_count"
-                  :per-page="operator_pagination.limit" size="sm" @change="paginationFn($event, 'Operate')">
+                <b-pagination v-model="attendee_pagination.current_page" :total-rows="attendee_pagination.total_count"
+                  :per-page="attendee_pagination.limit" size="sm" @change="paginationFn($event, 2)">
                 </b-pagination>
               </div>
             </b-col>
@@ -122,7 +123,7 @@
                 <template #head(selected)="scope">
                   <div class="text-center">
                     <b-form-checkbox v-model="attendee_all" :indeterminate="attendee_indeterminate"
-                      @change="toggleAllAttendee($event)"> {{ scope.label }}</b-form-checkbox>
+                      @change="toggleAllAttendee($event)"> {{ scope.label }} </b-form-checkbox>
                   </div>
                 </template>
 
@@ -131,14 +132,16 @@
                     <div class="text-center">
                       <b-form-checkbox v-model="row.rowSelected"
                         @change="checked(row.index, row.rowSelected, 'AttendeeSelectableTable')">
-                        {{row.index}}</b-form-checkbox>
+                        {{ attendee_pagination.total_count - (attendee_pagination.limit*(attendee_pagination.current_page-1) + row.index) }}
+                      </b-form-checkbox>
                     </div>
                   </template>
                   <template v-else>
                     <div class="text-center">
                       <b-form-checkbox v-model="row.rowSelected"
                         @change="checked(row.index, row.rowSelected, 'AttendeeSelectableTable')">
-                        {{row.index}}</b-form-checkbox>
+                        {{ attendee_pagination.total_count - (attendee_pagination.limit*(attendee_pagination.current_page-1) + row.index) }}
+                      </b-form-checkbox>
                     </div>
                   </template>
                 </template>
@@ -181,7 +184,7 @@
             <b-col cols="auto">
               <div align="right">
                 <b-pagination v-model="operator_pagination.current_page" :total-rows="operator_pagination.total_count"
-                  :per-page="operator_pagination.limit" size="sm" @change="paginationFn($event, 'Operate')">
+                  :per-page="operator_pagination.limit" size="sm" @change="paginationFn($event, 0)">
                 </b-pagination>
               </div>
             </b-col>
@@ -194,8 +197,7 @@
                 <template #head(selected)="scope">
                   <div class="text-center">
                     <b-form-checkbox v-model="operator_all" :indeterminate="operator_indeterminate"
-                      @change="toggleAll($event)">
-                      {{ scope.label }}</b-form-checkbox>
+                      @change="toggleAll($event)">{{ scope.label }}</b-form-checkbox>
                   </div>
                 </template>
 
@@ -204,14 +206,16 @@
                     <div class="text-center">
                       <b-form-checkbox v-model="row.rowSelected"
                         @change="checked(row.index, row.rowSelected, 'selectableTable')">
-                        {{row.index}}</b-form-checkbox>
+                        {{ operator_pagination.total_count - (operator_pagination.limit*(operator_pagination.current_page-1) + row.index) }}
+                      </b-form-checkbox>
                     </div>
                   </template>
                   <template v-else>
                     <div class="text-center">
                       <b-form-checkbox v-model="row.rowSelected"
                         @change="checked(row.index, row.rowSelected, 'selectableTable')">
-                        {{row.index}}</b-form-checkbox>
+                        {{ operator_pagination.total_count - (operator_pagination.limit*(operator_pagination.current_page-1) + row.index) }}
+                      </b-form-checkbox>
                     </div>
                   </template>
                 </template>
@@ -223,21 +227,26 @@
 
       <b-modal v-model="overlayModal" title="신규 계정 생성" hide-footer>
         <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="이름">
-          <b-form-input size="sm" v-model="userForm.name" :state="user_validation.valid1"></b-form-input>
+          <b-form-input size="sm" v-model="userForm.name" :state="user_validation.valid1" @keydown.enter="storeUser"></b-form-input>
         </b-form-group>
         <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="이메일">
-          <b-form-input size="sm" v-model="userForm.email" :state="user_validation.valid2"></b-form-input>
-        </b-form-group>
-        <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="비밀번호">
-          <b-form-input size="sm" type="password" v-model="userForm.password" :state="user_validation.valid3">
-          </b-form-input>
-        </b-form-group>
-        <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="비밀번호 확인">
-          <b-form-input size="sm" type="password" v-model="password_confirm" :state="user_validation.valid3">
-          </b-form-input>
+          <b-form-input size="sm" type="email" v-model="userForm.email" :state="user_validation.valid2" @keydown.enter="storeUser"></b-form-input>
         </b-form-group>
         <b-button size="sm" class="inoBtn-150" variant="success" @click="storeUser">생성</b-button>
       </b-modal>
+
+    
+
+      <b-modal v-model="uploadModal" title="업로드 파일 선택" hide-footer>
+        <b-overlay :show="spin_show" rounded="sm">
+          <b-form-file v-model="file1" size="sm"></b-form-file>
+          <b-button size="sm" class="inoBtn-150 mt-1" variant="success" @click="uploadExcelTemplate">
+            업로드
+          </b-button>
+        </b-overlay>
+      </b-modal>
+
+      </b-overlay>
     </b-card>
   
 </template>
@@ -253,72 +262,18 @@
         invitaion_tabIndex: this.params.invitaion_tabIndex,
         conference_item: this.params.conference_item,
 
+        spin_show: false, // spinner
+        spin_show2: false, // spinner
+
+        uploadModal: false, // 엑셀 업로드 모달
+        file1: null, // 엑셀파일 추가할 경우
+
         // 신규유저 추가할 경우.
         overlayModal: false,
         userForm: {},
         password_confirm: "",
 
-        operator_items: [{
-            id: 1,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-          {
-            id: 2,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-          {
-            id: 3,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-          {
-            id: 4,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-          {
-            id: 5,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-          {
-            id: 6,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-        ],
+        operator_items: [],
         operator_fields: [{
             key: "selected",
             label: "No"
@@ -344,7 +299,7 @@
             label: "생성시간"
           },
           {
-            key: "invited_at",
+            key: "time_invitation",
             label: "초대시간"
           },
           {
@@ -353,37 +308,17 @@
           },
         ],
         operator_pagination: {
-          total_count: 6,
-          count_pages: 1,
+          total_count: 0,
+          count_pages: 0,
           current_page: 1,
-          limit: 100,
+          limit: 5,
         },
         operator_allSelected: [],
         operator_all: false,
         operator_indeterminate: false,
 
         /** moderator,presenter */
-        moderator_items: [{
-            id: 1,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-          {
-            id: 2,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-        ],
+        moderator_items: [],
         moderator_fields: [{
             key: "selected",
             label: "No"
@@ -409,7 +344,7 @@
             label: "생성시간"
           },
           {
-            key: "invited_at",
+            key: "time_invitation",
             label: "초대시간"
           },
           {
@@ -418,10 +353,10 @@
           },
         ],
         moderator_pagination: {
-          total_count: 6,
-          count_pages: 1,
+          total_count: 0,
+          count_pages: 0,
           current_page: 1,
-          limit: 100,
+          limit: 5,
         },
         moderator_allSelected: [],
         moderator_all: false,
@@ -429,37 +364,7 @@
         /** moderator,presenter */
 
         /** attendee */
-        attendee_items: [{
-            id: 1,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-          {
-            id: 2,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-          {
-            id: 3,
-            name: "hello name",
-            email: "hello@inowing.com",
-            part: "개발팀",
-            grade: "과장",
-            created_at: "2020-04-16",
-            invited_at: "2020-04-16",
-            passcode: "zepd1235",
-          },
-        ],
+        attendee_items: [],
         attendee_fields: [{
             key: "selected",
             label: "No"
@@ -485,7 +390,7 @@
             label: "생성시간"
           },
           {
-            key: "invited_at",
+            key: "time_invitation",
             label: "초대시간"
           },
           {
@@ -494,10 +399,10 @@
           },
         ],
         attendee_pagination: {
-          total_count: 6,
-          count_pages: 1,
+          total_count: 0,
+          count_pages: 0,
           current_page: 1,
-          limit: 100,
+          limit: 5,
         },
         attendee_allSelected: [],
         attendee_all: false,
@@ -552,27 +457,62 @@
       this.$nextTick(async function () {
         this.event_id = this.$store.getters.event_id;
         this.api_url = this.$store.getters.api_url;
+        await this.getList(0, 1); // operator
+        await this.getList(1, 1); // Moderator/Presenter
+        await this.getList(2, 1); // Attendee
       });
     },
     computed: {
       user_validation: function (params) {
+        const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        
         let valid1 = this.userForm.name ? true : false;
-        let valid2 = this.userForm.email ? true : false;
-        let valid3 =
-          this.userForm.password &&
-          this.userForm.password == this.password_confirm ?
-          true :
-          false;
-        let valid_result = valid1 && valid2 && valid3;
+        let valid2 = this.userForm.email && re.test(String(this.userForm.email).toLowerCase()) ? true : false;
+        let valid_result = valid1 && valid2;
         return {
           valid1,
           valid2,
-          valid3,
           valid_result
         };
       }
     },
     methods: {
+      getList: async function (userType, page) {
+        let limit = 50;
+        let conference_id = this.conference_item.id;
+        let url = `${this.api_url}/conference_invitation?conference_id=${conference_id}&user_type=${userType}&page=${page}&limit=${limit}`;
+        try {
+          let rs = await axios.get(url);
+          if (userType == 0) {
+            this.operator_items = rs.data.result; // operator
+            this.operator_pagination = rs.data.pagination;
+          } else if (userType == 1) {
+            this.moderator_items = rs.data.result; // Moderator/Presenter
+            this.moderator_pagination = rs.data.pagination;
+          } else {
+            this.attendee_items = rs.data.result; // Attendee
+            this.attendee_pagination = rs.data.pagination;
+          }
+        } catch (error) {
+          console.error(error);
+          let pagination = {
+            total_count: 0,
+            count_pages: 0,
+            current_page: 1,
+            limit: limit,
+          }
+          if (userType == 0) {
+            this.operator_items = [];
+            this.operator_pagination = pagination;
+          } else if (userType == 1) {
+            this.moderator_items = []; // Moderator/Presenter
+            this.moderator_pagination = pagination;
+          } else {
+            this.attendee_items = []; // Attendee
+            this.attendee_pagination = pagination;
+          }
+        }
+      },
       exeCopy: function (event, ref_id) {
         // 이메일 주소 복사
         let testingCodeToCopy = this.$refs[ref_id];
@@ -602,58 +542,99 @@
           return;
         }
         try {
-          let url = `${this.api_url}/register`;
+          let user_type = this.invitaion_tabIndex == 0 ? 1 : this.invitaion_tabIndex == 1 ? 2 : 0;
+          
+          let url = `${this.api_url}/conference_invitation`;
           let formData = new FormData();
-          formData.append("event_id", this.event_id);
+          formData.append("conference_id", this.conference_item.id);
+          formData.append("user_type", user_type);
           formData.append("name", this.userForm.name);
           formData.append("email", this.userForm.email);
-          formData.append("password", this.userForm.password);
           let rs = await axios.post(url, formData, {
             Headers: {
               "Content-Type": "application/json",
             },
           });
-          console.log(rs);
-          // this.tagValue.push(this.userForm.email);
+          
           this.$showMsgBoxTwo(rs.status);
-          rs = await axios.get(
-            `${this.api_url}/user/in_event?event_id=${this.event_id}`
-          );
-          console.log(rs);
-          // this.vm = rs.data.result;
+          await this.getList(user_type, 1);
           this.overlayModal = false;
         } catch (error) {
           this.$showMsgBoxTwo(error.response.status,"",error.response.statusText);
         }
       },
       excelUpload: function () {
-        console.log('upload');
+        this.uploadModal = true;
+      },
+      uploadExcelTemplate: async function () {
+        // http://127.0.0.1:8000/api/v1/conference_invitation/upload_excel?conference_id=6&user_type=0
+        try {
+          let user_type = this.invitaion_tabIndex == 0 ? 1 : this.invitaion_tabIndex == 1 ? 2 : 0;
+          let url = `${this.api_url}/conference_invitation/upload_excel`;
+          // http://127.0.0.1:8000/api/v1/conference_invitation/upload_excel
+          
+          let formData = new FormData();
+              formData.append("conference_id", this.conference_item.id);
+              formData.append("user_type", user_type);
+              formData.append("users", this.file1);
+          
+          this.spin_show = true;
+          let rs = await axios.post(url, formData, {
+            headers: {
+                "Content-Type": "multipart-form/data",
+            }
+          });
+            // <b-spinner v-show="spin_show" variant="primary" label="Spinning"></b-spinner>
+          this.spin_show = false;
+          if (rs.data.result.fail) {
+            console.log(rs);
+            this.$showMsgBoxTwo(500, "", `${rs.data.result.fail} 라인의 입력이 실패하였습니다.`);
+          } else {
+            this.$showMsgBoxTwo(200, "", '성공하였습니다.');
+            this.uploadModal = false;
+          }
+          await this.getList(user_type, 1);
+        } catch (error) {
+          this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);
+        }
+
       },
       excelDownload: function () {
-        let url = this.modal2_type == "Q&A" ? `${this.api_url}/conference_qna/excel?conference_id=${this.conference_item.id}` : `${this.api_url}/conference_log/excel?conference_id=${this.conference_item.id}`;
-        window.location.href = url;
+        window.location.href = `${window.location.origin}/data/form/conference.csv`;
       },
       sendEmail: async function () {
-        console.log('sendEmailsendEmailsendEmail');
+        console.log('send mail');
         try {
-          let user_type = this.invitaion_tabIndex;
-          let url = `${this.api_url}/conference_invitation`;
+          // let user_type = this.invitaion_tabIndex;
+          let user_type = this.invitaion_tabIndex == 0 ? 1 : this.invitaion_tabIndex == 1 ? 2 : 0;
+          // user_type : 0 - Operator, 1 - Moderator/Presenter, 2 - Attendee, 3 - language
+          let url = `${this.api_url}/conference_invitation/send_invitation`;
           let formData = new FormData();
             formData.append("conference_id", this.conference_item.id);
             formData.append("user_type", user_type);
-            // todo. 선택된 탭의 체크된 리스트를 보내야 한다.
-            console.log('wowed', this.attendee_allSelected);
-          for (var i = 0; i < this.attendee_allSelected.length; i++) {
-            formData.append("user[]", 'test@test.com');
+
+          // todo. 선택된 탭의 체크된 리스트를 보내야 한다.
+          let arr = user_type == 0 ? this.operator_allSelected : (user_type == 1 ? this.moderator_allSelected : this.attendee_allSelected);
+          
+          console.log(arr);
+          if (arr.length == 0) {
+            return;
+          }
+          for (var i = 0; i < arr.length; i++) {
+            let item = arr[i];
+            console.log(item);
+            formData.append("users[]", item.id); 
           }
           
+          this.spin_show2 = true;
           let rs = await axios.post(url, formData, {
             Headers: {
               "Content-Type": "application/json"
             }
           });
           console.log(rs);
-          this.$showMsgBoxTwo(rs.status);
+          this.spin_show2 = false;
+          this.$showMsgBoxTwo(rs.status, "", "email을 전송했습니다.");
           this.modal3 = false;
         } catch (error) {
           this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);
@@ -663,6 +644,7 @@
       },
       paginationFn: async function (requestPage, type) {
         // await getOperationList()
+        this.getList(type, requestPage);
         console.log("requestPage ", requestPage, type);
       },
       onRowSelected(items) {

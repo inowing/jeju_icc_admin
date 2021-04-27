@@ -204,6 +204,23 @@
                                 </b-row>
                             </b-col>
                         </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">상세주소</label></b-col>
+                                    <b-col sm="8">
+                                            <b-form-textarea
+                                                v-model="form.address_detail"
+                                                placeholder="address_detail..."
+                                                rows="3"
+                                                max-rows="6"
+                                                class="mt-1"
+                                            ></b-form-textarea>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                            <b-col></b-col>
+                        </b-row>
                     </b-tab>
                     <b-tab title="영문">
                         <b-row>
@@ -393,6 +410,23 @@
                                 </b-row>
                             </b-col>
                         </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-row class="p-1">
+                                    <b-col sm="4"><label style="font-size: 10pt;">상세주소</label></b-col>
+                                    <b-col sm="8">
+                                            <b-form-textarea
+                                                v-model="form.address_detail_en"
+                                                placeholder="address_detail..."
+                                                rows="3"
+                                                max-rows="6"
+                                                class="mt-1"
+                                            ></b-form-textarea>
+                                    </b-col>
+                                </b-row>
+                            </b-col>
+                            <b-col></b-col>
+                        </b-row>
                     </b-tab>
                 </b-tabs>
             </b-card>
@@ -402,8 +436,18 @@
                     <b-row class="p-1">
                         <b-col sm="4"><label style="font-size: 10pt;">사업자 등록 사본</label></b-col>
                         <b-col sm="8">
+<!--                             
                             <b-form-file v-model="form.business_registration" :placeholder="file_src" size="sm" class="w-50 mr-sm-2"></b-form-file>
-                            <b-button @click="form.business_registration = null; file_src='No file'; file_del=true;" size="sm" variant="danger">파일 삭제</b-button>
+                            <b-button @click="form.business_registration = null; file_src='No file'; file_del=true;" size="sm" variant="danger">파일 삭제</b-button> -->
+
+                            <b-input-group v-show="file_src" prepend="file">
+                                <b-form-input disabled :value="file_src"></b-form-input>
+                                <b-input-group-append>
+                                    <b-button variant="outline-success" @click="fileDownload(file_src)">Download</b-button>
+                                    <b-button variant="danger" @click="form.business_registration = ''; file_src=''; file_del = true;">Delete</b-button>
+                                </b-input-group-append>
+                            </b-input-group>
+                            <b-form-file v-show="!file_src" v-model="form.business_registration" size="sm" class="w-50 mr-sm-2"></b-form-file>
                         </b-col>
                     </b-row>
                 </b-col>
@@ -411,8 +455,19 @@
                     <b-row class="p-1">
                         <b-col sm="4"><label style="font-size: 10pt;">기업 로고</label></b-col>
                         <b-col sm="8">
+<!--                             
                             <b-form-file v-model="form.logo" :placeholder="logo_src" size="sm" class="w-50 mr-sm-2"></b-form-file>
-                            <b-button @click="form.logo = null; logo_src='No file'; logo_del=true;" size="sm" variant="danger">파일 삭제</b-button>
+                            <b-button @click="form.logo = null; logo_src='No file'; logo_del=true;" size="sm" variant="danger">파일 삭제</b-button> -->
+
+                            <b-input-group v-show="logo_src" prepend="file">
+                                <b-form-input disabled :value="logo_src"></b-form-input>
+                                <b-input-group-append>
+                                    <b-button variant="outline-success" @click="fileDownload(logo_src)">Download</b-button>
+                                    <b-button variant="danger" @click="form.logo = ''; logo_src=''; logo_del = true;">Delete</b-button>
+                                </b-input-group-append>
+                            </b-input-group>
+                            <b-form-file v-show="!logo_src" v-model="form.logo" size="sm" class="w-50 mr-sm-2"></b-form-file>
+
                         </b-col>
                     </b-row>
                 </b-col>
@@ -464,6 +519,7 @@ module.exports = {
 
             file_src: '',
             file_del: false,
+            
             logo_src: '',
             logo_del: false,
             
@@ -615,6 +671,8 @@ module.exports = {
 
             console.log(rs);
             this.form = {...rs};
+            this.event_type = rs.event_type;
+            this.attend_type = rs.attend_type;
             this.isNew = false;
         },
         storeData: async function () {
@@ -628,10 +686,16 @@ module.exports = {
                 if (this.form[key] != "") {
                     formData.append(key, this.form[key]);
                 }
+                if (key == 'event_type') {
+                    formData.append('event_type', this.event_type);
+                }
+                if (key == 'attend_type') {
+                    formData.append('attend_type', this.attend_type);
+                }
             }
 
             console.log(this.form);
-
+            
             !this.form.business_registration && this.file_del ? formData.append('business_registration_del', 'Y') : formData.append('business_registration', this.form.business_registration);
             !this.form.logo && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.form.logo);
 
@@ -654,14 +718,21 @@ module.exports = {
 
             let url =  `${this.api_url}/company/${this.company_id}`;
             let formData = new FormData();
+            
             for (let key in this.form) {
                 if (this.form[key] != "") {
                     formData.append(key, this.form[key]);
                 }
+                if (key == 'event_type') {
+                    formData.append('event_type', this.event_type);
+                }
+                if (key == 'attend_type') {
+                    formData.append('attend_type', this.attend_type);
+                }
             }
 
             console.log(this.form);
-
+            
             !this.form.business_registration && this.file_del ? formData.append('business_registration_del', 'Y') : formData.append('business_registration', this.form.business_registration);
             !this.form.logo && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.form.logo);
 
@@ -675,7 +746,15 @@ module.exports = {
                 this.$router.go(-1);
             }
             this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
-        }
+        },
+        fileDownload(url) {
+            var link = document.createElement("a");
+            link.setAttribute('download', '');
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        },
     }
 }
 </script>

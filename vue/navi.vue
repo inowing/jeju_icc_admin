@@ -328,10 +328,19 @@ module.exports = {
         },
         goRedirect: async function () {
             let url = `${this.api_url}/event/${this.event_id}/get_url`;
-            let rs = await axios.get(url);
-            let redirectUrl = rs.data.result;
+            try {
+                let rs = await axios.get(url);
+                if (rs.data.code == 200) {
+                    let redirectUrl = rs.data.result;
+                    window.open(redirectUrl, '_blank');
+                } else {
+                    alert('error');
+                }
+            } catch (error) {
+                alert('error');
+            }
+
             // window.location.href = redirectUrl;
-            window.open(redirectUrl, '_blank');
         }
     }
 }

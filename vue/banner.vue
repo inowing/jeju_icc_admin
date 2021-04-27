@@ -315,10 +315,10 @@ module.exports = {
 				formData.append("order", this.order);
 				formData.append("name", this.name);
 				
-				if (!this.link.includes('http') && this.link) {
+				if (this.link && !this.link.includes('http')) {
                     this.link = `http://${this.link}`;
                 }
-                if (!this.link_en.includes('http') && this.link) {
+                if (this.link_en && !this.link_en.includes('http')) {
                     this.link_en = `http://${this.link_en}`;
                 }
 				formData.append("link", this.link);

@@ -29,8 +29,8 @@
     <b-row class="mt-1">
         <b-col>
             <b-table :fields="fields" :items="items" small bordered head-variant="light" class="mt-1" style="font-size: 9pt; vertical-align: center; line-height:33px;">
-                <template #cell(id)="row">
-                    <div class="text-center">{{row.item.id}}</div>
+                <template #cell(No)="row">
+                    <div class="text-center">{{items.length - row.index}}</div>
                 </template>
                 <template #cell(attend_type)="row">
                     <div class="text-center">{{row.item.attend_type == 0 ? '바이어' : '셀러'}}</div>
@@ -41,8 +41,8 @@
                 <template #cell(representation_name)="row">
                     <div class="text-center">{{row.item.representation_name ? row.item.representation_name : row.item.representation_name_en }}</div>
                 </template>
-                <template #cell(address)="row">
-                    <div class="text-center" v-b-tooltip.hover :title="row.item.address" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:230px;">{{row.item.address}}</div>
+                <template #cell(local_type)="row">
+                    <div class="text-center" v-b-tooltip.hover :title="row.item.address" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:230px;">{{row.item.local_type}}</div>
                 </template>
                 <template #cell(condition)="row">
                     <div class="text-center" v-b-tooltip.hover :title="row.item.condition" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:50px;">{{row.item.condition}}</div>
@@ -99,8 +99,8 @@ module.exports = {
                 }
             ],
             fields: [{
-                    key: 'id',
-                    label: '번호'
+                    key: 'No',
+                    label: 'No'
                 },
                 {
                     key: 'attend_type',
@@ -123,7 +123,7 @@ module.exports = {
                     label: '대표번호'
                 },
                 {
-                    key: 'address',
+                    key: 'local_type',
                     label: '지역'
                 },
                 {

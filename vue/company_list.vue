@@ -1,12 +1,5 @@
 <template>
 <section>
-<!--     
-    <b-row class="mb-1">
-        <b-col>
-            <h6><strong>3.기업관리 > 기업목록</strong></h6>
-        </b-col>
-    </b-row> -->
-
     <b-row class="mt-1">
         <b-col>
         <b-row>
@@ -34,8 +27,8 @@
         
 
         <b-table :fields="fields" :items="items" small bordered head-variant="light" class="mt-1" style="font-size: 9pt; vertical-align: center; line-height:33px;">
-            <template #cell(id)="row">
-                <div class="text-center">{{row.item.id}}</div>
+            <template #cell(No)="row">
+                <div class="text-center">{{items.length - row.index}}</div>
             </template>
             <template #cell(attend_type)="row">
                 <div class="text-center">{{row.item.attend_type == 0 ? '바이어' : '셀러'}}</div>
@@ -50,10 +43,10 @@
                 <div class="text-center">{{row.item.address}}</div>
             </template>
             <template #cell(condition)="row">
-                <div class="text-center">{{row.item.condition}}</div>
+                <div class="text-center" v-b-tooltip.hover :title="row.item.condition" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:50px;">{{row.item.condition}}</div>
             </template>
             <template #cell(sectors)="row">
-                <div class="text-center">{{row.item.sectors}}</div>
+                <div class="text-center" v-b-tooltip.hover :title="row.item.sectors" style="white-space: nowrap; text-overflow:ellipsis; overflow: hidden; max-width:50px;">{{row.item.sectors}}</div>
             </template>
             <template #cell(delivery_price)="row">
                 <div class="text-right">{{ row.item.delivery_price.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")}}</div>
@@ -140,9 +133,10 @@ module.exports = {
 				{ value: 'seller', text: '셀러' }
 			],
             
-            fields: [{
-                    key: 'id',
-                    label: '아이디'
+            fields: [
+                {
+                    key: 'No',
+                    label: 'No'
                 },
                 {
                     key: 'attend_type',

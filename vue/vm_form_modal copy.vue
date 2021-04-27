@@ -305,7 +305,7 @@
         language_form: {}, // 언어통역사 생성폼
         conference_item: this.params.conference_item, // 선택된 아이템이 있으면 수정폼이 되게 된다.
 
-        lang_options: [], // 로딩 되면, 유저목록을 가져온다. getUserList() - text=email,user_id
+        lang_options: [], // 로딩 되면, 유저목록을 가져온다. getUserList()
         lang_options_obj: {},
         lang_options_values: [],
         select_arr: [], // {user_id, language, available}
@@ -371,24 +371,29 @@
     },
     methods: {
       getUserList: async function () {
-        let conference_id = this.conference_item.id;
-        let url = `${this.api_url}/conference/user_list?conference_id=${conference_id}`;
-        let rs = await axios.get(url); // [{text: "hanaldo@rado.com()", value: 1326}]
-        let arr = rs.data.result;
+        // todo. 통역유저 리스팅 API 필요함.
         
+        let conference_id = this.conference_item.id;
+        console.log('conference_id ? ', conference_id);
+        let url = `${this.api_url}/conference/user_list?conference_id=${conference_id}`;
+        let rs = await axios.get(url);
+
+        console.log('conference_ids', rs); // {text: "hanaldo@rado.com()", value: 1326, user_id: undefined}
+        let arr = rs.data.result;
         this.lang_options = [];
         this.lang_options_values = [];
         this.lang_options_obj = {};
         for (var i = 0; i < arr.length; i++) {
           let user_id = arr[i].value;
-          let text = arr[i].text;
+          let email = arr[i].text;
 
           this.lang_options.push({
             user_id: user_id,
-            text: text
+            name: email,
+            text: email
           }); // select 박스의 옵션에서 꺼내기 좋은 형태로
           this.lang_options_values.push(user_id); // user_id만
-            arr[i].user_id = user_id; // 아아아.... this.conference_item.language 속에 user_id로 들어있어서 통일함.
+          arr[i].user_id = user_id; // 아아아.... this.conference_item.language 속에 user_id로 들어있어서 통일함.
           this.lang_options_obj[user_id] = arr[i]; // user_id를 키로하는 object
         }
         
@@ -560,7 +565,6 @@
             formData.append("user_type", 3);
             formData.append('email', this.language_form.email);
             formData.append('name', this.language_form.name);
-            formData.append('passcode', this.language_form.passcode);
         let rs = await axios.post(url, formData, {
             Headers: { 'Content-Type': 'application/json' }
         }).catch(error => {
@@ -580,18 +584,18 @@
           let user_id = rs.data.result.id;
           let email = rs.data.result.email;
           let name = rs.data.result.name;
-          let text = `${email}(${this.language_form.passcode})`;
+
           this.lang_options.push({
             user_id: user_id,
             name: name,
-            text: text
+            text: email
           }); // select 박스의 옵션에서 꺼내기 좋은 형태로
           this.lang_options_values.push(user_id); // user_id만
           this.lang_options_obj[user_id] = {
             user_id: user_id,
             id: user_id,
             name: name,
-            text: text
+            text: email
           }; // user_id를 키로하는 object
           this.reset_available();
         }
@@ -653,7 +657,7 @@
           let availabe = [net_obj, ...vanila_available]; // 저장된 본체(자기자신) + 전혀 선택되지 않은 값.
           this.select_arr.push({
             user_id: el.user_id,
-            text: net_obj.text,
+            name: net_obj.text,
             language: el.language,
             available: availabe
           });
@@ -683,7 +687,7 @@
         for (let item of this.lang_options) {
           if (vanila_values.includes(item.user_id)) {
             console.log(item);
-            item.text = item.text;
+            item.text = item.name;
             vanila_available.push(item);
           }
         }
@@ -708,7 +712,7 @@
           if (this.select_arr[i]) {
             language = this.select_arr[i].language;
           }
-          let new_item = {user_id: value, text: this.lang_options_obj[value].text, language, available: item_available};
+          let new_item = {user_id: value, name: this.lang_options_obj[value].text, language, available: item_available};
           console.log(new_item);
           new_arr.push(new_item);
         }
@@ -725,11 +729,11 @@
           console.log('this.lang_options[0] - ', this.lang_options[0]);
           console.log('this.lang_options - ', this.lang_options);
           let user_id = this.lang_options[0].user_id;
-          let text = this.lang_options[0].text;
+          let name = this.lang_options[0].name;
           let language = '';
           let available = [...this.lang_options];
           
-          this.select_arr.push({user_id, text, language, available});
+          this.select_arr.push({user_id, name, language, available});
           console.log(this.select_arr);
           return;
         }
@@ -742,7 +746,7 @@
       },
       removeList: function (item, index) {
         this.select_arr.splice(index, 1);
-        let revive = { user_id: item.user_id, text: item.text, language: item.language }; // 되살릴 아이템 구성
+        let revive = { user_id: item.user_id, name: item.name, language: item.language }; // 되살릴 아이템 구성
         for (let item of this.select_arr) {
           item.available.push(revive); // 남은 목록 안에 선택 가능한 옵션으로 되살린 아이템 넣어준다.
         }

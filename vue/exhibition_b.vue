@@ -85,8 +85,8 @@
         <b-col cols="6">
             <strong>카테고리 #2 컨텐츠</strong>
         </b-col>
-        <b-col cols="6" align="rigtht">
-            <b-button variant="outline-primary" block size="sm" @click="newModalAction('카테고리 #2 컨텐츠 추가')">
+        <b-col cols="6" align="rigtht" class="text-right">
+            <b-button variant="outline-primary" size="sm" @click="newModalAction('카테고리 #2 컨텐츠 추가')">
                 <b-icon-plus></b-icon-plus>이미지 추가
             </b-button>
         </b-col>

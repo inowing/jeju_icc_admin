@@ -17,25 +17,6 @@
                     <b-tab title="국문" active>
                         <b-row>
                             <b-col>
-                                <b-form-group label="사업자등록번호">
-                                    <b-input-group>
-                                        <b-form-input size="sm" v-model="form.number" @change="ditectNumberChange" :state="validation.valid1"></b-form-input>
-                                        <b-input-group-append>
-                                            <b-button variant="info" size="sm" @click="searchCompany">중복 체크</b-button>
-                                        </b-input-group-append>
-                                    </b-input-group>
-                                    <b-form-invalid-feedback :state="validation.valid1">{{valid1_text}}</b-form-invalid-feedback>
-                                </b-form-group>
-                            </b-col>
-                            <b-col>
-                                 <b-form-group label="업체명">
-                                    <b-form-input size="sm" v-model="form.name" :state="validation.valid2"></b-form-input>
-                                    <b-form-invalid-feedback :state="validation.valid2">업체명을 입력하세요.</b-form-invalid-feedback>
-                                 </b-form-group>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col>
                                  <b-form-group label="행사 참가구분" v-slot="{ ariaDescribedby2 }">
                                     <b-form-radio-group
                                         v-model="event_type"
@@ -51,6 +32,25 @@
                                         :options="attend_type_ops"
                                         :aria-describedby="ariaDescribedby"
                                     ></b-form-radio-group>
+                                 </b-form-group>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-form-group label="사업자등록번호">
+                                    <b-input-group>
+                                        <b-form-input size="sm" v-model="form.number" @change="ditectNumberChange" :state="validation.valid1"></b-form-input>
+                                        <b-input-group-append>
+                                            <b-button variant="info" size="sm" @click="searchCompany">중복 체크</b-button>
+                                        </b-input-group-append>
+                                    </b-input-group>
+                                    <b-form-invalid-feedback :state="validation.valid1">{{valid1_text}}</b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col>
+                                 <b-form-group label="업체명">
+                                    <b-form-input size="sm" v-model="form.name" :state="validation.valid2"></b-form-input>
+                                    <b-form-invalid-feedback :state="validation.valid2">업체명을 입력하세요.</b-form-invalid-feedback>
                                  </b-form-group>
                             </b-col>
                         </b-row>
@@ -225,25 +225,6 @@
                     <b-tab title="영문">
                         <b-row>
                             <b-col>
-                                <b-form-group label="사업자등록번호">
-                                    <b-input-group>
-                                        <b-form-input size="sm" v-model="form.number" @change="ditectNumberChange" :state="validation.valid1"></b-form-input>
-                                        <b-input-group-append>
-                                            <b-button variant="info" size="sm" @click="searchCompany">중복 체크</b-button>
-                                        </b-input-group-append>
-                                    </b-input-group>
-                                    <b-form-invalid-feedback :state="validation.valid1">{{valid1_text}}</b-form-invalid-feedback>
-                                </b-form-group>
-                            </b-col>
-                            <b-col>
-                                 <b-form-group label="업체명">
-                                    <b-form-input size="sm" v-model="form.name_en" :state="validation.valid2_en"></b-form-input>
-                                    <b-form-invalid-feedback :state="validation.valid2_en">업체명을 입력하세요.</b-form-invalid-feedback>
-                                 </b-form-group>
-                            </b-col>
-                        </b-row>
-                        <b-row>
-                            <b-col>
                                  <b-form-group label="행사 참가구분" v-slot="{ ariaDescribedby2 }">
                                     <b-form-radio-group
                                         v-model="event_type"
@@ -259,6 +240,25 @@
                                         :options="attend_type_ops"
                                         :aria-describedby="ariaDescribedby"
                                     ></b-form-radio-group>
+                                 </b-form-group>
+                            </b-col>
+                        </b-row>
+                        <b-row>
+                            <b-col>
+                                <b-form-group label="사업자등록번호">
+                                    <b-input-group>
+                                        <b-form-input size="sm" v-model="form.number" @change="ditectNumberChange" :state="validation.valid1"></b-form-input>
+                                        <b-input-group-append>
+                                            <b-button variant="info" size="sm" @click="searchCompany">중복 체크</b-button>
+                                        </b-input-group-append>
+                                    </b-input-group>
+                                    <b-form-invalid-feedback :state="validation.valid1">{{valid1_text}}</b-form-invalid-feedback>
+                                </b-form-group>
+                            </b-col>
+                            <b-col>
+                                 <b-form-group label="업체명">
+                                    <b-form-input size="sm" v-model="form.name_en" :state="validation.valid2_en"></b-form-input>
+                                    <b-form-invalid-feedback :state="validation.valid2_en">업체명을 입력하세요.</b-form-invalid-feedback>
                                  </b-form-group>
                             </b-col>
                         </b-row>
@@ -436,10 +436,6 @@
                     <b-row class="p-1">
                         <b-col sm="4"><label style="font-size: 10pt;">사업자 등록 사본</label></b-col>
                         <b-col sm="8">
-<!--                             
-                            <b-form-file v-model="form.business_registration" :placeholder="file_src" size="sm" class="w-50 mr-sm-2"></b-form-file>
-                            <b-button @click="form.business_registration = null; file_src='No file'; file_del=true;" size="sm" variant="danger">파일 삭제</b-button> -->
-
                             <b-input-group v-show="file_src" prepend="file">
                                 <b-form-input disabled :value="file_src"></b-form-input>
                                 <b-input-group-append>
@@ -455,19 +451,30 @@
                     <b-row class="p-1">
                         <b-col sm="4"><label style="font-size: 10pt;">기업 로고</label></b-col>
                         <b-col sm="8">
-<!--                             
-                            <b-form-file v-model="form.logo" :placeholder="logo_src" size="sm" class="w-50 mr-sm-2"></b-form-file>
-                            <b-button @click="form.logo = null; logo_src='No file'; logo_del=true;" size="sm" variant="danger">파일 삭제</b-button> -->
-
                             <b-input-group v-show="logo_src" prepend="file">
                                 <b-form-input disabled :value="logo_src"></b-form-input>
                                 <b-input-group-append>
                                     <b-button variant="outline-success" @click="fileDownload(logo_src)">Download</b-button>
-                                    <b-button variant="danger" @click="form.logo = ''; logo_src=''; logo_del = true;">Delete</b-button>
+                                    <b-button variant="danger" @click="form.logo=''; logo_src=''; logo_del=true;">Delete</b-button>
                                 </b-input-group-append>
                             </b-input-group>
                             <b-form-file v-show="!logo_src" v-model="form.logo" size="sm" class="w-50 mr-sm-2"></b-form-file>
 
+                        </b-col>
+                    </b-row>
+                </b-col>
+                <b-col>
+                    <b-row class="p-1">
+                        <b-col sm="4"><label style="font-size: 10pt;">기업 로고</label></b-col>
+                        <b-col sm="8">
+                            <b-input-group v-show="logo_ai_src" prepend="file">
+                                <b-form-input disabled :value="logo_ai_src"></b-form-input>
+                                <b-input-group-append>
+                                    <b-button variant="outline-success" @click="fileDownload(logo_ai_src)">Download</b-button>
+                                    <b-button variant="danger" @click="form.logo_ai=''; logo_ai_src=''; logo_ai_del=true;">Delete</b-button>
+                                </b-input-group-append>
+                            </b-input-group>
+                            <b-form-file v-show="!logo_ai_src" v-model="form.logo_ai" size="sm" class="w-50 mr-sm-2"></b-form-file>
                         </b-col>
                     </b-row>
                 </b-col>
@@ -522,6 +529,9 @@ module.exports = {
             
             logo_src: '',
             logo_del: false,
+
+            logo_ai_src: '',
+            logo_ai_del: false,
             
             form: {
                 "event_id": this.$store.getters.event_id,
@@ -665,8 +675,10 @@ module.exports = {
             let res = await axios.get(url);
             let rs = res.data.result;
             this.logo_src = rs.logo;
+            this.logo_ai_src = rs.logo_ai;
             this.file_src = rs.business_registration;
             rs.logo = null;
+            rs.logo_ai = null;
             rs.business_registration = null;
 
             console.log(rs);
@@ -698,6 +710,7 @@ module.exports = {
             
             !this.form.business_registration && this.file_del ? formData.append('business_registration_del', 'Y') : formData.append('business_registration', this.form.business_registration);
             !this.form.logo && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.form.logo);
+            !this.form.logo_ai && this.logo_ai_del ? formData.append('logo_ai_del', 'Y') : formData.append('logo_ai', this.form.logo_ai);
 
             let rs = await axios.post(url, formData, {
                 Headers: {
@@ -735,7 +748,8 @@ module.exports = {
             
             !this.form.business_registration && this.file_del ? formData.append('business_registration_del', 'Y') : formData.append('business_registration', this.form.business_registration);
             !this.form.logo && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.form.logo);
-
+            !this.form.logo_ai && this.logo_ai_del ? formData.append('logo_ai_del', 'Y') : formData.append('logo_ai', this.form.logo_ai);
+            
             let rs = await axios.post(url, formData, {
                 Headers: {
                     'Content-Type': 'multipart/form-data'

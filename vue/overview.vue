@@ -22,9 +22,18 @@
             </b-modal>
         </b-col>
     </b-row>
-    <b-card no-body header="포스터" class="mt-1">
+    <b-card no-body class="mt-1">
+        <template #header>
+            <b-row>
+                <b-col>
+                    <span>포스터</span>
+                </b-col>
+                <b-col class="text-right">
+                    <b-button variant="outline-primary" size="sm" @click="addNewPoster"><b-icon-plus></b-icon-plus> 이미지 추가</b-button>
+                </b-col>
+            </b-row>
+        </template>
         <b-card-text class="text-right pt-1 pr-1 m-0">
-            <b-button variant="outline-primary" size="sm" @click="addNewPoster"><b-icon-plus></b-icon-plus> 이미지 추가</b-button>
         </b-card-text>
         <b-card-text class="p-1 m-0">
             <b-table :fields="photoFields" :items="photo" bordered head-variant="light" small class="m-0">
@@ -127,12 +136,19 @@
     <!-- .. -->
     <!-- .. -->
     <!-- .. -->
-    <b-card no-body header="영상" class="mt-3">
-        <b-card-text class="text-right pt-1 pr-1 m-0">
-            <b-button variant="outline-primary" size="sm" @click="addNewVideo">
-                <b-icon-plus></b-icon-plus> 영상 추가
-            </b-button>
-        </b-card-text>
+    <b-card no-body class="mt-3">
+        <template #header>
+            <b-row>
+                <b-col>
+                    <span>영상</span>
+                </b-col>
+                <b-col class="text-right">
+                    <b-button variant="outline-primary" size="sm" @click="addNewVideo">
+                        <b-icon-plus></b-icon-plus> 영상 추가
+                    </b-button>
+                </b-col>
+            </b-row>
+        </template>
         <b-card-text class="p-1 m-0">
             <b-table :fields="videoFields" :items="video" bordered head-variant="light" small class="m-0">
                 <template #cell(id)="row">
@@ -247,12 +263,19 @@
     </b-modal>
 
 
-    <b-card no-body header="바로가기" class="mt-3">
-        <b-card-text class="text-right pt-1 pr-1 m-0">
-            <b-button variant="outline-primary" size="sm" @click="addNewQuickLink">
-                <b-icon-plus></b-icon-plus>바로가기 추가
-            </b-button>
-        </b-card-text>
+    <b-card no-body class="mt-3">
+        <template #header>
+            <b-row>
+                <b-col>
+                    <span>바로가기</span>
+                </b-col>
+                <b-col class="text-right">
+                    <b-button variant="outline-primary" size="sm" @click="addNewQuickLink">
+                        <b-icon-plus></b-icon-plus>바로가기 추가
+                    </b-button>
+                </b-col>
+            </b-row>
+        </template>
         <b-card-text class="p-1 m-0">
             <b-table :fields="linkFields" :items="link" bordered head-variant="light" small class="m-0">
                 <template #cell(id)="row">
@@ -266,7 +289,11 @@
                     </div>
                 </template>
                 <template #cell(photo_1)="row">
-                    <b-img :src="row.item.photo_1||$store.getters.dummy_image_url(['626x352'])" :id="'tooltip_image_'+row.item.id" fluid style="width:25px; height:25px;"></b-img>
+                    <b-img 
+                        :src="row.item.photo_1||$store.getters.dummy_image_url(['626x352'])" 
+                        :id="'tooltip_image_'+row.item.id" 
+                        fluid 
+                        style="width:75px; max-height:75px; "></b-img>
                     <b-tooltip :target="'tooltip_image_'+row.item.id" title="Online!">
                         <b-img :src="row.item.photo_1||$store.getters.dummy_image_url(['626x352'])" fluid ></b-img>
                     </b-tooltip>

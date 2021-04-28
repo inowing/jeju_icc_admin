@@ -122,49 +122,49 @@
                                             <b-table-simple small bordered head-variant="light">
                                                 <b-tbody>
                                                     <b-tr variant="secondary">
-                                                        <b-th style="width: 150px;">업체명</b-th>
+                                                        <b-th style="width: 150px;" class="text-center">업체명</b-th>
                                                         <b-td>
                                                             {{company.name}}
                                                         </b-td>
                                                     </b-tr>
                                                     <b-tr>
-                                                        <b-th>대표자</b-th>
+                                                        <b-th class="text-center">대표자</b-th>
                                                         <b-td>{{company.representation_name}}</b-td>
                                                     </b-tr>
                                                     <b-tr variant="secondary">
-                                                        <b-th>소재지</b-th>
+                                                        <b-th class="text-center">소재지</b-th>
                                                         <b-td>{{company.address}}</b-td>
                                                     </b-tr>
                                                     <b-tr>
-                                                        <b-th>연락처</b-th>
+                                                        <b-th class="text-center">연락처</b-th>
                                                         <b-td>{{company.representation_phone}}</b-td>
                                                     </b-tr>
                                                     <b-tr variant="secondary">
-                                                        <b-th>이메일</b-th>
+                                                        <b-th class="text-center">이메일</b-th>
                                                         <b-td>{{company.email}}</b-td>
                                                     </b-tr>
                                                     <b-tr>
-                                                        <b-th>홈페이지</b-th>
+                                                        <b-th class="text-center">홈페이지</b-th>
                                                         <b-td>{{company.homepage}}</b-td>
                                                     </b-tr>
                                                     <b-tr variant="secondary">
-                                                        <b-th>직원수</b-th>
+                                                        <b-th class="text-center">직원수</b-th>
                                                         <b-td>{{company.employees_count}}</b-td>
                                                     </b-tr>
                                                     <b-tr>
-                                                        <b-th>국가</b-th>
+                                                        <b-th class="text-center">국가</b-th>
                                                         <b-td>{{company.country}}</b-td>
                                                     </b-tr>
                                                     <b-tr variant="secondary">
-                                                        <b-th>업태</b-th>
+                                                        <b-th class="text-center">업태</b-th>
                                                         <b-td>{{company.condition}}</b-td>
                                                     </b-tr>
                                                     <b-tr>
-                                                        <b-th>업종</b-th>
+                                                        <b-th class="text-center">업종</b-th>
                                                         <b-td>{{company.sectors}}</b-td>
                                                     </b-tr>
                                                     <b-tr variant="secondary">
-                                                        <b-th>개요</b-th>
+                                                        <b-th class="text-center">개요</b-th>
                                                         <b-td>{{company.introduce}}</b-td>
                                                     </b-tr>
                                                 </b-tbody>

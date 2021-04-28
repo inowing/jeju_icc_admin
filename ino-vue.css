@@ -181,6 +181,10 @@ thead {
 	width: 100px;
 }
 
+.ino-space-dot {
+	white-space: nowrap; text-overflow:ellipsis; overflow: hidden;
+}
+
 .vm_card_v_left {
 	display: flex;
 	align-items: center;

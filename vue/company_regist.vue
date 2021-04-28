@@ -98,7 +98,7 @@
                         <b-row>
                             <b-col>
                                 <b-row class="p-1">
-                                    <b-col sm="4"><label style="font-size: 10pt;">홈페이지</label></b-col>
+                                    <b-col sm="4"><label style="font-size: 10pt;">홈페이지(https://~~~)</label></b-col>
                                     <b-col sm="8">
                                         <b-form-input size="sm" v-model="form.homepage"></b-form-input>
                                     </b-col>
@@ -306,7 +306,7 @@
                         <b-row>
                             <b-col>
                                 <b-row class="p-1">
-                                    <b-col sm="4"><label style="font-size: 10pt;">홈페이지</label></b-col>
+                                    <b-col sm="4"><label style="font-size: 10pt;">홈페이지(https://~~~)</label></b-col>
                                     <b-col sm="8">
                                         <b-form-input size="sm" v-model="form.homepage"></b-form-input>
                                     </b-col>

@@ -240,7 +240,7 @@ img {
 }
 
 .header-pc>*:last-child {
-    width: 20%;
+    width: 25%;
     text-align: right;
 }
 

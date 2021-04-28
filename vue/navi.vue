@@ -317,13 +317,15 @@ module.exports = {
             
         },
         logoutFn: async function () {
-            // cookie delete
-            document.cookie = 'laravel_session' + '=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
-            let rs = await axios.get(`${this.api_url}/auth/logout`)
-            if (rs.status == 200) {
-                window.location.href = '';
-            } else {
-                alert('logout 실패');
+            if (confirm('관리자페이지에서 로그아웃 하시겠습니까?')) {
+                // cookie delete
+                // document.cookie = 'laravel_session' + '=; expires=Thu, 01 Jan 1970 00:00:10 GMT;';
+                let rs = await axios.get(`${this.api_url}/auth/logout`)
+                if (rs.status == 200) {
+                    window.location.href = '';
+                } else {
+                    alert('logout 실패');
+                }
             }
         },
         goRedirect: async function () {

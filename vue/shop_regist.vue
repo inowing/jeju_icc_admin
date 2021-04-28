@@ -252,6 +252,7 @@ module.exports = {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            console.log('shop regist ', rs);
 
             function callback () {
                 this.$router.go(-1);

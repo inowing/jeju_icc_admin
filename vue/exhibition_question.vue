@@ -2,7 +2,7 @@
 <section>
     <b-row class="mb-1">
         <b-col>
-            <h6><strong>2.메뉴 및 컨텐츠 관리 > 컨텐츠 (관리) > {{company_name}} 문의 내역</strong></h6>
+            <h6><strong>2.메뉴 및 컨텐츠 관리 > 컨텐츠 (관리) > '{{company_name}}' 문의 내역</strong></h6>
             <b-button class="mt-2" href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
                 <b-icon-arrow-left></b-icon-arrow-left> 이전으로
             </b-button>
@@ -10,7 +10,6 @@
     </b-row>
     <b-row class="mt-3">
         <b-col>
-        <span>문의내역 </span>
         <b-button href="#" variant="primary" size="sm" @click="excelDownload" class="ml-1">
             <b-icon-download></b-icon-download> 엑셀 다운로드
         </b-button>
@@ -23,21 +22,31 @@
             </template>
 
             <template #cell(name)="row">
-                <div class="text-center">
+                <div class="text-center ino-space-dot" v-b-tooltip.hover :title="row.item.name" style="max-width:200px;">
                     {{row.item.name}}
                 </div>
             </template>
             <template #cell(phone)="row">
-                <div class="text-center">
+                <div class="text-center ino-space-dot" v-b-tooltip.hover :title="row.item.phone" style="max-width:200px;">
                     {{row.item.phone}}
                 </div>
             </template>
+            <template #cell(title)="row">
+                <div class="text-center ino-space-dot" v-b-tooltip.hover :title="row.item.title" style="max-width:200px;">
+                    {{row.item.title}}
+                </div>
+            </template>
             <template #cell(contents)="row">
-                <div class="text-center">
+                <div class="text-center ino-space-dot" v-b-tooltip.hover :title="row.item.contents" style="max-width:200px;">
                     {{row.item.contents}}
                     <!-- <b-button size="sm" variant="outline-info" @click="containModalOpen(row.item, $event, row.index)">
                         <b-icon-pencil-square></b-icon-pencil-square> 내용 확인
                     </b-button> -->
+                </div>
+            </template>
+            <template #cell(created_at)="row">
+                <div class="text-center">
+                    {{row.item.created_at}}
                 </div>
             </template>
             <template #cell(manageBtn)="row">
@@ -117,6 +126,10 @@ module.exports = {
                 {
                     key: 'contents',
                     label: '문의내용'
+                },
+                {
+                    key: 'created_at',
+                    label: '작성일자'
                 },
                 {
                     key: "manageBtn",

@@ -21,7 +21,7 @@
           </b-row>
           <b-row class="p-1" style="height: 42px;">
             <b-col cols="auto" class="mr-auto">
-              <b-button v-show="invitaion_tabIndex != 1" variant="outline-success" @click="openOverlayModal" size="sm">
+              <b-button variant="outline-success" @click="openOverlayModal" size="sm">
                 신규 계정 생성</b-button>
               <b-button href="#" variant="outline-success" size="sm" @click="excelUpload">
                 <b-icon-upload></b-icon-upload> 엑셀 업로드
@@ -94,7 +94,7 @@
           </b-row>
           <b-row class="p-1" style="height: 42px;">
             <b-col cols="auto" class="mr-auto">
-              <b-button v-show="invitaion_tabIndex != 1" variant="outline-success" @click="openOverlayModal" size="sm">
+              <b-button variant="outline-success" @click="openOverlayModal" size="sm">
                 신규 계정 생성</b-button>
               <b-button href="#" variant="outline-success" size="sm" @click="excelUpload">
                 <b-icon-upload></b-icon-upload> 엑셀 업로드
@@ -168,7 +168,7 @@
           </b-row>
           <b-row class="p-1" style="height: 42px;">
             <b-col cols="auto" class="mr-auto">
-              <b-button v-show="invitaion_tabIndex != 1" variant="outline-success" @click="openOverlayModal" size="sm">
+              <b-button variant="outline-success" @click="openOverlayModal" size="sm">
                 신규 계정 생성</b-button>
               <b-button href="#" variant="outline-success" size="sm" @click="excelUpload">
                 <b-icon-upload></b-icon-upload> 엑셀 업로드
@@ -232,6 +232,20 @@
         <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="이메일">
           <b-form-input size="sm" type="email" v-model="userForm.email" :state="user_validation.valid2" @keydown.enter="storeUser"></b-form-input>
         </b-form-group>
+
+        <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="소속">
+          <b-form-input size="sm" v-model="userForm.part" @keydown.enter="storeUser"></b-form-input>
+        </b-form-group>
+        <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="직책">
+          <b-form-input size="sm" type="email" v-model="userForm.position" @keydown.enter="storeUser"></b-form-input>
+        </b-form-group>
+
+        <b-form-group 
+          v-show="invitaion_tabIndex != 1"
+          label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="Passcode">
+          <b-form-input size="sm" type="email" v-model="userForm.passcode" @keydown.enter="storeUser"></b-form-input>
+        </b-form-group>
+
         <b-button size="sm" class="inoBtn-150" variant="success" @click="storeUser">생성</b-button>
       </b-modal>
 
@@ -549,6 +563,9 @@
           formData.append("conference_id", this.conference_item.id);
           formData.append("user_type", user_type);
           formData.append("name", this.userForm.name);
+          formData.append("part", this.userForm.part);
+          formData.append("position", this.userForm.position);
+          formData.append("passcode", this.userForm.passcode);
           formData.append("email", this.userForm.email);
           let rs = await axios.post(url, formData, {
             Headers: {
@@ -634,7 +651,8 @@
           });
           console.log(rs);
           this.spin_show2 = false;
-          this.$showMsgBoxTwo(rs.status, "", "email을 전송했습니다.");
+          let rsCnt = rs.data.result;
+          this.$showMsgBoxTwo(rs.status, "", `${rsCnt}명에 초청 email을 전송했습니다.`);
           this.modal3 = false;
         } catch (error) {
           this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);

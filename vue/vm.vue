@@ -144,13 +144,13 @@
                                 </b-button>
                                 예상 참가자수 <strong class="text-primary">{{ item.event_size }}</strong> 명
                               </p>
-                              <p class="mb-1">
+                              <p class="mb-3">
                                 <b-button size="sm" variant="danger" class="inoBtn-200">
                                   <b-icon-stop-circle></b-icon-stop-circle> BroadCast 멈추기
                                 </b-button>
                               </p>
-                              <p class="mb-1">
-                                <b-button size="sm" variant="success" class="inoBtn-200"
+                              <p class="mb-1 mt-3">
+                                <b-button size="sm" variant="success" class="inoBtn-200 mt-3"
                                   @click="openModal1($event, item)">
                                   <b-icon-files-alt></b-icon-files-alt> 수정
                                 </b-button>
@@ -162,13 +162,18 @@
                     </b-row>
 
                     <b-row class="text-right mb-1">
-                      <b-col>
-                        <b-button v-b-toggle="'toggle_'+item.id" size="sm" variant="outline-primary"
+                      <b-col cols="9"></b-col>
+                      <b-col cols="3">
+                        <b-button 
+                          style="float: left;"
+                          v-b-toggle="'toggle_'+item.id" size="sm" variant="outline-primary"
                           @click="openId.includes(item.id) ? openId.splice(openId.indexOf(item.id), 1) : openId.push(item.id);">
                           <b-icon-chevron-down v-show="!openId.includes(item.id)"></b-icon-chevron-down>
                           <b-icon-chevron-up v-show="openId.includes(item.id)"></b-icon-chevron-up>
                         </b-button>
-                        <b-button size="sm" variant="outline-danger" @click="deleteData(item)">
+                        <b-button 
+                          style="float: right;"
+                          size="sm" variant="outline-danger" @click="deleteData(item)">
                           <b-icon-trash></b-icon-trash>
                         </b-button>
                       </b-col>
@@ -300,13 +305,13 @@
                                 </b-button>
                                 예상 참가자수 <strong class="text-primary">{{ item.event_size }}</strong> 명
                               </p>
-                              <p class="mb-1">
+                              <p class="mb-1 mb-3">
                                 <b-button size="sm" variant="danger" class="inoBtn-200">
                                   <b-icon-stop-circle></b-icon-stop-circle> BroadCast 멈추기
                                 </b-button>
                               </p>
-                              <p class="mb-1">
-                                <b-button size="sm" variant="success" class="inoBtn-200"
+                              <p class="mb-1 mt-3">
+                                <b-button size="sm" variant="success" class="inoBtn-200 mt-3"
                                   @click="openModal1($event, item)">
                                   <b-icon-files-alt></b-icon-files-alt> 수정
                                 </b-button>
@@ -318,13 +323,18 @@
                     </b-row>
 
                     <b-row class="text-right mb-1">
-                      <b-col>
-                        <b-button v-b-toggle="'toggle_'+item.id" size="sm" variant="outline-primary"
+                      <b-col cols="9"></b-col>
+                      <b-col cols="3">
+                        <b-button 
+                          style="float: left;"
+                          v-b-toggle="'toggle_'+item.id" size="sm" variant="outline-primary"
                           @click="openId.includes(item.id) ? openId.splice(openId.indexOf(item.id), 1) : openId.push(item.id);">
                           <b-icon-chevron-down v-show="!openId.includes(item.id)"></b-icon-chevron-down>
                           <b-icon-chevron-up v-show="openId.includes(item.id)"></b-icon-chevron-up>
                         </b-button>
-                        <b-button size="sm" variant="outline-danger" @click="deleteData(item)">
+                        <b-button 
+                          style="float: right;"
+                          size="sm" variant="outline-danger" @click="deleteData(item)">
                           <b-icon-trash></b-icon-trash>
                         </b-button>
                       </b-col>
@@ -349,7 +359,7 @@
     </b-modal>
 
     <!-- qna -->
-    <b-modal v-model="modal2" hide-footer title="Q&A">
+    <b-modal v-model="modal2" hide-footer title="Q&A" size="xl">
       <vm-qna-modal :params="{conference_item}"></vm-qna-modal>
     </b-modal>
 

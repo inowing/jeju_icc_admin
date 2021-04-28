@@ -12,6 +12,9 @@
       <template #cell(name)="row">
         <div class="text-center">{{row.item.user.name}}</div>
       </template>
+      <template #cell(contents)="row">
+        <div class="text-center ino-space-dot" v-b-tooltip.hover :title="row.item.contents">{{row.item.contents}}</div>
+      </template>
       <template #cell(created_at)="row">
         <div class="text-center">{{row.item.created_at}}</div>
       </template>
@@ -41,16 +44,16 @@
             label: "아이디"
           },
           {
-            key: "contents",
-            label: "내용"
-          },
-          {
             key: "name",
             label: "작성자"
           },
           {
+            key: "contents",
+            label: "문의내용"
+          },
+          {
             key: "created_at",
-            label: "작성일"
+            label: "작성시간"
           },
           {
             key: "manageBtn",

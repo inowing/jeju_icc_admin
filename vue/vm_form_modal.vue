@@ -4,10 +4,14 @@
       <b-tabs card>
         <b-tab title="국문" active>
           <b-form-group label="Event title" label-variant="primary">
-            <b-form-input v-model="form.name" size="sm" :state="form.name ? true: false"></b-form-input>
+            <b-form-textarea 
+              rows="1"
+              v-model="form.name" size="sm" :state="form.name ? true: false"></b-form-textarea>
           </b-form-group>
-          <b-form-group label="Sub title">
-            <b-form-input v-model="form.sub_title" size="sm"></b-form-input>
+          <b-form-group label="Subtitle">
+            <b-form-textarea 
+              rows="1"
+              v-model="form.sub_title" size="sm"></b-form-textarea>
           </b-form-group>
           <b-form-group label="Venue">
             <b-form-input v-model="form.venue" size="sm" :state="form.venue ? true: false">
@@ -19,10 +23,14 @@
         </b-tab>
         <b-tab title="영문">
           <b-form-group label="Event title" label-variant="primary">
-            <b-form-input v-model="form.name_en" size="sm"></b-form-input>
+            <b-form-textarea 
+              rows="1"
+              v-model="form.name_en" size="sm"></b-form-textarea>
           </b-form-group>
-          <b-form-group label="Sub title">
-            <b-form-input v-model="form.sub_title_en" size="sm"></b-form-input>
+          <b-form-group label="Subtitle">
+            <b-form-textarea 
+              rows="1" 
+              v-model="form.sub_title_en" size="sm"></b-form-textarea>
           </b-form-group>
           <b-form-group label="Venue">
             <b-form-input v-model="form.venue_en" size="sm"></b-form-input>
@@ -231,7 +239,7 @@
         </div>
 
         <b-form-checkbox v-model="form.is_show_attendee_count" unchecked-value="0" value="1" variant="success">
-          Live Attendee
+          참여중인 Attendee 숫자 표시
         </b-form-checkbox>
 
         <b-form-checkbox v-model="form.is_play_music" unchecked-value="0" value="1" variant="success">
@@ -474,13 +482,15 @@
         let formData = new FormData();
 
         // event size
+        console.log('~~~~~~~~');
+        console.log(this.event_size);
         formData.append("event_size", this.event_size);
 
         if (this.form.survey_link && !this.form.survey_link.includes("http")) {
           this.form.survey_link = `http://${this.form.survey_link}`;
         }
         // etc
-        let skips = ["language", "date", "intro_background"];
+        let skips = ["language", "date", "intro_background", "event_size"];
         for (let item in this.form) {
           if (!skips.includes(item)) {
             formData.append(item, this.form[item]);

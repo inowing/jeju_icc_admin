@@ -47,8 +47,9 @@
                         <b-button size="sm" variant="outline-primary" @click="updateFn(row.item, $event, 1)">
                             <b-icon-film></b-icon-film>
                             전시관</b-button>
-                        <b-button size="sm" variant="outline-secondary" @click="goQuestion(row.item, $event)">
-                            <b-icon-patch-question-fill></b-icon-patch-question-fill>
+                        <b-button size="sm" :variant="row.item.not_read ? 'outline-danger' : 'outline-secondary'" @click="goQuestion(row.item, $event)">
+                            <b-icon-patch-exclamation-fill v-show="row.item.not_read"></b-icon-patch-exclamation-fill>
+                            <b-icon-patch-question-fill v-show="!row.item.not_read"></b-icon-patch-question-fill>
                             문의내역</b-button>
                         <b-button size="sm" variant="outline-danger" @click="deleteFn(row.item, $event)">
                             <b-icon-trash2-fill></b-icon-trash2-fill>

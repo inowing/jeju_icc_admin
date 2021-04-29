@@ -363,7 +363,9 @@
       this.event_id = this.$store.getters.event_id;
       this.api_url = this.$store.getters.api_url;
       await this.getUserList();
+      
     },
+
     computed: {
       validation: function () {
         return (

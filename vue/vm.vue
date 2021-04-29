@@ -373,7 +373,7 @@
       <!-- 숫자가 안넘어가서 객체로 넘겼음. -->
       <vm-invitation-modal :params="{conference_item, invitaion_tabIndex}" @get-list="getList"></vm-invitation-modal>
     </b-modal>
-
+    
   </section>
 </template>
 
@@ -430,6 +430,7 @@
         this.upcoming = rs.data.result.upcoming;
         this.past = rs.data.result.past;
         this.modal1 = false;
+        this.openId = [];
       },
       searchDayList: async function (index, item) {
         this.selected_btn_index = index;

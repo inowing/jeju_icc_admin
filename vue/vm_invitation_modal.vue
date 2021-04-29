@@ -234,7 +234,7 @@
         </b-form-group>
 
         <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="소속">
-          <b-form-input size="sm" v-model="userForm.part" @keydown.enter="storeUser"></b-form-input>
+          <b-form-input size="sm" v-model="userForm.department" @keydown.enter="storeUser"></b-form-input>
         </b-form-group>
         <b-form-group label-cols-sm="4" label-cols-lg="4" content-cols-sm content-cols-lg="8" label="직책">
           <b-form-input size="sm" type="email" v-model="userForm.position" @keydown.enter="storeUser"></b-form-input>
@@ -301,11 +301,11 @@
             label: "이메일"
           },
           {
-            key: "part",
+            key: "department",
             label: "소속"
           },
           {
-            key: "grade",
+            key: "position",
             label: "직책"
           },
           {
@@ -346,11 +346,11 @@
             label: "이메일"
           },
           {
-            key: "part",
+            key: "department",
             label: "소속"
           },
           {
-            key: "grade",
+            key: "position",
             label: "직책"
           },
           {
@@ -392,11 +392,11 @@
             label: "이메일"
           },
           {
-            key: "part",
+            key: "department",
             label: "소속"
           },
           {
-            key: "grade",
+            key: "position",
             label: "직책"
           },
           {
@@ -406,11 +406,7 @@
           {
             key: "time_invitation",
             label: "초대시간"
-          },
-          {
-            key: "passcode",
-            label: "passcode"
-          },
+          }
         ],
         attendee_pagination: {
           total_count: 0,
@@ -563,8 +559,8 @@
           formData.append("conference_id", this.conference_item.id);
           formData.append("user_type", user_type);
           formData.append("name", this.userForm.name);
-          formData.append("part", this.userForm.part);
-          formData.append("position", this.userForm.position);
+          formData.append("department", this.userForm.department); // 소속
+          formData.append("position", this.userForm.position); // 직책
           formData.append("passcode", this.userForm.passcode);
           formData.append("email", this.userForm.email);
           let rs = await axios.post(url, formData, {

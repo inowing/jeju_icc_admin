@@ -17,7 +17,7 @@
         <b-table :fields="fields" :items="items" small bordered head-variant="light" class="mt-1">
              <template #cell(index)="data">
                  <div class="text-center">
-                    {{ data.index + 1 }}
+                    {{ items.length - data.index }}
                  </div>
             </template>
 

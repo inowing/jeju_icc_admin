@@ -14,8 +14,7 @@
         <b-col>
           <b-form>
             <b-form-group label="대분류 :">
-              <b-form-select v-model="category.selected_top" :options="category.topcategory" size="sm"
-                @change="getSubcategory"></b-form-select>
+              <b-form-select v-model="category.selected_top" :options="category.topcategory" size="sm" @change="getSubcategory"></b-form-select>
             </b-form-group>
           </b-form>
         </b-col>
@@ -31,20 +30,14 @@
         <b-col>
           <b-form>
             <b-form-group label="기업 선택 :">
-              <b-form-select v-model="company_index" :options="company_list" size="sm"
-                @change="company = company_list[company_index]"></b-form-select>
+              <b-form-select v-model="company_index" :options="company_list" size="sm" @change="company = company_list[company_index]"></b-form-select>
             </b-form-group>
           </b-form>
         </b-col>
         <b-col>
           <b-form>
             <b-form-group label="기업노출/미노출 :">
-              <b-form-radio-group 
-                size="sm" 
-                v-model="boothForm.is_top" 
-                :options="is_show_options"
-                buttons 
-                button-variant="outline-primary">
+              <b-form-radio-group size="sm" buttons  button-variant="outline-primary" v-model="boothForm.is_top" :options="is_show_options">
               </b-form-radio-group>
             </b-form-group>
           </b-form>
@@ -59,9 +52,7 @@
             <b-col>
               <b-card>
                 <b-card-text align="center" class="ino-400-320-wrap">
-                  <div>
-                    <b-img :src="logo_preview_local||logo_preview_default" fluid></b-img>
-                  </div>
+                  <div><b-img :src="logo_preview_local||logo_preview_default" fluid></b-img></div>
                 </b-card-text>
               </b-card>
               <b-form inline class="mt-1">
@@ -347,6 +338,7 @@
       return {
         api_url: this.$store.getters.api_url,
         menu_id: this.$route.query.menu_id,
+        editorOption: {theme: "snow"}, // 퀼 에디터 옵션
 
         // category - 대,소분류
         category: {
@@ -382,8 +374,8 @@
         file_src: 'No file chosen', // 카탈로그 DB 소스 경로
         file_en: null,
         file_en_src: 'No file chosen',
-        // 이미지 관련 end
-
+        // 이미지 관련 ... end
+        
         // 기업소개자료
         introduction_fields: [
           {key: 'id', label: '아이디'},
@@ -393,19 +385,11 @@
           {key: 'link', label: '링크'},
           {key: "manageBtn", label: "관리항목"}
         ],
-        
-        // 퀼 에디터 옵션
-        // desc_byte: 0,
-        // desc_en_byte: 0,
-        editorOption: {
-          theme: "snow",
-        },
 
-        // 모달...
+        // 모달 관련
         isNew: true,
+        selected_item: {}, // 선택된 기업소개자료
         selected_index: 0,
-        // "lang_type": 0, // 0- 국문, 1 - 영문
-        selected_item: {},
         e_library_delete_ids: [],
         introduction_modal: false
       }
@@ -433,7 +417,6 @@
         return this.strByteLength(this.boothForm.desc_en);
       }
     },
-
     methods: {
       /**
        * API 연동
@@ -615,27 +598,10 @@
         switch (item.library_type) {
           case 0:
             // photo_1_del~10_del ....   photo_1_del 조작이 필요하다.
-            !item.photo_1.file && item.photo_1.del ? formData2.append('photo_1_del', 'Y') : formData2.append('photo_1', item.photo_1.file);
-            !item.photo_2.file && item.photo_2.del ? formData2.append('photo_2_del', 'Y') : formData2.append('photo_2', item.photo_2.file);
-            !item.photo_3.file && item.photo_3.del ? formData2.append('photo_3_del', 'Y') : formData2.append('photo_3', item.photo_3.file);
-            !item.photo_4.file && item.photo_4.del ? formData2.append('photo_4_del', 'Y') : formData2.append('photo_4', item.photo_4.file);
-            !item.photo_5.file && item.photo_5.del ? formData2.append('photo_5_del', 'Y') : formData2.append('photo_5', item.photo_5.file);
-            !item.photo_6.file && item.photo_6.del ? formData2.append('photo_6_del', 'Y') : formData2.append('photo_6', item.photo_6.file);
-            !item.photo_7.file && item.photo_7.del ? formData2.append('photo_7_del', 'Y') : formData2.append('photo_7', item.photo_7.file);
-            !item.photo_8.file && item.photo_8.del ? formData2.append('photo_8_del', 'Y') : formData2.append('photo_8', item.photo_8.file);
-            !item.photo_9.file && item.photo_9.del ? formData2.append('photo_9_del', 'Y') : formData2.append('photo_9', item.photo_9.file);
-            !item.photo_10.file && item.photo_10.del ? formData2.append('photo_10_del', 'Y') : formData2.append('photo_10', item.photo_10.file);
-
-            formData2.append('photo_1_message', item.photo_1.message);
-            formData2.append('photo_2_message', item.photo_2.message);
-            formData2.append('photo_3_message', item.photo_3.message);
-            formData2.append('photo_4_message', item.photo_4.message);
-            formData2.append('photo_5_message', item.photo_5.message);
-            formData2.append('photo_6_message', item.photo_6.message);
-            formData2.append('photo_7_message', item.photo_7.message);
-            formData2.append('photo_8_message', item.photo_8.message);
-            formData2.append('photo_9_message', item.photo_9.message);
-            formData2.append('photo_10_message', item.photo_10.message);
+            for (var i = 1; i < 11; i++) {
+              !item[`photo_${i}`].file && item[`photo_${i}`].del ? formData2.append(`photo_${i}_del`, 'Y') : formData2.append(`photo_${i}`, item[`photo_${i}`].file);
+              formData2.append(`photo_${i}_message`, item[`photo_${i}`].message);
+            }
             break;
           case 1:
             !item.thumb_prev && item.thumb_prev_del ? formData2.append('image_prev_del', 'Y') : formData2.append('image_prev', item.image_prev); // 유튜브 썸네일 프리뷰 파일

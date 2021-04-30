@@ -342,8 +342,8 @@ module.exports = {
   data: function () {
     return {
       selected_item: this.params.selected_item,
-
       isNew: this.params.isNew,
+
       library_type_options: [
         {value: 0, text: '이미지'},
         {value: 1, text: 'YouTube'},
@@ -364,25 +364,18 @@ module.exports = {
       photo_8_prev: '',
       photo_9_prev: '',
       photo_10_prev: '',
-      photo_prev_default: this.$store.getters.dummy_image_url(['180x180']),
       thumb_prev: this.params.selected_item.image_prev, // youtube, movie 썸네일 같이쓴다
-      movie_file_src: this.params.selected_item.file,
+      movie_file_src: this.params.selected_item.file, // 영상 첨부파일
+      photo_prev_default: this.$store.getters.dummy_image_url(['180x180']),
       thumb_prev_default: this.$store.getters.dummy_image_url(['180x180']),
-      e_library_delete_ids: [],
     }
   },
   methods: {
-    // this.$emit('add-item'); // 이름이 같으면 동작 안된다.
-    // this.$emit('update-item'); // 이름이 같으면 동작 안된다.
     imagePrev: function (e, key) {
       const file = e.target.files[0];
       let file_url = URL.createObjectURL(file);
       this.selected_item[key].url = file_url;
       this[key + "_prev"] = file_url;
-      // item.photo_1.url = file_url;
-      // this.photo_1_prev = file_url; // 개별컴포넌트에 변경되는 url 받아줄 변수가 있어야함.
-      console.log('imagePrev')
-
     },
   }
 }

@@ -311,11 +311,21 @@
         <b-row>
           <b-col sm="4"><label style="font-size: 10pt;">영상 파일</label></b-col>
           <b-col sm="8">
+<!--             
             <b-form-file v-model="selected_item.file" size="sm" :placeholder="movie_file_src" style="width: 260px;"
               class="mr-1">
             </b-form-file>
             <b-button @click="selected_item.file = null; selected_item.movie_file_del = true; movie_file_src='';"
-              size="sm" variant="danger">영상 삭제</b-button>
+              size="sm" variant="danger">영상 삭제</b-button> -->
+
+              <b-input-group v-show="movie_file_src" prepend="file" size="sm">
+                  <b-form-input disabled :value="movie_file_src"></b-form-input>
+                  <b-input-group-append>
+                      <b-button variant="outline-success" @click="fileDownload(movie_file_src)"><b-icon-download></b-icon-download></b-button>
+                      <b-button variant="danger" @click="selected_item.file=null; movie_file_src=''; selected_item.movie_file_del = true;"><b-icon-trash></b-icon-trash></b-button>
+                  </b-input-group-append>
+              </b-input-group>
+              <b-form-file v-show="!movie_file_src" v-model="selected_item.file" size="sm" class="w-50 mr-sm-2"></b-form-file>
           </b-col>
         </b-row>
         <b-row class="mt-1">
@@ -377,6 +387,14 @@ module.exports = {
       this.selected_item[key].url = file_url;
       this[key + "_prev"] = file_url;
     },
+    fileDownload(url) {
+      var link = document.createElement("a");
+      link.setAttribute('download', '');
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
   }
 }
 </script>

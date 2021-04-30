@@ -677,10 +677,9 @@
         console.log(item);
         this.isNew = false; // 이제 모달에서 수정 버튼으로 보이도록 값을 바꾼다.
         this.selected_index = index; // 선택한 인덱스 저장해둔다. 바꿀자리 찾기 위해서...
-        
+
         this.selected_item = {
           ...item,
-          file: null,
           thumb_prev_del: false, // 썸네일 이미지 지울까요
           movie_file_del: false, // 첨부 영상 파일 지울까요
         };

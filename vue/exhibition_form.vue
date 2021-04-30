@@ -66,8 +66,14 @@
               <b-form inline class="mt-1">
                 <span class="mr-sm-2" style="width: 100px;">카탈로그#1</span>
                 <span>:&nbsp;</span>
-                <b-form-file v-model="file" :placeholder="file_src" size="sm" style="width:250px;" class="mr-1"></b-form-file>
-                <b-button @click="file = null; file_src='No file chosen';" size="sm" variant="danger">삭제</b-button>
+                <b-input-group v-show="file_src" prepend="file" size="sm">
+                    <b-form-input disabled :value="file_src"></b-form-input>
+                    <b-input-group-append>
+                        <b-button variant="outline-success" @click="fileDownload(file_src)"><b-icon-download></b-icon-download></b-button>
+                        <b-button variant="danger" @click="file=null; file_src=''; file_del = true;"><b-icon-trash></b-icon-trash></b-button>
+                    </b-input-group-append>
+                </b-input-group>
+                <b-form-file v-show="!file_src" v-model="file" size="sm" class="w-50 mr-sm-2"></b-form-file>
               </b-form>
               <b-form inline class="mt-1">
                 <span class="mr-sm-2" style="width: 100px;">방문자</span>
@@ -191,16 +197,21 @@
               <b-form inline class="mt-1">
                 <span class="mr-sm-2" style="width: 100px;">업체로고#1</span>
                 <span>:&nbsp;</span>
-                <b-form-file v-model="logo_en_file" @change="onFileChange($event, 'logo_en_preview_local')"
-                  size="sm" class="mr-1" style="width:250px;">
+                <b-form-file v-model="logo_en_file" @change="onFileChange($event, 'logo_en_preview_local')" size="sm" class="mr-1" style="width:250px;">
                 </b-form-file>
-                <b-button @click="logo_en_file = null; logo_en_preview_local = null; logo_en_del = true;" size="sm" variant="danger">삭제</b-button>
+                <b-button @click="logo_en_file = null; logo_en_preview_local = null; logo_en_del = true;" variant="danger" size="sm">삭제</b-button>
               </b-form>
               <b-form inline class="mt-1">
                 <span class="mr-sm-2" style="width: 100px;">카탈로그#1</span>
                 <span>:&nbsp;</span>
-                <b-form-file v-model="file_en" :placeholder="file_en_src" size="sm" style="width:250px;" class="mr-1"></b-form-file>
-                <b-button @click="file_en = null; file_en_src='No file chosen';" size="sm" variant="danger">삭제</b-button>
+                <b-input-group v-show="file_en_src" prepend="file" size="sm">
+                    <b-form-input disabled :value="file_en_src"></b-form-input>
+                    <b-input-group-append>
+                        <b-button variant="outline-success" @click="fileDownload(file_en_src)"><b-icon-download></b-icon-download></b-button>
+                        <b-button variant="danger" @click="file_en=null; file_en_src=''; file_en_del = true;"><b-icon-trash></b-icon-trash></b-button>
+                    </b-input-group-append>
+                </b-input-group>
+                <b-form-file v-show="!file_en_src" v-model="file_en" size="sm" class="w-50 mr-sm-2"></b-form-file>
               </b-form>
               <b-form inline class="mt-1">
                 <span class="mr-sm-2" style="width: 100px;">방문자</span>
@@ -372,8 +383,10 @@
 
         file: null, // 카탈로그
         file_src: 'No file chosen', // 카탈로그 DB 소스 경로
+        file_del: false,
         file_en: null,
         file_en_src: 'No file chosen',
+        file_en_del: false,
         // 이미지 관련 ... end
         
         // 기업소개자료
@@ -416,6 +429,14 @@
       desc_en_byte: function () {
         return this.strByteLength(this.boothForm.desc_en);
       }
+    },
+    watch: {
+      // boothForm: {
+      //   deap: true,
+      //   handler(newData) {
+      //     console.log(`data changed %o`, newData);
+      //   }
+      // }
     },
     methods: {
       /**
@@ -512,18 +533,8 @@
           element[1] + '' ? formData.append(element[0], element[1]) : '';
         });
 
-        if (!this.file && this.file_src == 'No file chosen') {
-          formData.append('file_del', 'Y');
-        }
-        if (this.file) {
-          formData.append('file', this.file);
-        }
-        if (!this.file_en && this.file_en_src == 'No file chosen') {
-          formData.append('file_en_del', 'Y');
-        }
-        if (this.file_en) {
-          formData.append('file_en', this.file_en);
-        }
+        !this.file && this.file_del ? formData.append('file_del', 'Y') : formData.append('file', this.file);
+        !this.file_en && this.file_en_del ? formData.append('file_en_del', 'Y') : formData.append('file_en', this.file_en);
 
         !this.logo_file && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.logo_file);
         !this.logo_en_file && this.logo_en_del ? formData.append('logo_en_del', 'Y') : formData.append('logo_en', this.logo_en_file);
@@ -564,11 +575,12 @@
             }
           }
           for (let item of this.boothForm.introduction_en) {
-            if (item.id) { // 소개자료 수정한 경우
-              await this.postIntroduction(item, `${this.api_url}/e_library/${item.id}`);
-            } else { // 소개자료가 더 추가된 경우
-              await this.postIntroduction(item, intro_store_url, this.$route.query.id);
-            }
+            // todo. 영문 API 미작동으로 덮어써지면서 사이드이팩트 발생하여 막았음....
+            // if (item.id) { // 소개자료 수정한 경우
+            //   await this.postIntroduction(item, `${this.api_url}/e_library/${item.id}`);
+            // } else { // 소개자료가 더 추가된 경우
+            //   await this.postIntroduction(item, intro_store_url, this.$route.query.id);
+            // }
           }
           for (let id of this.e_library_delete_ids) {
             // 소개자료가 지워진 경우
@@ -592,6 +604,8 @@
         formData2.append('type', 0); // 기업소개자료
         formData2.append('library_type', item.library_type);
         formData2.append('lang_type', item.lang_type);
+
+        console.log('update!!!!', item);
         formData2.append('title', item.title);
         formData2.append('order', item.order);
 
@@ -608,8 +622,9 @@
             formData2.append('link', item.link);
             formData2.append('link_message', item.link_message);
             break;
-          default:
+          case 2:
             // 2 영상파일
+            console.log('ya.... c8 ', item.title);
             !item.thumb_prev && item.thumb_prev_del ? formData2.append('image_prev_del', 'Y') : formData2.append('image_prev', item.image_prev); // 영상 썸네일 프리뷰 파일
             !item.file && item.movie_file_del ? formData2.append('file_del', 'Y') : formData2.append('file', item.file); // 영상 파일
             formData2.append('link_message', item.link_message); // 영상 메시지
@@ -659,22 +674,42 @@
       },
       introductionUpdateFn: async function (item, event, index) {
         // 기업소개자료 수정하기 세팅
+        console.log(item);
         this.isNew = false; // 이제 모달에서 수정 버튼으로 보이도록 값을 바꾼다.
         this.selected_index = index; // 선택한 인덱스 저장해둔다. 바꿀자리 찾기 위해서...
+        
         this.selected_item = {
           ...item,
           file: null,
           thumb_prev_del: false, // 썸네일 이미지 지울까요
           movie_file_del: false, // 첨부 영상 파일 지울까요
         };
+        let thumb_prev = '';
+        console.log('item.thumb_prev', item.thumb_prev);
+        if (item.thumb_prev) {
+          thumb_prev = item.thumb_prev
+        } else if (typeof item.image_prev === 'string') {
+          thumb_prev = item.image_prev;
+        }
+        this.selected_item.thumb_prev = thumb_prev;
+        
+        console.log(this.selected_item);
         this.introduction_modal = true; // 모달을 연다.
       },
       updateItemFn: function () {
         // 기업소개자료 모달의 수정버튼을 누른다.
+        console.log('update item... ', this.tabIndex, this.selected_index, this.selected_item)
+        
         if (this.tabIndex == 0) {
-          this.boothForm.introduction[this.selected_index] = {...this.selected_item}; // 목록에서 수정된 아이템을 바꿔준다.
+          let newArr = [...this.boothForm.introduction];
+          newArr[this.selected_index] = {...this.selected_item};
+          this.boothForm.introduction = newArr; // 목록에서 수정된 아이템을 바꿔준다.
+          // this.boothForm.introduction[this.selected_index] = Object.create(this.selected_item); // 목록에서 수정된 아이템을 바꿔준다.
         } else {
-          this.boothForm.introduction_en[this.selected_index] = {...this.selected_item}; // 목록에서 수정된 아이템을 바꿔준다.
+          let newArr = [...this.boothForm.introduction_en];
+          newArr[this.selected_index] = {...this.selected_item};
+          this.boothForm.introduction_en = newArr; // 목록에서 수정된 아이템을 바꿔준다.
+          // this.boothForm.introduction_en[this.selected_index] = Object.create(this.selected_item); // 목록에서 수정된 아이템을 바꿔준다.
         }
         this.introduction_modal = false; // 모달을 닫는다.
       },
@@ -692,6 +727,14 @@
         if (!s) return 0;
         for (b = i = 0; c = s.charCodeAt(i++); b += c >> 11 ? 3 : c >> 7 ? 2 : 1);
         return b
+      },
+      fileDownload(url) {
+        var link = document.createElement("a");
+        link.setAttribute('download', '');
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
       }
     }
   }

@@ -258,14 +258,14 @@
         <b-card align="center">
           <b-card-text class="ino-180-180-wrap">
             <div>
-              <b-img :src="thumb_prev||thumb_prev_default" fluid></b-img>
+              <b-img :src="selected_item.thumb_prev||thumb_prev_default" fluid></b-img>
             </div>
           </b-card-text>
           <b-form inline class="mt-1">
             <b-form-file v-model="selected_item.image_prev" ref="file-input"
-              @change="onFileChange($event, 'thumb_prev')" size="sm" style="width:300px;" class="mr-1">
+              @change="onFileChange($event, 'thumb_prev', selected_item)" size="sm" style="width:300px;" class="mr-1">
             </b-form-file>
-            <b-button @click="selected_item.image_prev = null; thumb_prev = null; selected_item.thumb_prev_del = true;"
+            <b-button @click="selected_item.image_prev = null; selected_item.thumb_prev = null; selected_item.thumb_prev_del = true;"
               size="sm" variant="danger">이미지 삭제</b-button>
           </b-form>
         </b-card>
@@ -295,14 +295,14 @@
           <!-- <b-img :src="thumb_prev||thumb_prev_default" fluid alt="Responsive image" style="max-width:250px;"></b-img> -->
           <b-card-text class="ino-180-180-wrap">
             <div>
-              <b-img :src="thumb_prev||thumb_prev_default" fluid></b-img>
+              <b-img :src="selected_item.thumb_prev||thumb_prev_default" fluid></b-img>
             </div>
           </b-card-text>
           <b-form inline class="mt-1">
             <b-form-file v-model="selected_item.image_prev" ref="file-input"
-              @change="onFileChange($event, 'thumb_prev')" size="sm" style="width:300px;" class="mr-1">
+              @change="onFileChange($event, 'thumb_prev', selected_item)" size="sm" style="width:300px;" class="mr-1">
             </b-form-file>
-            <b-button @click="selected_item.image_prev = null; thumb_prev = null; selected_item.thumb_prev_del = true;"
+            <b-button @click="selected_item.image_prev = null; selected_item.thumb_prev = null; selected_item.thumb_prev_del = true;"
               size="sm" variant="danger">이미지 삭제</b-button>
           </b-form>
         </b-card>
@@ -364,7 +364,7 @@ module.exports = {
       photo_8_prev: '',
       photo_9_prev: '',
       photo_10_prev: '',
-      thumb_prev: this.params.selected_item.image_prev, // youtube, movie 썸네일 같이쓴다
+      // thumb_prev: this.params.selected_item.thumb_prev, // youtube, movie 썸네일 같이쓴다
       movie_file_src: this.params.selected_item.file, // 영상 첨부파일
       photo_prev_default: this.$store.getters.dummy_image_url(['180x180']),
       thumb_prev_default: this.$store.getters.dummy_image_url(['180x180']),

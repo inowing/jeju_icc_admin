@@ -30,7 +30,7 @@
 
 <script>
 module.exports = {
-    name: "survey_list",
+    name: "sns_list",
     data: function () {
         return {
             event_id: 0,
@@ -74,7 +74,7 @@ module.exports = {
          *  리스트
          **/
         getList: async function () {
-            let url = `${this.api_url}/survey?menu_id=${this.menu_id}`;
+            let url = `${this.api_url}/sns?menu_id=${this.menu_id}`;
             let rs = await axios.get(url);
             console.log(rs);
             this.items = rs.data.result;
@@ -82,14 +82,14 @@ module.exports = {
         goForm: function (event, item) {
             if (item) {
                 console.log('id? ', item);
-                this.$router.push({ name: 'survey_form', query: {menu_id: this.menu_id, id: item.id}});
+                this.$router.push({ name: 'sns_form', query: {menu_id: this.menu_id, id: item.id}});
             } else {
-                this.$router.push({ name: 'survey_form', query: {menu_id: this.menu_id}});
+                this.$router.push({ name: 'sns_form', query: {menu_id: this.menu_id}});
             }
         },
         deleteData: async function (event, item) {
             console.log(item);
-            let url = `${this.api_url}/survey/${item.id}`;
+            let url = `${this.api_url}/sns/${item.id}`;
             
             try {
                 if (confirm('삭제 하시겠습니까?')) {

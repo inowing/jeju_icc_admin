@@ -323,9 +323,6 @@ module.exports = {
 
 
         },
-        userUpdate(item, index, target) {
-            console.log(item, index, target);
-        },
         userDelete: async function (item, index, target) {
             if (confirm("삭제 하시겠습니까?")) {
                 let rs = await axios.delete(`${this.api_url}/user/${item.id}`);
@@ -336,7 +333,7 @@ module.exports = {
         storeData: async function () {
             console.log(this.validation, this.form);
             if (!this.validation) return;
-            if (!this.password) {
+            if (!this.form.password) {
                 this.password_confirm = 'password를 입력하고 확인하세요.';
                 return;
             }
@@ -379,7 +376,7 @@ module.exports = {
 
             let url = `${this.api_url}/user/${this.form.id}`;
             let formData = new FormData();
-            if (this.password) {
+            if (this.form.password) {
                 formData.append('password', this.form.password);
             }
             formData.append('name', this.form.name);

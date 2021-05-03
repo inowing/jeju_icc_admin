@@ -618,38 +618,42 @@
       sendEmail: async function () {
         console.log('send mail');
         try {
-          // let user_type = this.invitaion_tabIndex;
-          let user_type = this.invitaion_tabIndex == 0 ? 1 : this.invitaion_tabIndex == 1 ? 2 : 0;
-          // user_type : 0 - Operator, 1 - Moderator/Presenter, 2 - Attendee, 3 - language
-          let url = `${this.api_url}/conference_invitation/send_invitation`;
-          let formData = new FormData();
-            formData.append("conference_id", this.conference_item.id);
-            formData.append("user_type", user_type);
-
           // todo. 선택된 탭의 체크된 리스트를 보내야 한다.
+          let user_type = this.invitaion_tabIndex == 0 ? 1 : this.invitaion_tabIndex == 1 ? 2 : 0;
           let arr = user_type == 0 ? this.operator_allSelected : (user_type == 1 ? this.moderator_allSelected : this.attendee_allSelected);
           
-          console.log(arr);
           if (arr.length == 0) {
             return;
           }
-          for (var i = 0; i < arr.length; i++) {
-            let item = arr[i];
-            console.log(item);
-            formData.append("users[]", item.id); 
-          }
-          
-          this.spin_show2 = true;
-          let rs = await axios.post(url, formData, {
-            Headers: {
-              "Content-Type": "application/json"
+
+          if (confirm(`${arr.length}명에 초대메일을 전송하시겠습니까?`)) {
+            // let user_type = this.invitaion_tabIndex;
+            
+            // user_type : 0 - Operator, 1 - Moderator/Presenter, 2 - Attendee, 3 - language
+            let url = `${this.api_url}/conference_invitation/send_invitation`;
+            let formData = new FormData();
+              formData.append("conference_id", this.conference_item.id);
+              formData.append("user_type", user_type);
+  
+            for (var i = 0; i < arr.length; i++) {
+              let item = arr[i];
+              console.log(item);
+              formData.append("users[]", item.id); 
             }
-          });
-          console.log(rs);
-          this.spin_show2 = false;
-          let rsCnt = rs.data.result;
-          this.$showMsgBoxTwo(rs.status, "", `${rsCnt}명에 초청 email을 전송했습니다.`);
-          this.modal3 = false;
+            
+            this.spin_show2 = true;
+            let rs = await axios.post(url, formData, {
+              Headers: {
+                "Content-Type": "application/json"
+              }
+            });
+            console.log(rs);
+            this.spin_show2 = false;
+            let rsCnt = rs.data.result;
+            this.$showMsgBoxTwo(rs.status, "", `${rsCnt}명에 초청 email을 전송했습니다.`);
+            this.modal3 = false;
+          }
+
         } catch (error) {
           this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);
         }

@@ -39,7 +39,7 @@
                         </b-form-group>
                     </b-col>
                     <b-col>
-                        <b-form-group label="상풍명,구매자">
+                        <b-form-group label="상품명,구매자">
                             <b-form-input size="sm" v-model="search_key"></b-form-input>
                         </b-form-group>
                     </b-col>
@@ -334,6 +334,8 @@ module.exports = {
 
     methods: {
         getList: async function () {
+            // search_key
+            // 
             console.log('this event_id : %s, menu_id : %s', this.event_id, this.menu_id);
             let url = `${this.api_url}/order?menu_id=${this.menu_id}`;
             console.log(url);

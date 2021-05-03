@@ -22,9 +22,9 @@
                 </b-col>
                 <b-col cols="4">
                     <b-input-group size="sm" align-v="baseline">
-                        <b-form-input aria-placeholder="검색어를 입력하세요."></b-form-input>
+                        <b-form-input aria-placeholder="검색어를 입력하세요." v-model="searchKey"></b-form-input>
                         <b-input-group-append>
-                            <b-button variant="info" size="sm">검색하기</b-button>
+                            <b-button variant="info" size="sm" @click="getList">검색하기</b-button>
                         </b-input-group-append>
                     </b-input-group>
                 </b-col>
@@ -144,6 +144,7 @@ module.exports = {
 
     methods: {
         getList: async function () {
+            // search_key
             console.log('this event_id : ', this.event_id);
             let response = await axios.get(`${this.api_url}/product?menu_id=${this.menu_id}`);
             let rs = response.data.result;

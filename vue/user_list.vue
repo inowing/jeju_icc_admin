@@ -8,9 +8,9 @@
         </b-col>
         <b-col cols="4">
             <b-input-group size="sm" align-v="baseline" class="text-right">
-                <b-form-input aria-placeholder="검색어를 입력하세요."></b-form-input>
+                <b-form-input aria-placeholder="검색어를 입력하세요." v-model="search_key"></b-form-input>
                 <b-input-group-append>
-                    <b-button variant="info" size="sm">검색하기</b-button>
+                    <b-button variant="info" size="sm" @click="getList" @keydown.enter="getList">검색하기</b-button>
                 </b-input-group-append>
             </b-input-group>
         </b-col>
@@ -196,7 +196,7 @@ module.exports = {
     data: function () {
         return {
             modal1: false,
-
+            search_key: '',
             form: {
                 email: '',
                 password: '',
@@ -307,7 +307,11 @@ module.exports = {
 
     methods: {
         getList: async function () {
-            let rs = await axios.get(`${this.api_url}/user/in_event?event_id=${this.event_id}`);
+            let url = `${this.api_url}/user/in_event?event_id=${this.event_id}`;
+            if (this.search_key) {
+                url = url + '&search_key=' + this.search_key;
+            }
+            let rs = await axios.get(url);
             this.items = rs.data.result;
             // console.log(this.items);
             // admin_level

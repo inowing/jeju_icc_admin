@@ -6,15 +6,18 @@
             
             <b-col cols="8">
 				<b-input-group size="sm" align-v="baseline">
-                    <b-form-select v-model="selected" :options="options" size="sm" style="max-width: 150px;" class="mr-2"></b-form-select>
+                    <b-form-select 
+                        size="sm" style="max-width: 150px;" class="mr-2"
+                        v-model="selected" :options="options" 
+                        @change="getList"></b-form-select>
                     <b-link to="/company/regist">
                         <b-button size="sm" variant="primary"><b-icon-plus></b-icon-plus>기업추가하기</b-button>
                     </b-link>
 					<b-form-input v-model="search_key" 
-                        @keydown.enter="getList(search_key)"
+                        @keydown.enter="getList"
                         aria-placeholder="검색어를 입력하세요." style="max-width: 300px;" class="ml-2"></b-form-input>
 					<b-input-group-append>
-						<b-button variant="info" size="sm" @click="getList(search_key)">검색하기</b-button>
+						<b-button variant="info" size="sm" @click="getList">검색하기</b-button>
 					</b-input-group-append>
 				</b-input-group>
             </b-col>
@@ -29,6 +32,16 @@
         <b-table :fields="fields" :items="items" small bordered head-variant="light" class="mt-1" style="font-size: 9pt; vertical-align: center; line-height:33px;">
             <template #cell(No)="row">
                 <div class="text-center">{{items.length - row.index}}</div>
+            </template>
+            <template #cell(logo)="row">
+                <b-img 
+                    :src="row.item.logo||$store.getters.dummy_image_url(['30x30'])" 
+                    :id="'tooltip_image_'+row.item.id" 
+                    fluid 
+                    style="width:30px; max-height:30px;"></b-img>
+                <b-tooltip :target="'tooltip_image_'+row.item.id" title="Online!" variant="light">
+                    <b-img :src="row.item.logo||$store.getters.dummy_image_url(['30x30'])" fluid ></b-img>
+                </b-tooltip>
             </template>
             <template #cell(attend_type)="row">
                 <div class="text-center">{{row.item.attend_type == 0 ? '바이어' : '셀러'}}</div>
@@ -139,6 +152,10 @@ module.exports = {
                     label: 'No'
                 },
                 {
+                    key: 'logo',
+                    label: '로고'
+                },
+                {
                     key: 'attend_type',
                     label: '기업구분'
                 },
@@ -211,15 +228,31 @@ module.exports = {
             this.getList();
         })
     },
+    watch: {
+        search_key: function (newval, oldval) {
+            if (oldval && !newval) {
+                console.log('search fire');
+                this.getList();
+            }
+        }
+    },
 
     methods: {
-        getList: async function (search_key) {
-            let url = `${this.api_url}/company?event_id=${this.event_id}`;
-            if (search_key) {
-                url = url + `&search_key=${search_key}`;
+        getList: async function () {
+            // selected
+            let url = `${this.api_url}/company?event_id=${this.event_id}&status=1`;
+            if (this.selected) {
+                if (this.selected == 'buyer') {
+                    url = url + `&attend_type=0`;
+                } else {
+                    url = url + `&attend_type=1`;
+                }
             }
+            if (this.search_key) {
+                url = url + `&search_key=${this.search_key}`;
+            }
+            
             let response = await axios.get(url);
-            console.log(this.event_id);
             let rs = response.data.result;
             console.log('company list data ', response);
             this.items = rs;

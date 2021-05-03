@@ -167,6 +167,7 @@ module.exports = {
             is_bizmatching_cross_meeting: 0,
 			match_options: [
 				{ value: 0, text: '양방향' },
+				{ value: 1, text: '단방향' },
 				{ value: 1, text: '단방향' }
 			],
             

@@ -54,6 +54,23 @@
                 <b-col>
                     <form size="sm">
                         <div class="form-group">
+                            <b-form-checkbox v-model="is_visible_search_option" name="check-button" switch>
+                                <strong>검색바 : {{ is_visible_search_option ? "보이기" : "안보이기"}}</strong>
+                            </b-form-checkbox>
+                        </div>
+                    </form>
+
+                    <form size="sm">
+                        <div class="form-group">
+                            <b-form-checkbox v-model="is_visible_category" name="check-button" switch>
+                                <strong>카테고리 선택 : {{ is_visible_category ? "보이기" : "안보이기" }}</strong>
+                            </b-form-checkbox>
+                        </div>
+                    </form>
+                </b-col>
+                <b-col>
+                    <form size="sm">
+                        <div class="form-group">
                             <b-form-checkbox v-model="exhibition_search_selling" name="check-button" switch>
                                 <strong>매출액 : {{ exhibition_search_selling ? "보이기" : "안보이기"}}</strong>
                             </b-form-checkbox>
@@ -70,23 +87,6 @@
                         <div class="form-group">
                             <b-form-checkbox v-model="exhibition_search_type" name="check-button" switch>
                                 <strong>회사규모 : {{ exhibition_search_type ? "보이기" : "안보이기"}}</strong>
-                            </b-form-checkbox>
-                        </div>
-                    </form>
-                </b-col>
-                <b-col>
-                    <form size="sm">
-                        <div class="form-group">
-                            <b-form-checkbox v-model="is_visible_search_option" name="check-button" switch>
-                                <strong>검색바 : {{ is_visible_search_option ? "보이기" : "안보이기"}}</strong>
-                            </b-form-checkbox>
-                        </div>
-                    </form>
-
-                    <form size="sm">
-                        <div class="form-group">
-                            <b-form-checkbox v-model="is_visible_category" name="check-button" switch>
-                                <strong>카테고리 선택 : {{ is_visible_category ? "보이기" : "안보이기" }}</strong>
                             </b-form-checkbox>
                         </div>
                     </form>

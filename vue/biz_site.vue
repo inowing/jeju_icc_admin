@@ -167,9 +167,9 @@ module.exports = {
 			],
             is_bizmatching_cross_meeting: 0,
 			match_options: [
-				{ value: 2, text: '양방향' },
 				{ value: 0, text: '셀러 -> 바이어' },
-				{ value: 1, text: '바이어 -> 셀러' }
+				{ value: 1, text: '바이어 -> 셀러' },
+				{ value: 2, text: '양방향' }
 			],
             
             fields: [{
@@ -215,10 +215,10 @@ module.exports = {
                 this.logo_del = false;
                 this.logo_en = rs.bizmatching_logo_en;
                 this.logo_en_del = false;
-                this.is_bizmatching_cross_meeting = rs.is_bizmatching_cross_meeting ? 1 : 0;
+                this.is_bizmatching_cross_meeting = rs.is_bizmatching_cross_meeting;
                 this.bizmatching_max_count = rs.bizmatching_max_count;
             //}}
-            console.log(rs);
+            
             this.items = rs.menus;
         },
         goRegisterForm: function (event, item) {

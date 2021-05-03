@@ -239,7 +239,7 @@
 				},
 				getData: async function () {
 					let rs = await axios.get(`${this.api_url}/event/main_page?event_id=${this.event_id}`);
-					console.log('vue_main ', rs);
+					// console.log('vue_main ', rs);
 					
 					this.site_url = rs.data.result.link;
 					return rs;

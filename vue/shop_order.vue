@@ -40,7 +40,7 @@
                     </b-col>
                     <b-col>
                         <b-form-group label="상품명,구매자">
-                            <b-form-input size="sm" v-model="search_key"></b-form-input>
+                            <b-form-input size="sm" v-model="search_key" @keydown.enter="getList"></b-form-input>
                         </b-form-group>
                     </b-col>
                     <b-col></b-col>

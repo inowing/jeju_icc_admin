@@ -1,12 +1,5 @@
 <template>
 <section>
-<!--     
-    <b-row class="mb-1">
-        <b-col>
-            <h6><strong>6.Bizmatching > 사이트 구성</strong></h6>
-        </b-col>
-    </b-row> -->
-
     <b-row>
         <b-col>
             <b-card no-body>
@@ -44,6 +37,10 @@
                                         <b-card-text>
                                             <b-form-group label="매칭 방향">
                                                 <b-form-radio-group v-model="is_bizmatching_cross_meeting" :options="match_options" button-variant="outline-primary" size="sm" buttons></b-form-radio-group>
+                                            </b-form-group>
+
+                                            <b-form-group label="최대 상담 신청 가능횟수">
+                                                <b-form-input type="number" v-model="bizmatching_max_count" min="1" max="3"></b-form-input>
                                             </b-form-group>
                                         </b-card-text>
                                     </b-card>
@@ -84,6 +81,10 @@
                                         <b-card-text>
                                             <b-form-group label="매칭 방향">
                                                 <b-form-radio-group v-model="is_bizmatching_cross_meeting" :options="match_options" button-variant="outline-primary" size="sm" buttons></b-form-radio-group>
+                                            </b-form-group>
+                                            
+                                            <b-form-group label="최대 상담 신청 가능횟수">
+                                                <b-form-input type="number" v-model="bizmatching_max_count" min="1"></b-form-input>
                                             </b-form-group>
                                         </b-card-text>
                                     </b-card>
@@ -166,9 +167,9 @@ module.exports = {
 			],
             is_bizmatching_cross_meeting: 0,
 			match_options: [
-				{ value: 0, text: '양방향' },
-				{ value: 1, text: '단방향' },
-				{ value: 1, text: '단방향' }
+				{ value: 2, text: '양방향' },
+				{ value: 0, text: '셀러 -> 바이어' },
+				{ value: 1, text: '바이어 -> 셀러' }
 			],
             
             fields: [{
@@ -194,7 +195,8 @@ module.exports = {
             thumb_prev: '',
             thumb_prev_default: this.$store.getters.dummy_image_url(['180x180']),
             movie_file_src: '',
-            isNew: true
+            isNew: true,
+            bizmatching_max_count: 1 // 최대상담신청가능횟수
         }
     },
     mounted: function () {
@@ -204,7 +206,6 @@ module.exports = {
             this.getList();
         })
     },
-
     methods: {
         getList: async function () {
             let response = await axios.get(`${this.api_url}/bizmatching_menu?event_id=${this.event_id}`);
@@ -215,6 +216,7 @@ module.exports = {
                 this.logo_en = rs.bizmatching_logo_en;
                 this.logo_en_del = false;
                 this.is_bizmatching_cross_meeting = rs.is_bizmatching_cross_meeting ? 1 : 0;
+                this.bizmatching_max_count = rs.bizmatching_max_count;
             //}}
             console.log(rs);
             this.items = rs.menus;
@@ -237,31 +239,36 @@ module.exports = {
             }
         },
         updateEvent: async function () {
-            let url = `${this.api_url}/event/${this.event_id}`;
-            
-            let formData = new FormData();
-                if (this.logo_del) {
-                    formData.append('bizmatching_logo_del', 'Y');
-                }
-                if (!this.logo_del && this.file1) {
-                    formData.append('bizmatching_logo', this.file1);
-                }
-                if (this.logo_en_del) {
-                    formData.append('bizmatching_logo_en_del', 'Y');
-                }
-                if (!this.logo_en_del && this.file1_en) {
-                    formData.append('bizmatching_logo_en', this.file1_en);
-                }
+            if (confirm('저장 하시겠습니까?')) {
+                let url = `${this.api_url}/event/${this.event_id}`;
+                
+                // 최대상담신청가능횟수 : bizmatching_max_count
 
-                formData.append('is_bizmatching_cross_meeting', this.is_bizmatching_cross_meeting);
-
-            let rs = await axios
-                    .post(url, formData, { Headers: { 'Content-Type': 'multipart/form-data' }})
-                    .catch(error => {
-                        console.error(error);
-                    });
-
-            this.getList();
+                let formData = new FormData();
+                    if (this.logo_del) {
+                        formData.append('bizmatching_logo_del', 'Y');
+                    }
+                    if (!this.logo_del && this.file1) {
+                        formData.append('bizmatching_logo', this.file1);
+                    }
+                    if (this.logo_en_del) {
+                        formData.append('bizmatching_logo_en_del', 'Y');
+                    }
+                    if (!this.logo_en_del && this.file1_en) {
+                        formData.append('bizmatching_logo_en', this.file1_en);
+                    }
+    
+                    formData.append('is_bizmatching_cross_meeting', this.is_bizmatching_cross_meeting);
+                    formData.append('bizmatching_max_count', this.bizmatching_max_count);
+    
+                let rs = await axios
+                        .post(url, formData, { Headers: { 'Content-Type': 'multipart/form-data' }})
+                        .catch(error => {
+                            console.error(error);
+                        });
+                this.$showMsgBoxTwo(rs.status);
+                this.getList();
+            }
         },
         
         

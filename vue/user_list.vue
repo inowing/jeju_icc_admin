@@ -8,9 +8,9 @@
         </b-col>
         <b-col cols="4">
             <b-input-group size="sm" align-v="baseline" class="text-right">
-                <b-form-input aria-placeholder="검색어를 입력하세요." v-model="search_key"></b-form-input>
+                <b-form-input aria-placeholder="검색어를 입력하세요." v-model="search_key" @keydown.enter="getSeachList"></b-form-input>
                 <b-input-group-append>
-                    <b-button variant="info" size="sm" @click="getList" @keydown.enter="getList">검색하기</b-button>
+                    <b-button variant="info" size="sm" @click="getSeachList">검색하기</b-button>
                 </b-input-group-append>
             </b-input-group>
         </b-col>
@@ -19,7 +19,7 @@
     <b-row class="mt-1">
         <b-col>
             <b-card no-body>
-                <b-tabs card>
+                <b-tabs v-model="tabIndex" card>
                     <b-tab title="일반회원" active>
                         <b-card>
                             <b-table :fields="fields" :items="level50_items" small bordered head-variant="light" class="mt-1">
@@ -197,6 +197,7 @@ module.exports = {
         return {
             modal1: false,
             search_key: '',
+            tabIndex: 0,
             form: {
                 email: '',
                 password: '',
@@ -306,15 +307,27 @@ module.exports = {
     },
 
     methods: {
-        getList: async function () {
+        getSeachList: async function () {
             let url = `${this.api_url}/user/in_event?event_id=${this.event_id}`;
             if (this.search_key) {
                 url = url + '&search_key=' + this.search_key;
             }
+            if (this.tabIndex == 1) {
+                url = url + '&level=40';  // 기업회원
+                let rs = await axios.get(url);
+                this.level40_items = rs.data.result;
+            } else {
+                url = url + '&level=50';
+                let rs = await axios.get(url);
+                this.level50_items = rs.data.result;
+            }
+        },
+        getList: async function () {
+            let url = `${this.api_url}/user/in_event?event_id=${this.event_id}`;
+            
             let rs = await axios.get(url);
             this.items = rs.data.result;
-            // console.log(this.items);
-            // admin_level
+
             let level40_items = [];
             let level50_items = [];
 
@@ -324,7 +337,6 @@ module.exports = {
 
             this.level40_items = level40_items;
             this.level50_items = level50_items;
-
 
         },
         userDelete: async function (item, index, target) {

@@ -38,7 +38,7 @@ export const store = new Vuex.Store({
     },
     mutations: {
         // usage
-        // this.$store.commit('increment', {key: '', value: ''})
+        // this.$store.commit('event_id', {key: '', value: ''})
         event_id(state, payload) {
             state.event_id = payload.event_id;
         },

@@ -159,6 +159,7 @@
 					}
 					this.navShow = this.$refs.inoResizer.clientWidth > 800 ? true : false; // 네비게이션 쇼,하이드
 					router.addRoute({ path: '/', component: window.httpVueLoader('./vue/site_info.vue') });
+					router.addRoute({ path: '/test', component: window.httpVueLoader('./vue/kht_test.vue') });
 					router.addRoute({ path: '/site_info', component: window.httpVueLoader('./vue/site_info.vue') });
 					router.addRoute({ path: '/familysite', component: window.httpVueLoader('./vue/familysite.vue') });
 					router.addRoute({ path: '/popup', component: window.httpVueLoader('./vue/popup.vue') });

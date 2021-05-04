@@ -12,7 +12,7 @@ export const store = new Vuex.Store({
     },
     getters: {
         // usage
-        // this.$store.getters.selected_item
+        // this.$store.getters.event_id
         event_id: function (state) {
             return state.event_id;
         },
@@ -38,7 +38,7 @@ export const store = new Vuex.Store({
     },
     mutations: {
         // usage
-        // this.$store.commit('increment', {key: '', value: ''})
+        // this.$store.commit('event_id', {event_id: '107', value: ''})
         event_id(state, payload) {
             state.event_id = payload.event_id;
         },
@@ -51,10 +51,12 @@ export const store = new Vuex.Store({
     },
     actions: {
         // usage
-        // this.$store.dispatch('increment', {key:'', value:''});
+        // this.$store.dispatch('actionA', {key:'', value:''});
         async actionA ({ commit }) {
             // commit('increment', await sometingAPI())
         },
+        
+        // this.$store.dispatch('increment', {key:'', value:''});
         async increment(context) { // ({dispatch, commit})
             await context.dispatch('actionA') // wait for `actionA` to finish
             context.commit('increment')

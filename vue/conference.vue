@@ -30,11 +30,6 @@
                 <b-form-group label="메뉴 순서">
                     <b-form-input type="number" v-model="form.order"></b-form-input>
                 </b-form-group>
-            </b-col>
-            <b-col></b-col>
-        </b-row>
-        <b-row>
-            <b-col>
                 <b-form-group label="행사 일정 이미지 #1">
                     <b-card>
                         <b-card-text class="ino-180-70-wrap mb-1">
@@ -49,7 +44,16 @@
                     </b-card>
                 </b-form-group>
             </b-col>
-            <b-col></b-col>
+            <b-col>
+                <b-form-group label="VM 화면 이용약관 (모든세션 공통입력)">
+                    <b-form-textarea
+                        v-model="form.terms"
+                        rows="6"
+                        max-rows="6"
+                        ></b-form-textarea>
+
+                </b-form-group>
+            </b-col>
         </b-row>
         <b-button variant="primary" size="sm" class="inoBtn-150" @click="updateData(form, event_id, `${api_url}/menu/${menu_id}`)">저장</b-button>
     </b-card>
@@ -248,6 +252,7 @@ module.exports = {
             formData.append('name', form.name);
             formData.append('name_en', form.name_en);
             formData.append('order', form.order);
+            formData.append('terms', form.terms);
             !form.file1 && form.photo_1_del ? formData.append('photo_1_del', 'Y') : formData.append('photo_1', form.file1);
 
             try {

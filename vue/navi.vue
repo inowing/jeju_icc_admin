@@ -124,6 +124,12 @@
                         <a href="#">바로가기</a>
                     </span>
                 </b-card-text>
+                <hr class="m-0 p-0" />
+                <b-card-text class="m-0 p-2">
+                    <span @click="goRedirect('biz_dashboard')">
+                        <a href="#">현황판</a>
+                    </span>
+                </b-card-text>
                 <!-- <router-link to="/biz/link">
                     <b-card-text class="m-0 p-2">
                         <span v-bind:class="[ routePath == '/biz/link' ? classObject : '' ]">바로가기</span>
@@ -312,8 +318,14 @@ module.exports = {
                 }
             }
         },
-        goRedirect: async function () {
-            let url = `${this.api_url}/event/${this.event_id}/get_url`;
+        goRedirect: async function (type) {
+            if (!type) {
+                url = `${this.api_url}/event/${this.event_id}/get_url`;
+            } else {
+                console.log(`this.event_id `, this.event_id);
+                window.location.href = `url?event_id=${this.event_id}`;
+                return;
+            }
             try {
                 let rs = await axios.get(url);
                 if (rs.data.code == 200) {

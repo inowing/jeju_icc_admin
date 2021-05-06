@@ -243,7 +243,6 @@ module.exports = {
             let aco8 = ['/stats_counsel_b', '/stats_counsel_s'];
             let aco9 = ['/stats_vm_b', '/stats_vm_s'];
             if (aco1.includes(this.routePath)) {
-                // console.log('arco1');
                 this.accordion1 = true;
             }
             if (aco3.includes(this.routePath)) {
@@ -280,37 +279,22 @@ module.exports = {
                 this.accordion9 = false;
             }
             if (to.query.event_id) {
-                
                 if (to.query.event_id != this.$store.getters.event_id) {
                     this.$store.commit('event_id', {event_id: to.query.event_id});
-                    // this.$router.go();
                 }
-                // window.location.href = `http://14.63.172.119/admin/vue_main.html#${from.path}`;
             }
-            // console.log(to);
         }
     },
     mounted: function () {
         this.$nextTick(function () {
-            // this.routePath = this.$route.path;	// 네비게이션의 패스 감지용
             this.api_url = this.$store.getters.api_url;
             this.event_id = this.$store.getters.event_id;
             this.$root.$on('bv::collapse::state', (collapseId, isJustShown) => {
-                // console.log('collapseId:', collapseId)
-                // console.log('isJustShown:', isJustShown)
+                
             }); // 네비게이션 클릭 감지
         })
     },
     methods: {
-        visibleHandler: function (isVisible) {
-            if (isVisible) {
-                // console.log('open');
-                // Do something
-            } else {
-                // console.log('close');
-                // Do something else
-            }
-        },
         goReload: function (url) {
             window.location.href = url;
             this.$router.go(url);

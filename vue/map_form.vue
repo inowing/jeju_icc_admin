@@ -114,7 +114,6 @@ module.exports = {
             }
             let url = `${this.api_url}/map/${this.id}`;
             let rs = await axios.get(url);
-            console.log(rs);
             let data = rs.data.result;
             this.id = data.id;
             this.title = data.title;

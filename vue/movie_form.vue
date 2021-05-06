@@ -55,7 +55,7 @@
     <b-row>
         <b-col>
             <span>내용</span>
-            <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+            <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content" />
             <br>
             <div class="content ql-editor" v-html="editor_content"></div>
         </b-col>
@@ -118,17 +118,7 @@ module.exports = {
         },
         content1Delete: function (item, index) {
             this.contents1_arr.splice(index, 1);
-        },
-        onEditorBlur(quill) {
-            console.log("editor blur!", quill);
-        },
-        onEditorFocus(quill) {
-            console.log("editor focus!", quill);
-        },
-        onEditorReady(quill) {
-            console.log("editor ready!", quill);
-        },
-
+        }
     }
 }
 </script>

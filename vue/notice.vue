@@ -87,12 +87,8 @@ module.exports = {
             let url = `${this.api_url}/notice?menu_id=${this.menu_id}`;
             let data = (await axios.get(url)).data;
             this.items = data.result;
-            console.log('-----------------------------');
-            console.log(data);
-            console.log('-----------------------------');
         },
         goForm: function (item, event) {
-            
 			this.$router.push({
 				name: 'notice_form',
 				query: { menu_id: this.menu_id, id: item.id }

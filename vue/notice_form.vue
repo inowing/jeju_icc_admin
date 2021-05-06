@@ -57,7 +57,6 @@
                                     class="editor" 
                                     :options="editorOption" 
                                     v-model="editor_content" 
-                                    @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" 
                                 />
                                 <br>
                                 <div class="content ql-editor" v-html="editor_content"></div>
@@ -67,12 +66,10 @@
                     <b-tab title="영문">
                         <b-row class="mb-3">
                             <b-col>
-
                                 <span>제목:</span>
                                 <b-form-input v-model="title_en" placeholder="제목을 입력하세요." size="sm" block class="mb-3"></b-form-input>
                                 <span>서브 타이틀:</span>
                                 <b-form-input v-model="subtitle_en" placeholder="제목을 입력하세요." size="sm" block></b-form-input>
-
                             </b-col>
                         </b-row>
                         <b-row class="mb-3">
@@ -91,7 +88,7 @@
                         <b-row>
                             <b-col>
                                 <span>내용</span>
-                                <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+                                <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content_en"/>
                                 <br>
                                 <div class="content ql-editor" v-html="editor_content_en"></div>
                             </b-col>
@@ -155,7 +152,6 @@ module.exports = {
         this.$nextTick(function () {
             this.menu_id = this.$route.query.menu_id;
             this.api_url = this.$store.getters.api_url;
-            console.log(this.menu_id);
             this.getTopCategory();
             this.getNotice();
         })
@@ -196,7 +192,6 @@ module.exports = {
             let url = `${this.api_url}/notice/${this.$route.query.id}`;
             let response = await axios.get(url);
             let rs = response.data.result;
-            console.log('get notice ', rs);
             this.title = rs.title;
             this.title_en = rs.title_en;
             this.subtitle = rs.subtitle;
@@ -214,8 +209,6 @@ module.exports = {
             this.selected_sub = rs.sub_category_id;
             // 서브검색 -- 주신값2
             this.getSubcategory();
-            // if (this.selected_top) {
-            // }
         },
         storeData: async function () {
             let url = `${this.api_url}/notice`;
@@ -224,7 +217,6 @@ module.exports = {
                 url = `${this.api_url}/notice/${this.$route.query.id}`;
             }
             let formData = new FormData();
-            console.log('this.$route.query.menu_id ', this.$route.query.menu_id);
             formData.append('menu_id', this.$route.query.menu_id);
             
             // top만있으면 top, sub 있으면 sub만
@@ -249,7 +241,6 @@ module.exports = {
                     "Content-Type": "multipart-form/data",
                 }
             });
-            console.log(this.api_url, rs);
 
 			this.getTopCategory();
             function callback () {
@@ -272,17 +263,7 @@ module.exports = {
         },
         content1Delete: function (item, index) {
             this.contents1_arr.splice(index, 1);
-        },
-        onEditorBlur(quill) {
-            console.log("editor blur!", quill);
-        },
-        onEditorFocus(quill) {
-            console.log("editor focus!", quill);
-        },
-        onEditorReady(quill) {
-            // console.log("editor ready!", quill);
-        }, 
-
+        }
     }
 }
 </script>

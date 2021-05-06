@@ -5,15 +5,11 @@ export const store = new Vuex.Store({
         event_id: 105,
         api_url: `${window.location.origin}/api/v1`,
         page_url: `${window.location.origin}`,
-        selected_item: null,
-        logo_url: '',
         dummy_image_url: 'https://via.placeholder.com/'
-        // dummy_image_url: 'https://dummyimage.com/'
     },
     getters: {
-        // usage
-        // this.$store.getters.event_id
         event_id: function (state) {
+            // this.$store.getters.event_id
             return state.event_id;
         },
         api_url: function (state) {
@@ -22,44 +18,17 @@ export const store = new Vuex.Store({
         page_url: function (state) {
             return state.page_url;
         },
-        logo_url: function (state) {
-            return state.logo_url;
-        },
-        selected_item: function (state) {
-            return state.selected_item;
-        },
         dummy_image_url: function (state) {
             // this.$store.getters.dummy_image_url(['600x400', '/aaa/fff']);
             return function (args) {
                 return `${state.dummy_image_url}/${args[0]}${args[1]}`;
             }
-        },
-
-    },
-    mutations: {
-        // usage
-        // this.$store.commit('event_id', {event_id: '107', value: ''})
-        event_id(state, payload) {
-            state.event_id = payload.event_id;
-        },
-        logo_url(state, payload) {
-            state.logo_url = payload;
-        },
-        selected_item(state, payload) {
-            state.selected_item = payload;
         }
     },
-    actions: {
-        // usage
-        // this.$store.dispatch('actionA', {key:'', value:''});
-        async actionA ({ commit }) {
-            // commit('increment', await sometingAPI())
-        },
-        
-        // this.$store.dispatch('increment', {key:'', value:''});
-        async increment(context) { // ({dispatch, commit})
-            await context.dispatch('actionA') // wait for `actionA` to finish
-            context.commit('increment')
+    mutations: {
+        event_id(state, payload) {
+            // this.$store.commit('event_id', {event_id: '107', value: ''})
+            state.event_id = payload.event_id;
         }
     },
     plugins: [

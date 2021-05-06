@@ -77,7 +77,6 @@ module.exports = {
 	return {
 		event_id: null,
 		api_url: '',
-		// apiUrl: `${api_url}/familysite`,
 		url: null,
 		familyPost: false,
 		
@@ -103,7 +102,6 @@ module.exports = {
 		this.$nextTick(function () {
 			this.event_id = this.$store.getters.event_id;
 			this.api_url = this.$store.getters.api_url;
-			console.log(this.api_url);
 			this.getList();
 		})
 	},

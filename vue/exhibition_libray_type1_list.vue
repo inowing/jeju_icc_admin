@@ -67,7 +67,6 @@
                                     <b-col>
                                         <b-card-group deck>
                                             <b-card no-body style="padding:0 max-width:182px;">
-                                            <!-- <b-card no-body style="padding:0 max-width:182px;"> -->
                                                 <b-card-text class="ino-180-180-wrap mb-1">
                                                     <div>
                                                         <b-img :src="photo_1_prev||photo_prev_default" fluid></b-img>
@@ -270,14 +269,6 @@
                             <b-button @click="selected_item.file = null; selected_item.movie_file_del = true; movie_file_src='';" size="sm" variant="danger">영상 삭제</b-button>
                         </b-col>
                     </b-row>
-<!-- 
-                    <b-row class="p-1">
-                        <b-col sm="4"><label style="font-size: 10pt;">링크 메시지</label></b-col>
-                        <b-col sm="8">
-                            <b-form-textarea v-model="selected_item.link_message" rows="3" max-rows="6" class="mt-1"></b-form-textarea>
-                        </b-col>
-                    </b-row>
-                     -->
                 </b-col>
             </b-row>
 
@@ -298,10 +289,6 @@
 <script>
 module.exports = {
     name: 'exhibition_libray_type1_list',
-    components: {
-        // 'introduction-image': window.httpVueLoader(`./popup/introduction_image.vue`),
-
-    },
     data: function () {
         return {
             api_url: ``,
@@ -420,7 +407,6 @@ module.exports = {
         getList: async function () {
             let response = await axios.get(`${this.api_url}/e_library?exhibition_id=${this.exhibition_id}&type=1`);
             let rs = response.data.result;
-            console.log('exhibition library type 1 data ', response);
             this.introduction = rs;
         },
         emptyModalOpen: function () {
@@ -543,7 +529,6 @@ module.exports = {
 
         },
         addItemFn: async function () {
-            console.log(this.selected_item);
             let item = this.selected_item;
             let url = `${this.api_url}/e_library`;
             let formData = new FormData();
@@ -608,10 +593,8 @@ module.exports = {
             }
         },
         updateItemFn: async function () {
-            console.log(this.selected_item);
             let item = this.selected_item;
             let url = `${this.api_url}/e_library/${item.id}`;
-            console.log(url);
             let formData = new FormData();
                 formData.append('title', item.title);
                 formData.append('order', item.order); // 전시자료 1
@@ -674,19 +657,11 @@ module.exports = {
 
         },
         imagePrev: function (e, key) {
-
             const file = e.target.files[0];
             let file_url = URL.createObjectURL(file);
             this.selected_item[key].url = file_url;
             this[key + "_prev"] = file_url;
-            // item.photo_1.url = file_url;
-            // this.photo_1_prev = file_url; // 개별컴포넌트에 변경되는 url 받아줄 변수가 있어야함.
-            console.log('imagePrev')
-
-        },
-
-        
-        
+        }
     }
 }
 </script>

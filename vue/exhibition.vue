@@ -20,8 +20,6 @@
     </b-row>
     <b-row>
         <b-col>
-
-            
             <b-table :fields="fields" :items="items" small responsive="sm" bordered head-variant="light" sticky-header>
                 <template #cell(id)="row">
                     <div class="text-center">{{row.item.id}}</div>
@@ -66,9 +64,6 @@
 <script>
 module.exports = {
     name: "exhibition",
-    components: {
-        // 'exhibition_libray_type1_list': window.httpVueLoader(`./exhibition_libray_type1_list.vue`),
-    },
     data: function () {
         return {
             event_id: 0,
@@ -104,9 +99,7 @@ module.exports = {
                     label: "관리항목",
                 },
             ],
-            items: [],
-            
-            
+            items: []
         };
     },
     mounted: function () {
@@ -123,7 +116,6 @@ module.exports = {
             let url = `${this.api_url}/exhibition?menu_id=${this.menu_id}`;
             let data = (await axios.get(url)).data;
             this.items = data.result;
-            console.log(data);
         },
         getTopCategory: async function () {
             // movie 형식으로 menu_id에 등록된 대분류
@@ -157,8 +149,6 @@ module.exports = {
             this.subcategory = temArr;
         },
         updateFn: async function (item, event, library_type) {
-            console.log(item);
-            
             if (library_type == 1) {
                 this.$router.push({ name: 'exhibition_libray_type1_list', query: {menu_id: this.menu_id, company_id: item.company_id, company_name: item.company.name, exhibition_id:item.id }});
             } else {

@@ -39,9 +39,6 @@
             <template #cell(contents)="row">
                 <div class="text-center ino-space-dot" v-b-tooltip.hover :title="row.item.contents" style="max-width:200px;">
                     {{row.item.contents}}
-                    <!-- <b-button size="sm" variant="outline-info" @click="containModalOpen(row.item, $event, row.index)">
-                        <b-icon-pencil-square></b-icon-pencil-square> 내용 확인
-                    </b-button> -->
                 </div>
             </template>
             <template #cell(created_at)="row">
@@ -71,7 +68,6 @@
                     <b-card>
                         {{selected_item.title}}
                     </b-card>
-                    
                 </b-col>
             </b-row>
             <b-row>
@@ -79,7 +75,6 @@
                     <b-card>
                         {{selected_item.contents}}
                     </b-card>
-                    
                 </b-col>
             </b-row>
             <b-row class="mt-3">
@@ -161,7 +156,6 @@ module.exports = {
         getList: async function () {
             let response = await axios.get(`${this.api_url}/question?exhibition_id=${this.exhibition_id}`);
             let rs = response.data.result;
-            console.log('exhibition library type 1 data ', response);
             this.items = rs;
         },
         containModalOpen: function (item) {
@@ -176,7 +170,6 @@ module.exports = {
             }
         },
         excelDownload: function () {
-            console.log(this.items);
             function s2ab(s) { 
                 var buf = new ArrayBuffer(s.length); //convert s to arrayBuffer
                 var view = new Uint8Array(buf);  //create uint8array as viewer
@@ -207,11 +200,8 @@ module.exports = {
                 // step 5. 엑셀 파일 내보내기 
                 saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), `${Date.now()}.xlsx`);
             }
-            console.log("Got you!");
             exportExcel(this.items);
-
         }
-        
     }
 }
 </script>

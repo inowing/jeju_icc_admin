@@ -68,8 +68,8 @@
                 <template #cell(grade)="row">
                     <div class="text-center">{{row.item.grade}}</div>
                 </template>
-                <template #cell(count)="row">
-                    <div class="text-center">{{row.item.count}}</div>
+                <template #cell(quantity)="row">
+                    <div class="text-center">{{row.item.quantity}}</div>
                 </template>
                 <template #cell(name)="row">
                     <div class="text-center">{{row.item.name}}</div>
@@ -287,7 +287,7 @@ module.exports = {
                     label: '상품명'
                 },
                 {
-                    key: 'count',
+                    key: 'quantity',
                     label: '구매수량'
                 },
                 {
@@ -368,7 +368,12 @@ module.exports = {
             this.$router.push({ name: 'shop_product', query: {menu_id : this.menu_id}});
         },
         getDeliveryInfo: function (event, item) {
-            this.user = item.user;
+            // this.user = item.user;
+            this.user = {
+                name: item.user_name,
+                phone: item.user_phone
+            }
+
             this.delivery = {
                 "recipient": item.recipient,
                 "recipient_zip": item.recipient_zip,

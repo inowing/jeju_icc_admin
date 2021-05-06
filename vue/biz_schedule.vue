@@ -1,12 +1,5 @@
 <template>
 <section>
-<!--     
-    <b-row>
-        <b-col>
-            <h6><strong>6.Bizmatching > 일정관리</strong></h6>
-        </b-col>
-    </b-row> -->
-
     <b-row class="mt-1">
         <b-col>
             <b-input-group size="sm" align-v="baseline">
@@ -140,8 +133,6 @@
                         <b-button variant="info" size="sm" @click="saveMemo($event, row.item)">저장</b-button>
                     </b-input-group-append>
                 </b-input-group>
-
-                
             </template>
         </b-table>
     </b-modal>
@@ -229,14 +220,12 @@ module.exports = {
 
     methods: {
          onContext(ctx) {
-            console.log(ctx);
             this.form.plan = ctx.selectedYMD;
             
         },
         getList: async function () {
             let response = await axios.get(`${this.api_url}/schedule?event_id=${this.event_id}`);
             this.items = response.data.result;
-            console.log(this.items);
         },
         getRestList: async function () {
             // let response = await axios.get(`${this.api_url}/schedule?event_id=${this.event_id}`);
@@ -244,16 +233,10 @@ module.exports = {
             // this.restList = rs;
         },
         openModal1: function (event, item) {
-            console.log(event, item);
             if (item) {
                 this.modal1_border='success';
-                console.log(item, '수정모달');
                 this.form = {...item};
-                // this.start_time = item.start_time;
-                // this.end_time = item.end_time;
-                // this.date = item.date;
             } else {
-                console.log('no item. 신규 생성모달');
                 this.modal1_border='primary';
                 this.form = {
                     id: 0,
@@ -262,9 +245,6 @@ module.exports = {
                     end_date: '',
                     interval: 30
                 }
-                // this.start_time = '';
-                // this.end_time = '';
-                // this.date = '';
             }
             this.modal1 = true;
         },
@@ -279,7 +259,7 @@ module.exports = {
             let formData = new FormData();
                 formData.append('event_id', this.event_id);
                 formData.append('date', this.form.date);
-                // 01:00:00
+                
                 formData.append('start_time', this.form.start_time.substr(0, 5));
                 formData.append('end_time', this.form.end_time.substr(0, 5));
                 formData.append('interval', this.form.interval);
@@ -296,12 +276,7 @@ module.exports = {
         },
         
         updateData: async function () {
-            console.log(this.form);
-            // api 태우고
-            // todo
-            // 
             
-
             let url = `${this.api_url}/schedule/${this.form.id}`;
             let formData = new FormData();
                 formData.append('date', this.form.date);
@@ -327,12 +302,10 @@ module.exports = {
                 this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
             }
             
-            
             // 변경 하시려는 일정에 비즈니스 매칭이 신청되어 있어 변경이 불가합니다.
         },
         deleteData: async function (event, item) {
-            console.log(item);
-
+            
             let msg = item.is_use ? `해당 일정에 비즈니스매칭이 신청되어있습니다. 삭제 하시겠습니까?` 
                 : `삭제 하시겠습니까?`;
 
@@ -348,7 +321,7 @@ module.exports = {
             
         },
         statusChang: async function (event, item) {
-            console.log(item);
+            
             let url = `${this.api_url}/schedule/detail/${item.id}`;
             let formData = new FormData();
                 formData.append('status', item.status == 0 ? 1 : 0);
@@ -361,7 +334,7 @@ module.exports = {
                 });
                 await this.getList();
                 this.restList = this.items[this.selected_item_index].details;
-                console.log('rs.data.code : ', rs.data.code);
+                
                 if (rs.data.code == 412) {
                     this.$showMsgBoxTwo(rs.data.code, '', '변경 하시려는 일정에 비즈니스 매칭이 신청되어 있어 변경이 불가합니다.');
                 } else {

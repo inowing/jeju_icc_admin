@@ -22,7 +22,7 @@
         <div v-show="form.type == 0">
             <b-form-group label-cols-sm="3" label-cols-lg="2" content-cols-sm content-cols-lg="7" label="컨텐츠 입력" label-for="input-contents">
             </b-form-group>
-            <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="form.contents" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+            <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="form.contents" />
             <div class="content ql-editor" v-html="form.contents"></div>
         </div>
         <div v-show="form.type == 1">
@@ -134,18 +134,7 @@ module.exports = {
             });
 
             this.$router.go(-1);
-        },
-
-        onEditorBlur(quill) {
-            console.log("editor blur!", quill);
-        },
-        onEditorFocus(quill) {
-            console.log("editor focus!", quill);
-        },
-        onEditorReady(quill) {
-            // console.log("editor ready!", quill);
-        },
-
+        }
     }
 }
 </script>

@@ -222,12 +222,10 @@ module.exports = {
             this.items = rs.menus;
         },
         goRegisterForm: function (event, item) {
-            console.log(event, item);
+            
             if (item) {
-                console.log(item);
                 this.$router.push({ name: 'biz_site_form', query: {id: item.id}});
             } else {
-                console.log('no item.');
                 this.$router.push({ name: 'biz_site_form' });
             }
         },

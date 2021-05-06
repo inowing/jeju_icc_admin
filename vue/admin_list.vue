@@ -3,7 +3,6 @@
     <b-row>
         <b-col>
             <h6><strong>3.기업관리 > 기업목록 > 관리자 목록</strong></h6>
-            
         </b-col>
     </b-row>
     <b-row class="mt-1">
@@ -13,7 +12,6 @@
                 <b-button href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
                     <b-icon-arrow-left></b-icon-arrow-left> 이전으로
                 </b-button>
-
                 <b-button size="sm" variant="primary" @click="openModal"><b-icon-plus></b-icon-plus> 계정 추가하기</b-button>
             </b-col>
             <b-col cols="4">
@@ -25,7 +23,6 @@
 				</b-input-group>
 			</b-col>
         </b-row>
-        
 
         <b-table :fields="fields" :items="items" small bordered head-variant="light" class="mt-1">
             <template #cell(id)="row">
@@ -163,24 +160,14 @@ module.exports = {
     },
     computed: {
       validation() {
-
-        let valid = 
-            this.password
-            && (this.password_confirm == this.password)
-
-            ? true : false;
-        console.log(valid);
+        let valid = this.password && (this.password_confirm == this.password) ? true : false;
         return valid;
       }
     },
     methods: {
         getList: async function () {
-            // http://14.63.172.119/api/v1/user/info
-            // http://14.63.172.119/api/v1/user/in_company?company_id=1
             let response = await axios.get(`${this.api_url}/user/in_company?company_id=${this.company_id}`);
-            console.log(this.event_id);
             let rs = response.data.result;
-            console.log('company list data ', response);
             this.items = rs;
         },
         openModal: function (event, item) {
@@ -194,12 +181,6 @@ module.exports = {
             this.password = '';
             this.password_confirm = '';
             this.question_modal = true;
-            // http://14.63.172.119/api/v1/user/info
-            // let response = await axios.get(`${this.api_url}/user?event_id=${this.event_id}`);
-            // console.log(this.event_id);
-            // let rs = response.data.result;
-            // console.log('company list data ', response);
-            // this.items = rs;
         },
         deleteItemFn: async function (item) {
             if (confirm("삭제 하시겠습니까?")) {
@@ -210,10 +191,8 @@ module.exports = {
         },
         storeUser: async function () {
             if (!this.validation) {
-                console.log("no...");
                 return;
             }
-            console.log(this.form.name_en);
             
             let url = `${this.api_url}/register`;
             let formData = new FormData();
@@ -231,7 +210,6 @@ module.exports = {
             }).catch(error => {
                 this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
             });
-            console.log(rs);
             if (rs.data.code == 200) {
                 this.$showMsgBoxTwo(rs.status);
             } else {
@@ -244,8 +222,6 @@ module.exports = {
 
         },
         updateUser: async function () {
-            console.log(this.form);
-
             if (!this.validation) {
                 return;
             }
@@ -266,7 +242,6 @@ module.exports = {
             }).catch(error => {
                 this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
             });
-            console.log(rs);
             if (rs.data.code == 200) {
                 this.$showMsgBoxTwo(rs.status);
             } else {
@@ -275,11 +250,7 @@ module.exports = {
             
             this.getList();
             this.question_modal = false;
-
-        },
-        
-        
-        
+        }
     }
 }
 </script>

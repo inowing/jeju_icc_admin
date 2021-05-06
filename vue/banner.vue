@@ -180,7 +180,6 @@ module.exports = {
 	data: function () {
 		return {
 			event_id: 0,
-			// apiUrl: `${this.api_url}/banner`,
 			url: null,
 			defaultImage250: this.$store.getters.dummy_image_url(['250x420']),
 			banner: {
@@ -254,7 +253,6 @@ module.exports = {
 			let url = `${this.api_url}/event/${this.event_id}`;
 			
 			var formData = new FormData();
-				console.log("@!!!" , this.banner_photo_2_del);
 				!this.file1 && this.banner_photo_1_del ? formData.append('banner_photo_1_del', 'Y') : formData.append('banner_photo_1', this.file1);
 				!this.file2 && this.banner_photo_2_del ? formData.append('banner_photo_2_del', 'Y') : formData.append('banner_photo_2', this.file2);
 

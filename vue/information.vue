@@ -87,7 +87,6 @@ module.exports = {
         getList: async function () {
             let url = `${this.api_url}/information?menu_id=${this.menu_id}`;
             let rs = await axios.get(url);
-            console.log(rs);
             this.items = rs.data.result;
         },
         goForm: function (event, item) {
@@ -98,7 +97,6 @@ module.exports = {
             }
         },
         updateIsVisible: async function (event, item) {
-            console.log(item);
             let url = `${this.api_url}/information/${item.id}`;
             let formData = new FormData();
                 formData.append('is_visible', item.is_visible ? 1 : 0);
@@ -116,7 +114,6 @@ module.exports = {
             }
         },
         deleteData: async function (event, item) {
-            console.log(item);
             let url = `${this.api_url}/information/${item.id}`;
             
             try {

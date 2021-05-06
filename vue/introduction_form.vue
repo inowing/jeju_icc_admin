@@ -6,7 +6,6 @@
             <b-button class="mt-2" href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
                 <b-icon-arrow-left></b-icon-arrow-left> 이전으로
             </b-button>
-
         </b-col>
     </b-row>
     <b-card>
@@ -38,7 +37,7 @@
                                 <b-form-input type="text" v-model="title"></b-form-input>
                             </b-form-group>
 							<b-card-text>
-								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents"/>
 								<br>
 								<div class="content ql-editor" v-html="contents"></div>
 							</b-card-text>
@@ -48,7 +47,7 @@
                                 <b-form-input type="text" v-model="title_en"></b-form-input>
                             </b-form-group>
 							<b-card-text>
-								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en"/>
 								<br>
 								<div class="content ql-editor" v-html="contents_en"></div>
 							</b-card-text>
@@ -83,7 +82,6 @@ module.exports = {
                 selected_sub: ''
             },
 
-
             id: '',
             title: '',
             title_en: '',
@@ -93,8 +91,7 @@ module.exports = {
             editorOption: {
 				placeholder: '게시물을 작성해주세요.',
                 theme: "snow",
-            },
-           
+            }
         };
     },
     mounted: function () {
@@ -112,7 +109,6 @@ module.exports = {
         getData: async function () { // 데이터 가져오기
             let url = `${this.api_url}/introduction/${this.id}`;
             let rs = await axios.get(url);
-            console.log(rs);
             let data = rs.data.result;
             this.id = data.id;
             this.title = data.title;
@@ -120,20 +116,11 @@ module.exports = {
             this.contents = data.contents;
 			this.contents_en = data.contents_en;
 
-            // this.is_visible = data.is_visible;
-            // this.is_visible_title = data.is_visible_title;
-
-            // this.photo_1 = data.photo_1;
-            // this.photo_1_en = data.photo_1_en;
-
             // 탑 셀렉트
             this.category.selected_top = data.top_category_id
             // 서브검색
             await this.getSubcategory();
-            console.log(this.category.subcategory);
-            console.log(data.sub_category_id, ' == 115');
             this.category.selected_sub = data.sub_category_id;
-            console.log(this.category.selected_sub, data.sub_category_id);
         },
         storeData: async function () { // 데이터 저장
             let url = `${this.api_url}/introduction`;
@@ -233,15 +220,6 @@ module.exports = {
 
             this.category.sub_id_key_store = sub;
             this.category.subcategory = temArr;
-        },
-        onEditorBlur(quill) {
-            // console.log("editor blur!", quill);
-        },
-        onEditorFocus(quill) {
-            // console.log("editor focus!", quill);
-        },
-        onEditorReady(quill) {
-            // console.log("editor ready!", quill);
         }
     }
 };

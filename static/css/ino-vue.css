@@ -227,6 +227,17 @@ thead {
 	line-height: 33px;
 }
 
+.img-box {
+	display: grid;
+	height: 100%;
+}
+
+.center-fit {
+	max-width: 100%;
+	max-height: 100vh;
+	margin: auto;
+}
+
 @-webkit-keyframes AnimationName {
 	0% {
 		background-position: 97% 0%

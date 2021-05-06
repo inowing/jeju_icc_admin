@@ -194,11 +194,11 @@
             </b-card-body>
         </b-collapse>
 
-        <b-button variant="outline-danger" @click="logoutFn">Logout</b-button>
+        <b-button class="mt-1" variant="outline-danger" @click="logoutFn">Logout</b-button>
+        <b-button class="mt-1" variant="outline-success" v-show="$store.getters.event_id == 106" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=105`)'>테스트버전(105) 가기</b-button>
+        <b-button class="mt-1" variant="outline-primary" v-show="$store.getters.event_id == 105" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=106`)'>운영버전(106) 가기</b-button>
     </b-card>
     
-    <b-button href="#" v-show="$store.getters.event_id == 106" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=105`)'>테스트버전(105) 가기</b-button>
-    <b-button href="#" v-show="$store.getters.event_id == 105" @click='goReload(`${window.location.origin}/admin/vue_main.html#/?event_id=106`)'>운영버전(106) 가기</b-button>
 
 </div>
 </template>

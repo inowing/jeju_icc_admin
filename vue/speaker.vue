@@ -11,8 +11,39 @@
     </b-row>
 
     <b-table :fields="fields" :items="items" small bordered head-variant="light" class="mt-1">
-        <template #cell(id)="row">
-            <div class="text-center">{{row.item.id}}</div>
+        <template #cell(reverse_index)="row">
+            <div class="text-center">{{items.length - row.index}}</div>
+        </template>
+        <template #cell(order)="row">
+            <div class="text-center">{{row.item.order}}</div>
+        </template>
+        <template #cell(photo_1)="row">
+            <b-img 
+                :src="row.item.photo_1||$store.getters.dummy_image_url(['30x30'])" 
+                :id="'tooltip_image_'+row.item.id" 
+                fluid 
+                style="width:30px; max-height:30px;"></b-img>
+            <b-tooltip :target="'tooltip_image_'+row.item.id" title="Online!" variant="light">
+                <b-img :src="row.item.photo_1||$store.getters.dummy_image_url(['30x30'])" fluid ></b-img>
+            </b-tooltip>
+        </template>
+        <template #cell(title)="row">
+            <div class="text-center ino-space-dot" v-b-tooltip.hover :title="row.item.title" style="max-width:150px;">{{row.item.title}}</div>
+        </template>
+        <template #cell(speaker_name)="row">
+            <div class="text-center">{{row.item.speaker_name}}</div>
+        </template>
+        <template #cell(position)="row">
+            <div class="text-center">{{row.item.position}}</div>
+        </template>
+        <template #cell(contents)="row">
+            <div class="text-center ino-space-dot" v-b-tooltip.hover :title="row.item.contents" style="max-width:150px;">{{row.item.contents}}</div>
+        </template>
+        <template #cell(introduction)="row">
+            <div class="text-center ino-space-dot" v-b-tooltip.hover :title="row.item.introduction" style="max-width:150px;">{{row.item.introduction}}</div>
+        </template>
+        <template #cell(file)="row">
+            <div class="text-center"><b-button v-if="row.item.file" variant="info" size="sm" @click="fileDownload(row.item.file, row.item.file_name_1)"><b-icon-download></b-icon-download></b-button></div>
         </template>
         <template #cell(manageBtn)="row">
             <div class="text-center">
@@ -38,8 +69,17 @@ module.exports = {
             menu_id: null,
             
             fields: [{
-                    key: 'id',
-                    label: '아이디'
+                    key: 'reverse_index',
+                    label: 'No'
+                },
+                {
+                    key: 'order',
+                    label: '노출순서',
+                    sortable: true
+                },
+                {
+                    key: 'photo_1',
+                    label: '연자사진'
                 },
                 {
                     key: 'top_category',
@@ -54,8 +94,28 @@ module.exports = {
                     label: '제목'
                 },
                 {
+                    key: 'speaker_name',
+                    label: '연자이름'
+                },
+                {
+                    key: 'position',
+                    label: '소속/직책'
+                },
+                {
+                    key: 'contents',
+                    label: '발표주제'
+                },
+                {
+                    key: 'introduction',
+                    label: '연자소개'
+                },
+                {
+                    key: 'file',
+                    label: '초록'
+                },
+                {
                     key: 'manageBtn',
-                    label: '관리계정'
+                    label: '관리'
                 }
             ],
             items: []
@@ -100,6 +160,14 @@ module.exports = {
             } catch (error) {
                 this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
             }
+        },
+        fileDownload(url, file_name) {
+            var link = document.createElement("a");
+            link.setAttribute('download', file_name);
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
         }
     }
 };

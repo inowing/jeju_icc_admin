@@ -26,7 +26,12 @@
                     </div>
             </template>
             <template #cell(name)="data">
-                    <b-button size="sm" class="mr-2" block variant="outline-info" @click="selectType(data.item, data.index, $event.target)">{{ data.item.name }}</b-button>
+                <b-button v-if="data.item.type == 6"
+                    size="sm" class="mr-2" block variant="outline-secondary" disabled
+                    >{{ data.item.name }}</b-button>
+                <b-button v-if="data.item.type != 6"
+                    size="sm" class="mr-2" block variant="outline-info" 
+                    @click="selectType(data.item, data.index, $event.target)">{{ data.item.name }}</b-button>
             </template>
             <template #cell(style)="data">
                     <div class="text-center">
@@ -164,7 +169,7 @@
                 <!-- 카테고리 : 하드코딩... 없애고 싶다 -->
                 <template #cell(category)="data">
                     <div class="text-center">
-                        <b-button size="sm" v-if="![0, 1, 12].includes(data.item.type)" variant="outline-primary" @click="manageCategory(data.item, data.index, $event.target)">
+                        <b-button size="sm" v-if="![0, 1, 12, 15].includes(data.item.type)" variant="outline-primary" @click="manageCategory(data.item, data.index, $event.target)">
                             <b-icon-award></b-icon-award> 관리
                         </b-button>
                     </div>

@@ -6,7 +6,6 @@
             <b-button class="mt-2" href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
                 <b-icon-arrow-left></b-icon-arrow-left> 이전으로
             </b-button>
-
         </b-col>
     </b-row>
     <b-card>
@@ -22,20 +21,16 @@
                 </b-form>
             </b-col>
             <b-col>
-<!-- 
-                <b-form>
-                    <b-form-group label="소분류 :">
-                        <b-form-select v-model="category.selected_sub" :options="category.subcategory" size="sm"></b-form-select>
-                    </b-form-group>
-                </b-form>
-                 -->
             </b-col>
         </b-row>
         <b-row>
             <b-col>
                 <b-card no-body>
 					<b-tabs content-class="" card>
-						<b-tab title="국문" active @>
+						<b-tab title="국문" active>
+                            <b-form-group label="노출순서">
+                                <b-form-input type="number" v-model="order"></b-form-input>
+                            </b-form-group>
                             <b-form-group label="제목">
                                 <b-form-input type="text" v-model="title"></b-form-input>
                             </b-form-group>
@@ -54,9 +49,9 @@
                             <b-row>
                                 <b-col>
                                     <b-form-group label="연자이미지">
-                                        <b-card-text class="ino-180-70-wrap mb-1">
-                                            <div>
-                                                <b-img :src="photo_1||photo_prev" fluid></b-img>
+                                        <b-card-text>
+                                            <div class="img-box">
+                                                <b-img class="center-fit" :src="photo_1||photo_prev" fluid></b-img>
                                             </div>
                                         </b-card-text>
                                         <b-card-text class="mt-1">
@@ -67,35 +62,38 @@
                                     </b-form-group>
                                 </b-col>
                                 <b-col>
-<!-- 
-                                    <b-form-group label="발표자료">
-                                        <b-card-text class="mt-1">
-                                            <b-form-file v-model="file2" style="max-width:70%;" :placeholder="file2_placeholder" class="mr-2" size="sm"></b-form-file>
-                                            <b-button @click="file2= null; file2_del=true; file2_placeholder=''" size="sm" variant="danger">발표자료 삭제</b-button>
-                                        </b-card-text>
-                                    </b-form-group>
-                                     -->
                                 </b-col>
                             </b-row>
                             <b-form-group label="발표주제">
                                 <b-card-text>
                                     <b-form-textarea v-model="contents"></b-form-textarea>
-                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
-                                    <br>
-                                    <div class="content ql-editor" v-html="contents"></div> -->
                                 </b-card-text>
                             </b-form-group>
 
                             <b-form-group label="연자소개">
                                 <b-card-text>
                                     <b-form-textarea v-model="introduction"></b-form-textarea>
-                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="introduction" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
-                                    <br>
-                                    <div class="content ql-editor" v-html="introduction"></div> -->
+                                </b-card-text>
+                            </b-form-group>
+
+                            <b-form-group>
+                                <label style="color: #007BFF;">*초록업로드</label>
+                                <b-card-text>
+                                    <b-input-group v-show="file_name_1" prepend="file">
+                                        <b-form-input disabled :value="file_name_1"></b-form-input>
+                                        <b-input-group-append>
+                                            <b-button variant="outline-success" @click="fileDownload(file2, file_name_1)">Download</b-button>
+                                            <b-button variant="danger" @click="file2=null; file2_del = true;">Delete</b-button>
+                                        </b-input-group-append>
+                                    </b-input-group>
+                                    <b-form-file v-show="!file_name_1" v-model="file2" size="sm" class="w-50 mr-sm-2"></b-form-file>
                                 </b-card-text>
                             </b-form-group>
 						</b-tab>
 						<b-tab title="영문">
+                            <b-form-group label="노출순서">
+                                <b-form-input type="number" v-model="order"></b-form-input>
+                            </b-form-group>
                             <b-form-group label="제목">
                                 <b-form-input type="text" v-model="title_en"></b-form-input>
                             </b-form-group>
@@ -114,9 +112,9 @@
                             <b-row>
                                 <b-col>
                                     <b-form-group label="연자이미지">
-                                        <b-card-text class="ino-180-70-wrap mb-1">
-                                            <div>
-                                                <b-img :src="photo_1_en||photo_prev" fluid></b-img>
+                                        <b-card-text>
+                                            <div class="img-box">
+                                                <b-img class="center-fit" :src="photo_1_en||photo_prev" fluid></b-img>
                                             </div>
                                         </b-card-text>
                                         <b-card-text class="mt-1">
@@ -127,31 +125,31 @@
                                     </b-form-group>
                                 </b-col>
                                 <b-col>
-<!-- 
-                                    <b-form-group label="발표자료">
-                                        <b-card-text class="mt-1">
-                                            <b-form-file v-model="file2_en" :placeholder="file2_en_placeholder" style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-                                            <b-button @click="file2_en= null; file2_en_del=true; file2_en_placeholder=''" size="sm" variant="danger">발표자료 삭제</b-button>
-                                        </b-card-text>
-                                    </b-form-group>
-                                     -->
                                 </b-col>
                             </b-row>
                             <b-form-group label="발표주제">
                                 <b-card-text>
                                     <b-form-textarea v-model="contents_en"></b-form-textarea>
-                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
-                                    <br>
-                                    <div class="content ql-editor" v-html="contents_en"></div> -->
                                 </b-card-text>
                             </b-form-group>
 
                             <b-form-group label="연자소개">
                                 <b-card-text>
                                     <b-form-textarea v-model="introduction_en"></b-form-textarea>
-                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="introduction_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
-                                    <br>
-                                    <div class="content ql-editor" v-html="introduction_en"></div> -->
+                                </b-card-text>
+                            </b-form-group>
+
+                            <b-form-group>
+                                <label style="color: #007BFF;">*초록업로드</label>
+                                <b-card-text>
+                                    <b-input-group v-show="file_name_1_en" prepend="file">
+                                        <b-form-input disabled :value="file_name_1_en"></b-form-input>
+                                        <b-input-group-append>
+                                            <b-button variant="outline-success" @click="fileDownload(file2_en, file_name_1_en)">Download</b-button>
+                                            <b-button variant="danger" @click="file2_en=null; file2_en_del = true;">Delete</b-button>
+                                        </b-input-group-append>
+                                    </b-input-group>
+                                    <b-form-file v-show="!file_name_1_en" v-model="file2_en" size="sm" class="w-50 mr-sm-2"></b-form-file>
                                 </b-card-text>
                             </b-form-group>
 						</b-tab>
@@ -185,8 +183,8 @@ module.exports = {
                 selected_sub: ''
             },
 
-
             id: '',
+            order: 0,
             title: '',
             title_en: '',
             contents: null,
@@ -211,20 +209,14 @@ module.exports = {
             photo_1_en: '',
             photo_1_del: false,
             photo_1_en_del: false,
-            photo_prev: this.$store.getters.dummy_image_url(['180x70']),
+            photo_prev: this.$store.getters.dummy_image_url(['400x460']),
 
             file2: null, // 발표자료 추가파일 (국)
             file2_en: null,  // 발표자료 추가파일 (영)
             file2_del: false,
             file2_en_del: false,
-            file2_placeholder:'',
-            file2_en_placeholder:'',
-            
-            editorOption: {
-				placeholder: '게시물을 작성해주세요.',
-                theme: "snow",
-            },
-           
+            file_name_1: '',
+            file_name_1_en: ''
         };
     },
     mounted: function () {
@@ -245,11 +237,11 @@ module.exports = {
             console.log(rs);
             let data = rs.data.result;
             this.id = data.id;
+            this.order = data.order;
             this.title = data.title;
             this.title_en = data.title_en;
             this.contents = data.contents;
 			this.contents_en = data.contents_en;
-
 
             this.speaker_name = data.speaker_name;
             this.speaker_name_en = data.speaker_name_en;
@@ -261,17 +253,16 @@ module.exports = {
             this.photo_1 = data.photo_1;
             this.photo_1_en = data.photo_1_en;
 
-            this.file2_placeholder = data.file;
-            this.file2_en_placeholder = data.file_en;
+            this.file2 = data.file;
+            this.file2_en = data.file_en;
+            this.file_name_1 = data.file_name_1;
+            this.file_name_1_en = data.file_name_1_en;
 
             // 탑 셀렉트
             this.category.selected_top = data.top_category_id
             // 서브검색
             await this.getSubcategory();
-            console.log(this.category.subcategory);
-            console.log(data.sub_category_id, ' == 115');
             this.category.selected_sub = data.sub_category_id;
-            console.log(this.category.selected_sub, data.sub_category_id);
         },
         storeData: async function () { // 데이터 저장
             let url = `${this.api_url}/keynote`;
@@ -284,18 +275,17 @@ module.exports = {
                 !this.file2 && this.file2_del ? formData.append('file_del', 'Y') : formData.append('file', this.file2);
                 !this.file2_en && this.file2_en_del ? formData.append('file_en_del', 'Y') : formData.append('file_en', this.file2_en);
 
-                formData.append('title', this.title);
-                formData.append('title_en', this.title_en);
-                formData.append('contents', this.contents);
-                formData.append('contents_en', this.contents_en);
-
-                formData.append('speaker_name', this.speaker_name);
-                formData.append('position', this.position);
-                formData.append('introduction', this.introduction);
-
-                formData.append('speaker_name_en', this.speaker_name_en);
-                formData.append('position_en', this.position_en);
-                formData.append('introduction_en', this.introduction_en);
+                formData.append('order', this.order);
+                this.title ? formData.append('title', this.title) : '';
+                this.title_en ? formData.append('title_en', this.title_en) : '';
+                this.contents ? formData.append('contents', this.contents) : '';
+                this.contents_en ? formData.append('contents_en', this.contents_en) : '';
+                this.speaker_name ? formData.append('speaker_name', this.speaker_name) : '';
+                this.position ? formData.append('position', this.position) : '';
+                this.introduction ? formData.append('introduction', this.introduction) : '';
+                this.speaker_name_en ? formData.append('speaker_name_en', this.speaker_name_en) : '';
+                this.position_en ? formData.append('position_en', this.position_en) : '';
+                this.introduction_en ? formData.append('introduction_en', this.introduction_en) : '';
                 
                 let category_id = this.category.selected_sub != 0 ? this.category.selected_sub : this.category.selected_top;
                 formData.append('category_id', category_id);
@@ -327,18 +317,17 @@ module.exports = {
                 !this.file2 && this.file2_del ? formData.append('file_del', 'Y') : formData.append('file', this.file2);
                 !this.file2_en && this.file2_en_del ? formData.append('file_en_del', 'Y') : formData.append('file_en', this.file2_en);
 
-                formData.append('title', this.title);
-                formData.append('title_en', this.title_en);
-                formData.append('contents', this.contents);
-                formData.append('contents_en', this.contents_en);
-
-                formData.append('speaker_name', this.speaker_name);
-                formData.append('position', this.position);
-                formData.append('introduction', this.introduction);
-
-                formData.append('speaker_name_en', this.speaker_name_en);
-                formData.append('position_en', this.position_en);
-                formData.append('introduction_en', this.introduction_en);
+                formData.append('order', this.order);
+                this.title ? formData.append('title', this.title) : '';
+                this.title_en ? formData.append('title_en', this.title_en) : '';
+                this.contents ? formData.append('contents', this.contents) : '';
+                this.contents_en ? formData.append('contents_en', this.contents_en) : '';
+                this.speaker_name ? formData.append('speaker_name', this.speaker_name) : '';
+                this.position ? formData.append('position', this.position) : '';
+                this.introduction ? formData.append('introduction', this.introduction) : '';
+                this.speaker_name_en ? formData.append('speaker_name_en', this.speaker_name_en) : '';
+                this.position_en ? formData.append('position_en', this.position_en) : '';
+                this.introduction_en ? formData.append('introduction_en', this.introduction_en) : '';
                 
                 let category_id = this.category.selected_sub != 0 ? this.category.selected_sub : this.category.selected_top;
                 formData.append('category_id', category_id);
@@ -400,14 +389,13 @@ module.exports = {
             this.category.sub_id_key_store = sub;
             this.category.subcategory = temArr;
         },
-        onEditorBlur(quill) {
-            // console.log("editor blur!", quill);
-        },
-        onEditorFocus(quill) {
-            // console.log("editor focus!", quill);
-        },
-        onEditorReady(quill) {
-            // console.log("editor ready!", quill);
+        fileDownload(url, file_name) {
+            var link = document.createElement("a");
+            link.setAttribute('download', file_name);
+            link.href = url;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
         }
     }
 };

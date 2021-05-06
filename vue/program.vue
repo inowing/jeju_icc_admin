@@ -14,6 +14,15 @@
         <template #cell(id)="row">
             <div class="text-center">{{row.item.id}}</div>
         </template>
+        <template #cell(time)="row">
+            <div class="text-center">{{row.item.time}}</div>
+        </template>
+        <template #cell(venue)="row">
+            <div class="text-center">{{row.item.venue}}</div>
+        </template>
+        <template #cell(order)="row">
+            <div class="text-center">{{row.item.order}}</div>
+        </template>
         <template #cell(manageBtn)="row">
             <div class="text-center">
                 <b-button size="sm" variant="outline-success" @click="goForm($event, row.item)">
@@ -50,12 +59,25 @@ module.exports = {
                     label: '소분류'
                 },
                 {
+                    key: 'time',
+                    label: 'Time'
+                },
+                {
                     key: 'title',
-                    label: '제목'
+                    label: '타이틀'
+                },
+                {
+                    key: 'venue',
+                    label: 'Room'
+                },
+                {
+                    key: 'order',
+                    label: '순서',
+                    sortable: true
                 },
                 {
                     key: 'manageBtn',
-                    label: '관리계정'
+                    label: '관리'
                 }
             ],
             items: []

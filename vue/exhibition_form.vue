@@ -430,14 +430,6 @@
         return this.strByteLength(this.boothForm.desc_en);
       }
     },
-    watch: {
-      // boothForm: {
-      //   deap: true,
-      //   handler(newData) {
-      //     console.log(`data changed %o`, newData);
-      //   }
-      // }
-    },
     methods: {
       /**
        * API 연동
@@ -486,7 +478,6 @@
 
         this.file_src = rs.file;
         this.file_en_src = rs.file_en;
-        console.log('booth form ', this.boothForm);
 
         this.category.selected_top = rs.top_category_id; // 탑 셀렉트
         await this.getSubcategory(); // 서브검색
@@ -547,7 +538,6 @@
             'Content-Type': 'multipart/form-data'
           }
         });
-        console.log('1단계 - 상단 데이터 저장결과 ', rs);
 
         /**
          * 2단계 저장. 상단 데이터 저장
@@ -575,7 +565,8 @@
             }
           }
           for (let item of this.boothForm.introduction_en) {
-            // todo. 영문 API 미작동으로 덮어써지면서 사이드이팩트 발생하여 막았음....
+            // todo. 영문일때 API 에서, 같은 이름 위로 덮어써지고 있는 현상으롱 인해 화면에서도 사이드이팩트가 발생하여 막았음....
+            // API 완비되면 아래 주석을 풀것.
             // if (item.id) { // 소개자료 수정한 경우
             //   await this.postIntroduction(item, `${this.api_url}/e_library/${item.id}`);
             // } else { // 소개자료가 더 추가된 경우
@@ -605,7 +596,6 @@
         formData2.append('library_type', item.library_type);
         formData2.append('lang_type', item.lang_type);
 
-        console.log('update!!!!', item);
         formData2.append('title', item.title);
         formData2.append('order', item.order);
 
@@ -624,7 +614,6 @@
             break;
           case 2:
             // 2 영상파일
-            console.log('ya.... c8 ', item.title);
             !item.thumb_prev && item.thumb_prev_del ? formData2.append('image_prev_del', 'Y') : formData2.append('image_prev', item.image_prev); // 영상 썸네일 프리뷰 파일
             !item.file && item.movie_file_del ? formData2.append('file_del', 'Y') : formData2.append('file', item.file); // 영상 파일
             formData2.append('link_message', item.link_message); // 영상 메시지
@@ -674,7 +663,6 @@
       },
       introductionUpdateFn: async function (item, event, index) {
         // 기업소개자료 수정하기 세팅
-        console.log(item);
         this.isNew = false; // 이제 모달에서 수정 버튼으로 보이도록 값을 바꾼다.
         this.selected_index = index; // 선택한 인덱스 저장해둔다. 바꿀자리 찾기 위해서...
 
@@ -684,7 +672,6 @@
           movie_file_del: false, // 첨부 영상 파일 지울까요
         };
         let thumb_prev = '';
-        console.log('item.thumb_prev', item.thumb_prev);
         if (item.thumb_prev) {
           thumb_prev = item.thumb_prev
         } else if (typeof item.image_prev === 'string') {
@@ -692,12 +679,10 @@
         }
         this.selected_item.thumb_prev = thumb_prev;
         
-        console.log(this.selected_item);
         this.introduction_modal = true; // 모달을 연다.
       },
       updateItemFn: function () {
         // 기업소개자료 모달의 수정버튼을 누른다.
-        console.log('update item... ', this.tabIndex, this.selected_index, this.selected_item)
         
         if (this.tabIndex == 0) {
           let newArr = [...this.boothForm.introduction];

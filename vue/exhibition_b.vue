@@ -33,11 +33,8 @@
                             </b-card>
 
                             <!-- editor -->
-                            <!-- editor -->
-                            <!-- editor -->
-                            <!-- editor -->
                             <h6>내용</h6>
-                            <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+                            <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content" />
                             <br>
                             <div class="content ql-editor" v-html="editor_content"></div>
                         </b-tab>
@@ -63,11 +60,8 @@
                             </b-card>
 
                             <!-- editor -->
-                            <!-- editor -->
-                            <!-- editor -->
-                            <!-- editor -->
                             <h6>내용</h6>
-                            <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+                            <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="editor_content_en" />
                             <br>
                             <div class="content ql-editor" v-html="editor_content_en"></div>
                         </b-tab>
@@ -168,8 +162,6 @@
 </template>
 
 <script>
-// import { VueEditor } from "vue2-editor";
-
 module.exports = {
     name: "exhibition_b",
     data: function () {
@@ -269,7 +261,6 @@ module.exports = {
             let url = `${this.api_url}/e_overview?menu_id=${this.menu_id}`;
             let rs = (await axios.get(url)).data.result;
             this.exibition_b = rs[0];
-            console.log(rs);
             this.overview_id = this.exibition_b.id;
             this.editor_content = this.exibition_b.contents;
             this.editor_content_en = this.exibition_b.contents_en;
@@ -289,16 +280,13 @@ module.exports = {
             // 상단 내용 저장
             let url = `${this.api_url}/e_overview`;
             var formData = new FormData();
-						formData.append('menu_id', this.menu_id); // 필수
-						// formData.append('overview_id', this.overview_id); // 필수
-						// formData.append('overview_type', this.overview_type);
-
-            formData.append("type_b_image", this.file1);
-            formData.append("type_b_image_en", this.file1_en);
-            formData.append("type_b_link", this.form.type_b_link);
-            formData.append("type_b_link_en", this.form.type_b_link_en);
-            formData.append("contents", this.editor_content);
-            formData.append("contents_en", this.editor_content_en);
+                formData.append('menu_id', this.menu_id); // 필수
+                formData.append("type_b_image", this.file1);
+                formData.append("type_b_image_en", this.file1_en);
+                formData.append("type_b_link", this.form.type_b_link);
+                formData.append("type_b_link_en", this.form.type_b_link_en);
+                formData.append("contents", this.editor_content);
+                formData.append("contents_en", this.editor_content_en);
 
             let rs = await axios.post(url, formData, {
                 headers: {
@@ -306,7 +294,6 @@ module.exports = {
                 },
             });
 
-            console.log(rs);
             this.getList();
         },
         insertContent: async function () {
@@ -325,15 +312,13 @@ module.exports = {
             for (let key in this.photoParams) {
                 formData.append(key, this.photoParams[key]);
             }
-						// formData.append('menu_id', this.menu_id);
-						
+
             let rs = await axios.post(url, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                },
+                }
             });
 
-            console.log("--->", rs);
             this.getList();
             this.modal1 = false;
         },
@@ -368,20 +353,9 @@ module.exports = {
             if (confirm('삭제 하시겠습니까?')) {
                 let url = `${this.api_url}/overviewcontents/${item.id}`;
                 let rs = await axios.delete(url);
-								console.log('deleted --> ', rs);
-								this.getList();
+                this.getList();
             }
-        },
-        
-        onEditorBlur(quill) {
-            // console.log("editor blur!", quill);
-        },
-        onEditorFocus(quill) {
-            // console.log("editor focus!", quill);
-        },
-        onEditorReady(quill) {
-            // console.log("editor ready!", quill);
-        },
+        }
     },
 };
 </script>

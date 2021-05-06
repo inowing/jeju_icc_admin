@@ -118,7 +118,6 @@
             <b-row class="mt-3">
                 <b-col>
                     <b-button size="sm" variant="outline-primary" @click="question_modal = !question_modal">확인</b-button>
-                    
                 </b-col>
             </b-row>
         </b-modal>
@@ -231,7 +230,6 @@ module.exports = {
     watch: {
         search_key: function (newval, oldval) {
             if (oldval && !newval) {
-                console.log('search fire');
                 this.getList();
             }
         }
@@ -254,7 +252,6 @@ module.exports = {
             
             let response = await axios.get(url);
             let rs = response.data.result;
-            console.log('company list data ', response);
             this.items = rs;
         },
         goAdminList: function (item) {

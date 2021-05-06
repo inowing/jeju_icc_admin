@@ -50,7 +50,7 @@
                                 <b-col>
                                     <b-form-group label="연자이미지">
                                         <b-card-text>
-                                            <div class="img-box">
+                                            <div class="img-box" style="max-width:200px;">
                                                 <b-img class="center-fit" :src="photo_1||photo_prev" fluid></b-img>
                                             </div>
                                         </b-card-text>
@@ -113,7 +113,7 @@
                                 <b-col>
                                     <b-form-group label="연자이미지">
                                         <b-card-text>
-                                            <div class="img-box">
+                                            <div class="img-box" style="max-width:200px;">
                                                 <b-img class="center-fit" :src="photo_1_en||photo_prev" fluid></b-img>
                                             </div>
                                         </b-card-text>

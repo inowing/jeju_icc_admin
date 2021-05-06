@@ -58,7 +58,7 @@
                                 <b-col>
                                     <b-form-group label="연자이미지">
                                         <b-card-text>
-                                            <div class="img-box">
+                                            <div class="img-box" style="max-width:200px;">
                                                 <b-img class="center-fit" :src="photo_1||photo_prev" fluid></b-img>
                                             </div>
                                         </b-card-text>
@@ -70,31 +70,17 @@
                                     </b-form-group>
                                 </b-col>
                                 <b-col>
-<!-- 
-                                    <b-form-group label="발표자료">
-                                        <b-card-text class="mt-1">
-                                            <b-form-file v-model="file2" style="max-width:70%;" :placeholder="file2_placeholder" class="mr-2" size="sm"></b-form-file>
-                                            <b-button @click="file2= null; file2_del=true; file2_placeholder=''" size="sm" variant="danger">발표자료 삭제</b-button>
-                                        </b-card-text>
-                                    </b-form-group>
-                                     -->
                                 </b-col>
                             </b-row>
                             <b-form-group label="발표주제">
                                 <b-card-text>
                                     <b-form-textarea v-model="contents"></b-form-textarea>
-                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
-                                    <br>
-                                    <div class="content ql-editor" v-html="contents"></div> -->
                                 </b-card-text>
                             </b-form-group>
 
                             <b-form-group label="연자소개">
                                 <b-card-text>
                                     <b-form-textarea v-model="introduction"></b-form-textarea>
-                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="introduction" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
-                                    <br>
-                                    <div class="content ql-editor" v-html="introduction"></div> -->
                                 </b-card-text>
                             </b-form-group>
 
@@ -135,7 +121,7 @@
                                 <b-col>
                                     <b-form-group label="연자이미지">
                                         <b-card-text>
-                                            <div class="img-box">
+                                            <div class="img-box" style="max-width:200px;">
                                                 <b-img class="center-fit" :src="photo_1_en||photo_prev" fluid></b-img>
                                             </div>
                                         </b-card-text>
@@ -147,31 +133,17 @@
                                     </b-form-group>
                                 </b-col>
                                 <b-col>
-<!--                                     
-                                    <b-form-group label="발표자료">
-                                        <b-card-text class="mt-1">
-                                            <b-form-file v-model="file2_en" :placeholder="file2_en_placeholder" style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-                                            <b-button @click="file2_en= null; file2_en_del=true; file2_en_placeholder=''" size="sm" variant="danger">발표자료 삭제</b-button>
-                                        </b-card-text>
-                                    </b-form-group>
-                                     -->
                                 </b-col>
                             </b-row>
                             <b-form-group label="발표주제">
                                 <b-card-text>
                                     <b-form-textarea v-model="contents_en"></b-form-textarea>
-                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
-                                    <br>
-                                    <div class="content ql-editor" v-html="contents_en"></div> -->
                                 </b-card-text>
                             </b-form-group>
 
                             <b-form-group label="연자소개">
                                 <b-card-text>
                                     <b-form-textarea v-model="introduction_en"></b-form-textarea>
-                                    <!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="introduction_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
-                                    <br>
-                                    <div class="content ql-editor" v-html="introduction_en"></div> -->
                                 </b-card-text>
                             </b-form-group>
 
@@ -271,7 +243,6 @@ module.exports = {
         getData: async function () { // 데이터 가져오기
             let url = `${this.api_url}/speaker/${this.id}`;
             let rs = await axios.get(url);
-            console.log(rs);
             let data = rs.data.result;
             this.id = data.id;
             this.order = data.order;

@@ -1,12 +1,5 @@
 <template>
 <section>
-<!-- 
-    <b-row class="mb-1">
-        <b-col>
-            <h6><strong>3.기업관리 > 기업 신청 승인</strong></h6>
-        </b-col>
-    </b-row>
-     -->
     <b-row>
         <b-col cols="8">
             <b-input-group size="sm" align-v="baseline">
@@ -176,9 +169,6 @@ module.exports = {
                 }
             });
         },
-        requestInfo(item, index, target) {
-            console.log(item, index, target);
-        },
         requestAccept: async function(item, index, target) {
 
             if (confirm('승인 하시겠습니까?')) {
@@ -198,8 +188,6 @@ module.exports = {
                     this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
                 }
             }
-            //
-            console.log(item, index, target);
         },
         requestDelete: async function(item, index, target) {
             if (confirm("삭제 하시겠습니까?")) {
@@ -212,7 +200,6 @@ module.exports = {
         },
         excelDownload: function () {
             window.location.href = `${this.api_url}/company/excel?event_id=${this.event_id}&status=0`;
-
         }
     },
 };

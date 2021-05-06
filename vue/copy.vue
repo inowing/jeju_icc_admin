@@ -1,26 +1,19 @@
 <template>
 	<section>
-<!-- 		
-		<b-row>
-			<b-col>
-				<h6><b>Copyright 영역</b></h6>
-			</b-col>
-		</b-row>
-		 -->
 		<b-row>
 			<b-col>
 				<b-card no-body>
 					<b-tabs content-class="" card>
 						<b-tab title="국문" active @>
 							<b-card-text>
-								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="copyright" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="copyright"/>
 								<br>
 								<div class="content ql-editor" v-html="copyright"></div>
 							</b-card-text>
 						</b-tab>
 						<b-tab title="영문">
 							<b-card-text>
-								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="copyright_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
+								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="copyright_en"/>
 								<br>
 								<div class="content ql-editor" v-html="copyright_en"></div>
 							</b-card-text>
@@ -82,16 +75,7 @@ module.exports = {
 				});
 			this.getCopyright();
 			this.$showMsgBoxTwo(rs.status);
-		},
-		onEditorBlur(quill) {
-            // console.log("editor blur!", quill);
-        },
-        onEditorFocus(quill) {
-            // console.log("editor focus!", quill);
-        },
-        onEditorReady(quill) {
-            // console.log("editor ready!", quill);
-        },
+		}
 	}
 }
 </script>

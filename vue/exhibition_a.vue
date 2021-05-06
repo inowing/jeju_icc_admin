@@ -405,7 +405,6 @@
         <b-row>
             <b-col>
                 <b-card no-body>
-
                 
                 <b-tabs card>
                     <b-tab title="국문" active>
@@ -637,13 +636,8 @@ module.exports = {
             this.is_visible_photo_2_en = this.exibition_a.is_visible_photo_2_en ? true : false;
             this.is_visible_photo_3_en = this.exibition_a.is_visible_photo_3_en ? true : false;
 
-            console.log(this.exibition_a);
-
             this.photoParams_reset.overview_id = this.exibition_a.id;
             this.photoParams.overview_id = this.exibition_a.id;
-
-            // this.contents1_keys = Object.keys(contents1);
-            // this.contents1_values = Object.values(contents1);
         },
 
         save: async function () {
@@ -660,7 +654,6 @@ module.exports = {
             this.exibition_a.link_1_en = this.exibition_a.link_1_en && !this.exibition_a.link_1_en.includes('http') ? `http://${this.exibition_a.link_1_en}` : this.exibition_a.link_1_en;
             this.exibition_a.link_2_en = this.exibition_a.link_2_en && !this.exibition_a.link_2_en.includes('http') ? `http://${this.exibition_a.link_2_en}` : this.exibition_a.link_2_en;
             this.exibition_a.link_3_en = this.exibition_a.link_3_en && !this.exibition_a.link_3_en.includes('http') ? `http://${this.exibition_a.link_3_en}` : this.exibition_a.link_3_en;
-
             
             formData.append("link_1", this.exibition_a.link_1); // 상단 슬라이드 링크
             formData.append("link_2", this.exibition_a.link_2);
@@ -682,7 +675,6 @@ module.exports = {
             // x:linkPreview_default(from DB) - x:linkPreview -> nothing 
             // o:linkPreview_default(from DB) - x:linkPreview -> del y (delete exist file)
             // o:linkPreview_default(from DB) - o:linkPreview -> after compare : o (add new file), x
-            console.log('1번째 파일은 0.아무것도 안한다. 1.업로드한다 2.지운다 :', this.$fileUploadChecker(this.photo_1_preview_local, this.photo_1_preview_data));
             let fileStatus = 0;
 
             fileStatus = this.$fileUploadChecker(this.photo_1_preview_local, this.photo_1_preview_data);
@@ -703,9 +695,7 @@ module.exports = {
             fileStatus == 1 ? formData.append("logo", this.logo_file) : fileStatus == 2 ? formData.append("logo_del", 'Y') : '';
             fileStatus = this.$fileUploadChecker(this.logo_file_en_preview_local, this.logo_file_en_preview_data);
             fileStatus == 1 ? formData.append("logo_en", this.logo_file_en) : fileStatus == 2 ? formData.append("logo_en_del", 'Y') : '';
-            console.log(this.contents1_arr);
-            console.log(this.contents1_arr);
-            console.log(this.contents1_arr);
+            
             formData.append("contents", JSON.stringify(this.contents1_arr)); // 카테고리1 컨텐츠
             formData.append("contents_en", JSON.stringify(this.contents1_en_arr)); // 카테고리1 컨텐츠
 
@@ -725,11 +715,9 @@ module.exports = {
             this.getList();
         },
         insertContent23: async function () {
-            console.log(this.content3, this.photoParams);
             let url = `${this.api_url}/overviewcontents`;
 
             if (this.photoParams.id) {
-                console.log(this.photoParams.id);
                 url = `${this.api_url}/overviewcontents/${this.photoParams.id}`;
             }
             var formData = new FormData();
@@ -751,21 +739,14 @@ module.exports = {
             let rs = await axios.post(url, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                },
+                }
             });
 
             this.getList();
             this.$showMsgBoxTwo(rs.status);
             this.modal1 = false;
         },
-        updateContent23: async function (
-            item,
-            index,
-            target,
-            isContent3,
-            title,
-            imageSize
-        ) {
+        updateContent23: async function (item, index, target, isContent3, title, imageSize) {
             this.photoParams = {
                 ...this.photoParams_reset,
             };
@@ -790,8 +771,8 @@ module.exports = {
             this.photoParams.photo_1_en = null;
 
             this.content_modal_title = title;
-            (this.photoPreview_default = this.$store.getters.dummy_image_url([imageSize])),
-            (this.modal1 = true);
+            this.photoPreview_default = this.$store.getters.dummy_image_url([imageSize]);
+            this.modal1 = true;
         },
         deleteContent23: async function (item, index, target) {
             if (confirm("삭제하시겠습니까?")) {
@@ -799,29 +780,17 @@ module.exports = {
                 let rs = await axios.delete(url, {
                     headers: {
                         "Content-Type": "application/json",
-                    },
+                    }
                 });
                 this.$showMsgBoxTwo(rs.status);
                 this.getList();
             }
         },
         content1Add: function (type) {
-            type
-                ?
-                this.contents1_en_arr.push({
-                    key: "",
-                    value: "",
-                }) :
-                this.contents1_arr.push({
-                    key: "",
-                    value: "",
-                });
+            type ? this.contents1_en_arr.push({ key: "", value: "" }) : this.contents1_arr.push({ key: "", value: "" });
         },
         content1Delete: function (index, type) {
-            type
-                ?
-                this.contents1_en_arr.splice(index, 1) :
-                this.contents1_arr.splice(index, 1);
+            type ? this.contents1_en_arr.splice(index, 1) : this.contents1_arr.splice(index, 1);
         },
         newModalAction(isContent3, title, imageSize) {
             this.content3 = isContent3;
@@ -837,8 +806,8 @@ module.exports = {
             this.content_modal_title = title;
             this.modal1_photo_1_local = null;
             this.modal1_photo_1_en_local = null;
-            (this.photo_preview_default = this.$store.getters.dummy_image_url([imageSize])),
-            (this.modal1 = !this.modal1);
+            this.photo_preview_default = this.$store.getters.dummy_image_url([imageSize]);
+            this.modal1 = !this.modal1;
         }
     }
 };

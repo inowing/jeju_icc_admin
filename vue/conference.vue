@@ -6,7 +6,6 @@
             <b-button class="mt-2" href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
                 <b-icon-arrow-left></b-icon-arrow-left> 이전으로
             </b-button>
-
         </b-col>
     </b-row>
     <b-card>
@@ -112,10 +111,6 @@
         <b-form-group label="Sub Text 컬러" class="mb-1">
             <b-form-input type="color" v-model="sub_text_color" size="sm">
         </b-form-group>
-        <!-- <b-form-group label="Sub Title" class="mb-1">
-            <b-form-input type="text" v-model="sub_title" size="sm">
-        </b-form-group> -->
-
         <div>
             <b-form-group label="VM" label-for="tags-component-select">
                 <b-form-tags id="tags-component-select" v-model="tagValue" size="sm" add-on-change no-outer-focus>
@@ -132,7 +127,6 @@
                             <option v-for="option in availableOptions" :key="option.id">{{ option.name }}</option>
                             <option v-if="availableOptions.length === 0">There are no tags available to select</option>
                         </datalist>
-
                     </template>
                 </b-form-tags>
             </b-form-group>
@@ -242,7 +236,6 @@ module.exports = {
             let url = `${this.api_url}/menu/${this.menu_id}`;
             let data = (await axios.get(url)).data;
             this.form = data.result;
-            console.log(this.form);
         },
         updateData: async function (form, event_id, url) { // 상단 데이터 수정저장
             let formData = new FormData();
@@ -262,7 +255,6 @@ module.exports = {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-                console.log(rs);
 
                 this.$showMsgBoxTwo(rs.status);
                 this.getData();
@@ -279,7 +271,6 @@ module.exports = {
         getList: async function () { // VM 설정 하단 리스트
             let url = `${this.api_url}/menu_conference?menu_id=${this.menu_id}`;
             let rs = await axios.get(url);
-            console.log('----',rs);
             this.items = rs.data.result;
         },
         storeVM: async function () { // 하단 리스트아이템 저장하기
@@ -298,7 +289,6 @@ module.exports = {
                 formData.append('sub_theme_color', this.sub_theme_color);
                 formData.append('main_text_color', this.main_text_color);
                 formData.append('sub_text_color', this.sub_text_color);
-                // formData.append('sub_title', this.sub_title);
 
             await this.sendPost(url, formData);
             await this.getList();
@@ -320,7 +310,6 @@ module.exports = {
                 formData.append('sub_theme_color', this.sub_theme_color);
                 formData.append('main_text_color', this.main_text_color);
                 formData.append('sub_text_color', this.sub_text_color);
-                // formData.append('sub_title', this.sub_title);
 
             await this.sendPost(url, formData);
             await this.getList();
@@ -359,7 +348,6 @@ module.exports = {
          **/
         openModal: function (event, item) {
             if (item) {
-                console.log('selected item', item);
                 this.vm_id = item.id;
                 this.category_id = item.category_id;
                 // this.sub_title = item.sub_title;
@@ -374,7 +362,6 @@ module.exports = {
             } else {
                 this.vm_id = '';
                 this.category_id = '';
-                // this.sub_title = '';
                 this.main_theme_color = '';
                 this.sub_theme_color = '';
                 this.main_text_color = '';
@@ -390,8 +377,6 @@ module.exports = {
             this.category = this.array_reform(rs.data.result.category);
             this.color = this.array_reform(rs.data.result.color);
             this.vm = rs.data.result.conference;
-            
-            console.log('this.vm ', this.vm);
         },
         array_reform: function (arr) {
             if (!arr || !arr.length) {

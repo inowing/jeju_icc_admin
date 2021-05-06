@@ -25,6 +25,12 @@
                             <b-form-invalid-feedback :state="validation.valid2">기업을 선택하세요.</b-form-invalid-feedback>
                         </b-form-group>
 
+                        <b-form-group label="게시순서">
+                            <div class="form-group">
+                                <b-form-input v-model="form.order" type="number"></b-form-input>
+                            </div>
+                        </b-form-group>
+
                         <!-- radio -->
                         <b-form-group label="게시상태">
                             <div class="form-group">
@@ -132,6 +138,7 @@ module.exports = {
             form: {
                 company_id: 0,
                 category_id: 0,
+                order: 0,
                 is_visible: false,
 			    is_sale: false,
                 title: '',
@@ -175,9 +182,7 @@ module.exports = {
     computed: {
         validation: function () {
 
-            let valid_result = this.form.category_id && this.form.company_id && this.form.title && this.form.price && this.form.sale_price && this.form.phone
-
-            && parseInt(this.form.price) > parseInt(this.form.sale_price);
+            let valid_result = this.form.category_id && this.form.company_id && this.form.title && this.form.price && this.form.sale_price && this.form.phone && parseInt(this.form.price) > parseInt(this.form.sale_price);
             
             return {
                 valid1: this.form.category_id ? true : false,
@@ -252,7 +257,6 @@ module.exports = {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            console.log('shop regist ', rs);
 
             function callback () {
                 this.$router.go(-1);
@@ -265,6 +269,7 @@ module.exports = {
             !this.form.product_image && this.product_image_del ? formData.append('product_image_del', 'Y') : formData.append('product_image', this.form.product_image);
             !this.form.detail_image && this.detail_image_del ? formData.append('detail_image_del', 'Y') : formData.append('detail_image', this.form.detail_image);
 
+            formData.append("order", this.form.order);
             formData.append("category_id", this.form.category_id);
             formData.append('is_visible', this.form.is_visible ? 1 : 0);
             formData.append('is_sale', this.form.is_sale ? 1 : 0);

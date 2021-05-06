@@ -9,7 +9,6 @@
         </b-col>
     </b-row>
     
-    
     <b-row class="mt-3">
         <b-col>
             <b-card no-body>
@@ -70,7 +69,6 @@
                                     <b-col sm="4"><label style="font-size: 10pt;">직원수</label></b-col>
                                     <b-col sm="8">
                                         <b-form-select v-model="form.employees_count" :options="employees_count_options" size="sm"></b-form-select>
-                                        <!-- <b-form-input size="sm" v-model="form.employees_count"></b-form-input> -->
                                     </b-col>
                                 </b-row>
                             </b-col>
@@ -89,7 +87,6 @@
                                 <b-row class="p-1">
                                     <b-col sm="4"><label style="font-size: 10pt;">국가</label></b-col>
                                     <b-col sm="8">
-                                        <!-- <b-form-input size="sm" v-model="form.country"></b-form-input> -->
                                         <b-form-select v-model="form.country" :options="nation_options" size="sm"></b-form-select>
                                     </b-col>
                                 </b-row>
@@ -129,7 +126,6 @@
                                     <b-col sm="4"><label style="font-size: 10pt;">매출액</label></b-col>
                                     <b-col sm="8">
                                         <b-form-select v-model="form.take" :options="take_options" size="sm"></b-form-select>
-                                        <!-- <b-form-input size="sm" v-model="form.take"></b-form-input> -->
                                     </b-col>
                                 </b-row>
                             </b-col>
@@ -278,7 +274,6 @@
                                     <b-col sm="4"><label style="font-size: 10pt;">직원수</label></b-col>
                                     <b-col sm="8">
                                         <b-form-select v-model="form.employees_count" :options="employees_count_options" size="sm"></b-form-select>
-                                        <!-- <b-form-input size="sm" v-model="form.employees_count"></b-form-input> -->
                                     </b-col>
                                 </b-row>
                             </b-col>
@@ -297,7 +292,6 @@
                                 <b-row class="p-1">
                                     <b-col sm="4"><label style="font-size: 10pt;">국가</label></b-col>
                                     <b-col sm="8">
-                                        <!-- <b-form-input size="sm" v-model="form.country"></b-form-input> -->
                                         <b-form-select v-model="form.country" :options="nation_options" size="sm"></b-form-select>
                                     </b-col>
                                 </b-row>
@@ -337,7 +331,6 @@
                                     <b-col sm="4"><label style="font-size: 10pt;">매출액</label></b-col>
                                     <b-col sm="8">
                                         <b-form-select v-model="form.take" :options="take_options" size="sm"></b-form-select>
-                                        <!-- <b-form-input size="sm" v-model="form.take"></b-form-input> -->
                                     </b-col>
                                 </b-row>
                             </b-col>
@@ -459,7 +452,6 @@
                                 </b-input-group-append>
                             </b-input-group>
                             <b-form-file v-show="!logo_src" v-model="form.logo" size="sm" class="w-50 mr-sm-2"></b-form-file>
-
                         </b-col>
                     </b-row>
                 </b-col>
@@ -589,7 +581,6 @@ module.exports = {
                 this.isCheckedNumber = true;
                 this.getData();
             }
-            // http://14.63.172.119/api/v1/company/option
         })
     },
     computed: {
@@ -603,7 +594,6 @@ module.exports = {
                 && this.form.sectors
                 && this.form.email
                 && this.form.address
-            console.log('this.form', valid_result ? true : false,  this.form);
 
             let valid_result_en = this.isCheckedNumber
                 && this.form.name_en
@@ -644,21 +634,16 @@ module.exports = {
         searchCompany: async function() {
             let com = String(this.form.number).replace(/-/g, '');
             let com_str = com.substr(0,3) + '-'  + com.substr(3,2) + '-'  + com.substr(5);
-            // let com_str = parseInt(com.substr(0,3)) + '-'  + parseInt(com.substr(3,2)) + '-'  + parseInt(com.substr(5));
             this.form.number = com_str;
             if (com_str.match(/^\d{3}-\d{2}-\d{5}$/g)) {
-                // console.log('yaho~~~', com_str);
                 let url =  `${this.api_url}/company/search?event_id=${this.event_id}&number=${this.form.number}`;
                 let rs = await axios.get(url);
                 if (rs.data.code == 200) {
                     // 있으면 입력 못하게 해주기
                     this.isCheckedNumber = false;
                     this.valid1_text = '중복되지 않는 사업자번호가 필요합니다.';
-                    // this.$showMsgBoxTwo(400, '', `${this.form.number} : 중복입니다.`);
                 } else {
-
                     this.isCheckedNumber = true;
-                    // this.$showMsgBoxTwo(200, '', `${this.form.number} : 등록 가능합니다.`);
                 }
             } else {
                 // 형식이 다름.
@@ -681,16 +666,12 @@ module.exports = {
             rs.logo_ai = null;
             rs.business_registration = null;
 
-            console.log(rs);
             this.form = {...rs};
             this.event_type = rs.event_type;
             this.attend_type = rs.attend_type;
             this.isNew = false;
         },
         storeData: async function () {
-            // if (!this.validation.valid_result && !this.validation.valid_result_en) {
-            //     return;
-            // }
             
             let url =  `${this.api_url}/company`;
             let formData = new FormData();
@@ -706,8 +687,6 @@ module.exports = {
                 }
             }
 
-            console.log(this.form);
-            
             !this.form.business_registration && this.file_del ? formData.append('business_registration_del', 'Y') : formData.append('business_registration', this.form.business_registration);
             !this.form.logo && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.form.logo);
             !this.form.logo_ai && this.logo_ai_del ? formData.append('logo_ai_del', 'Y') : formData.append('logo_ai', this.form.logo_ai);
@@ -725,10 +704,7 @@ module.exports = {
         }
 
         ,updateData: async function () {
-            // if (!this.validation.valid_result && !this.validation.valid_result_en) {
-            //     return;
-            // }
-
+            
             let url =  `${this.api_url}/company/${this.company_id}`;
             let formData = new FormData();
             
@@ -744,8 +720,6 @@ module.exports = {
                 }
             }
 
-            console.log(this.form);
-            
             !this.form.business_registration && this.file_del ? formData.append('business_registration_del', 'Y') : formData.append('business_registration', this.form.business_registration);
             !this.form.logo && this.logo_del ? formData.append('logo_del', 'Y') : formData.append('logo', this.form.logo);
             !this.form.logo_ai && this.logo_ai_del ? formData.append('logo_ai_del', 'Y') : formData.append('logo_ai', this.form.logo_ai);
@@ -768,7 +742,7 @@ module.exports = {
             document.body.appendChild(link);
             link.click();
             link.remove();
-        },
+        }
     }
 }
 </script>

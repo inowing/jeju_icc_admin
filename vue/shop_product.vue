@@ -35,6 +35,9 @@
                 <template #cell(id)="row">
                     <div class="text-center">{{row.item.id}}</div>
                 </template>
+                <template #cell(order)="row">
+                    <div class="text-center">{{row.item.order}}</div>
+                </template>
                 <template #cell(price)="row">
                     <div class="text-right">{{ row.item.price.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")}}</div>
                 </template>
@@ -89,6 +92,11 @@ module.exports = {
             fields: [{
                     key: 'id',
                     label: '아이디'
+                },
+                {
+                    key: 'order',
+                    label: '순서',
+                    sortable: true
                 },
                 {
                     key: 'category_name',

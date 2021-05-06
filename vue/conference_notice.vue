@@ -125,7 +125,6 @@ module.exports = {
         getList: async function () {
             let url = `${this.api_url}/conference_notice?conference_id=${this.conference_id}`;
             let rs = await axios.get(url);
-            console.log(rs);
             this.items = rs.data.result;
         },
         openModal: function (event, item) {

@@ -212,10 +212,6 @@
 <script>
 module.exports = {
     name: 'mainMenu',
-    components: {
-        // 'c_overview': window.httpVueLoader(`./c_overview.vue`),
-
-    },
     data: function () {
         return {
             event_id: null,
@@ -243,6 +239,7 @@ module.exports = {
             ],
             menuItems: [],
             menuType: {
+                // style은 사용가능한 카테고리만 쓰세요
                 0: {
                     type: 0,
                     name: 'Home',
@@ -253,16 +250,9 @@ module.exports = {
                     type: 1,
                     name: '박람회소개',
                     style: '혼합형',
-                    overview_type: [{
-                            value: 0,
-                            text: 'Type-A',
-                            vue_name: 'exhibition_a'
-                        },
-                        {
-                            value: 1,
-                            text: 'Type-B',
-                            vue_name: 'exhibition_b'
-                        }
+                    overview_type: [
+                        { value: 0, text: 'Type-A', vue_name: 'exhibition_a' },
+                        { value: 1, text: 'Type-B', vue_name: 'exhibition_b' }
                     ]
                 },
                 2: {
@@ -352,44 +342,16 @@ module.exports = {
                 }
             },
 
-            fields: [{
-                    key: 'id',
-                    label: 'menu_id',
-                    sortable: true
-                },
-                {
-                    key: 'type',
-                    label: '메뉴타입'
-                },
-                {
-                    key: 'name',
-                    label: '메뉴명(국문)'
-                },
-                {
-                    key: 'name_en',
-                    label: '메뉴명(영문)'
-                },
-                {
-                    key: 'order',
-                    label: '순서',
-                    sortable: true
-                },
-                {
-                    key: 'is_visible',
-                    label: '노출여부'
-                },
-                {
-                    key: 'category',
-                    label: '카테고리'
-                },
-                {
-                    key: 'contents',
-                    label: '컨텐츠'
-                },
-                {
-                    key: 'manageBtn',
-                    label: '관리항목'
-                },
+            fields: [
+                { key: 'id', label: 'menu_id', sortable: true },
+                { key: 'type', label: '메뉴타입' },
+                { key: 'name', label: '메뉴명(국문)' },
+                { key: 'name_en', label: '메뉴명(영문)' },
+                { key: 'order', label: '순서', sortable: true },
+                { key: 'is_visible', label: '노출여부' },
+                { key: 'category', label: '카테고리' },
+                { key: 'contents', label: '컨텐츠' },
+                { key: 'manageBtn', label: '관리항목' }
             ],
             items: [],
 
@@ -405,7 +367,6 @@ module.exports = {
             },
 
             ex_target: null,
-
             colors: {
                 "menu_back_color": '#4d67c7',
                 "menu_text_color": '#ffffff',
@@ -416,32 +377,17 @@ module.exports = {
                 "submenu_back_color_on": "#d874d4",
                 "submenu_text_color_on": "#ffffff",
             },
-            menuBtnPreview: {
-                'background-color': '#4d67c7',
-                color: '#ffffff'
-            },
-            menuBtnHoverPreview: {
-                'background-color': '#d874d4',
-                color: '#ffffff'
-            },
-            subMenuBtnPreview: {
-                'background-color': '#4d67c7',
-                color: '#ffffff'
-            },
-            subMenuBtnHoverPreview: {
-                'background-color': '#d874d4',
-                color: '#ffffff'
-            },
-
+            menuBtnPreview: { 'background-color': '#4d67c7', color: '#ffffff' },
+            menuBtnHoverPreview: { 'background-color': '#d874d4', color: '#ffffff' },
+            subMenuBtnPreview: { 'background-color': '#4d67c7', color: '#ffffff' },
+            subMenuBtnHoverPreview: { 'background-color': '#d874d4', color: '#ffffff' },
             api_url: ''
-
         }
     },
     mounted: function () {
         this.$nextTick(function () {
             this.event_id = this.$store.getters.event_id;
             this.api_url = this.$store.getters.api_url;
-            // console.log('event_id... mainmenu ', this.$store.getters.event_id);
             this.loadData();
             this.menuItems = Object.values(this.menuType);
             
@@ -449,7 +395,6 @@ module.exports = {
     },
     methods: {
         btnPreviewChange(target, property, value) {
-            // console.log(target, property, value);
             this[target][property] = value;
         },
 
@@ -457,7 +402,6 @@ module.exports = {
             this.$refs[id].hide()
         },
         selectType(item, index, target) {
-            // console.log(item, index, target, target.className);
             if (this.ex_target) {
                 this.ex_target.className = this.ex_target.className.replace('btn-info', 'btn-outline-info');
             }
@@ -487,13 +431,11 @@ module.exports = {
             formData.append("link", this.menuAddParams.link);
             formData.append("link_en", this.menuAddParams.link_en);
 
-            // console.log(this.menuAddParams);
             let rs = await axios.post(url, formData, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log(rs);
             this.$showMsgBoxTwo(rs.status);
             this.loadData();
             this.mainMenuAdd = false;
@@ -501,7 +443,6 @@ module.exports = {
         saveColor: async function () {
             let url = `${this.api_url}/event/${this.$store.getters.event_id}`;
             var formData = new FormData();
-            console.log(this.colors);
             formData.append("menu_back_color", this.colors.menu_back_color);
             formData.append("menu_text_color", this.colors.menu_text_color);
             formData.append("menu_back_color_on", this.colors.menu_back_color_on);
@@ -516,7 +457,6 @@ module.exports = {
                     'Content-Type': 'application/json'
                 }
             });
-            // console.log(rs);
             this.$showMsgBoxTwo(rs.status);
             this.loadData();
             this.colorChange = false;
@@ -526,7 +466,6 @@ module.exports = {
                 let url = `${this.api_url}/menu?event_id=${this.$store.getters.event_id}`;
                 let res = await axios.get(url);
                 this.items = res.data.result.menu;
-                // console.log(res.data.result.menu);
 
                 let res2 = await axios.get(`${this.api_url}/event/main_page?event_id=${this.$store.getters.event_id}`);
                 let data2 = res2.data.result;
@@ -558,7 +497,6 @@ module.exports = {
             }
         },
         manageCategory(item, index, target) {
-            // console.log(item, index, target);
             this.$router.push({
                 name: 'category',
                 query: {
@@ -570,11 +508,10 @@ module.exports = {
             });
         },
         manageContents(item, index, target) {
-            // 살려줘... : 클릭 아이템(메뉴)의 타입을 체크하는데, 만약 overview_type이 존재하면, 오버뷰타입 이름이 라우터 이름
+            // 클릭 아이템(메뉴)의 타입을 체크하는데, 만약 overview_type이 존재하면, 오버뷰타입 이름이 라우터 이름
             // 없으면 menuType의 타입번호가 키에 해당하는 아이템의 vue_name이 바로 라우터 이름
             let router_name = this.menuType[item.type].overview_type ?
                 this.menuType[item.type].overview_type[item.overview_type].vue_name : this.menuType[item.type].vue_name;
-            // console.log(' type - ', item.type, ': overview_type - ', item.overview_type, ' = ', router_name);
             if (router_name) {
                 this.$router.push({
                     name: router_name,
@@ -588,7 +525,6 @@ module.exports = {
             this.$router.push({ name: 'com_info', query: { id: item.id } });
         },
         deleteMenu: async function(item, index, target) {
-            // console.log(item, index, target);
             if (confirm('삭제 하시겠습니까?')) {
                 let rs = await axios.delete(`${this.api_url}/menu/${item.id}`);
                 this.$showMsgBoxTwo(rs.status);

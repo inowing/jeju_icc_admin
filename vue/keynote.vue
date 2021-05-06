@@ -136,7 +136,6 @@ module.exports = {
         getList: async function () {
             let url = `${this.api_url}/keynote?menu_id=${this.menu_id}`;
             let rs = await axios.get(url);
-            console.log(rs);
             this.items = rs.data.result;
         },
         goForm: function (event, item) {
@@ -147,7 +146,6 @@ module.exports = {
             }
         },
         deleteData: async function (event, item) {
-            console.log(item);
             let url = `${this.api_url}/keynote/${item.id}`;
             
             try {

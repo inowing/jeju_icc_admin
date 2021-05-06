@@ -234,7 +234,6 @@ module.exports = {
         getData: async function () { // 데이터 가져오기
             let url = `${this.api_url}/keynote/${this.id}`;
             let rs = await axios.get(url);
-            console.log(rs);
             let data = rs.data.result;
             this.id = data.id;
             this.order = data.order;

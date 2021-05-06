@@ -134,8 +134,6 @@
     </b-modal>
     
     <!-- .. -->
-    <!-- .. -->
-    <!-- .. -->
     <b-card no-body class="mt-3">
         <template #header>
             <b-row>
@@ -417,68 +415,26 @@ module.exports = {
             photoModal: false,
             videoModal: false,
             linkModal: false,
-            photoFields: [{
-                    key: 'id',
-                    label: '번호'
-                },
-                {
-                    key: 'order',
-                    label: '순서'
-                },
-                {
-                    key: 'link',
-                    label: '링크'
-                },
-                {
-                    key: 'manageBtn',
-                    label: '관리'
-                }
+            photoFields: [
+                { key: 'id', label: '번호' },
+                { key: 'order', label: '순서' },
+                { key: 'link', label: '링크' },
+                { key: 'manageBtn', label: '관리' }
             ],
-            videoFields: [{
-                    key: 'id',
-                    label: '번호'
-                },
-                {
-                    key: 'order',
-                    label: '순서'
-                },
-                {
-                    key: 'video_link',
-                    label: '영상링크'
-                },
-                {
-                    key: 'file',
-                    label: '업로드 영상'
-                },
-                {
-                    key: 'manageBtn',
-                    label: '관리'
-                }
+            videoFields: [
+                { key: 'id', label: '번호' },
+                { key: 'order', label: '순서' },
+                { key: 'video_link', label: '영상링크' },
+                { key: 'file', label: '업로드 영상' },
+                { key: 'manageBtn', label: '관리' }
             ],
-            linkFields: [{
-                    key: 'id',
-                    label: '번호'
-                },
-                {
-                    key: 'order',
-                    label: '순서'
-                },
-                {
-                    key: 'title',
-                    label: '제목'
-                },
-                {
-                    key: 'photo_1',
-                    label: '이미지'
-                },
-                {
-                    key: 'link',
-                    label: '이미지 링크'
-                },
-                {
-                    key: 'manageBtn',
-                    label: '관리'
-                }
+            linkFields: [
+                { key: 'id', label: '번호' },
+                { key: 'order', label: '순서' },
+                { key: 'title', label: '제목' },
+                { key: 'photo_1', label: '이미지' },
+                { key: 'link', label: '이미지 링크' },
+                { key: 'manageBtn', label: '관리' }
             ],
             photo: [{
                 "id": 1,
@@ -609,7 +565,6 @@ module.exports = {
     },
     mounted: function () {
         this.$nextTick(function () {
-            console.log(this.$route.query.menu_id, this.$route.params);
             this.menu_id = this.$route.query.menu_id;
             this.api_url = this.$store.getters.api_url;
             this.page_url = this.$store.getters.page_url;
@@ -638,23 +593,6 @@ module.exports = {
             this.photo = res.data.result.photo;
             this.video = res.data.result.video;
             this.link = res.data.result.link;
-            // this.link = [
-            //     {
-            //         id: 1, order: 0, title: "바로가기1", title_en: "quick 1", 
-            //         photo_1: "https://picsum.photos/200/300",
-            //         link: "https://picsum.photos/200/300",
-            //         photo_1_en: "https://picsum.photos/200/300",
-            //         link_en: "https://picsum.photos/200/300",
-            //     },
-            //     {
-            //         id: 2, order: 1, title: "바로가기2", title_en: "quick 1", 
-            //         photo_1: "https://picsum.photos/300/300",
-            //         link: "https://picsum.photos/200/300",
-            //         photo_1_en: "https://picsum.photos/200/300",
-            //         link_en: "https://picsum.photos/200/300",
-            //     }
-            // ]
-            
         },
         insertPhoto: async function () {
             let url = ``;
@@ -664,7 +602,6 @@ module.exports = {
                 url = `${this.api_url}/overview/${this.selectedItem.id}`;
             }
 
-            console.log(this.photoParams);
             var formData = new FormData();
             formData.append('menu_id', this.menu_id);
             for (key in this.photoParams) {
@@ -675,7 +612,6 @@ module.exports = {
                 } else {
                     formData.append(key, this.photoParams[key]);
                 }
-                console.log(key, typeof this.photoParams[key]);
             }
 
             let rs = await axios.post(url, formData, {
@@ -683,7 +619,6 @@ module.exports = {
                     "Content-Type": "multipart/form-data"
                 }
             });
-            console.log('photo done ', rs);
 
             this.getList();
             this.$refs['photo-modal'].hide();
@@ -691,8 +626,6 @@ module.exports = {
         },
         
         updatePhoto: async function (item, index, target) {
-            console.log(item);
-
             this.photoParams.order = item.order;
             this.photoParams.title = item.title;
             this.photoParams.link = item.link;
@@ -704,7 +637,6 @@ module.exports = {
             this.selectedItem = item;
         },
         deletePhoto: async function (item, index, target) {
-            console.log(item);
             if (confirm('삭제하시겠습니까?')) {
                 await axios.delete(`${this.api_url}/overview/${item.id}`);
                 this.getList();
@@ -720,23 +652,10 @@ module.exports = {
                 url = `${this.api_url}/overview/${this.selectedItem.id}`;
             }
 
-
-            console.log(this.videoParams);
             var formData = new FormData();
             formData.append('menu_id', this.menu_id);
             for (key in this.videoParams) {
-
-                // if (key == 'photo_1' && !this.videoParams['photo_1']) {
-                //     formData.append('photo_1_del', 'Y');
-                // } else if (key == 'photo_1_en' && !this.videoParams['photo_1_en']) {
-                //     formData.append('photo_1_en_del', 'Y');
-                // } else if (key == 'file' && !this.videoParams['file']) {
-                //     formData.append('file_del', 'Y');
-                // } else if (key == 'file_en' && !this.videoParams['file_en']) {
-                //     formData.append('file_en_del', 'Y');
-                // } else {
-                // }
-                    formData.append(key, this.videoParams[key]);
+                formData.append(key, this.videoParams[key]);
             }
 
             let rs = await axios.post(url, formData, {
@@ -744,13 +663,10 @@ module.exports = {
                     "Content-Type": "multipart/form-data"
                 }
             });
-            console.log('insert video ', rs);
-            console.log(this.videoParams);
             this.getList();
             this.$refs['video-modal'].hide()
         },
         updateVideo: async function (item, index, target) {
-            console.log(item);
             this.videoParams.order = item.order;
             this.videoParams.title = item.title;
             this.videoParams.video_link = item.video_link;
@@ -783,7 +699,6 @@ module.exports = {
         },
         updateLink: async function (item, index, target) {
             // 모달 오픈전 값 바인딩
-            console.log(item);
             this.isNew = false; // 중요!
             this.linkParams.id = item.id;
             this.linkParams.type = 2;
@@ -833,8 +748,6 @@ module.exports = {
                 // x:linkPreview_default(from DB) - x:linkPreview -> nothing 
                 // o:linkPreview_default(from DB) - x:linkPreview -> del y (delete exist file)
                 // o:linkPreview_default(from DB) - o:linkPreview -> after compare : o (add new file), x
-                console.log(this.linkPreview_default," vs ", this.linkPreview);
-
                 if (!this.linkPreview_default && this.linkPreview) { // x - o
                     formData.append('photo_1', this.linkParams.photo_1);
                 }
@@ -866,7 +779,6 @@ module.exports = {
             this.$showMsgBoxTwo(rs.status);
             this.getList();
             this.linkModal = false;
-            // this.$refs['link-modal'].hide();
         },
         
         deleteLink: async function (item, index, target) {

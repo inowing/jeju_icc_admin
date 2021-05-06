@@ -29,8 +29,6 @@
                     </b-input-group>
                 </b-col>
             </b-row>
-            
-
             <b-table :fields="fields" :items="items" small bordered head-variant="light" class="mt-1">
                 <template #cell(id)="row">
                     <div class="text-center">{{row.item.id}}</div>
@@ -153,14 +151,12 @@ module.exports = {
     methods: {
         getList: async function () {
             // search_key
-            console.log('this event_id : ', this.event_id);
             let url = `${this.api_url}/product?menu_id=${this.menu_id}`;
             if (this.search_key) {
                 url = url + '&search_key=' + this.search_key;
             }
             let response = await axios.get(url);
             let rs = response.data.result;
-            console.log(rs);
             this.items = rs;
         },
         goAdminList: function (item) {

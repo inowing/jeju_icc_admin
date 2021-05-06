@@ -2,24 +2,6 @@
 <section>
     <b-row>
         <b-col>
-<!-- 
-            <b-button variant="dark" size="sm" @click="PCPreview = !PCPreview">PC버전 보기</b-button>
-            <b-modal v-model="PCPreview" hide-footer ref="pc-modal" size="xl">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" :src="`${page_url}/jeju/overview.html`" allowfullscreen></iframe>
-                </div>
-                <b-button class="mt-3" variant="outline-danger" block @click="$refs['pc-modal'].hide()">Close Me</b-button>
-            </b-modal>
-
-            <b-button variant="dark" @click="MobilePreview = !MobilePreview" size="sm">Mobile버전 보기</b-button>
-            <b-modal v-model="MobilePreview" hide-footer ref="mobile-modal" class="modal-dialog modal-30size" role="document">
-                <div class="embed-responsive embed-responsive-16by9 modal-content modal-30size" style="min-height:600px;">
-                    <iframe class="embed-responsive-item" :src="`${page_url}/jeju/overview.html?menu_id=${menu_id}`" allowfullscreen></iframe>
-                </div>
-                <b-button class="mt-3" variant="outline-danger" block @click="$refs['mobile-modal'].hide()">Close Me</b-button>
-            </b-modal>
-             -->
-
             <b-button variant="dark" size="sm" @click="PCPreview = !PCPreview">PC버전 보기</b-button>
             <b-modal v-model="PCPreview" size="lg" hide-footer ref="pc-modal" title="PC 미리보기">
                 <pc :url="{logo, url2, url3, url6, url7, url8}"></pc>
@@ -31,7 +13,6 @@
                 <mo :url="{logo, url2, url6, url7, url8}"></mo>
                 <b-button class="mt-3" variant="outline-danger" block @click="hideModal('mobile-modal')">Close Me</b-button>
             </b-modal>
-            
         </b-col>
     </b-row>
     
@@ -489,16 +470,7 @@
                                 </b-card>
                             </b-col>
                         </b-row>
-                        <!-- 영문은 없네??
-                        <b-row class="mt-3">
-                            <b-col>
-                                <b-form-checkbox v-model="is_visible_familysite_en" name="check-button" switch>
-                                    <strong>Family Site</strong>
-                                </b-form-checkbox>
-                            </b-col>
-                        </b-row>
-                         -->
-
+                        
                         <b-row class="mt-3">
                             <b-col>
                                 <b-card>
@@ -530,9 +502,7 @@
                                 </b-card>
                             </b-col>
                         </b-row>
-
                     </b-tab>
-
                 </b-tabs>
             </b-card>
         </b-col>
@@ -570,7 +540,6 @@
             <b-button variant="danger" size="sm" @click="getData" class="inoBtn-150">취소</b-button>
         </b-col>
     </b-row>
-
 </section>
 </template>
 
@@ -592,7 +561,6 @@ module.exports = {
             prev_150_150: this.$store.getters.dummy_image_url(['150x150']),
             prev_480_60: this.$store.getters.dummy_image_url(['480x60']),
             prev_240_48: this.$store.getters.dummy_image_url(['240x48']),
-            
 
             file1: null,
             file1_en: null,
@@ -657,18 +625,10 @@ module.exports = {
             is_login: true,
             is_language: true,
             language: 0,
-            options: [{
-                    value: 2,
-                    text: "한국어 & 영어"
-                },
-                {
-                    value: 0,
-                    text: "한국어"
-                },
-                {
-                    value: 1,
-                    text: "영어"
-                },
+            options: [
+                { value: 2, text: "한국어 & 영어" },
+                { value: 0, text: "한국어" },
+                { value: 1, text: "영어" }
             ],
             boxTwo: '',
             page_url: ''
@@ -678,7 +638,6 @@ module.exports = {
         this.$nextTick(function () {
             this.event_id = this.$store.getters.event_id;
             this.api_url = this.$store.getters.api_url;
-            console.log(this.event_id, ' - ', this.api_url);
             this.page_url = this.$store.getters.page_url;
             this.getData();
         })
@@ -689,8 +648,6 @@ module.exports = {
 
             let res = (await axios.get(url)).data.result;
             EventBus.$emit('change_logo', res.logo);
-            // console.log(res);
-
             this.logo = res.logo;
             this.logo_en = res.logo_en;
 
@@ -808,18 +765,15 @@ module.exports = {
             // 홈페이지 언어
             formData.append("is_language", this.is_language ? 1 : 0); // 언어선택 노출여부
 
-            // console.log(this.language, ' send value language');
             formData.append("language", this.language); // 타입 language : 0 - kr, 1 - en, 2 - kr & en
-            // console.log(formData);
             let response = await axios.post(url, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                },
+                }
             });
-            // console.log(response.status);
             this.getData();
             this.$showMsgBoxTwo(response.status);
-        },
-    },
+        }
+    }
 };
 </script>

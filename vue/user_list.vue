@@ -275,7 +275,6 @@ module.exports = {
             level50_items: [], // 일반회원
             api_url: '',
             event_id: 0
-
         };
     },
     mounted: function () {
@@ -347,7 +346,6 @@ module.exports = {
             }
         },
         storeData: async function () {
-            console.log(this.validation, this.form);
             if (!this.validation) return;
             if (!this.form.password) {
                 this.password_confirm = 'password를 입력하고 확인하세요.';
@@ -386,8 +384,6 @@ module.exports = {
             this.modal1 = true;
         },
         updateData: async function () {
-            // http://127.0.0.1:8000/api/v1/user/9?name=test40_test&name_en=test40_test_en
-            console.log(this.form);
             if (!this.isSamePassword) return;
 
             let url = `${this.api_url}/user/${this.form.id}`;
@@ -408,7 +404,6 @@ module.exports = {
             this.modal1 = false;
         },
         userIdCheck: async function () {
-            // http://14.63.172.119/api/v1/auth/check_email?event_id=105&email=test
             let url = `${this.api_url}/auth/check_email?event_id=${this.event_id}&email=${this.form.email}`;
             let response = await axios.get(url);
             if (response.data.code == 200) {
@@ -418,6 +413,6 @@ module.exports = {
                 this.isUniquiId = false;
             }
         }
-    },
+    }
 };
 </script>

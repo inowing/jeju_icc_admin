@@ -102,7 +102,6 @@
         </b-col>
     </b-row>
 
-
     <b-modal v-model="modal1" hide-footer title="배송 정보">
         <b-card>
             <b-row>
@@ -132,7 +131,6 @@
             </b-row>
         </b-card>
         <b-card class="mt-3">
-
             <b-row>
                 <b-col>
                     <strong>배송지 정보</strong>
@@ -205,7 +203,6 @@
             </b-col>
         </b-row>
     </b-modal>
-
 
     <b-modal v-model="modal2" hide-footer title="결제 내역 취소">
         <b-card>
@@ -334,11 +331,7 @@ module.exports = {
 
     methods: {
         getList: async function () {
-            // search_key
-            // 
-            console.log('this event_id : %s, menu_id : %s', this.event_id, this.menu_id);
             let url = `${this.api_url}/order?menu_id=${this.menu_id}`;
-            console.log(url);
             if (this.search_key) {
                 url += `&search_key=${this.search_key}`;
             }
@@ -349,19 +342,15 @@ module.exports = {
                 url += `&end_date=${this.end_date}`;
             }
 
-            console.log(this.start_date);
-
             let response = await axios.get(url)
                                 .catch(error=> {
                                     this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
                                 });
 
-            
             let rs = response.data.result;
             this.items = rs;
         },
         openModal2: function (event, item) {
-            console.log(item);
             this.cancel_item = item;
             this.modal2 = true;
         },

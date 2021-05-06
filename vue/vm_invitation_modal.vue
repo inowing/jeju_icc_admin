@@ -249,8 +249,6 @@
         <b-button size="sm" class="inoBtn-150" variant="success" @click="storeUser">생성</b-button>
       </b-modal>
 
-    
-
       <b-modal v-model="uploadModal" title="업로드 파일 선택" hide-footer>
         <b-overlay :show="spin_show" rounded="sm">
           <b-form-file v-model="file1" size="sm"></b-form-file>
@@ -423,8 +421,6 @@
     },
     watch: {
       operator_allSelected(newValue, oldValue) {
-        // Handle changes in individual flavour checkboxes
-        console.log(newValue, oldValue);
         if (newValue.length === 0) {
           this.operator_indeterminate = false;
           this.operator_all = false;
@@ -437,8 +433,6 @@
         }
       },
       moderator_allSelected(newValue, oldValue) {
-        // Handle changes in individual flavour checkboxes
-        console.log(newValue, oldValue);
         if (newValue.length === 0) {
           this.moderator_indeterminate = false;
           this.moderator_all = false;
@@ -580,11 +574,9 @@
         this.uploadModal = true;
       },
       uploadExcelTemplate: async function () {
-        // http://127.0.0.1:8000/api/v1/conference_invitation/upload_excel?conference_id=6&user_type=0
         try {
           let user_type = this.invitaion_tabIndex == 0 ? 1 : this.invitaion_tabIndex == 1 ? 2 : 0;
           let url = `${this.api_url}/conference_invitation/upload_excel`;
-          // http://127.0.0.1:8000/api/v1/conference_invitation/upload_excel
           
           let formData = new FormData();
               formData.append("conference_id", this.conference_item.id);
@@ -597,10 +589,8 @@
                 "Content-Type": "multipart-form/data",
             }
           });
-            // <b-spinner v-show="spin_show" variant="primary" label="Spinning"></b-spinner>
           this.spin_show = false;
           if (rs.data.result.fail) {
-            console.log(rs);
             this.$showMsgBoxTwo(500, "", `${rs.data.result.fail} 라인의 입력이 실패하였습니다.`);
           } else {
             this.$showMsgBoxTwo(200, "", '성공하였습니다.');
@@ -616,7 +606,6 @@
         window.location.href = `${window.location.origin}/data/form/conference.csv`;
       },
       sendEmail: async function () {
-        console.log('send mail');
         try {
           // todo. 선택된 탭의 체크된 리스트를 보내야 한다.
           let user_type = this.invitaion_tabIndex == 0 ? 1 : this.invitaion_tabIndex == 1 ? 2 : 0;
@@ -627,9 +616,6 @@
           }
 
           if (confirm(`${arr.length}명에 초대메일을 전송하시겠습니까?`)) {
-            // let user_type = this.invitaion_tabIndex;
-            
-            // user_type : 0 - Operator, 1 - Moderator/Presenter, 2 - Attendee, 3 - language
             let url = `${this.api_url}/conference_invitation/send_invitation`;
             let formData = new FormData();
               formData.append("conference_id", this.conference_item.id);
@@ -637,7 +623,6 @@
   
             for (var i = 0; i < arr.length; i++) {
               let item = arr[i];
-              console.log(item);
               formData.append("users[]", item.id); 
             }
             
@@ -647,7 +632,6 @@
                 "Content-Type": "application/json"
               }
             });
-            console.log(rs);
             this.spin_show2 = false;
             let rsCnt = rs.data.result;
             this.$showMsgBoxTwo(rs.status, "", `${rsCnt}명에 초청 email을 전송했습니다.`);
@@ -661,9 +645,7 @@
         this.$emit('get-list'); // 이름이 같으면 동작 안된다.
       },
       paginationFn: async function (requestPage, type) {
-        // await getOperationList()
         this.getList(type, requestPage);
-        console.log("requestPage ", requestPage, type);
       },
       onRowSelected(items) {
         this.operator_allSelected = items;

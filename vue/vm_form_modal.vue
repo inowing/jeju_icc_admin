@@ -303,8 +303,6 @@
       const now = new Date();
       const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const minDate = new Date(today);
-      // conference - language - user_id//id
-      // userList - text//user_id
       
       return {
         event_id: 0,
@@ -406,8 +404,6 @@
         this.form_page = 1;
       },
       storeData: async function () {
-        console.log(this.form);
-
         let url = `${this.api_url}/conference`;
         let formData = new FormData();
         formData.append("event_id", this.event_id);
@@ -422,7 +418,6 @@
         });
 
         formData.append("language", JSON.stringify(language));
-        console.log("save language - ", JSON.stringify(language));
 
         // event size
         formData.append("event_size", this.event_size);
@@ -464,10 +459,6 @@
             },
           });
 
-          // function callback () {
-          //     this.$router.go(-1);
-          // }
-          // this.getList();
           function callback () {
               this.$emit('get-list'); // 이름이 같으면 동작 안된다.
           }
@@ -484,8 +475,6 @@
         let formData = new FormData();
 
         // event size
-        console.log('~~~~~~~~');
-        console.log(this.event_size);
         formData.append("event_size", this.event_size);
 
         if (this.form.survey_link && !this.form.survey_link.includes("http")) {
@@ -500,14 +489,12 @@
         }
         // language
         let language = [];
-        console.log(this.select_arr);
         this.select_arr.forEach((el) => {
           language.push({
             user_id: el.user_id,
             language: el.language
           });
         });
-
         
         formData.append("language", JSON.stringify(language));
 
@@ -537,31 +524,23 @@
           let rs = await axios.post(url, formData, {
             Headers: {
               "Content-Type": "multipart/form-data"
-            },
+            }
           });
-          console.log(rs);
 
           function callback () {
               this.$emit('get-list'); // 이름이 같으면 동작 안된다.
           }
           this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
-          // this.$showMsgBoxTwo(rs.status);
-          // await this.getList();
-          
           
         } catch (error) {
           this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);
         } finally {
-          // this.modal1 = false;
-          // console.log(this.$parent.modal);
-          // this.$parent.modal1 = false;
+          
         }
       },
       
       languageFormSubmit: async function () {
         // todo. 통역유저 생성 API 필요함. + 신규 생성일때 로직 필요 
-        console.log(this.language_form);
-        console.log('do API ...');
         let url = `${this.api_url}/conference_invitation`;
         
         let formData = new FormData();
@@ -588,7 +567,6 @@
         if (this.select_arr.length == 0) {
           await this.getUserList();
         } else {
-          console.log(rs.data);
           let user_id = rs.data.result.id;
           let email = rs.data.result.email;
           let name = rs.data.result.name;
@@ -639,13 +617,11 @@
         }
         
         this.select_arr = []; // 목록을 준비한다.
-        console.log('this.conference_item', this.conference_item);
         let save_array = this.conference_item.language; // 저장되어 있는 목록
         let selected_value = []; // 저장된 아이디만 추려냄
         save_array.forEach((el) => {
           selected_value.push(el.user_id);
         });
-        console.log('already save_array --> ',  save_array);
 
         let vanila_available = []; // 저장안된 아이디 목록 [value, value, value]
         for (let item of this.lang_options_values) {
@@ -654,14 +630,11 @@
             vanila_available.push(this.lang_options_obj[item]);
           }
         }
-        console.log('lang_options_values : ', this.lang_options_values);
-        console.log('저장 안된 목록 (선택 가능하다.) : ', vanila_available);
 
         // select_arr 저장된 아이디를 토대로 화면에 그려줄 셀렉트 옵션 배열을 만들어 준다.
         save_array.forEach((el) => {
           // el = 이미 저장된 값의 본체
           let net_obj = this.lang_options_obj[el.user_id];
-          console.log('net_obj', net_obj);
           let availabe = [net_obj, ...vanila_available]; // 저장된 본체(자기자신) + 전혀 선택되지 않은 값.
           this.select_arr.push({
             user_id: el.user_id,
@@ -670,7 +643,6 @@
             available: availabe
           });
         });
-        console.log('새로 구성된 목록 : ', this.select_arr);
       },
       
       reset_available: function (type) {
@@ -681,7 +653,6 @@
         for (let item of this.select_arr) {
           selected_value.push(item.user_id);
         }
-        console.log('selected ', selected_value);
         
         let vanila_values = []; // [value, value, value]
         for (let item of this.lang_options_values) {
@@ -689,60 +660,46 @@
             vanila_values.push(item);
           }
         }
-        console.log('vanila_values ', vanila_values);
 
         let vanila_available = [];
         for (let item of this.lang_options) {
           if (vanila_values.includes(item.user_id)) {
-            console.log(item);
             item.text = item.text;
             vanila_available.push(item);
           }
         }
-        console.log('vanila_available ', vanila_available);
-
 
         if (type == 'add') {
-          console.log('add, ', vanila_available);
           selected_value.push(vanila_available[0].user_id); // 추가할 아이템 넣어준다.
           vanila_available.splice(0, 1); // 바닐라에서 하나 빼준다.
-          console.log('- vanila_available ', vanila_available);
-          console.log('- selected_value ', selected_value);
         }
 
         let new_arr = []; // init
         for (var i = 0; i < selected_value.length; i++) {
           let value = selected_value[i];
           let item_available = [this.lang_options_obj[value], ...vanila_available]; // 자기 자신과 바닐라 = 리스트별 선택 가능목록
-          console.log(' item_available ', item_available);
-          console.log(this.lang_options_obj[value]);
           let language = this.lang_options_obj[value].language;
           if (this.select_arr[i]) {
             language = this.select_arr[i].language;
           }
           let new_item = {user_id: value, text: this.lang_options_obj[value].text, language, available: item_available};
-          console.log(new_item);
           new_arr.push(new_item);
         }
         this.select_arr = new_arr;
       },
       selectedChange: function (event, item, index) {
-        console.log('event  ', event.target.value);
         item.user_id = event.target.value*1; // 순수한 숫자를 key에 해당하는 id로 사용할 경우, 오류가 발생한다.
         // key값을 단순 숫자 나열로 쓰지말았으면 좋겠다......
         this.reset_available();
       },
       addList: function () {
         if (this.select_arr.length == 0) {
-          console.log('this.lang_options[0] - ', this.lang_options[0]);
-          console.log('this.lang_options - ', this.lang_options);
           let user_id = this.lang_options[0].user_id;
           let text = this.lang_options[0].text;
           let language = '';
           let available = [...this.lang_options];
           
           this.select_arr.push({user_id, text, language, available});
-          console.log(this.select_arr);
           return;
         }
         // 최초순환 끝
@@ -750,7 +707,6 @@
         // 두번째부터 수행 -- available을 모두 재생산 하는것이 관건이다.
         this.reset_available('add');
         
-
       },
       removeList: function (item, index) {
         this.select_arr.splice(index, 1);

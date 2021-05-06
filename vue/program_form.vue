@@ -33,7 +33,7 @@
             <b-col>
                 <b-card no-body>
 					<b-tabs content-class="" card>
-						<b-tab title="국문" active @>
+						<b-tab title="국문" active>
                             <b-form-group label="Time">
                                 <b-form-input type="text" v-model="time"></b-form-input>
                             </b-form-group>
@@ -47,12 +47,7 @@
                                 <b-form-input type="text" v-model="link"></b-form-input>
                             </b-form-group>
 							<b-card-text>
-                                <b-form-textarea  v-model="contents">
-
-                                </b-form-textarea>
-								<!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
-								<br>
-								<div class="content ql-editor" v-html="contents"></div> -->
+                                <b-form-textarea  v-model="contents"></b-form-textarea>
 							</b-card-text>
 						</b-tab>
 						<b-tab title="영문">
@@ -69,12 +64,7 @@
                                 <b-form-input type="text" v-model="link_en"></b-form-input>
                             </b-form-group>
 							<b-card-text>
-                                <b-form-textarea  v-model="contents_en">
-
-                                </b-form-textarea>
-								<!-- <quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en" @blur="onEditorBlur($event)" @focus="onEditorFocus($event)" @ready="onEditorReady($event)" />
-								<br>
-								<div class="content ql-editor" v-html="contents_en"></div> -->
+                                <b-form-textarea  v-model="contents_en"></b-form-textarea>
 							</b-card-text>
 						</b-tab>
 					</b-tabs>
@@ -106,8 +96,6 @@ module.exports = {
                 sub_id_key_store: {},
                 selected_sub: ''
             },
-
-
             id: '',
             time: '',
             venue: '',
@@ -119,13 +107,7 @@ module.exports = {
             title: '',
             title_en: '',
             contents: null,
-			contents_en: null,
-
-            editorOption: {
-				placeholder: '게시물을 작성해주세요.',
-                theme: "snow",
-            },
-           
+			contents_en: null
         };
     },
     mounted: function () {
@@ -146,7 +128,6 @@ module.exports = {
             }
             let url = `${this.api_url}/program/${this.id}`;
             let rs = await axios.get(url);
-            console.log(rs);
             let data = rs.data.result;
             this.id = data.id;
             this.title = data.title;
@@ -162,16 +143,12 @@ module.exports = {
             this.title_en = data.title_en;
             this.contents = data.contents;
 			this.contents_en = data.contents_en;
-
             
             // 탑 셀렉트
             this.category.selected_top = data.top_category_id
             // 서브검색
             await this.getSubcategory();
-            console.log(this.category.subcategory);
-            console.log(data.sub_category_id, ' == 115');
             this.category.selected_sub = data.sub_category_id;
-            console.log(this.category.selected_sub, data.sub_category_id);
         },
         storeData: async function () { // 데이터 저장
             let url = `${this.api_url}/program`;
@@ -261,9 +238,7 @@ module.exports = {
             } catch (error) {
                 this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
             }
-
         },
-
 
         /**
          * 기타
@@ -300,15 +275,6 @@ module.exports = {
 
             this.category.sub_id_key_store = sub;
             this.category.subcategory = temArr;
-        },
-        onEditorBlur(quill) {
-            // console.log("editor blur!", quill);
-        },
-        onEditorFocus(quill) {
-            // console.log("editor focus!", quill);
-        },
-        onEditorReady(quill) {
-            // console.log("editor ready!", quill);
         }
     }
 };

@@ -565,7 +565,7 @@
             }
           }
           for (let item of this.boothForm.introduction_en) {
-            // todo. 영문일때 API 에서, 같은 이름 위로 덮어써지고 있는 현상으롱 인해 화면에서도 사이드이팩트가 발생하여 막았음....
+            // todo. 영문일때도 같은 아이디로 되어있어, API 에서 덮어써지는 현상이 발생함. 이로인해 화면에서도 사이드이팩트가 발생하여 막았음....
             // API 완비되면 아래 주석을 풀것.
             // if (item.id) { // 소개자료 수정한 경우
             //   await this.postIntroduction(item, `${this.api_url}/e_library/${item.id}`);

@@ -76,19 +76,16 @@ module.exports = {
         getList: async function () {
             let url = `${this.api_url}/sns?menu_id=${this.menu_id}`;
             let rs = await axios.get(url);
-            console.log(rs);
             this.items = rs.data.result;
         },
         goForm: function (event, item) {
             if (item) {
-                console.log('id? ', item);
                 this.$router.push({ name: 'sns_form', query: {menu_id: this.menu_id, id: item.id}});
             } else {
                 this.$router.push({ name: 'sns_form', query: {menu_id: this.menu_id}});
             }
         },
         deleteData: async function (event, item) {
-            console.log(item);
             let url = `${this.api_url}/sns/${item.id}`;
             
             try {

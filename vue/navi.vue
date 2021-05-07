@@ -126,8 +126,8 @@
                 </b-card-text>
                 <hr class="m-0 p-0" />
                 <b-card-text class="m-0 p-2">
-                    <span @click="goRedirect('biz_dashboard')">
-                        <a href="#">현황판</a>
+                    <span>
+                        <a :href="'http://jejueatsuda.com/admin/biz_dashboard.html#/?event_id='+event_id" target="_blank">현황판</a>
                     </span>
                 </b-card-text>
                 <!-- <router-link to="/biz/link">
@@ -318,14 +318,8 @@ module.exports = {
                 }
             }
         },
-        goRedirect: async function (type) {
-            if (!type) {
-                url = `${this.api_url}/event/${this.event_id}/get_url`;
-            } else {
-                console.log(`this.event_id `, this.event_id);
-                window.location.href = `url?event_id=${this.event_id}`;
-                return;
-            }
+        goRedirect: async function () {
+            let url = `${this.api_url}/event/${this.event_id}/get_url`;
             try {
                 let rs = await axios.get(url);
                 if (rs.data.code == 200) {

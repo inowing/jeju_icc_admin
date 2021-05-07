@@ -1,0 +1,14 @@
+{
+    "result": [
+        { "id": 1, "type":"바이어 #1", "time1": "셀러# A", "time2": "셀러# B", "time3": "", "time4": "셀러# C", "time5": "", "time6": ""},
+        { "id": 2, "type":"바이어 #1", "time1": "셀러# A", "time2": "셀러# B", "time3": "", "time4": "셀러# C", "time5": "", "time6": "셀러# B"},
+        { "id": 3, "type":"바이어 #1", "time1": "셀러# A", "time2": "셀러# B", "time3": "", "time4": "셀러# C", "time5": "", "time6": ""},
+        { "id": 4, "type":"바이어 #1", "time1": "셀러# A", "time2": "셀러# B", "time3": "", "time4": "셀러# C", "time5": "", "time6": "셀러# A"},
+        { "id": 5, "type":"바이어 #1", "time1": "셀러# A", "time2": "셀러# B", "time3": "", "time4": "셀러# C", "time5": "", "time6": ""},
+        { "id": 6, "type":"바이어 #1", "time1": "셀러# A", "time2": "셀러# B", "time3": "", "time4": "셀러# C", "time5": "", "time6": ""},
+        { "id": 7, "type":"바이어 #1", "time1": "셀러# A", "time2": "셀러# B", "time3": "", "time4": "셀러# C", "time5": "", "time6": ""},
+        { "id": 8, "type":"바이어 #1", "time1": "셀러# A", "time2": "셀러# B", "time3": "", "time4": "셀러# C", "time5": "", "time6": ""},
+        { "id": 9, "type":"바이어 #1", "time1": "셀러# A", "time2": "셀러# B", "time3": "", "time4": "셀러# C", "time5": "", "time6": ""},
+        { "id": 10, "type":"바이어 #1", "time1": "셀러# A", "time2": "셀러# B", "time3": "", "time4": "셀러# C", "time5": "", "time6": ""}
+    ]
+}

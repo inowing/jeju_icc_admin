@@ -61,6 +61,12 @@
                             <b-form-input size="sm" v-model="form.phone" :state="validation.valid6"></b-form-input>
                             <b-form-invalid-feedback :state="validation.valid6">담당자 연락처를 입력하세요.</b-form-invalid-feedback>
                         </b-form-group>
+                        <b-form-group label="제품 배송비(준비중)">
+                            <b-form-input v-model="form.product_delivery" size="sm"></b-form-input>
+                        </b-form-group>
+                        <b-form-group label="1회 구매 제한 수량(준비중)">
+                            <b-form-input v-model="limit_quantity" type="number" size="sm"></b-form-input>
+                        </b-form-group>
                      </b-col>
                      <b-col>
                          <b-row>
@@ -146,7 +152,9 @@ module.exports = {
                 sale_price: 0,
                 phone: '',
                 product_image: null,
-                detail_image: null
+                detail_image: null,
+                product_delivery: 0,
+                limit_quantity: 0
             },
 
             product_image_prev: '',
@@ -277,6 +285,9 @@ module.exports = {
             formData.append("price", this.form.price);
             formData.append("sale_price", this.form.sale_price);
             formData.append("phone", this.form.phone);
+
+            formData.append("limit_quantity", this.form.limit_quantity);
+            formData.append("product_delivery", this.form.product_delivery);
 
             let rs = await axios.post(url, formData, {
                 Headers: {

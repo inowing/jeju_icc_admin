@@ -65,7 +65,7 @@
                             <b-form-input v-model="form.product_delivery" size="sm"></b-form-input>
                         </b-form-group>
                         <b-form-group label="1회 구매 제한 수량(준비중)">
-                            <b-form-input v-model="limit_quantity" type="number" size="sm"></b-form-input>
+                            <b-form-input v-model="form.limit_quantity" size="sm" type="number"></b-form-input>
                         </b-form-group>
                      </b-col>
                      <b-col>
@@ -238,6 +238,7 @@ module.exports = {
             this.detail_image_del = false;
             this.isNew = false;
             this.form = {...data};
+            
             this.form.is_visible = data.is_visible ? true : false;
             this.form.is_sale = data.is_sale ? true : false;
 

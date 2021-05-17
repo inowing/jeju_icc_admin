@@ -169,6 +169,12 @@
           </b-form-group>
         </b-col>
       </b-row>
+      <b-row style="margin-bottom: 10pt;">
+        <b-col sm="4"><label style="font-size: 10pt;">로그인 배경색 코드</label></b-col>
+        <b-col sm="8">
+            <b-form-input type="color" v-model="form.intro_background_color" size="sm" @change="introBackgroundColorChange('intro_background_color', $event)">
+        </b-col>
+      </b-row>
       <b-form-group>
         <b-row class="mb-1">
           <b-col><span>Languages</span></b-col>
@@ -354,7 +360,9 @@
         background_del: false,
 
         intro_background_file: null,
-        intro_background_del: false
+        intro_background_del: false,
+
+        intro_background_color: "#ffffff"
       };
     },
     created: async function () {
@@ -451,6 +459,7 @@
           formData.append("intro_background_del", "Y") :
           formData.append("intro_background", this.intro_background_file);
 
+        formData.append("intro_background_color", this.intro_background_color);
         // form submit
         try {
           let rs = await axios.post(url, formData, {
@@ -519,6 +528,7 @@
           formData.append("intro_background_del", "Y") :
           formData.append("intro_background", this.intro_background_file);
 
+        formData.append("intro_background_color", this.intro_background_color);
         // form submit
         try {
           let rs = await axios.post(url, formData, {
@@ -721,6 +731,9 @@
         } else {
           this.$toast("Alert", "폼을 모두 입력해 주세요.", "danger");
         }
+      },
+      introBackgroundColorChange(target, value) {
+          this[target] = value;
       }
     }
   };

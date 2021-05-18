@@ -685,11 +685,11 @@ module.exports = {
             fileStatus == 1 ? formData.append("photo_3", this.file3) : fileStatus == 2 ? formData.append("photo_3_del", 'Y') : '';
 
             fileStatus = this.$fileUploadChecker(this.photo_1_en_preview_local, this.photo_1_en_preview_data);
-            fileStatus == 1 ? formData.append("photo_1", this.file1_en) : fileStatus == 2 ? formData.append("photo_1_en_del", 'Y') : '';
+            fileStatus == 1 ? formData.append("photo_1_en", this.file1_en) : fileStatus == 2 ? formData.append("photo_1_en_del", 'Y') : '';
             fileStatus = this.$fileUploadChecker(this.photo_2_en_preview_local, this.photo_2_en_preview_data);
-            fileStatus == 1 ? formData.append("photo_2", this.file2_en) : fileStatus == 2 ? formData.append("photo_2_en_del", 'Y') : '';
+            fileStatus == 1 ? formData.append("photo_2_en", this.file2_en) : fileStatus == 2 ? formData.append("photo_2_en_del", 'Y') : '';
             fileStatus = this.$fileUploadChecker(this.photo_3_en_preview_local, this.photo_3_en_preview_data);
-            fileStatus == 1 ? formData.append("photo_3", this.file3_en) : fileStatus == 2 ? formData.append("photo_3_en_del", 'Y') : '';
+            fileStatus == 1 ? formData.append("photo_3_en", this.file3_en) : fileStatus == 2 ? formData.append("photo_3_en_del", 'Y') : '';
 
             fileStatus = this.$fileUploadChecker(this.logo_file_preview_local, this.logo_file_preview_data);
             fileStatus == 1 ? formData.append("logo", this.logo_file) : fileStatus == 2 ? formData.append("logo_del", 'Y') : '';

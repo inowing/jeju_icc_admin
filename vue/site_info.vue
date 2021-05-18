@@ -64,7 +64,9 @@
                                     <b-row>
                                         <b-col>
                                             <b-card>
-                                                <strong>버튼 이미지 #1</strong><br>
+                                                <b-form-checkbox v-model="is_visible_file_1" name="check-button" switch>
+                                                    <strong>버튼 이미지 #1</strong>
+                                                </b-form-checkbox>
                                                 <b-img :src="url2||prev_240_48" fluid style="max-width:240px; height:48px; border: 1px solid silver;"></b-img>
                                                 <b-card-text class="mt-1">
                                                     <b-row>
@@ -80,7 +82,9 @@
                                         </b-col>
                                         <b-col>
                                             <b-card>
-                                                <strong>버튼 이미지 #2</strong><br>
+                                                <b-form-checkbox v-model="is_visible_file_2" name="check-button" switch>
+                                                    <strong>버튼 이미지 #2</strong>
+                                                </b-form-checkbox>
                                                 <b-img :src="url3||prev_240_48" fluid style="max-width:250px; height:48px; border: 1px solid silver;"></b-img>
                                                 <b-card-text class="mt-1">
                                                     <b-row>
@@ -310,7 +314,9 @@
                                     <b-row>
                                         <b-col>
                                             <b-card>
-                                                <strong>버튼 이미지 #1</strong><br>
+                                                <b-form-checkbox v-model="is_visible_file_1_en" name="check-button" switch>
+                                                    <strong>버튼 이미지 #1</strong>
+                                                </b-form-checkbox>
                                                 <b-img :src="url2_en||prev_240_48" fluid style="max-width:240px; height:48px; border: 1px solid silver;"></b-img>
                                                 <b-card-text class="mt-1">
                                                     <b-row>
@@ -326,7 +332,9 @@
                                         </b-col>
                                         <b-col>
                                             <b-card>
-                                                <strong>버튼 이미지 #2</strong><br>
+                                                <b-form-checkbox v-model="is_visible_file_2_en" name="check-button" switch>
+                                                    <strong>버튼 이미지 #2</strong>
+                                                </b-form-checkbox>
                                                 <b-img :src="url3_en||prev_240_48" fluid style="max-width:250px; height:48px; border: 1px solid silver;"></b-img>
                                                 <b-card-text class="mt-1">
                                                     <b-row>
@@ -602,6 +610,11 @@ module.exports = {
             link2_en: null,
             link3_en: null,
 
+            is_visible_file_1: true,
+            is_visible_file_2: true,
+            is_visible_file_1_en: true,
+            is_visible_file_2_en: true,
+
             is_visible_sns_banner_1: true,
             is_visible_sns_banner_2: true,
             is_visible_sns_banner_3: true,
@@ -683,6 +696,11 @@ module.exports = {
             this.privacyTitle_en = res.privacy_terms_title_en;
             this.privacyContent_en = res.privacy_terms_en;
 
+            this.is_visible_file_1 = res.is_visible_file_1 ? true : false;
+            this.is_visible_file_2 = res.is_visible_file_2 ? true : false;
+            this.is_visible_file_1_en = res.is_visible_file_1_en ? true : false;
+            this.is_visible_file_2_en = res.is_visible_file_2_en ? true : false;
+
             this.is_visible_sns_banner_1 = res.is_visible_sns_banner_1 ? true : false;
             this.is_visible_sns_banner_2 = res.is_visible_sns_banner_2 ? true : false;
             this.is_visible_sns_banner_3 = res.is_visible_sns_banner_3 ? true : false;
@@ -717,11 +735,15 @@ module.exports = {
             formData.append("file_button_2", this.file3); // 파일 버튼 이미지 #2
             formData.append("file_1", this.file4); // 파일 업로드 #1
             formData.append("file_2", this.file5); // 파일 업로드 #2
+            formData.append("is_visible_file_1", this.is_visible_file_1 ? 1 : 0);
+            formData.append("is_visible_file_2", this.is_visible_file_2 ? 1 : 0);
 
             formData.append("file_button_1_en", this.file2_en); // 파일 버튼 이미지 #1
             formData.append("file_button_2_en", this.file3_en); // 파일 버튼 이미지 #2
             formData.append("file_1_en", this.file4_en); // 파일 업로드 #1
             formData.append("file_2_en", this.file5_en); // 파일 업로드 #2
+            formData.append("is_visible_file_1_en", this.is_visible_file_1_en ? 1 : 0);
+            formData.append("is_visible_file_2_en", this.is_visible_file_2_en ? 1 : 0);
 
             // 상단우측 SNS
             formData.append("is_visible_sns_banner_1", this.is_visible_sns_banner_1 ? 1 : 0); // 상단우측 SNS  배너 이미지 보기 안보기

@@ -601,7 +601,6 @@ module.exports = {
             } else {
                 url = `${this.api_url}/overview/${this.selectedItem.id}`;
             }
-
             var formData = new FormData();
             formData.append('menu_id', this.menu_id);
             for (key in this.photoParams) {
@@ -630,6 +629,8 @@ module.exports = {
             this.photoParams.title = item.title;
             this.photoParams.link = item.link;
             this.photoParams.link_en = item.link_en;
+            this.photoParams.photo_1 = item.photo_1;
+            this.photoParams.photo_1_en = item.photo_1_en;
             this.photoPreview = item.photo_1; // 프리뷰
             this.photoPreview_en = item.photo_1_en; // 프리뷰
 
@@ -742,7 +743,6 @@ module.exports = {
                         formData.append(key, this.linkParams[key]);
                     }
                 }
-
                 // update image data setting
                 // x:linkPreview_default(from DB) - o:linkPreview -> o (add new file)
                 // x:linkPreview_default(from DB) - x:linkPreview -> nothing 
@@ -761,11 +761,11 @@ module.exports = {
                 if (!this.linkPreview_en_default && this.linkPreview_en) {
                     formData.append('photo_1_en', this.linkParams.photo_1_en);
                 }
-                if (this.linkPreview_en_default && this.linkPreview_en) {
+                if (this.linkPreview_en_default && !this.linkPreview_en) {
                     formData.append('photo_1_en_del', 'Y');
                 }
                 if (this.linkPreview_en_default != this.linkPreview_en) { // compare after
-                    formData.append('photo_1', this.linkParams.photo_1_en);
+                    formData.append('photo_1_en', this.linkParams.photo_1_en);
                 }
 
             }

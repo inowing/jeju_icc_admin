@@ -11,8 +11,8 @@
             <b-col cols="9">
               <p class="m-0">Join URL</p>
               <p class="m-0 text-primary">
-                <span>{{conference_item ? conference_item.link : ''}}</span>
-                <input type="hidden" ref="email2" :value="conference_item ? conference_item.link : ''">
+                <span>{{conference_item ? conference_item.admin_link : ''}}</span>
+                <input type="hidden" ref="email2" :value="conference_item ? conference_item.admin_link : ''">
                 <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email2')">
                   <b-icon-clipboard-plus></b-icon-clipboard-plus>
                 </b-button>
@@ -158,8 +158,8 @@
             <b-col cols="9">
               <p class="m-0">Join URL</p>
               <p class="m-0 text-primary">
-                <span>{{conference_item ? conference_item.link : ''}}</span>
-                <input type="hidden" ref="email1" :value="conference_item ? conference_item.link : ''">
+                <span>{{conference_item ? conference_item.admin_link : ''}}</span>
+                <input type="hidden" ref="email1" :value="conference_item ? conference_item.admin_link : ''">
                 <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email1')">
                   <b-icon-clipboard-plus></b-icon-clipboard-plus>
                 </b-button>

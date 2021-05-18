@@ -544,15 +544,17 @@
          */
         // 기업소개자료 입력
         let intro_store_url = `${this.api_url}/e_library`;
-
         if (!this.$route.query.id) { // query.id = exhibition_id
           let exhibition_id = rs.data.result.id;
-          for (let item of this.boothForm.introduction) {
-            await this.postIntroduction(item, intro_store_url, exhibition_id);
+          if(this.boothForm.introduction){
+            for (let item of this.boothForm.introduction) {
+              await this.postIntroduction(item, intro_store_url, exhibition_id);
+            }
+            for (let item of this.boothForm.introduction_en) {
+              await this.postIntroduction(item, intro_store_url, exhibition_id);
+            }
           }
-          for (let item of this.boothForm.introduction_en) {
-            await this.postIntroduction(item, intro_store_url, exhibition_id);
-          }
+          
         }
 
         // 기업소개자료 수정된 경우

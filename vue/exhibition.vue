@@ -20,7 +20,7 @@
     </b-row>
     <b-row>
         <b-col>
-            <b-table :fields="fields" :items="items" small responsive="sm" bordered head-variant="light" sticky-header>
+            <b-table :fields="fields" :items="items" small responsive="sm" bordered head-variant="light" >
                 <template #cell(id)="row">
                     <div class="text-center">{{row.item.id}}</div>
                 </template>

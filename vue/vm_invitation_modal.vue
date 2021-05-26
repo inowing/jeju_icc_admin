@@ -553,9 +553,9 @@
           formData.append("conference_id", this.conference_item.id);
           formData.append("user_type", user_type);
           formData.append("name", this.userForm.name);
-          formData.append("department", this.userForm.department); // 소속
-          formData.append("position", this.userForm.position); // 직책
-          formData.append("passcode", this.userForm.passcode);
+          if(this.userForm.department)formData.append("department", this.userForm.department); // 소속
+          if(this.userForm.position)formData.append("position", this.userForm.position); // 직책
+          if(this.userForm.passcode)formData.append("passcode", this.userForm.passcode);
           formData.append("email", this.userForm.email);
           let rs = await axios.post(url, formData, {
             Headers: {

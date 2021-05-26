@@ -248,7 +248,7 @@
           참여중인 Attendee 숫자 표시
         </b-form-checkbox>
 
-        <b-form-checkbox v-model="form.is_play_music" unchecked-value="0" value="1" variant="success">
+        <b-form-checkbox v-model="form.is_play_music" unchecked-value="0" value="1" variant="success" disabled="true">
           Welcome Music Play
         </b-form-checkbox>
         <div class="pl-4">
@@ -344,7 +344,9 @@
 
         form_date: "",
         start_time: "",
-        form: {},
+        form: {
+          is_play_music: 1,
+        },
         min: minDate,
 
         logo_file: null,
@@ -554,7 +556,8 @@
         let url = `${this.api_url}/conference_invitation`;
         
         let formData = new FormData();
-            if (this.conference_item.id) {
+        console.log('languageFormSubmit check', this.conference_item);
+            if (this.conference_item && this.conference_item.id) {
               formData.append("conference_id", this.conference_item.id);
             }
             // formData.append('event_id', this.event_id);

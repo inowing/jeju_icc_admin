@@ -2,7 +2,7 @@
 	<section>
 		<b-row>
 			<b-col>
-				<b-button variant="primary" size="sm" @click="familyPost = !familyPost; url=api_url;"><b-icon-plus></b-icon-plus>사이트 추가</b-button>
+				<b-button variant="primary" size="sm" @click="createPopup()"><b-icon-plus></b-icon-plus>사이트 추가</b-button>
 				<b-modal v-model="familyPost" hide-footer ref="familysite-modal" title="사이트 추가">
 					<b-form inline>순서&nbsp;<b-form-input v-model="order" size="sm" placeholder="0"></b-form-input></b-form>
 					<b-card no-body class="mt-3">
@@ -131,6 +131,15 @@ module.exports = {
 		},
 		hideModal(id) {
 			this.$refs[id].hide()
+		},
+		createPopup() {
+			this.url = `${this.api_url}/familysite`;
+			this.order = 0;
+			this.name = "";
+			this.name_en = "";
+			this.link = "";
+			this.link_en = "";
+			this.familyPost = true;
 		},
 		updatePopup(item, index, target) {
 			this.url = `${this.api_url}/familysite/${item.id}`;

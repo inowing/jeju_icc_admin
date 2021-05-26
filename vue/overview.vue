@@ -664,6 +664,7 @@ module.exports = {
                     "Content-Type": "multipart/form-data"
                 }
             });
+            this.$showMsgBoxTwo(rs.status);
             this.getList();
             this.$refs['video-modal'].hide()
         },

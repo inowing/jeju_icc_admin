@@ -43,6 +43,17 @@
           </b-form>
         </b-col>
       </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group label="게시순서">
+            <div class="form-group">
+                <b-form-input v-model="order" type="number"></b-form-input>
+            </div>
+          </b-form-group>
+        </b-col>
+        <b-col>
+        </b-col>
+      </b-row>
     </b-card>
 
     <b-card no-body class="mt-1">
@@ -363,6 +374,7 @@
         company_list: [], // 기업 선택용 리스트
         company_index: 0, // 선택된 기업 인덱스
         company: {}, // 기업개요 - 리스트에서 선택된 컴퍼니
+        order:0,
 
         tabIndex: 0,
         boothForm: {}, // 기업부스 정보
@@ -470,6 +482,8 @@
 
         this.boothForm = rs;
 
+        this.order = rs.order;
+
         this.company = rs.company; // 기업개요
         this.logo_preview_data = rs.logo; // DB 값
         this.logo_en_preview_data = rs.logo_en;
@@ -516,7 +530,8 @@
           is_show_visitor: this.boothForm.is_show_visitor,
           is_show_visitor_en: this.boothForm.is_show_visitor_en,
           summary: this.boothForm.summary,
-          summary_en: this.boothForm.summary_en
+          summary_en: this.boothForm.summary_en,
+          order: this.order
         }
 
         let formData = new FormData();

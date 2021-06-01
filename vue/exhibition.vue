@@ -3,19 +3,34 @@
     <b-row class="mb-1">
         <b-col>
             <h6><strong>2.메뉴 및 컨텐츠 관리 > 온라인전시관 > 컨텐츠 (관리)</strong></h6>
-            <b-button class="mt-2" href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
-                <b-icon-arrow-left></b-icon-arrow-left> 이전으로
-            </b-button>
-            <b-button class="mt-2" href="#" variant="primary" size="sm" :to="'/mainmenu/contents/exhibition/form?menu_id='+menu_id">
-                <b-icon-plus></b-icon-plus>리스트 추가
-            </b-button>
+            <div>
+                <b-col cols="8" style="float:left">
+                    <b-button class="mt-2" href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
+                        <b-icon-arrow-left></b-icon-arrow-left> 이전으로
+                    </b-button>
+                    <b-button class="mt-2" href="#" variant="primary" size="sm" :to="'/mainmenu/contents/exhibition/form?menu_id='+menu_id">
+                        <b-icon-plus></b-icon-plus>리스트 추가
+                    </b-button>
 
-            <b-button class="mt-2" href="#" variant="outline-primary" size="sm" @click="updateIsVisible(1, menu_id)">
-                <b-icon-eye></b-icon-eye> 모두 노출
-            </b-button>
-            <b-button class="mt-2" href="#" variant="outline-secondary" size="sm" @click="updateIsVisible(0, menu_id)">
-                <b-icon-eye-slash></b-icon-eye-slash> 모두 비노출
-            </b-button>
+                    <b-button class="mt-2" href="#" variant="outline-primary" size="sm" @click="updateIsVisible(1, menu_id)">
+                        <b-icon-eye></b-icon-eye> 모두 노출
+                    </b-button>
+                    <b-button class="mt-2" href="#" variant="outline-secondary" size="sm" @click="updateIsVisible(0, menu_id)">
+                        <b-icon-eye-slash></b-icon-eye-slash> 모두 비노출
+                    </b-button>
+                </b-col>
+                <b-col cols="4" style="float:left">
+
+                    <b-input-group size="sm" class="mt-2">
+                        <b-form-input aria-placeholder="검색어를 입력하세요." style="max-width: 300px;" v-model="search_key" @keydown.enter="getList"></b-form-input>
+                        <b-input-group-append>
+                            <b-button variant="info" size="sm" @click="getList">검색하기</b-button>
+                        </b-input-group-append>
+                    </b-input-group>
+                </b-col>
+            </div>
+            
+           
         </b-col>
     </b-row>
     <b-row>
@@ -68,6 +83,7 @@ module.exports = {
         return {
             event_id: 0,
             menu_id: null,
+            search_key: '',
             api_url: '',
             fields: [{
                     key: "id",
@@ -114,6 +130,9 @@ module.exports = {
     methods: {
         getList: async function () {
             let url = `${this.api_url}/exhibition?menu_id=${this.menu_id}`;
+            if (this.search_key) {
+                url = url + '&search_key=' + this.search_key;
+            }
             let data = (await axios.get(url)).data;
             this.items = data.result;
         },

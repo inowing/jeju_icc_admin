@@ -88,13 +88,13 @@
                     </div>
                 </template>
                 <template #cell(status)="row">
-                    <div :class="`text-center ${row.item.status ? 'text-danger' : 'text-info'}`" >{{row.item.status ? '취소' : '완료'}}</div>
+                    <div :class="`text-center ${row.item.status ? 'text-danger' : 'text-info'}`" >{{row.item.status == 1 ? '완료' : ( row.item.status == 3 ? '에러' : '취소')}}</div>
                 </template>
 
                 
                 <template #cell(manageBtn)="row">
                     <b-button size="sm" variant="outline-danger" @click="openModal2($event, row.item)"
-                        v-show="row.item.status == 0">
+                        v-show="row.item.status == 1">
                         <b-icon-trash2-fill></b-icon-trash2-fill>취소
                     </b-button>
                 </template>
@@ -304,7 +304,7 @@ module.exports = {
                 },
                 {
                     key: 'status',
-                    label: '결제상태' //  0 완료 / 1취소
+                    label: '결제상태' //  0 - waitng payment, 1 - payment success, 2 - cancel, 3 - error
                 },
                 {
                     key: "manageBtn",

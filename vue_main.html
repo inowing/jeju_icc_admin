@@ -108,7 +108,7 @@
 			mode: 'history',
 			store: store,
 			components: {
-				navi: window.httpVueLoader(`./vue/navi.vue`),
+				navi: window.httpVueLoader(`./vue/navi.vue?v=1`),
 			},
 			router: router,
 			data: function (){
@@ -132,6 +132,8 @@
 					
 					this.api_url = this.$store.getters.api_url;
 					this.event_id = this.$store.getters.event_id;
+					
+					this.getUserInfo();
 					let rs = await this.getData();
 					if (rs.data.code == 401) {
 						let targetUrl = `${window.location.origin}/cms`
@@ -140,7 +142,6 @@
 					}
 					this.navShow = this.$refs.inoResizer.clientWidth > 800 ? true : false; // 네비게이션 쇼,하이드
 					router.addRoute({ path: '/', component: window.httpVueLoader('./vue/site_info.vue') });
-					router.addRoute({ path: '/test', component: window.httpVueLoader('./vue/kht_test.vue') });
 					router.addRoute({ path: '/site_info', component: window.httpVueLoader('./vue/site_info.vue') });
 					router.addRoute({ path: '/familysite', component: window.httpVueLoader('./vue/familysite.vue') });
 					router.addRoute({ path: '/popup', component: window.httpVueLoader('./vue/popup.vue') });
@@ -153,7 +154,7 @@
 					router.addRoute({ path: '/mainmenu/contents/exhibition_a', name: 'exhibition_a', component: window.httpVueLoader('./vue/exhibition_a.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition_b', name: 'exhibition_b', component: window.httpVueLoader('./vue/exhibition_b.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition', name: 'exhibition', component: window.httpVueLoader('./vue/exhibition.vue') });
-					router.addRoute({ path: '/mainmenu/contents/exhibition/form', name: 'exhibition_form', component: window.httpVueLoader('./vue/exhibition_form.vue') });
+					router.addRoute({ path: '/mainmenu/contents/exhibition/form', name: 'exhibition_form', component: window.httpVueLoader('./vue/exhibition_form.vue?v=1235') });
 					router.addRoute({ path: '/mainmenu/contents/e_library/list', name: 'exhibition_libray_type1_list', component: window.httpVueLoader('./vue/exhibition_libray_type1_list.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition/question', name: 'exhibition_question', component: window.httpVueLoader('./vue/exhibition_question.vue') });
 					router.addRoute({ path: '/mainmenu/contents/movie', name: 'movie', component: window.httpVueLoader('./vue/movie.vue') });
@@ -212,6 +213,13 @@
 			methods: {
 				inowingResizeListener: function (e) {
 					this.navShow = this.$refs.inoResizer.clientWidth > 800 ? true : false;
+				},
+				getUserInfo: async function() {
+					let rs = await axios.get(`${this.api_url}/user/info`);
+					if(rs.data.code == 200){
+						this.$store.commit('user_level', {user_level: rs.data.result.admin_level});
+						// this.$store.commit('event_id', {event_id: to.query.event_id});
+					}
 				},
 				getLogo: async function() {
 					let rs = await axios.get(`${this.api_url}/event/main_page?event_id=${this.$store.getters.event_id}`);

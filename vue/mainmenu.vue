@@ -26,12 +26,14 @@
                     </div>
             </template>
             <template #cell(name)="data">
-                <b-button v-if="data.item.type == 6"
-                    size="sm" class="mr-2" block variant="outline-secondary" disabled
-                    >{{ data.item.name }}</b-button>
-                <b-button v-if="data.item.type != 6"
-                    size="sm" class="mr-2" block variant="outline-info" 
-                    @click="selectType(data.item, data.index, $event.target)">{{ data.item.name }}</b-button>
+                <div class="text-center">
+                    <b-button v-if="data.item.type != 6"
+                        size="sm" class="mr-2" block variant="outline-info" 
+                        @click="selectType(data.item, data.index, $event.target)">{{ data.item.name }}</b-button>
+                    <b-button v-if="data.item.type == 6"
+                        size="sm" class="mr-2" block variant="outline-secondary" disabled
+                        >{{ data.item.name }}</b-button>
+                </div>
             </template>
             <template #cell(style)="data">
                     <div class="text-center">

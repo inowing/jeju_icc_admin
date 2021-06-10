@@ -31,7 +31,8 @@
                             <b-form-group label="노출순서">
                                 <b-form-input type="number" v-model="order"></b-form-input>
                             </b-form-group>
-                            <b-form-group label="제목">
+
+                            <b-form-group label="발표주제">
                                 <b-form-input type="text" v-model="title"></b-form-input>
                             </b-form-group>
                             <b-row>
@@ -64,20 +65,24 @@
                                 <b-col>
                                 </b-col>
                             </b-row>
-                            <b-form-group label="발표주제">
-                                <b-card-text>
-                                    <b-form-textarea v-model="contents"></b-form-textarea>
-                                </b-card-text>
-                            </b-form-group>
 
                             <b-form-group label="연자소개">
                                 <b-card-text>
-                                    <b-form-textarea v-model="introduction"></b-form-textarea>
+                                    <b-form-textarea rows="8" v-model="introduction"></b-form-textarea>
                                 </b-card-text>
                             </b-form-group>
 
-                            <b-form-group>
-                                <label style="color: #007BFF;">*초록업로드</label>
+                            <b-form-radio v-model="select_speaker" name="select_speaker" value="0">초록내용</b-form-radio>
+                            <b-form-group v-if="select_speaker == 0" >
+                                <!-- label="초록내용" -->
+                                <b-card-text>
+                                    <b-form-textarea rows="8" v-model="contents"></b-form-textarea>
+                                </b-card-text>
+                            </b-form-group>
+
+                            <b-form-radio v-model="select_speaker" name="select_speaker" value="1">초록업로드</b-form-radio>
+                            <b-form-group  v-if="select_speaker == 1">
+                                <!-- <label style="color: #007BFF;">*초록업로드</label> -->
                                 <b-card-text>
                                     <b-input-group v-show="file_name_1" prepend="file">
                                         <b-form-input disabled :value="file_name_1"></b-form-input>
@@ -94,7 +99,7 @@
                             <b-form-group label="노출순서">
                                 <b-form-input type="number" v-model="order"></b-form-input>
                             </b-form-group>
-                            <b-form-group label="제목">
+                            <b-form-group label="발표주제">
                                 <b-form-input type="text" v-model="title_en"></b-form-input>
                             </b-form-group>
                             <b-row>
@@ -127,20 +132,23 @@
                                 <b-col>
                                 </b-col>
                             </b-row>
-                            <b-form-group label="발표주제">
-                                <b-card-text>
-                                    <b-form-textarea v-model="contents_en"></b-form-textarea>
-                                </b-card-text>
-                            </b-form-group>
-
+                            
                             <b-form-group label="연자소개">
                                 <b-card-text>
-                                    <b-form-textarea v-model="introduction_en"></b-form-textarea>
+                                    <b-form-textarea rows="8" v-model="introduction_en"></b-form-textarea>
                                 </b-card-text>
                             </b-form-group>
 
-                            <b-form-group>
-                                <label style="color: #007BFF;">*초록업로드</label>
+                            <b-form-radio v-model="select_speaker_en" name="select_speaker_en" value="0">초록내용</b-form-radio>
+                            <b-form-group v-if="select_speaker_en == 0">
+                                <b-card-text>
+                                    <b-form-textarea rows="8" v-model="contents_en"></b-form-textarea>
+                                </b-card-text>
+                            </b-form-group>
+
+                            <b-form-radio v-model="select_speaker_en" name="select_speaker_en" value="1">초록업로드</b-form-radio>
+                            <b-form-group  v-if="select_speaker_en == 1">
+                                <!-- <label style="color: #007BFF;">초록업로드</label> -->
                                 <b-card-text>
                                     <b-input-group v-show="file_name_1_en" prepend="file">
                                         <b-form-input disabled :value="file_name_1_en"></b-form-input>
@@ -182,6 +190,9 @@ module.exports = {
                 sub_id_key_store: {},
                 selected_sub: ''
             },
+
+            select_speaker:0,
+            select_speaker_en:0,
 
             id: '',
             order: 0,
@@ -242,6 +253,17 @@ module.exports = {
             this.contents = data.contents;
 			this.contents_en = data.contents_en;
 
+            if(data.contents.length > 0){
+                this.select_speaker = 0;
+            }else if(data.file.length > 0){
+                this.select_speaker = 1;
+            }
+            if(data.contents_en.length > 0){
+                this.select_speaker_en = 0;
+            }else if(data.file_en.length > 0){
+                this.select_speaker_en = 1;
+            }
+            
             this.speaker_name = data.speaker_name;
             this.speaker_name_en = data.speaker_name_en;
             this.position = data.position;
@@ -277,8 +299,10 @@ module.exports = {
                 formData.append('order', this.order);
                 this.title ? formData.append('title', this.title) : '';
                 this.title_en ? formData.append('title_en', this.title_en) : '';
-                this.contents ? formData.append('contents', this.contents) : '';
-                this.contents_en ? formData.append('contents_en', this.contents_en) : '';
+                // this.contents ? formData.append('contents', this.contents) : '';
+                // this.contents_en ? formData.append('contents_en', this.contents_en) : '';
+                formData.append('contents', this.contents ? this.contents: '')
+                formData.append('contents_en', this.contents_en ? this.contents_en: '')
                 this.speaker_name ? formData.append('speaker_name', this.speaker_name) : '';
                 this.position ? formData.append('position', this.position) : '';
                 this.introduction ? formData.append('introduction', this.introduction) : '';
@@ -319,8 +343,10 @@ module.exports = {
                 formData.append('order', this.order);
                 this.title ? formData.append('title', this.title) : '';
                 this.title_en ? formData.append('title_en', this.title_en) : '';
-                this.contents ? formData.append('contents', this.contents) : '';
-                this.contents_en ? formData.append('contents_en', this.contents_en) : '';
+                // this.contents ? formData.append('contents', this.contents) : '';
+                // this.contents_en ? formData.append('contents_en', this.contents_en) : '';
+                formData.append('contents', this.contents ? this.contents: '')
+                formData.append('contents_en', this.contents_en ? this.contents_en: '')
                 this.speaker_name ? formData.append('speaker_name', this.speaker_name) : '';
                 this.position ? formData.append('position', this.position) : '';
                 this.introduction ? formData.append('introduction', this.introduction) : '';

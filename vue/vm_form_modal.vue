@@ -109,6 +109,44 @@
           </b-form-group>
         </b-col>
         <b-col>
+          <b-form-group label="Login Image">
+            <b-card no-body>
+              <b-card-text class="ino-180-180-wrap mt-1">
+                <div>
+                  <b-img :src="form.background||background_prev" fluid></b-img>
+                </div>
+              </b-card-text>
+              <b-card-text class="mt-1 pl-1 pb-1">
+                <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
+                <b-form-file v-model="background_file" @change="onFileChange($event, 'background', form)"
+                  style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
+                <b-button @click="background_file = null; form.background=''; background_del=true;" size="sm"
+                  variant="danger">삭제</b-button>
+              </b-card-text>
+            </b-card>
+          </b-form-group>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-form-group label="Event Background Image">
+            <b-card no-body>
+              <b-card-text class="ino-180-180-wrap mt-1">
+                <div>
+                  <b-img :src="form.intro_background||background_prev" fluid></b-img>
+                </div>
+              </b-card-text>
+              <b-card-text class="mt-1 pl-1 pb-1">
+                <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
+                <b-form-file v-model="intro_background_file" @change="onFileChange($event, 'intro_background', form)"
+                  style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
+                <b-button @click="intro_background_file = null; form.intro_background=''; intro_background_del=true;"
+                  size="sm" variant="danger">삭제</b-button>
+              </b-card-text>
+            </b-card>
+          </b-form-group>
+        </b-col>
+        <b-col>
           <b-form-group label="Sponsor Banner">
             <b-card no-body>
               <b-card-text class="ino-180-180-wrap mt-1">
@@ -126,44 +164,6 @@
                       삭제</b-button>
                   </b-input-group-append>
                 </b-input-group>
-              </b-card-text>
-            </b-card>
-          </b-form-group>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col>
-          <b-form-group label="Event Background Image">
-            <b-card no-body>
-              <b-card-text class="ino-180-180-wrap mt-1">
-                <div>
-                  <b-img :src="form.background||background_prev" fluid></b-img>
-                </div>
-              </b-card-text>
-              <b-card-text class="mt-1 pl-1 pb-1">
-                <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
-                <b-form-file v-model="background_file" @change="onFileChange($event, 'background', form)"
-                  style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-                <b-button @click="background_file = null; form.background=''; background_del=true;" size="sm"
-                  variant="danger">삭제</b-button>
-              </b-card-text>
-            </b-card>
-          </b-form-group>
-        </b-col>
-        <b-col>
-          <b-form-group label="Intro Background Image">
-            <b-card no-body>
-              <b-card-text class="ino-180-180-wrap mt-1">
-                <div>
-                  <b-img :src="form.intro_background||background_prev" fluid></b-img>
-                </div>
-              </b-card-text>
-              <b-card-text class="mt-1 pl-1 pb-1">
-                <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
-                <b-form-file v-model="intro_background_file" @change="onFileChange($event, 'intro_background', form)"
-                  style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-                <b-button @click="intro_background_file = null; form.intro_background=''; intro_background_del=true;"
-                  size="sm" variant="danger">삭제</b-button>
               </b-card-text>
             </b-card>
           </b-form-group>

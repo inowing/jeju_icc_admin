@@ -3,97 +3,46 @@
     <b-row>
         <b-col>
             <b-card no-body>
-				<b-tabs card>
-					<b-tab title="국문" active>
-						<b-card>
-                            <template #header>
-                                <h6><strong>로고</strong></h6>
-                            </template>
-                            <b-row>
-                                <b-col>
-                                    <b-card>
-                                        <b-card-text class="ino-480-60-wrap mb-1">
-                                            <div>
-                                                <b-img :src="logo||prev_default" fluid></b-img>
-                                            </div>
-                                        </b-card-text>
-                                        <b-card-text class="text-left mt-1">
-                                            <b-icon-info-square></b-icon-info-square><span class="p-1 text-secondary">가로 480px 세로 60px (8:1) 이미지 업로드를 권장합니다.</span>
-                                        </b-card-text>
-                                        <b-card-text>
-                                            <b-row>
-                                                <b-col md="9" class="pr-0">
-                                                    <b-form-file v-model="file1" ref="file-input" @change="onFileChange($event, 'logo')" size="sm"></b-form-file>
-                                                </b-col>
-                                                <b-col md="3" class="text-right">
-                                                    <b-button @click="file1 = null; logo = ''; logo_del=true;" size="sm" variant="danger">이미지 삭제</b-button>
-                                                </b-col>
-                                            </b-row>
-                                        </b-card-text>
-                                    </b-card>
-                                </b-col>
-                                <b-col>
-                                    <b-card>
-                                        <b-card-text>
-                                            <b-form-group label="매칭 방향">
-                                                <b-form-radio-group v-model="is_bizmatching_cross_meeting" :options="match_options" button-variant="outline-primary" size="sm" buttons></b-form-radio-group>
-                                            </b-form-group>
+                    <template #header>
+                        <h6><strong>로고</strong></h6>
+                    </template>
+                    <b-row>
+                        <b-col>
+                            <b-card>
+                                <b-card-text class="ino-480-60-wrap mb-1">
+                                    <div>
+                                        <b-img :src="logo||prev_default" fluid></b-img>
+                                    </div>
+                                </b-card-text>
+                                <b-card-text class="text-left mt-1">
+                                    <b-icon-info-square></b-icon-info-square><span class="p-1 text-secondary">가로 480px 세로 60px (8:1) 이미지 업로드를 권장합니다.</span>
+                                </b-card-text>
+                                <b-card-text>
+                                    <b-row>
+                                        <b-col md="9" class="pr-0">
+                                            <b-form-file v-model="file1" ref="file-input" @change="onFileChange($event, 'logo')" size="sm"></b-form-file>
+                                        </b-col>
+                                        <b-col md="3" class="text-right">
+                                            <b-button @click="file1 = null; logo = ''; logo_del=true;" size="sm" variant="danger">이미지 삭제</b-button>
+                                        </b-col>
+                                    </b-row>
+                                </b-card-text>
+                            </b-card>
+                        </b-col>
+                        <b-col>
+                            <b-card>
+                                <b-card-text>
+                                    <b-form-group label="매칭 방향">
+                                        <b-form-radio-group v-model="is_bizmatching_cross_meeting" :options="match_options" button-variant="outline-primary" size="sm" buttons></b-form-radio-group>
+                                    </b-form-group>
 
-                                            <b-form-group label="최대 상담 신청 가능횟수">
-                                                <b-form-input type="number" v-model="bizmatching_max_count" min="1" max="3"></b-form-input>
-                                            </b-form-group>
-                                        </b-card-text>
-                                    </b-card>
-                                </b-col>
-                            </b-row>
-                        </b-card>
-					</b-tab>
-					<b-tab title="영문">
-						<b-card>
-                            <template #header>
-                                <h6><strong>로고</strong></h6>
-                            </template>
-                            <b-row>
-                                <b-col>
-                                    <b-card>
-                                        <b-card-text class="ino-480-60-wrap mb-1">
-                                            <div>
-                                                <b-img :src="logo_en||prev_default" fluid></b-img>
-                                            </div>
-                                        </b-card-text>
-                                        <b-card-text class="text-left mt-1">
-                                            <b-icon-info-square></b-icon-info-square><span class="p-1 text-secondary">가로 480px 세로 60px (8:1) 이미지 업로드를 권장합니다.</span>
-                                        </b-card-text>
-                                        <b-card-text>
-                                            <b-row>
-                                                <b-col md="9" class="pr-0">
-                                                    <b-form-file v-model="file1_en" ref="file-input" @change="onFileChange($event, 'logo_en')" size="sm"></b-form-file>
-                                                </b-col>
-                                                <b-col md="3" class="text-right">
-                                                    <b-button @click="file1_en = null; logo_en = ''; logo_en_del=true;" size="sm" variant="danger">이미지 삭제</b-button>
-                                                </b-col>
-                                            </b-row>
-                                        </b-card-text>
-                                    </b-card>
-                                </b-col>
-                                <b-col>
-                                    <b-card>
-                                        <b-card-text>
-                                            <b-form-group label="매칭 방향">
-                                                <b-form-radio-group v-model="is_bizmatching_cross_meeting" :options="match_options" button-variant="outline-primary" size="sm" buttons></b-form-radio-group>
-                                            </b-form-group>
-                                            
-                                            <b-form-group label="최대 상담 신청 가능횟수">
-                                                <b-form-input type="number" v-model="bizmatching_max_count" min="1"></b-form-input>
-                                            </b-form-group>
-                                        </b-card-text>
-                                    </b-card>
-                                </b-col>
-                            </b-row>
-                        </b-card>
-					</b-tab>
-					
-				</b-tabs>
+                                    <b-form-group label="최대 상담 신청 가능횟수">
+                                        <b-form-input type="number" v-model="bizmatching_max_count" min="1" max="3"></b-form-input>
+                                    </b-form-group>
+                                </b-card-text>
+                            </b-card>
+                        </b-col>
+                    </b-row>
                 <b-row>
                     <b-col class="ml-4 mb-3">
                         <b-button size="sm" variant="primary"  class="inoBtn-150" @click="updateEvent">저장</b-button>

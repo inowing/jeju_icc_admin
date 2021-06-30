@@ -31,22 +31,22 @@
               <v-btn v-for="(item, index) in date_table" :key="index" @click="getData($event, item)">{{item}}</v-btn>
             </v-col>
             <v-col>
-              <v-btn @click="getData(); cycle=true;">Play</v-btn>
-              <v-btn @click="cycle=false;">Stop</v-btn>
+              <v-btn @click="getData(); slideStart();">Play</v-btn>
+              <v-btn @click="slideEnd();">Stop</v-btn>
             </v-col>
           </v-row>
 
 					<v-carousel 
             v-model="slide_index" 
             :show-arrows="false"
-            :interval="500"
+            :interval="5000"
             :continuous="true"
             :cycle="cycle"
             >
 						<v-carousel-item v-for="i in page_size" :key="i">
 							<v-simple-table
-                :light="true"
-              >
+									:light="true"
+								>
 								<template v-slot:default>
 									<thead>
 										<tr>
@@ -83,13 +83,13 @@
 					time_table: [],
 					company_table: [],
 					page_cnt: 0,
-					page_size: 2,
+					page_size: 5,
 				}
 			},
 			mounted: function () {
 				this.$nextTick(async function () {
 					this.event_id = window.location.hash.split('event_id=')[1];
-					this.event_id = 106;
+					// this.event_id = 106;
 					await this.getData();
 				})
 			},
@@ -117,7 +117,7 @@
 
 				},
 				slideStart: async function() {
-					this.cycle = true;
+					if(this.page_cnt > 1)this.cycle = true;
 				},
 				slideEnd() {
 					this.cycle = false;

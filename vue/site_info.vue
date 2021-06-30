@@ -229,13 +229,13 @@
                             </b-col>
                         </b-row>
 
-                        <b-row class="mt-3">
+                        <!-- <b-row class="mt-3">
                             <b-col>
                                 <b-form-checkbox v-model="is_visible_familysite" name="check-button" switch>
                                     <strong>Family Site</strong>
                                 </b-form-checkbox>
                             </b-col>
-                        </b-row>
+                        </b-row> -->
 
                         <b-row class="mt-3">
                             <b-col>
@@ -520,9 +520,15 @@
     <!-- 로그인/회원가입 -->
     <b-row>
         <b-col>
-            <b-form-checkbox v-model="is_login" name="check-button" switch>
-                <strong>로그인/회원가입</strong>
-            </b-form-checkbox>
+            <b-card>
+                <template #header>
+                    <h6><strong>로그인/회원가입 사용여부</strong></h6>
+                </template>
+                <b-form-checkbox v-model="is_login" name="check-button" switch>
+                    <strong>로그인/회원가입</strong>
+                </b-form-checkbox>
+            </b-card>
+            
         </b-col>
     </b-row>
     <br>

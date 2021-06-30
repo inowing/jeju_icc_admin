@@ -11,8 +11,8 @@
             <b-col cols="9">
               <p class="m-0">Join URL</p>
               <p class="m-0 text-primary">
-                <span>{{conference_item ? conference_item.admin_link : ''}}</span>
-                <input type="hidden" ref="email2" :value="conference_item ? conference_item.admin_link : ''">
+                <span>{{conference_item ? addDomain(conference_item.admin_link) : ''}}</span>
+                <input type="hidden" ref="email2" :value="conference_item ? addDomain(conference_item.admin_link) : ''">
                 <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email2')">
                   <b-icon-clipboard-plus></b-icon-clipboard-plus>
                 </b-button>
@@ -32,6 +32,9 @@
               </b-button>
               <b-button size="sm" variant="primary" @click="sendEmail">
                 <b-icon-envelope></b-icon-envelope> 초대메일 전송
+              </b-button>
+              <b-button size="sm" variant="danger" @click="multiDelete">
+                <b-icon-trash></b-icon-trash> 계정 삭제
               </b-button>
             </b-col>
             <b-col cols="auto">
@@ -84,8 +87,8 @@
             <b-col cols="9">
               <p class="m-0">Join URL</p>
               <p class="m-0 text-primary">
-                <span>{{conference_item ? conference_item.link : ''}}</span>
-                <input type="hidden" ref="email3" :value="conference_item ? conference_item.link : ''">
+                <span>{{conference_item ? addDomain(conference_item.link) : ''}}</span>
+                <input type="hidden" ref="email3" :value="conference_item ? addDomain(conference_item.link) : ''">
                 <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email3')">
                   <b-icon-clipboard-plus></b-icon-clipboard-plus>
                 </b-button>
@@ -105,6 +108,9 @@
               </b-button>
               <b-button size="sm" variant="primary" @click="sendEmail">
                 <b-icon-envelope></b-icon-envelope> 초대메일 전송
+              </b-button>
+              <b-button size="sm" variant="danger" @click="multiDelete">
+                <b-icon-trash></b-icon-trash> 계정 삭제
               </b-button>
             </b-col>
             <b-col cols="auto">
@@ -158,8 +164,8 @@
             <b-col cols="9">
               <p class="m-0">Join URL</p>
               <p class="m-0 text-primary">
-                <span>{{conference_item ? conference_item.admin_link : ''}}</span>
-                <input type="hidden" ref="email1" :value="conference_item ? conference_item.admin_link : ''">
+                <span>{{conference_item ? addDomain(conference_item.admin_link) : ''}}</span>
+                <input type="hidden" ref="email1" :value="conference_item ? addDomain(conference_item.admin_link) : ''">
                 <b-button size="sm" variant="outline-info" @click.stop.prevent="exeCopy($event, 'email1')">
                   <b-icon-clipboard-plus></b-icon-clipboard-plus>
                 </b-button>
@@ -179,6 +185,9 @@
               </b-button>
               <b-button size="sm" variant="primary" @click="sendEmail">
                 <b-icon-envelope></b-icon-envelope> 초대메일 전송
+              </b-button>
+              <b-button size="sm" variant="danger" @click="multiDelete">
+                <b-icon-trash></b-icon-trash> 계정 삭제
               </b-button>
             </b-col>
             <b-col cols="auto">
@@ -219,6 +228,7 @@
                     </div>
                   </template>
                 </template>
+
               </b-table>
             </b-col>
           </b-row>
@@ -404,7 +414,7 @@
           {
             key: "time_invitation",
             label: "초대시간"
-          }
+          },
         ],
         attendee_pagination: {
           total_count: 0,
@@ -535,6 +545,13 @@
         testingCodeToCopy.setAttribute("type", "hidden");
         window.getSelection().removeAllRanges();
       },
+      addDomain(parameter){
+        if(parameter.startsWith('/')){
+          return this.$store.getters.page_url+parameter;
+        }else{
+          return parameter;
+        }
+      },
       openOverlayModal: function () {
         this.userForm = {};
         this.password_confirm = "";
@@ -569,6 +586,17 @@
         } catch (error) {
           this.$showMsgBoxTwo(error.response.status,"",error.response.statusText);
         }
+      },
+      deleteUser: async function (item){
+        console.log('deleteUser', item.id);
+        // let url = `${this.api_url}/conference_invitation/${item.id}`;
+        // let rs = await axios.delete(url, formData, {
+        //   Headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        // });
+        // let user_type = this.invitaion_tabIndex == 0 ? 1 : this.invitaion_tabIndex == 1 ? 2 : 0;
+        // await this.getList(user_type, 1);
       },
       excelUpload: function () {
         this.uploadModal = true;
@@ -643,6 +671,46 @@
         }
 
         this.$emit('get-list'); // 이름이 같으면 동작 안된다.
+      },
+      multiDelete: async function () {
+        try {
+          let user_type = this.invitaion_tabIndex == 0 ? 1 : this.invitaion_tabIndex == 1 ? 2 : 0;
+          let arr = user_type == 0 ? this.operator_allSelected : (user_type == 1 ? this.moderator_allSelected : this.attendee_allSelected);
+          
+          if (arr.length == 0) {
+            alert('삭제할 유저를 선택해주세요.');
+            return;
+          }
+
+          if (confirm(`${arr.length}명을 삭제하시겠습니까?`)) {
+            let url = `${this.api_url}/conference_invitation/multi_delete`;
+            let formData = new FormData();
+              formData.append("conference_id", this.conference_item.id);
+              // formData.append("user_type", user_type);
+  
+            for (var i = 0; i < arr.length; i++) {
+              let item = arr[i];
+              formData.append("users[]", item.id); 
+            }
+            
+            this.spin_show2 = true;
+            let rs = await axios.post(url, formData, {
+              Headers: {
+                "Content-Type": "application/json"
+              }
+            });
+            this.spin_show2 = false;
+            let rsCnt = rs.data.result;
+            this.$showMsgBoxTwo(rs.status, "", `${rsCnt}명을 삭제했습니다.`);
+            this.modal3 = false;
+            await this.getList(user_type, 1);
+          }
+
+        } catch (error) {
+          this.$showMsgBoxTwo(error.response.status, "", error.response.statusText);
+        }
+
+        this.$emit('get-list2'); // 이름이 같으면 동작 안된다.
       },
       paginationFn: async function (requestPage, type) {
         this.getList(type, requestPage);

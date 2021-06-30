@@ -381,10 +381,10 @@
   module.exports = {
     name: "vm",
     components: {
-        'vm-form-modal': window.httpVueLoader(`./vue/vm_form_modal.vue`),
+        'vm-form-modal': window.httpVueLoader(`./vue/vm_form_modal.vue?v=3`),
 				'vm-qna-modal': window.httpVueLoader(`./vue/vm_qna_modal.vue`),
 				'vm-attendee-modal': window.httpVueLoader(`./vue/vm_attendee_modal.vue`),
-				'vm-invitation-modal': window.httpVueLoader(`./vue/vm_invitation_modal.vue`)
+				'vm-invitation-modal': window.httpVueLoader(`./vue/vm_invitation_modal.vue?v=4`)
     },
     data: function () {
       return {

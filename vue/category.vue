@@ -36,7 +36,7 @@
                 </b-row>
             </b-card>
         </b-col>
-        <b-col>
+        <b-col v-if="is_sub_visible == true" class="">
             <b-card title="소분류">
                 <b-form-group label="세로형메뉴" v-slot="{ ariaDescribedby2 }">
                     <b-form-radio-group v-model="sub_selected" :options="subcategory" :aria-describedby="ariaDescribedby2" name="radio-btn-stacked" buttons stacked @change="subFn"
@@ -115,6 +115,7 @@ module.exports = {
             top_selected: '', // option model
             sub_selected: '', // option model
 
+            is_sub_visible:false,
         }
     },
     mounted: function () {
@@ -123,6 +124,7 @@ module.exports = {
             this.api_url = this.$store.getters.api_url;
             this.form.menu_id = this.$route.query.menu_id;
             this.getTopCategory();
+            this.menu_info();
         })
     },
     methods: {
@@ -269,6 +271,14 @@ module.exports = {
             let rs = await axios.get(url);
             this.getTopCategory();
             this.getSubcategory();
+        },
+        menu_info:async function () {
+            let url = `${this.api_url}/menu/${this.form.menu_id}`;
+            let rs = await axios.get(url);
+            var type = rs.data.result.type;
+            if(type == 5 || type == 7){
+                this.is_sub_visible = true;
+            }
         }
     }
 }

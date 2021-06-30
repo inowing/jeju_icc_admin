@@ -141,15 +141,15 @@
 						return;
 					}
 					this.navShow = this.$refs.inoResizer.clientWidth > 800 ? true : false; // 네비게이션 쇼,하이드
-					router.addRoute({ path: '/', component: window.httpVueLoader('./vue/site_info.vue') });
-					router.addRoute({ path: '/site_info', component: window.httpVueLoader('./vue/site_info.vue') });
-					router.addRoute({ path: '/familysite', component: window.httpVueLoader('./vue/familysite.vue') });
+					router.addRoute({ path: '/', component: window.httpVueLoader('./vue/site_info.vue?v=2') });
+					router.addRoute({ path: '/site_info', component: window.httpVueLoader('./vue/site_info.vue?v=2') });
+					router.addRoute({ path: '/familysite', component: window.httpVueLoader('./vue/familysite.vue?v=1') });
 					router.addRoute({ path: '/popup', component: window.httpVueLoader('./vue/popup.vue') });
 					router.addRoute({ path: '/banner', component: window.httpVueLoader('./vue/banner.vue') });
 					router.addRoute({ path: '/copy', component: window.httpVueLoader('./vue/copy.vue') });
 
 					router.addRoute({ path: '/mainmenu', component: window.httpVueLoader('./vue/mainmenu.vue') });
-					router.addRoute({ path: '/mainmenu/category', name: 'category', component: window.httpVueLoader('./vue/category.vue') });
+					router.addRoute({ path: '/mainmenu/category', name: 'category', component: window.httpVueLoader('./vue/category.vue?v=1') });
 					router.addRoute({ path: '/mainmenu/contents/overview', name: 'overview', component: window.httpVueLoader('./vue/overview.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition_a', name: 'exhibition_a', component: window.httpVueLoader('./vue/exhibition_a.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition_b', name: 'exhibition_b', component: window.httpVueLoader('./vue/exhibition_b.vue') });

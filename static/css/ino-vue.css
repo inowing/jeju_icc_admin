@@ -88,6 +88,7 @@ thead {
 .ino-290-200-wrap>div,
 .ino-450-260-wrap>div,
 .ino-180-180-wrap>div,
+.ino-180-100-wrap>div,
 .ino-1000-300-wrap>div,
 .ino-1000-1400-wrap>div,
 .ino-800-450-wrap>div {
@@ -108,6 +109,7 @@ thead {
 .ino-290-200-wrap>div>img,
 .ino-450-260-wrap>div>img,
 .ino-180-180-wrap>div>img,
+.ino-180-100-wrap>div>img,
 .ino-1000-300-wrap>div>img,
 .ino-1000-1400-wrap>div>img,
 .ino-800-450-wrap>div>img {
@@ -133,6 +135,13 @@ thead {
 	height: 180px;
 	margin: 0px auto;
 	/* //p.card-text.ino-180-180-wrap */
+}
+
+.ino-180-100-wrap {
+	width: 180px;
+	height: 100px;
+	margin: 0px auto;
+	/* //p.card-text.ino-180-100-wrap */
 }
 
 .ino-450-260-wrap {

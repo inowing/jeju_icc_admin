@@ -2,6 +2,15 @@
 	<section>
 		<b-row>
 			<b-col>
+				<b-form-checkbox v-model="is_visible_familysite" name="check-button" switch>
+					<strong>Family Site 보이기 숨기기</strong>
+				</b-form-checkbox>
+				<b-button variant="primary" size="sm" @click="save_event" class="inoBtn-150">보이기 숨기기 저장</b-button>
+				
+			</b-col>
+		</b-row>
+		<b-row class="mt-3">
+			<b-col>
 				<b-button variant="primary" size="sm" @click="createPopup()"><b-icon-plus></b-icon-plus>사이트 추가</b-button>
 				<b-modal v-model="familyPost" hide-footer ref="familysite-modal" title="사이트 추가">
 					<b-form inline>순서&nbsp;<b-form-input v-model="order" size="sm" placeholder="0"></b-form-input></b-form>
@@ -79,6 +88,8 @@ module.exports = {
 		api_url: '',
 		url: null,
 		familyPost: false,
+
+		is_visible_familysite: false,
 		
 		order: 0,
 		name: null,
@@ -108,7 +119,9 @@ module.exports = {
 	methods: {
 		getList: async function() {
 			let url = `${this.api_url}/familysite?event_id=${this.event_id}`;
-			this.items = (await axios.get(url)).data.result.familysite;
+			var result = (await axios.get(url)).data.result;
+			this.items = result.familysite;
+			this.is_visible_familysite = result.is_visible_familysite == 0 ? false : true;
 		},
 		save: async function () {
 			
@@ -128,6 +141,19 @@ module.exports = {
 				
 			this.getList();
 			this.hideModal('familysite-modal');
+		},
+		save_event: async function () {
+			console.log('save_event');
+			let url = `${this.api_url}/event/${this.event_id}`;
+            var formData = new FormData();
+			formData.append("is_visible_familysite", this.is_visible_familysite ? 1 : 0);
+			let response = await axios.post(url, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                }
+            });
+			this.getList();
+			this.$showMsgBoxTwo(response.status);
 		},
 		hideModal(id) {
 			this.$refs[id].hide()

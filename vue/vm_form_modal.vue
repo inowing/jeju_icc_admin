@@ -3,7 +3,7 @@
     <b-card no-body class="p-1" :border-variant="modal1_border" v-show="form_page == 1">
       <b-tabs card>
         <b-tab title="국문" active>
-          <b-form-group label="Event title" label-variant="primary">
+          <b-form-group label="Session title" label-variant="primary">
             <b-form-textarea 
               rows="1"
               v-model="form.name" size="sm" :state="form.name ? true: false"></b-form-textarea>
@@ -22,7 +22,7 @@
           </b-form-group>
         </b-tab>
         <b-tab title="영문">
-          <b-form-group label="Event title" label-variant="primary">
+          <b-form-group label="Session title" label-variant="primary">
             <b-form-textarea 
               rows="1"
               v-model="form.name_en" size="sm"></b-form-textarea>
@@ -89,7 +89,7 @@
         <b-col>
           <b-form-group label="Event Logo">
             <b-card no-body>
-              <b-card-text class="ino-180-180-wrap mt-1">
+              <b-card-text class="ino-180-100-wrap mt-1">
                 <div>
                   <b-img :src="form.logo||logo_prev" fluid></b-img>
                 </div>
@@ -111,16 +111,16 @@
         <b-col>
           <b-form-group label="Login Image">
             <b-card no-body>
-              <b-card-text class="ino-180-180-wrap mt-1">
+              <b-card-text class="ino-180-100-wrap mt-1">
                 <div>
-                  <b-img :src="form.background||background_prev" fluid></b-img>
+                  <b-img :src="form.intro_background||background_prev" fluid></b-img>
                 </div>
               </b-card-text>
               <b-card-text class="mt-1 pl-1 pb-1">
                 <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
-                <b-form-file v-model="background_file" @change="onFileChange($event, 'background', form)"
+                <b-form-file v-model="intro_background_file" @change="onFileChange($event, 'intro_background', form)"
                   style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-                <b-button @click="background_file = null; form.background=''; background_del=true;" size="sm"
+                <b-button @click="intro_background_file = null; form.intro_background=''; intro_background_del=true;" size="sm"
                   variant="danger">삭제</b-button>
               </b-card-text>
             </b-card>
@@ -131,16 +131,16 @@
         <b-col>
           <b-form-group label="Event Background Image">
             <b-card no-body>
-              <b-card-text class="ino-180-180-wrap mt-1">
+              <b-card-text class="ino-180-100-wrap mt-1">
                 <div>
-                  <b-img :src="form.intro_background||background_prev" fluid></b-img>
+                  <b-img :src="form.background||background_prev" fluid></b-img>
                 </div>
               </b-card-text>
               <b-card-text class="mt-1 pl-1 pb-1">
                 <span style="font-size: 10pt;">권장 사이즈는 ★★:★★ 입니다. </span>
-                <b-form-file v-model="intro_background_file" @change="onFileChange($event, 'intro_background', form)"
+                <b-form-file v-model="background_file" @change="onFileChange($event, 'background', form)"
                   style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
-                <b-button @click="intro_background_file = null; form.intro_background=''; intro_background_del=true;"
+                <b-button @click="background_file = null; form.background=''; background_del=true;"
                   size="sm" variant="danger">삭제</b-button>
               </b-card-text>
             </b-card>
@@ -149,7 +149,7 @@
         <b-col>
           <b-form-group label="Sponsor Banner">
             <b-card no-body>
-              <b-card-text class="ino-180-180-wrap mt-1">
+              <b-card-text class="ino-180-100-wrap mt-1">
                 <div>
                   <b-img :src="form.banner||banner_prev" fluid></b-img>
                 </div>
@@ -175,6 +175,116 @@
             <b-form-input type="color" v-model="form.intro_background_color" size="sm" @change="introBackgroundColorChange('intro_background_color', $event)">
         </b-col>
       </b-row>
+
+      <b-row class="mt-3">
+          <b-col>
+              <b-card>
+                  <b-row>
+                      <b-col class="pr-5">
+                          <b-row>
+                              <b-col>
+                                  <b-form-checkbox v-model="is_visible_direct_1" name="check-button" switch>
+                                      <strong>버튼 이미지 #1</strong>
+                                  </b-form-checkbox>
+                              </b-col>
+                          </b-row>
+                          <b-row class="mt-1">
+                              <b-col>
+                                  <strong>버튼 텍스트 #1</strong>
+                                  <b-form-input size="sm" v-model="direct_text_1" placeholder=""></b-form-input>
+                              </b-col>
+                          </b-row>
+                          <b-row class="mt-1">
+                              <b-col>
+                                  <strong>버튼 배경색 #1</strong>
+                                  <b-form-input type="color" v-model="form.direct_background_1" size="sm" @change="introBackgroundColorChange('direct_background_1', $event)">
+                              </b-col>
+                          </b-row>
+                          <b-row class="mt-1">
+                              <b-col>
+                                  <strong>버튼 링크 #1</strong>
+                                  <b-form-input size="sm" v-model="direct_link_1" placeholder="반드시 http:// 를 입력해주세요."></b-form-input>
+                              </b-col>
+                          </b-row>
+                      </b-col>
+                  </b-row>
+
+              </b-card>
+          </b-col>
+      </b-row>
+      <b-row class="mt-3">
+          <b-col>
+              <b-card>
+                  <b-row>
+                      <b-col class="pr-5">
+                          <b-row>
+                              <b-col>
+                                  <b-form-checkbox v-model="is_visible_direct_2" name="check-button" switch>
+                                      <strong>버튼 이미지 #2</strong>
+                                  </b-form-checkbox>
+                              </b-col>
+                          </b-row>
+                          <b-row class="mt-1">
+                              <b-col>
+                                  <strong>버튼 텍스트 #2</strong>
+                                  <b-form-input size="sm" v-model="direct_text_2" placeholder=""></b-form-input>
+                              </b-col>
+                          </b-row>
+                          <b-row class="mt-1">
+                              <b-col>
+                                  <strong>버튼 배경색 #2</strong>
+                                  <b-form-input type="color" v-model="form.direct_background_2" size="sm" @change="introBackgroundColorChange('direct_background_2', $event)">
+                              </b-col>
+                          </b-row>
+                          <b-row class="mt-1">
+                              <b-col>
+                                  <strong>버튼 링크 #2</strong>
+                                  <b-form-input size="sm" v-model="direct_link_2" placeholder="반드시 http:// 를 입력해주세요."></b-form-input>
+                              </b-col>
+                          </b-row>
+                      </b-col>
+                  </b-row>
+
+              </b-card>
+          </b-col>
+      </b-row>
+      <b-row class="mt-3">
+          <b-col>
+              <b-card>
+                  <b-row>
+                      <b-col class="pr-5">
+                          <b-row>
+                              <b-col>
+                                  <b-form-checkbox v-model="is_visible_direct_3" name="check-button" switch>
+                                      <strong>버튼 이미지 #3</strong>
+                                  </b-form-checkbox>
+                              </b-col>
+                          </b-row>
+                          <b-row class="mt-1">
+                              <b-col>
+                                  <strong>버튼 텍스트 #3</strong>
+                                  <b-form-input size="sm" v-model="direct_text_3" placeholder=""></b-form-input>
+                              </b-col>
+                          </b-row>
+                          <b-row class="mt-1">
+                              <b-col>
+                                  <strong>버튼 배경색 #3</strong>
+                                  <b-form-input type="color" v-model="form.direct_background_3" size="sm" @change="introBackgroundColorChange('direct_background_3', $event)">
+                              </b-col>
+                          </b-row>
+                          <b-row class="mt-1">
+                              <b-col>
+                                  <strong>버튼 링크 #3</strong>
+                                  <b-form-input size="sm" v-model="direct_link_3" placeholder="반드시 http:// 를 입력해주세요."></b-form-input>
+                              </b-col>
+                          </b-row>
+                      </b-col>
+                  </b-row>
+
+              </b-card>
+          </b-col>
+      </b-row>
+
       <b-form-group>
         <b-row class="mb-1">
           <b-col><span>Languages</span></b-col>
@@ -351,20 +461,38 @@
 
         logo_file: null,
         logo_prev: this.$store.getters.dummy_image_url(["480x60"]),
+        // logo_prev: '/src/images/icon_1600_900.png',
         logo_del: false,
 
         banner_file: null,
-        banner_prev: this.$store.getters.dummy_image_url(["100x600"]),
+        // banner_prev: this.$store.getters.dummy_image_url(["100x600"]),
+        banner_prev: '/src/images/icon_1600_900.png',
         banner_del: false,
 
         background_file: null,
-        background_prev: this.$store.getters.dummy_image_url(["480x60"]),
+        // background_prev: this.$store.getters.dummy_image_url(["480x60"]),
+        background_prev: '/src/images/icon_1600_900.png',
         background_del: false,
 
         intro_background_file: null,
         intro_background_del: false,
 
-        intro_background_color: "#ffffff"
+        intro_background_color: "#ffffff",
+
+        direct_link_1:'',
+        direct_link_2:'',
+        direct_link_3:'',
+        is_visible_direct_1:false,
+        is_visible_direct_2:false,
+        is_visible_direct_3:false,
+        direct_text_1:'',
+        direct_text_2:'',
+        direct_text_3:'',
+        direct_background_1:'',
+        direct_background_2:'',
+        direct_background_3:''
+
+
       };
     },
     created: async function () {
@@ -461,6 +589,19 @@
           formData.append("intro_background_del", "Y") :
           formData.append("intro_background", this.intro_background_file);
 
+        formData.append("is_visible_direct_1", this.is_visible_direct_1 ? 1 : 0);
+        formData.append("is_visible_direct_2", this.is_visible_direct_2 ? 1 : 0);
+        formData.append("is_visible_direct_3", this.is_visible_direct_3 ? 1 : 0);
+        formData.append("direct_link_1", this.direct_link_1);
+        formData.append("direct_link_2", this.direct_link_2);
+        formData.append("direct_link_3", this.direct_link_3);
+        formData.append("direct_text_1", this.direct_text_1);
+        formData.append("direct_text_2", this.direct_text_2);
+        formData.append("direct_text_3", this.direct_text_3);
+        formData.append("direct_background_1", this.direct_background_1);
+        formData.append("direct_background_2", this.direct_background_2);
+        formData.append("direct_background_3", this.direct_background_3);
+
         formData.append("intro_background_color", this.intro_background_color);
         // form submit
         try {
@@ -529,6 +670,20 @@
         !this.intro_background_file && this.intro_background_del ?
           formData.append("intro_background_del", "Y") :
           formData.append("intro_background", this.intro_background_file);
+
+        formData.append("is_visible_direct_1", this.is_visible_direct_1 ? 1 : 0);
+        formData.append("is_visible_direct_2", this.is_visible_direct_2 ? 1 : 0);
+        formData.append("is_visible_direct_3", this.is_visible_direct_3 ? 1 : 0);
+
+        formData.append("direct_link_1", this.direct_link_1);
+        formData.append("direct_link_2", this.direct_link_2);
+        formData.append("direct_link_3", this.direct_link_3);
+        formData.append("direct_text_1", this.direct_text_1);
+        formData.append("direct_text_2", this.direct_text_2);
+        formData.append("direct_text_3", this.direct_text_3);
+        formData.append("direct_background_1", this.direct_background_1);
+        formData.append("direct_background_2", this.direct_background_2);
+        formData.append("direct_background_3", this.direct_background_3);
 
         formData.append("intro_background_color", this.intro_background_color);
         // form submit
@@ -624,6 +779,21 @@
         this.form.date = times[0];
         this.start_time = times[1];
         this.event_size = this.form.event_size;
+
+        this.direct_link_1 = this.form.direct_link_1;
+        this.direct_link_2 = this.form.direct_link_2;
+        this.direct_link_3 = this.form.direct_link_3;
+
+        this.is_visible_direct_1 = this.form.is_visible_direct_1==1 ? true : false;
+        this.is_visible_direct_2 = this.form.is_visible_direct_2==1 ? true : false;
+        this.is_visible_direct_3 = this.form.is_visible_direct_3==1 ? true : false;
+
+        this.direct_text_1 = this.form.direct_text_1;
+        this.direct_text_2 = this.form.direct_text_2;
+        this.direct_text_3 = this.form.direct_text_3;
+        this.direct_background_1 = this.form.direct_background_1;
+        this.direct_background_2 = this.form.direct_background_2;
+        this.direct_background_3 = this.form.direct_background_3;
         
         if (this.conference_item.language && !this.conference_item.language.length) {
           return;

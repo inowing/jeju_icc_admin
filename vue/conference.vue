@@ -220,7 +220,7 @@ module.exports = {
         },
         availableOptions() {
             const criteria = this.criteria;
-            const options = this.vm.filter(opt => this.tagValue.indexOf(opt.name) === -1);
+            const options = this.vm.filter(opt => this.tagValue.indexOf(opt.name.toLowerCase()) === -1);
             if (criteria) {
                 return options.filter(opt => opt.name.toLowerCase().indexOf(criteria) > -1); // return new array
             }
@@ -275,6 +275,7 @@ module.exports = {
         },
         storeVM: async function () { // 하단 리스트아이템 저장하기
             if (!(this.category_id && this.conference_id)) {
+                console.log('storeVM', this.category_id +':'+this.conference_id);
                 alert('값을 선택해 주세요 주세요.');
                 return;
             }
@@ -390,7 +391,7 @@ module.exports = {
         },
         onOptionClick({search, addTag, removeTag}) { // VM 목록에서 클릭시 태그 추가. 
             for (let option of this.vm) {
-                if (option.name == search) {
+                if (option.name.replace(/\n$/gm, '').replace(/(\r\n\t|\n|\r\t)/gm," ") == search) {
                     removeTag(this.tagValue[0]); // 1건만 된다.
                     addTag(option.name); // string만 되는듯하다...
                     this.conference_id = option.id;

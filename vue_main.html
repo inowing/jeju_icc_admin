@@ -108,7 +108,7 @@
 			mode: 'history',
 			store: store,
 			components: {
-				navi: window.httpVueLoader(`./vue/navi.vue?v=1`),
+				navi: window.httpVueLoader(`./vue/navi.vue?v=2`),
 			},
 			router: router,
 			data: function (){
@@ -178,7 +178,7 @@
 					router.addRoute({ path: '/mainmenu/contents/speaker_form', name: 'speaker_form', component: window.httpVueLoader('./vue/speaker_form.vue?v=2') });
 					
 					router.addRoute({ path: '/mainmenu/shop/product', name: 'shop_product', component: window.httpVueLoader('./vue/shop_product.vue') });
-					router.addRoute({ path: '/mainmenu/shop/regist',name:'shop_regist', component: window.httpVueLoader('./vue/shop_regist.vue') });
+					router.addRoute({ path: '/mainmenu/shop/regist',name:'shop_regist', component: window.httpVueLoader('./vue/shop_regist.vue?v=1') });
 					router.addRoute({ path: '/mainmenu/shop/order',name:'shop_order', component: window.httpVueLoader('./vue/shop_order.vue') });
 					router.addRoute({ path: '/mainmenu/map/list',name:'map_list', component: window.httpVueLoader('./vue/map_list.vue') });
 					router.addRoute({ path: '/mainmenu/map/form',name:'map_form', component: window.httpVueLoader('./vue/map_form.vue') });

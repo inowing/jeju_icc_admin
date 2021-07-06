@@ -28,11 +28,12 @@
 				<v-container style="max-width: 1580px;">
           <v-row class="mb-2">
             <v-col>
-              <v-btn v-for="(item, index) in date_table" :key="index" @click="getData($event, item)">{{item}}</v-btn>
+              <v-btn v-for="(item, index) in date_table" :key="index" @click="getData($event, item)"
+			  	v-bind:color="select_date == item ? 'primary' : ''">{{item}}</v-btn>
             </v-col>
             <v-col>
-              <v-btn @click="getData(); slideStart();">Play</v-btn>
-              <v-btn @click="slideEnd();">Stop</v-btn>
+              <v-btn @click="getData(); slideStart();" v-bind:color="cycle ? 'primary' : ''">Play</v-btn>
+              <v-btn @click="slideEnd();" v-bind:color="cycle ? '' : 'primary'">Stop</v-btn>
             </v-col>
           </v-row>
 
@@ -43,14 +44,14 @@
             :continuous="true"
             :cycle="cycle"
             >
-						<v-carousel-item v-for="i in page_size" :key="i">
+						<v-carousel-item v-for="i in page_cnt" :key="i">
 							<v-simple-table
 									:light="true"
 								>
 								<template v-slot:default>
 									<thead>
 										<tr>
-											<th class="text-left" v-for="item in time_table" :key="item.key">
+											<th class="text-left" v-for="item in time_table" :key="item.key" style="background-color: #1976d2;color: white;padding-top: 3px;padding-bottom: 3px;">
 												{{item.label}}
 											</th>
 										</tr>
@@ -77,13 +78,14 @@
 			data: function (){
 				return {
 					event_id: 0,
-					cycle: true,
+					cycle: false,
 					slide_index: 0,
 					date_table: [],
 					time_table: [],
 					company_table: [],
 					page_cnt: 0,
 					page_size: 5,
+					select_date: '',
 				}
 			},
 			mounted: function () {
@@ -106,18 +108,20 @@
 					if (date) {
 						url = url + `&search_date=${date}`;
 					}
-					console.log(url);
+					// console.log(url);
 					let response = await axios.get(url);
 					let rs = response.data.result;
-					console.log(response);
+					// console.log(response);
 					this.date_table = rs.date_table;
 					this.time_table = rs.time_table;
 					this.company_table = rs.company_table;
 					this.page_cnt = Math.ceil(this.company_table.length/this.page_size);
-
+					this.select_date = rs.select_date;
+					this.slideStart();
 				},
 				slideStart: async function() {
 					if(this.page_cnt > 1)this.cycle = true;
+					// console.log('cycle', this.cycle);
 				},
 				slideEnd() {
 					this.cycle = false;

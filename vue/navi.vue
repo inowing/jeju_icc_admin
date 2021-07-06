@@ -53,7 +53,7 @@
     <b-card no-body class="mb-0 p-0">
         <b-card-header class="p-0" role="tab">
             <b-button block squared v-b-toggle.accordion-3 variant="info" size="sm" class="text-left" v-bind:class="[ routePath == '/company/list' || routePath == '/company/regist' || routePath == '/company/admin' || routePath == '/com_request' ? active_parent_menu : '' ]">
-                <span>3. 기업관리</span>
+                <span>3. 기업정보관리</span>
             </b-button>
         </b-card-header>
         <b-collapse id="accordion-3" visible accordion="inowing-accordion" role="tabpanel" v-model="accordion3">
@@ -77,7 +77,7 @@
         <router-link to="/user_list">
             <b-card-header class="p-0" role="tab">
                 <b-button block squared v-b-toggle.accordion-4 variant="info" size="sm" class="text-left" v-bind:class="[ routePath == '/user_list' ? active_parent_menu : '' ]">
-                    <span>4. 사용자 관리</span>
+                    <span>4. 계정관리</span>
                     </b-button>
             </b-card-header>
         </router-link>

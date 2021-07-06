@@ -61,10 +61,10 @@
                             <b-form-input size="sm" v-model="form.phone" :state="validation.valid6"></b-form-input>
                             <b-form-invalid-feedback :state="validation.valid6">담당자 연락처를 입력하세요.</b-form-invalid-feedback>
                         </b-form-group>
-                        <b-form-group label="제품 배송비(준비중)">
+                        <b-form-group label="제품 배송비">
                             <b-form-input v-model="form.product_delivery" size="sm"></b-form-input>
                         </b-form-group>
-                        <b-form-group label="1회 구매 제한 수량(준비중)">
+                        <b-form-group label="1회 구매 제한 수량">
                             <b-form-input v-model="form.limit_quantity" size="sm" type="number"></b-form-input>
                         </b-form-group>
                      </b-col>

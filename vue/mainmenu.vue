@@ -22,7 +22,7 @@
         <b-table :items="menuItems" :fields="menuFields" bordered head-variant="light" small class="mt-1">
             <template #cell(type)="data">
                     <div class="text-center">
-                        {{data.item.type}}
+                        {{data.index}}
                     </div>
             </template>
             <template #cell(name)="data">
@@ -240,6 +240,109 @@ module.exports = {
                 }
             ],
             menuItems: [],
+            showMenuType: {
+                // style은 사용가능한 카테고리만 쓰세요
+                0: {
+                    type: 0,
+                    name: 'Home',
+                    style: '개요형',
+                    vue_name: 'overview'
+                },
+                1: {
+                    type: 1,
+                    name: '박람회소개',
+                    style: '혼합형',
+                    overview_type: [
+                        { value: 0, text: 'Type-A', vue_name: 'exhibition_a' },
+                        { value: 1, text: 'Type-B', vue_name: 'exhibition_b' }
+                    ]
+                },
+                2: {
+                    type: 2,
+                    name: '행사개요',
+                    style: '개요형', // 사용가능한 카테고리만 써
+                    vue_name: 'information'
+                },
+                3: {
+                    type: 3,
+                    name: '오프닝세션',
+                    style: '개요형', // 사용가능한 카테고리 예외
+                    vue_name: 'movie'
+                },
+                4: {
+                    type: 4,
+                    name: 'Introduction',
+                    style: '개요형', // 사용가능한 카테고리만 써
+                    vue_name: 'introduction'
+                },
+                5: {
+                    type: 5,
+                    name: '프로그램',
+                    style: '게시글형',
+                    vue_name: 'program'
+                },
+                6: {
+                    type: 6,
+                    name: '연자소개',
+                    style: '게시글형',
+                    vue_name: 'keynote'
+                },
+                7: {
+                    type: 7,
+                    name: '연자소개2',
+                    style: '게시글형',
+                    vue_name: 'speaker'
+                },
+                // 8: {
+                //     type: 8,
+                //     name: 'Map',
+                //     style: '개요형',
+                //     vue_name: 'map_list'
+                // },
+                // 9: {
+                //     type: 9,
+                //     name: 'SNS',
+                //     style: '게시글형',
+                //     vue_name: 'sns_list'
+                // },
+                8: {
+                    type: 10,
+                    name: '공지 및 이벤트',
+                    style: '게시글형',
+                    vue_name: 'notice'
+                },
+                9: {
+                    type: 11,
+                    name: 'Survey',
+                    style: '게시글형',
+                    vue_name: 'survey_list'
+                },
+                10: {
+                    type: 12,
+                    name: 'Outlink'
+                },
+                11: {
+                    type: 13,
+                    name: '온라인전시관',
+                    style: '게시글형',
+                    vue_name: 'exhibition'
+                },
+                12: {
+                    type: 14,
+                    name: '컨퍼런스',
+                    vue_name: 'conference'
+                },
+                13: {
+                    type: 15,
+                    name: '1:1 비즈매칭'
+                },
+                14: {
+                    type: 16,
+                    name: 'Shopping',
+                    style: '개요형', // 사용가능한 카테고리 예외
+                    vue_name: 'shop_product'
+                }
+            },
             menuType: {
                 // style은 사용가능한 카테고리만 쓰세요
                 0: {
@@ -391,8 +494,8 @@ module.exports = {
             this.event_id = this.$store.getters.event_id;
             this.api_url = this.$store.getters.api_url;
             this.loadData();
-            this.menuItems = Object.values(this.menuType);
-            
+            this.menuItems = Object.values(this.showMenuType);
+            console.log('this.menuItems ', this.menuItems);
         })
     },
     methods: {

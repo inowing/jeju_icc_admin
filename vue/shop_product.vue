@@ -47,6 +47,16 @@
                         {{ row.item.sale_price.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")}}
                     </div>
                 </template>
+                <template #cell(product_delivery)="row">
+                    <div class="text-right">
+                        {{ row.item.product_delivery.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")}}
+                    </div>
+                </template>
+                <template #cell(limit_quantity)="row">
+                    <div class="text-right">
+                        {{ row.item.limit_quantity.toFixed(0).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")}}
+                    </div>
+                </template>
                 <template #cell(is_visible)="row">
                     <div class="text-center">
                         <b-button size="sm" variant="outline-success" disabled  v-show="row.item.is_visible == 1"><b-icon-eye></b-icon-eye></b-button>
@@ -89,7 +99,8 @@ module.exports = {
             
             fields: [{
                     key: 'id',
-                    label: '아이디'
+                    label: '아이디',
+                    sortable: true
                 },
                 {
                     key: 'order',
@@ -102,16 +113,19 @@ module.exports = {
                 },
                 {
                     key: 'name',
-                    label: '업체명'
+                    label: '업체명',
+                    sortable: true
                 },
 
                 {
                     key: 'title',
-                    label: '상품명'
+                    label: '상품명',
+                    sortable: true
                 },
                 {
                     key: 'price',
-                    label: '원가'
+                    label: '원가',
+                    sortable: true
                 },
                 {
                     key: 'discount', //calc
@@ -119,7 +133,16 @@ module.exports = {
                 },
                 {
                     key: 'sale_price',
-                    label: '판매가'
+                    label: '판매가',
+                    sortable: true
+                },
+                {
+                    key: 'product_delivery',
+                    label: '제품 배송비'
+                },
+                {
+                    key: 'limit_quantity',
+                    label: '1회구매제한수량'
                 },
                 {
                     key: 'is_visible',

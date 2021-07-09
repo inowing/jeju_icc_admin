@@ -88,11 +88,13 @@ module.exports = {
             fields: [{
                     key: "id",
                     label: "번호",
-                    class: 'text-center' 
+                    class: 'text-center' ,
+                    sortable: true
                 },
                 {
                     key: "order",
                     label: "순서",
+                    sortable: true
                 },
                 {
                     key: "top_category",
@@ -101,14 +103,17 @@ module.exports = {
                 {
                     key: "company.name",
                     label: "업체명",
+                    sortable: true
                 },
                 {
                     key: "like_count",
                     label: "좋아요 수",
+                    sortable: true
                 },
                 {
                     key: "is_top",
                     label: "기업노출",
+                    sortable: true
                 },
                 {
                     key: "manageBtn",

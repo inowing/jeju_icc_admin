@@ -46,7 +46,12 @@
                         </b-form-group>
 
                         <b-form-group label="상품명">
-                            <b-form-input size="sm" v-model="form.title" :state="validation.valid3"></b-form-input>
+                            <b-form-textarea
+                                v-model="form.title"
+                                :state="validation.valid3"
+                                rows="2"
+                                max-rows="2"
+                                ></b-form-textarea>
                             <b-form-invalid-feedback :state="validation.valid3">상품명을 입력하세요.</b-form-invalid-feedback>
                         </b-form-group>
                         <b-form-group label="상품가격">
@@ -92,7 +97,7 @@
                          </b-row>
                          <b-row>
                              <b-col>
-                                <b-form-group label="상품 상세 페이지 이미지">
+                                <b-form-group label="상품 상세 페이지 이미지 1">
                                     <b-card>
                                         <b-card-body align="center">
                                             <b-card-text align="center" style="width:180px; height:180px;">
@@ -106,6 +111,90 @@
                                         <b-card-footer>
                                             <b-form-file v-model="form.detail_image" @change="onFileChange($event, 'detail_image_prev')" size="sm" class="w-50 mr-sm-2"></b-form-file>
                                             <b-button @click="form.detail_image = null; detail_image_prev = null; detail_image_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
+                                        </b-card-footer>
+                                    </b-card>
+                                </b-form-group>
+                             </b-col>
+                         </b-row>
+                         <b-row>
+                             <b-col>
+                                <b-form-group label="상품 상세 페이지 이미지 2">
+                                    <b-card>
+                                        <b-card-body align="center">
+                                            <b-card-text align="center" style="width:180px; height:180px;">
+                                                <div style="display:inline-block; width:100%; height: 100%; padding: 5px; border:1px solid silver; border-radius: 3px;">
+                                                    <b-img 
+                                                        style="height:100%; width:100%; object-fit:contain;"
+                                                        :src="detail_image_2_prev||detail_image_default" fluid></b-img>
+                                                </div>
+                                            </b-card-text>
+                                        </b-card-body>
+                                        <b-card-footer>
+                                            <b-form-file v-model="form.detail_image_2" @change="onFileChange($event, 'detail_image_2_prev')" size="sm" class="w-50 mr-sm-2"></b-form-file>
+                                            <b-button @click="form.detail_image_2 = null; detail_image_2_prev = null; detail_image_2_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
+                                        </b-card-footer>
+                                    </b-card>
+                                </b-form-group>
+                             </b-col>
+                         </b-row>
+                         <b-row>
+                             <b-col>
+                                <b-form-group label="상품 상세 페이지 이미지 3">
+                                    <b-card>
+                                        <b-card-body align="center">
+                                            <b-card-text align="center" style="width:180px; height:180px;">
+                                                <div style="display:inline-block; width:100%; height: 100%; padding: 5px; border:1px solid silver; border-radius: 3px;">
+                                                    <b-img 
+                                                        style="height:100%; width:100%; object-fit:contain;"
+                                                        :src="detail_image_3_prev||detail_image_default" fluid></b-img>
+                                                </div>
+                                            </b-card-text>
+                                        </b-card-body>
+                                        <b-card-footer>
+                                            <b-form-file v-model="form.detail_image_3" @change="onFileChange($event, 'detail_image_3_prev')" size="sm" class="w-50 mr-sm-2"></b-form-file>
+                                            <b-button @click="form.detail_image_3 = null; detail_image_3_prev = null; detail_image_3_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
+                                        </b-card-footer>
+                                    </b-card>
+                                </b-form-group>
+                             </b-col>
+                         </b-row>
+                         <b-row>
+                             <b-col>
+                                <b-form-group label="상품 상세 페이지 이미지 4">
+                                    <b-card>
+                                        <b-card-body align="center">
+                                            <b-card-text align="center" style="width:180px; height:180px;">
+                                                <div style="display:inline-block; width:100%; height: 100%; padding: 5px; border:1px solid silver; border-radius: 3px;">
+                                                    <b-img 
+                                                        style="height:100%; width:100%; object-fit:contain;"
+                                                        :src="detail_image_4_prev||detail_image_default" fluid></b-img>
+                                                </div>
+                                            </b-card-text>
+                                        </b-card-body>
+                                        <b-card-footer>
+                                            <b-form-file v-model="form.detail_image_4" @change="onFileChange($event, 'detail_image_4_prev')" size="sm" class="w-50 mr-sm-2"></b-form-file>
+                                            <b-button @click="form.detail_image_4 = null; detail_image_4_prev = null; detail_image_4_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
+                                        </b-card-footer>
+                                    </b-card>
+                                </b-form-group>
+                             </b-col>
+                         </b-row>
+                         <b-row>
+                             <b-col>
+                                <b-form-group label="상품 상세 페이지 이미지 5">
+                                    <b-card>
+                                        <b-card-body align="center">
+                                            <b-card-text align="center" style="width:180px; height:180px;">
+                                                <div style="display:inline-block; width:100%; height: 100%; padding: 5px; border:1px solid silver; border-radius: 3px;">
+                                                    <b-img 
+                                                        style="height:100%; width:100%; object-fit:contain;"
+                                                        :src="detail_image_5_prev||detail_image_default" fluid></b-img>
+                                                </div>
+                                            </b-card-text>
+                                        </b-card-body>
+                                        <b-card-footer>
+                                            <b-form-file v-model="form.detail_image_5" @change="onFileChange($event, 'detail_image_5_prev')" size="sm" class="w-50 mr-sm-2"></b-form-file>
+                                            <b-button @click="form.detail_image_5 = null; detail_image_5_prev = null; detail_image_5_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
                                         </b-card-footer>
                                     </b-card>
                                 </b-form-group>
@@ -153,6 +242,10 @@ module.exports = {
                 phone: '',
                 product_image: null,
                 detail_image: null,
+                detail_image_2: null,
+                detail_image_3: null,
+                detail_image_4: null,
+                detail_image_5: null,
                 product_delivery: 0,
                 limit_quantity: 0
             },
@@ -164,6 +257,14 @@ module.exports = {
             detail_image_prev: '',
             detail_image_del: false,
             detail_image_default: this.$store.getters.dummy_image_url(['180x180']),
+            detail_image_2_prev: '',
+            detail_image_2_del: false,
+            detail_image_3_prev: '',
+            detail_image_3_del: false,
+            detail_image_4_prev: '',
+            detail_image_4_del: false,
+            detail_image_5_prev: '',
+            detail_image_5_del: false,
 
 
             top_category_options: [],
@@ -232,10 +333,22 @@ module.exports = {
             let data = rs.data.result;
             this.product_image_prev = data.product_image;
             this.detail_image_prev = data.detail_image;
+            this.detail_image_2_prev = data.detail_image_2;
+            this.detail_image_3_prev = data.detail_image_3;
+            this.detail_image_4_prev = data.detail_image_4;
+            this.detail_image_5_prev = data.detail_image_5;
             data.product_image = null;
             data.detail_image = null;
+            data.detail_image_2 = null;
+            data.detail_image_3 = null;
+            data.detail_image_4 = null;
+            data.detail_image_5 = null;
             this.product_image_del = false;
             this.detail_image_del = false;
+            this.detail_image_2_del = false;
+            this.detail_image_3_del = false;
+            this.detail_image_4_del = false;
+            this.detail_image_5_del = false;
             this.isNew = false;
             this.form = {...data};
             
@@ -277,6 +390,10 @@ module.exports = {
             let formData = new FormData();
             !this.form.product_image && this.product_image_del ? formData.append('product_image_del', 'Y') : formData.append('product_image', this.form.product_image);
             !this.form.detail_image && this.detail_image_del ? formData.append('detail_image_del', 'Y') : formData.append('detail_image', this.form.detail_image);
+            !this.form.detail_image_2 && this.detail_image_2_del ? formData.append('detail_image_2_del', 'Y') : formData.append('detail_image_2', this.form.detail_image_2);
+            !this.form.detail_image_3 && this.detail_image_3_del ? formData.append('detail_image_3_del', 'Y') : formData.append('detail_image_3', this.form.detail_image_3);
+            !this.form.detail_image_4 && this.detail_image_4_del ? formData.append('detail_image_4_del', 'Y') : formData.append('detail_image_4', this.form.detail_image_4);
+            !this.form.detail_image_5 && this.detail_image_5_del ? formData.append('detail_image_5_del', 'Y') : formData.append('detail_image_5', this.form.detail_image_5);
 
             formData.append("order", this.form.order);
             formData.append("category_id", this.form.category_id);

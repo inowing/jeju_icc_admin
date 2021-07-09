@@ -42,6 +42,7 @@
 
 	<link type="text/css" href="./static/css/ino-vue.css" rel="stylesheet">
 
+
 </head>
 
 <body>
@@ -153,7 +154,7 @@
 					router.addRoute({ path: '/mainmenu/contents/overview', name: 'overview', component: window.httpVueLoader('./vue/overview.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition_a', name: 'exhibition_a', component: window.httpVueLoader('./vue/exhibition_a.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition_b', name: 'exhibition_b', component: window.httpVueLoader('./vue/exhibition_b.vue') });
-					router.addRoute({ path: '/mainmenu/contents/exhibition', name: 'exhibition', component: window.httpVueLoader('./vue/exhibition.vue') });
+					router.addRoute({ path: '/mainmenu/contents/exhibition', name: 'exhibition', component: window.httpVueLoader('./vue/exhibition.vue?v=1') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition/form', name: 'exhibition_form', component: window.httpVueLoader('./vue/exhibition_form.vue?v=1235') });
 					router.addRoute({ path: '/mainmenu/contents/e_library/list', name: 'exhibition_libray_type1_list', component: window.httpVueLoader('./vue/exhibition_libray_type1_list.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition/question', name: 'exhibition_question', component: window.httpVueLoader('./vue/exhibition_question.vue') });
@@ -177,8 +178,8 @@
 					router.addRoute({ path: '/mainmenu/contents/speaker', name: 'speaker', component: window.httpVueLoader('./vue/speaker.vue') });
 					router.addRoute({ path: '/mainmenu/contents/speaker_form', name: 'speaker_form', component: window.httpVueLoader('./vue/speaker_form.vue?v=2') });
 					
-					router.addRoute({ path: '/mainmenu/shop/product', name: 'shop_product', component: window.httpVueLoader('./vue/shop_product.vue') });
-					router.addRoute({ path: '/mainmenu/shop/regist',name:'shop_regist', component: window.httpVueLoader('./vue/shop_regist.vue?v=1') });
+					router.addRoute({ path: '/mainmenu/shop/product', name: 'shop_product', component: window.httpVueLoader('./vue/shop_product.vue?v=3') });
+					router.addRoute({ path: '/mainmenu/shop/regist',name:'shop_regist', component: window.httpVueLoader('./vue/shop_regist.vue?v=3') });
 					router.addRoute({ path: '/mainmenu/shop/order',name:'shop_order', component: window.httpVueLoader('./vue/shop_order.vue') });
 					router.addRoute({ path: '/mainmenu/map/list',name:'map_list', component: window.httpVueLoader('./vue/map_list.vue') });
 					router.addRoute({ path: '/mainmenu/map/form',name:'map_form', component: window.httpVueLoader('./vue/map_form.vue') });
@@ -253,7 +254,8 @@
 					} else {
 						window.location.href = 'http://'+this.site_url;
 					}
-				}
+				},
+				
 			}
 		})
 	</script>

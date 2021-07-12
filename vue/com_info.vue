@@ -46,7 +46,7 @@
             </b-col>
         </b-row>
     </b-card>
-    
+
     <b-card class="mt-1">
         <template #header> {{form.name}} </template>
         <b-card-text>
@@ -144,7 +144,7 @@
                                 <template #cell(order)="row">
                                     <div class="text-center">{{row.item.order}}</div>
                                 </template>
-                                
+
                                 <!-- 관리항목 -->
                                 <template #cell(manageBtn)="row">
                                     <b-button size="sm" variant="outline-success" @click="isNew=false; openModal2($event, false, row.item)">수정</b-button>
@@ -169,14 +169,14 @@
                                     style="width:250px;">
                         </b-form-file>
                         <b-button @click="photo_1 = null; photo_1_prev = null; photo_1_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
-                        
+
                         <b-form-group label="Outlink (국문)" class="mt-2" placeholder="http://를 반드시 입력해 주세요.">
                             <b-form-input type="text" v-model="link" size="sm" class="mt-1"></b-form-input>
                         </b-form-group>
                         <b-form-group label="Outlink (영문)" placeholder="http://를 반드시 입력해 주세요.">
                             <b-form-input type="text" v-model="link_en" size="sm" class="mt-1"></b-form-input>
                         </b-form-group>
-                        
+
                     </b-card>
                 </b-col>
                 <b-col></b-col>
@@ -201,7 +201,7 @@
             </b-row>
         </b-card-text>
     </b-card>
-    
+
     <b-row class="mt-3">
         <b-col>
             <b-button href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
@@ -211,11 +211,11 @@
                 <b-icon-file-earmark></b-icon-file-earmark>저장하기</b-button>
         </b-col>
     </b-row>
-    
+
 
     <!-- 모달 -->
     <b-modal v-model="modal1" hide-footer title="링크 추가">
-        
+
         <b-row>
             <b-col>
                 <b-form-group label="순서">
@@ -260,7 +260,7 @@
                 <div class="content ql-editor" v-html="shopping_form.contents"></div>
             </b-col>
         </b-row>
-        
+
         <b-row class="mt-1">
             <b-col>
                 <b-button variant="outline-primary" @click="storeShoppingLink" size="sm" v-show="isNew">Save</b-button>
@@ -304,7 +304,7 @@
                 <b-button @click="photo_1 = null; photo_1_prev = null; photo_1_del = true;" size="sm">이미지 삭제</b-button>
             </b-col>
         </b-row>
-        
+
         <b-row class="mt-1">
             <b-col>
                 <b-button variant="outline-primary" @click="storeShoppingBanner" size="sm" v-show="isNew">Save</b-button>
@@ -516,7 +516,7 @@ module.exports = {
                 }
             });
             this.getMenu();
-            
+
             function callback () {
                 this.$router.go(-1);
             }
@@ -647,7 +647,7 @@ module.exports = {
                 formData.append('order', this.shopping_banner_form.order);
                 formData.append('title', this.shopping_banner_form.title);
                 formData.append('lang_type', this.shopping_banner_form.lang_type);
-            
+
             !this.photo_1 && this.photo_1_del ? formData.append('photo_1_del', 'Y') : formData.append('photo_1', this.photo_1);
 
             let rs = await axios.post(url, formData, {
@@ -670,7 +670,7 @@ module.exports = {
                 this.modal2 = false;
             }
         },
-        
+
         deletePhoto: async function (item, index, target) {
             if (confirm('삭제하시겠습니까?')) {
                 await axios.delete(`http://jejueatsuda.com/api/v1/overview/${item.id}`);
@@ -678,13 +678,13 @@ module.exports = {
             }
         },
         onEditorBlur(quill) {
-            
+
         },
         onEditorFocus(quill) {
-            
+
         },
         onEditorReady(quill) {
-            
+
         },
     }
 };

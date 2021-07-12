@@ -8,9 +8,6 @@
     <br>
 
     <b-row>
-      <b-col cols="2">
-        <b-form-select v-model="selected" @change="changeType" :options="options" size="sm"></b-form-select>
-      </b-col>
       <b-col cols="6">
         <b-form inline size="sm">
 
@@ -69,6 +66,12 @@
           </b-input-group-append>
         </b-input-group>
       </b-col>
+      <b-col cols="2">
+        <b-button variant="info" size="sm">
+          <b-icon-download></b-icon-download>
+          엑셀 다운로드
+        </b-button>
+      </b-col>
     </b-row>
     <br>
 
@@ -79,7 +82,9 @@
             <b-button size="sm" pill variant="outline-success" @click="loginInfo(row.item, row.index, $event.target)">
               상세보기
             </b-button>
+
           </template>
+
         </b-table>
 
         <b-pagination
@@ -88,15 +93,13 @@
             :per-page="perPage"
             first-number
         ></b-pagination>
-
       </b-col>
     </b-row>
   </section>
 </template>
-
 <script>
 module.exports = {
-  name: "statsLogin",
+  name: "statsCounselBDetail",
   data: function () {
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -116,10 +119,10 @@ module.exports = {
       dateFrom: '',
       dateTo: '',
       attendType: '',
+      search: '',
       currentPage: 0,
       rows: 0,
       perPage: 10,
-      search: "",
 
       selected: null,
       options: [
@@ -131,9 +134,11 @@ module.exports = {
         {key: 'id', label: '번호'},
         {key: 'type', label: '구분'},
         {key: 'company', label: '업체'},
-        {key: 'email', label: '아이디'},
-        {key: 'loginCnt', label: '총 로그인 횟수'},
-        {key: 'manageBtn', label: '상세보기'}
+        {key: 'company_opponent', label: '대상 기업'},
+        {key: 'email', label: '상담 신청 아이디(바이어)'},
+        {key: 'date', label: '상담 확정 시간'},
+        {key: 'duration', label: '상담 진행 시간(분)'},
+        // {key: 'manageBtn', label: '상세보기'}
       ],
       items: [
         // {id: 6, type: '셀러', company: '기업 #1', email: 'admin@companyA.com', loginCnt: 12},
@@ -145,42 +150,59 @@ module.exports = {
     this.$nextTick(async function () {
       this.event_id = this.$store.getters.event_id;
       this.api_url = this.$store.getters.api_url;
-      this.id = this.$route.query.id;
+      this.company_id = this.$route.query.company_id;
+      this.status = this.$route.query.status;
       await this.getData();
     });
   },
   methods: {
     loginInfo(item, index, target) {
-      window.location.href = "#/stats_login_detail?user_id=" + item.user_id;
+      window.location.href = "#/stats_vm_b_detail?company_id=" + item.company_id;
       console.log(item, index, target);
     },
     getData: async function () { // 데이터 가져오기
-      let url = `${this.api_url}/front/bm_statistic/get_login_statistic_list?event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}`;
+      let url = `${this.api_url}/front/bm_statistic/get_access_duration_statistic_by_company_seller?company_id=${this.company_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}&status=${this.status}`;
       let rs = await axios.get(url);
       let data = rs.data.result;
       let pagination = rs.data.pagination;
       let new_object = [];
 
       let items = Object.keys(data);
-      for (var j = 0; j < items.length; j++) {
 
-        new_object[j] = {
-          id: data[j]['id'],
-          type: data[j]['attend_type'] == 0 ? "바이어" : "셀러",
-          company: data[j]['company_name'],
-          email: data[j]['user_email'],
-          loginCnt: data[j]['count'],
-          user_id: data[j]['user_id'],
+      Object.keys(data).forEach(function (key, index) {
+
+        new_object[key] = {
+
+          // id: data[j]['id'],
+          // type: data[j]['attend_type'] == 0 ? "바이어" : "셀러",
+          id: parseInt(key) + 1,
+          type: "바이어",
+          company: data[key]['company_name'],
+          company_opponent: data[key]['opponent_company_name'],
+          email: data[key]['opponent_email'],
+          duration: data[key]['meeting_duration'] + '분',
+          company_id: data[key]['company_id'],
+          date: data[key]['date'],
         };
-      }
-      console.log(new_object)
-
-
-      this.currentPage = pagination.current_page;
-      this.rows = pagination.total_count;
-      this.perPage = pagination.limit;
+      });
 
       this.items = new_object;
+
+      // for (var j = 0; j < items.length; j++) {
+      //
+      //
+      //   new_object[j] = {
+      //     // id: data[j]['id'],
+      //     // type: data[j]['attend_type'] == 0 ? "바이어" : "셀러",
+      //     company: data[j]['company_name'],
+      //     duration: data[j]['duration'],
+      //     company_id: data[j]['company_id'],
+      //   };
+      // }
+      // this.currentPage = pagination.current_page;
+      // this.rows = pagination.total_count;
+      // this.perPage = pagination.limit;
+
     },
     onContextFrom(ctx) {
       if (ctx.selectedYMD == "")

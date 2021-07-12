@@ -8,10 +8,8 @@
     <br>
 
     <b-row>
-      <b-col cols="2">
-        <b-form-select v-model="selected" @change="changeType" :options="options" size="sm"></b-form-select>
-      </b-col>
-      <b-col cols="6">
+
+      <b-col cols="7">
         <b-form inline size="sm">
 
           <b-input-group size="sm">
@@ -61,14 +59,7 @@
         </b-form>
 
       </b-col>
-      <b-col cols="4">
-        <b-input-group size="sm" align-v="baseline">
-          <b-form-input v-model="search" aria-placeholder="검색어를 입력하세요."></b-form-input>
-          <b-input-group-append>
-            <b-button variant="info" @click="makeSearch" size="sm">검색하기</b-button>
-          </b-input-group-append>
-        </b-input-group>
-      </b-col>
+
     </b-row>
     <br>
 
@@ -129,11 +120,10 @@ module.exports = {
       ],
       fields: [
         {key: 'id', label: '번호'},
-        {key: 'type', label: '구분'},
-        {key: 'company', label: '업체'},
-        {key: 'email', label: '아이디'},
-        {key: 'loginCnt', label: '총 로그인 횟수'},
-        {key: 'manageBtn', label: '상세보기'}
+        {key: 'date', label: '일자'},
+        {key: 'hit', label: '사이트 방문수'},
+        {key: 'empty', label: '비고'},
+
       ],
       items: [
         // {id: 6, type: '셀러', company: '기업 #1', email: 'admin@companyA.com', loginCnt: 12},
@@ -155,7 +145,7 @@ module.exports = {
       console.log(item, index, target);
     },
     getData: async function () { // 데이터 가져오기
-      let url = `${this.api_url}/front/bm_statistic/get_login_statistic_list?event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}`;
+      let url = `${this.api_url}/front/bm_statistic/get_site_hit_statistic?event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}`;
       let rs = await axios.get(url);
       let data = rs.data.result;
       let pagination = rs.data.pagination;
@@ -166,11 +156,8 @@ module.exports = {
 
         new_object[j] = {
           id: data[j]['id'],
-          type: data[j]['attend_type'] == 0 ? "바이어" : "셀러",
-          company: data[j]['company_name'],
-          email: data[j]['user_email'],
-          loginCnt: data[j]['count'],
-          user_id: data[j]['user_id'],
+          date: data[j]['date'],
+          hit: data[j]['hit'],
         };
       }
       console.log(new_object)

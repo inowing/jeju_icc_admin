@@ -8,9 +8,6 @@
     <br>
 
     <b-row>
-      <b-col cols="2">
-        <b-form-select v-model="selected" @change="changeType" :options="options" size="sm"></b-form-select>
-      </b-col>
       <b-col cols="6">
         <b-form inline size="sm">
 
@@ -69,6 +66,12 @@
           </b-input-group-append>
         </b-input-group>
       </b-col>
+      <b-col cols="2">
+        <b-button variant="info" size="sm">
+          <b-icon-download></b-icon-download>
+          엑셀 다운로드
+        </b-button>
+      </b-col>
     </b-row>
     <br>
 
@@ -77,9 +80,14 @@
         <b-table small :fields="fields" :items="items" responsive="sm">
           <template #cell(manageBtn)="row">
             <b-button size="sm" pill variant="outline-success" @click="loginInfo(row.item, row.index, $event.target)">
-              상세보기
+              상담 신청 건수
+            </b-button>
+
+            <b-button size="sm" pill variant="outline-danger" @click="loginInfo(row.item, row.index, $event.target)">
+              매칭 건수
             </b-button>
           </template>
+
         </b-table>
 
         <b-pagination
@@ -88,15 +96,13 @@
             :per-page="perPage"
             first-number
         ></b-pagination>
-
       </b-col>
     </b-row>
   </section>
 </template>
-
 <script>
 module.exports = {
-  name: "statsLogin",
+  name: "statsCounselBDetail",
   data: function () {
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -116,10 +122,10 @@ module.exports = {
       dateFrom: '',
       dateTo: '',
       attendType: '',
+      search: '',
       currentPage: 0,
       rows: 0,
       perPage: 10,
-      search: "",
 
       selected: null,
       options: [
@@ -131,9 +137,9 @@ module.exports = {
         {key: 'id', label: '번호'},
         {key: 'type', label: '구분'},
         {key: 'company', label: '업체'},
-        {key: 'email', label: '아이디'},
-        {key: 'loginCnt', label: '총 로그인 횟수'},
-        {key: 'manageBtn', label: '상세보기'}
+        {key: 'email', label: '신청 아이디'},
+        {key: 'opponentCompany', label: '상담 대상 기업'},
+        {key: 'date', label: '상담 신청 시간'},
       ],
       items: [
         // {id: 6, type: '셀러', company: '기업 #1', email: 'admin@companyA.com', loginCnt: 12},
@@ -145,7 +151,8 @@ module.exports = {
     this.$nextTick(async function () {
       this.event_id = this.$store.getters.event_id;
       this.api_url = this.$store.getters.api_url;
-      this.id = this.$route.query.id;
+      this.user_id = this.$route.query.user_id;
+      this.status = this.$route.query.status;
       await this.getData();
     });
   },
@@ -155,7 +162,7 @@ module.exports = {
       console.log(item, index, target);
     },
     getData: async function () { // 데이터 가져오기
-      let url = `${this.api_url}/front/bm_statistic/get_login_statistic_list?event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}`;
+      let url = `${this.api_url}/front/bm_statistic/get_meeting_statistic_list_bayer_detail?user_id=${this.user_id}&event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}&status=${this.status}`;
       let rs = await axios.get(url);
       let data = rs.data.result;
       let pagination = rs.data.pagination;
@@ -169,13 +176,10 @@ module.exports = {
           type: data[j]['attend_type'] == 0 ? "바이어" : "셀러",
           company: data[j]['company_name'],
           email: data[j]['user_email'],
-          loginCnt: data[j]['count'],
-          user_id: data[j]['user_id'],
+          opponentCompany: data[j]['opponent_company_name'],
+          date: data[j]['date'] + ' ' + data[j]['time_start'] + '-' + data[j]['time_end'],
         };
       }
-      console.log(new_object)
-
-
       this.currentPage = pagination.current_page;
       this.rows = pagination.total_count;
       this.perPage = pagination.limit;

@@ -61,13 +61,19 @@
         </b-form>
 
       </b-col>
-      <b-col cols="4">
+      <b-col cols="2">
         <b-input-group size="sm" align-v="baseline">
           <b-form-input v-model="search" aria-placeholder="검색어를 입력하세요."></b-form-input>
           <b-input-group-append>
             <b-button variant="info" @click="makeSearch" size="sm">검색하기</b-button>
           </b-input-group-append>
         </b-input-group>
+      </b-col>
+      <b-col cols="2">
+        <b-button variant="info" @click="excelDownload" size="sm">
+          <b-icon-download></b-icon-download>
+          엑셀 다운로드
+        </b-button>
       </b-col>
     </b-row>
     <br>
@@ -211,6 +217,9 @@ module.exports = {
       console.log(this.search)
       // this.search = "";
       this.getData();
+    },
+    excelDownload() {
+      window.location.href = `${this.api_url}/front/bm_statistic/get_login_statistic_list_excel?event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}`;
     }
   },
   watch: {

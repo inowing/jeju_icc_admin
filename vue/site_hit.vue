@@ -65,7 +65,7 @@
 
     <b-row>
       <b-col>
-        <b-table small :fields="fields" :items="items" responsive="sm">
+        <b-table small :fields="fields" :items="items" bordered center responsive="sm">
           <template #cell(manageBtn)="row">
             <b-button size="sm" pill variant="outline-success" @click="loginInfo(row.item, row.index, $event.target)">
               상세보기
@@ -119,10 +119,10 @@ module.exports = {
         {value: 'seller', text: '셀러'}
       ],
       fields: [
-        {key: 'id', label: '번호'},
-        {key: 'date', label: '일자'},
-        {key: 'hit', label: '사이트 방문수'},
-        {key: 'empty', label: '비고'},
+        {key: 'id', label: '번호', tdClass: 'text-center',},
+        {key: 'date', label: '일자', tdClass: 'text-center'},
+        {key: 'hit', label: '사이트 방문수', tdClass: 'text-center'},
+        {key: 'empty', label: '비고', tdClass: 'text-center'},
 
       ],
       items: [

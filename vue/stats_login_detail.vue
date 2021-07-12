@@ -69,6 +69,12 @@
           </b-input-group-append>
         </b-input-group>
       </b-col>
+      <b-col cols="2">
+        <b-button variant="info" @click="excelDownload" size="sm">
+          <b-icon-download></b-icon-download>
+          엑셀 다운로드
+        </b-button>
+      </b-col>
     </b-row>
     <br>
 
@@ -210,6 +216,9 @@ module.exports = {
       console.log(this.search)
       // this.search = "";
       this.getData();
+    },
+    excelDownload() {
+      window.location.href = `${this.api_url}/front/bm_statistic/get_login_statistic_detail_excel?user_id=${this.user_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}`;
     }
   },
   watch: {

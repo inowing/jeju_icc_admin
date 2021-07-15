@@ -134,8 +134,11 @@ module.exports = {
         {key: 'id', label: '번호'},
         {key: 'type', label: '구분'},
         {key: 'company', label: '업체'},
-        {key: 'duration', label: '총 상담 진행 시간(분)'},
-        {key: 'manageBtn', label: '상세보기'}
+        {key: 'company_opponent', label: '대상 기업'},
+        {key: 'email', label: '상담 신청 아이디(바이어)'},
+        {key: 'date', label: '상담 확정 시간'},
+        {key: 'duration', label: '상담 진행 시간(분)'},
+        // {key: 'manageBtn', label: '상세보기'}
       ],
       items: [
         // {id: 6, type: '셀러', company: '기업 #1', email: 'admin@companyA.com', loginCnt: 12},
@@ -154,11 +157,11 @@ module.exports = {
   },
   methods: {
     loginInfo(item, index, target) {
-      window.location.href = "#/stats_vm_s_detail?company_id=" + item.company_id;
+      window.location.href = "#/stats_vm_b_detail?company_id=" + item.company_id;
       console.log(item, index, target);
     },
     getData: async function () { // 데이터 가져오기
-      let url = `${this.api_url}/front/bm_statistic/get_access_duration_statistic_list_seller?event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}&status=${this.status}`;
+      let url = `${this.api_url}/front/bm_statistic/get_access_duration_statistic_by_company_seller?company_id=${this.company_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}&status=${this.status}`;
       let rs = await axios.get(url);
       let data = rs.data.result;
       let pagination = rs.data.pagination;
@@ -172,11 +175,14 @@ module.exports = {
 
           // id: data[j]['id'],
           // type: data[j]['attend_type'] == 0 ? "바이어" : "셀러",
-          id: key,
+          id: parseInt(key) + 1,
           type: "바이어",
           company: data[key]['company_name'],
-          duration: data[key]['duration'] + '분',
+          company_opponent: data[key]['opponent_company_name'],
+          email: data[key]['opponent_email'],
+          duration: data[key]['meeting_duration'] + '분',
           company_id: data[key]['company_id'],
+          date: data[key]['date'],
         };
       });
 
@@ -229,7 +235,7 @@ module.exports = {
       this.getData();
     },
     excelDownload() {
-      window.location.href = `${this.api_url}/front/bm_statistic/get_access_duration_statistic_list_seller_excel?event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}&status=${this.status}`;
+      window.location.href = `${this.api_url}/front/bm_statistic/get_access_duration_statistic_by_company_seller_excel?company_id=${this.company_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}&status=${this.status}`;
     }
   },
   watch: {

@@ -127,7 +127,7 @@
                 <hr class="m-0 p-0" />
                 <b-card-text class="m-0 p-2">
                     <span>
-                        <a :href="'http://jejueatsuda.com/admin/biz_dashboard.html#/?event_id='+event_id" target="_blank">현황판</a>
+                        <a :href="'http://jejueatsuda.com/admin/biz_dashboard.html#/?event_id='+$store.getters.event_id" target="_blank">현황판</a>
                     </span>
                 </b-card-text>
                 <!-- <router-link to="/biz/link">

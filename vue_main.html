@@ -42,7 +42,7 @@
 
 	<link type="text/css" href="./static/css/ino-vue.css" rel="stylesheet">
 
-
+	<!-- <script src="/tinymce-vue.min.js"></script> -->
 </head>
 
 <body>
@@ -95,6 +95,9 @@
 	<script type="module">
 		import { store } from './vue/store.js';
 		import InowingPlugin from './vue/InowingPlugin.js'
+		// import Editor from '@tinymce/tinymce-vue'
+
+		// var Editor = require('@tinymce/tinymce-vue').default;
 
 		Vue.use(httpVueLoader);
 		Vue.use(VueQuillEditor);
@@ -109,7 +112,8 @@
 			mode: 'history',
 			store: store,
 			components: {
-				navi: window.httpVueLoader(`./vue/navi.vue?v=2`),
+				navi: window.httpVueLoader(`./vue/navi.vue?v=3`),
+				// 'editor': Editor
 			},
 			router: router,
 			data: function (){

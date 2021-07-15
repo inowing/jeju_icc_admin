@@ -154,8 +154,20 @@
               <b-form-textarea v-model="boothForm.summary" rows="2" max-rows="6"></b-form-textarea>
 
               <h6 class="mt-3">기업 소개글 ( HTML Tag 포함 : {{desc_byte}} / 1,000 byte)</h6>
-              <quill-editor ref="quillEditor1" class="editor" :options="editorOption" v-model="boothForm.desc" />
+              <quill-editor ref="quillEditor1" class="editor" :options="editorOption" v-model="boothForm.desc"/>
               <div class="content ql-editor" v-html="boothForm.desc"></div>
+
+              <editor
+                api-key="no-api-key"
+                :init="{
+                  plugins: [
+                  'textcolor print preview  save code  searchreplace autolink   visualblocks visualchars fullscreen link image table charmap hr   anchor toc insertdatetime advlist lists  imagetools  help '
+                  ],
+                  toolbar: 'preview table bold italic strikethrough  forecolor backcolor   template  permanentpen fontselect  fontsizeselect  code | link image media pageembed | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat | addcomment'
+                }"
+                v-model="boothForm.desc"
+              />
+
             </b-col>
           </b-row>
           
@@ -294,6 +306,7 @@
               <h6 class="mt-3">기업 소개글 ( HTML Tag 포함 : {{desc_en_byte}} / 1,000 byte)</h6>
               <quill-editor ref="quillEditor1" class="editor" :options="editorOption" v-model="boothForm.desc_en"/>
               <div class="content ql-editor" v-html="boothForm.desc_en"></div>
+              <!-- <b-form-textarea v-model="boothForm.desc_en" rows="2" max-rows="6" class="editor_textarea"></b-form-textarea> -->
             </b-col>
           </b-row>
 
@@ -355,12 +368,17 @@
     name: 'exhibition_form',
     components: {
 				'introduction-modal-form': window.httpVueLoader(`./vue/introduction_modal_form.vue`)
+        // , 'editor': Editor
     },
     data: function () {
       return {
         api_url: this.$store.getters.api_url,
         menu_id: this.$route.query.menu_id,
         editorOption: {theme: "snow"}, // 퀼 에디터 옵션
+
+        // tinymce_components: {
+        //   'editor': Editor // <- Important part
+        // },
 
         // category - 대,소분류
         category: {

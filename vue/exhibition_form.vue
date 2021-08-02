@@ -157,16 +157,11 @@
               <quill-editor ref="quillEditor1" class="editor" :options="editorOption" v-model="boothForm.desc"/>
               <div class="content ql-editor" v-html="boothForm.desc"></div>
 
-              <editor
-                api-key="no-api-key"
-                :init="{
-                  plugins: [
-                  'textcolor print preview  save code  searchreplace autolink   visualblocks visualchars fullscreen link image table charmap hr   anchor toc insertdatetime advlist lists  imagetools  help '
-                  ],
-                  toolbar: 'preview table bold italic strikethrough  forecolor backcolor   template  permanentpen fontselect  fontsizeselect  code | link image media pageembed | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat | addcomment'
-                }"
+              <!-- <tinymce_editer
                 v-model="boothForm.desc"
-              />
+                :plugins="tinymce_plugins" :toolbar1="tinymce_toolbar1" :toolbar2="tinymce_toolbar2"
+                :other="tinymce_options"
+              /> -->
 
             </b-col>
           </b-row>
@@ -434,7 +429,23 @@
         selected_item: {}, // 선택된 기업소개자료
         selected_index: 0,
         e_library_delete_ids: [],
-        introduction_modal: false
+        introduction_modal: false,
+
+        //tinymce 데이터 설정
+        tinymce_plugins :[
+          'textcolor print preview  save code  searchreplace autolink',
+          'visualblocks visualchars fullscreen link image table charmap hr',
+          'anchor toc insertdatetime advlist lists  imagetools  help'
+        ],
+        tinymce_toolbar1:
+          'preview table bold italic strikethrough  forecolor backcolor |  \
+           template  permanentpen fontselect  fontsizeselect |  \
+           code | link image media pageembed | alignleft aligncenter alignright alignjustify  | numlist bullist outdent indent | removeformat | addcomment',
+        tinymce_toolbar2:'',
+        tinymce_options : {
+          height: 400,
+		      language: 'ko_KR',
+        },
       }
     },
     mounted: function () {

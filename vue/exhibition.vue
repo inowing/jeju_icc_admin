@@ -42,6 +42,9 @@
                 <template #cell(order)="row">
                     <div class="text-center">{{row.item.order}}</div>
                 </template>
+                <template #cell(hit)="row">
+                    <div class="text-center">{{row.item.hit}}</div>
+                </template>
                 <template #cell(like_count)="row">
                     <div class="text-center">{{row.item.like_count}}</div>
                 </template>
@@ -103,6 +106,11 @@ module.exports = {
                 {
                     key: "company.name",
                     label: "업체명",
+                    sortable: true
+                },
+                {
+                    key: "hit",
+                    label: "방문자 수",
                     sortable: true
                 },
                 {

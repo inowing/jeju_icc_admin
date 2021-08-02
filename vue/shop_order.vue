@@ -357,7 +357,7 @@ module.exports = {
         cancelOrder: async function () {
             let rs = await axios.post(`${this.api_url}/order/${this.cancel_item.id}/cancel`);
             if (rs.data.code == 200) {
-                this.$showMsgBoxTwo(rs.status);
+                this.$showMsgBoxTwo(rs.status, 'cancel');
             } else {
                 this.$showMsgBoxTwo(rs.data.code, '', rs.data.result);
             }

@@ -42,7 +42,10 @@
 
 	<link type="text/css" href="./static/css/ino-vue.css" rel="stylesheet">
 
-	<!-- <script src="/tinymce-vue.min.js"></script> -->
+	<script src="/src/js/tinymce/tinymce.min.js"></script>
+	<script src="/src/js/tinymce/vue-easy-tinymce.min.js"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/vue-easy-tinymce/dist/vue-easy-tinymce.min.js"></script> -->
+	
 </head>
 
 <body>
@@ -94,10 +97,11 @@
 	</div>
 	<script type="module">
 		import { store } from './vue/store.js';
-		import InowingPlugin from './vue/InowingPlugin.js'
+		import InowingPlugin from './vue/InowingPlugin.js?v=1'
 		// import Editor from '@tinymce/tinymce-vue'
 
 		// var Editor = require('@tinymce/tinymce-vue').default;
+		// var VueEasyTinyMCE = require('vue-easy-tinymce');
 
 		Vue.use(httpVueLoader);
 		Vue.use(VueQuillEditor);
@@ -113,7 +117,7 @@
 			store: store,
 			components: {
 				navi: window.httpVueLoader(`./vue/navi.vue?v=3`),
-				// 'editor': Editor
+				// 'tinymce_editer': VueEasyTinyMCE
 			},
 			router: router,
 			data: function (){
@@ -158,7 +162,7 @@
 					router.addRoute({ path: '/mainmenu/contents/overview', name: 'overview', component: window.httpVueLoader('./vue/overview.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition_a', name: 'exhibition_a', component: window.httpVueLoader('./vue/exhibition_a.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition_b', name: 'exhibition_b', component: window.httpVueLoader('./vue/exhibition_b.vue') });
-					router.addRoute({ path: '/mainmenu/contents/exhibition', name: 'exhibition', component: window.httpVueLoader('./vue/exhibition.vue?v=1') });
+					router.addRoute({ path: '/mainmenu/contents/exhibition', name: 'exhibition', component: window.httpVueLoader('./vue/exhibition.vue?v=2') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition/form', name: 'exhibition_form', component: window.httpVueLoader('./vue/exhibition_form.vue?v=1235') });
 					router.addRoute({ path: '/mainmenu/contents/e_library/list', name: 'exhibition_libray_type1_list', component: window.httpVueLoader('./vue/exhibition_libray_type1_list.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition/question', name: 'exhibition_question', component: window.httpVueLoader('./vue/exhibition_question.vue') });
@@ -183,8 +187,8 @@
 					router.addRoute({ path: '/mainmenu/contents/speaker_form', name: 'speaker_form', component: window.httpVueLoader('./vue/speaker_form.vue?v=2') });
 
 					router.addRoute({ path: '/mainmenu/shop/product', name: 'shop_product', component: window.httpVueLoader('./vue/shop_product.vue?v=3') });
-					router.addRoute({ path: '/mainmenu/shop/regist',name:'shop_regist', component: window.httpVueLoader('./vue/shop_regist.vue?v=3') });
-					router.addRoute({ path: '/mainmenu/shop/order',name:'shop_order', component: window.httpVueLoader('./vue/shop_order.vue') });
+					router.addRoute({ path: '/mainmenu/shop/regist',name:'shop_regist', component: window.httpVueLoader('./vue/shop_regist.vue?v=4') });
+					router.addRoute({ path: '/mainmenu/shop/order',name:'shop_order', component: window.httpVueLoader('./vue/shop_order.vue?v=3') });
 					router.addRoute({ path: '/mainmenu/map/list',name:'map_list', component: window.httpVueLoader('./vue/map_list.vue') });
 					router.addRoute({ path: '/mainmenu/map/form',name:'map_form', component: window.httpVueLoader('./vue/map_form.vue') });
 					router.addRoute({ path: '/mainmenu/sns/list',name:'sns_list', component: window.httpVueLoader('./vue/sns_list.vue') });
@@ -203,7 +207,7 @@
 					router.addRoute({ path: '/company/admin',name:'admin_list', component: window.httpVueLoader('./vue/admin_list.vue') });
 					router.addRoute({ path: '/com_request', component: window.httpVueLoader('./vue/com_request.vue') });
 					router.addRoute({ path: '/user_list', component: window.httpVueLoader('./vue/user_list.vue') });
-					router.addRoute({ path: '/vm', component: window.httpVueLoader('./vue/vm.vue') });
+					router.addRoute({ path: '/vm', component: window.httpVueLoader('./vue/vm.vue?v=2') });
 					router.addRoute({ path: '/vm2', component: window.httpVueLoader('./vue/vm2.vue') });
 					router.addRoute({ path: '/conference_notice', name:'conference_notice', component: window.httpVueLoader('./vue/conference_notice.vue') });
 					router.addRoute({ path: '/stats_login', component: window.httpVueLoader('./vue/stats_login.vue') });

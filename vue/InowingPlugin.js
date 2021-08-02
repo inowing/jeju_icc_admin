@@ -6,7 +6,7 @@ export default {
             const h = this.$createElement
 
             if (status == 200) {
-                let methodof = { insert: "저장", delete: "삭제", update: "수정" }
+                let methodof = { insert: "저장", delete: "삭제", update: "수정", cancel:"취소" }
                 msg = inputMessage ? h('div', { domProps: { innerHTML: inputMessage } }) : `성공적으로 ${methodof[type]||'저장'}되었습니다.`;
                 okVariant = 'success';
             } else {

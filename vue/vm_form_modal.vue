@@ -289,7 +289,7 @@
         <b-row class="mb-1">
           <b-col><span>Languages</span></b-col>
           <b-col class="text-right">
-            <b-button size="sm" variant="primary" @click="language_form={}; modal1=true;">신규생성</b-button>
+            <b-button size="sm" variant="primary" @click="language_form={}; modal1=true;">통역사 계정생성</b-button>
           </b-col>
         </b-row>
         <b-input-group v-for="(item, index) in select_arr" :key="item.user_id" class="mb-1">
@@ -334,7 +334,7 @@
         </div>
       </b-form-group>
       <b-form-group label="Event 정책설정">
-        <b-form-checkbox v-model="form.is_event_chatting" unchecked-value="1" value="0" variant="success">
+        <b-form-checkbox v-model="form.is_event_chatting" unchecked-value="0" value="1" variant="success">
           Event Chatting
         </b-form-checkbox>
         <div class="pl-4">
@@ -395,7 +395,7 @@
       </b-col>
     </b-row>
 
-    <b-modal v-model="modal1" hide-footer title="Language 추가">
+    <b-modal v-model="modal1" hide-footer title="통역사 계정생성">
       <b-form-group label="이름" label-variant="primary">
         <b-form-input v-model="language_form.name" size="sm" :state="language_form.name ? true: false"></b-form-input>
       </b-form-group>

@@ -79,7 +79,7 @@
                                  <b-form-group label="상품 이미지">
                                     <b-card>
                                         <b-card-body align="center">
-                                            <b-card-text align="center" style="width:180px; height:180px;">
+                                            <b-card-text align="center" style="width:180px; height:135px;">
                                                 <div style="display:inline-block; width:100%; height: 100%; padding: 5px; border:1px solid silver; border-radius: 3px;">
                                                     <b-img 
                                                         style="height:100%; width:100%; object-fit:contain;"
@@ -100,7 +100,7 @@
                                 <b-form-group label="상품 상세 페이지 이미지 1">
                                     <b-card>
                                         <b-card-body align="center">
-                                            <b-card-text align="center" style="width:180px; height:180px;">
+                                            <b-card-text align="center" style="width:180px; height:135px;">
                                                 <div style="display:inline-block; width:100%; height: 100%; padding: 5px; border:1px solid silver; border-radius: 3px;">
                                                     <b-img 
                                                         style="height:100%; width:100%; object-fit:contain;"
@@ -121,7 +121,7 @@
                                 <b-form-group label="상품 상세 페이지 이미지 2">
                                     <b-card>
                                         <b-card-body align="center">
-                                            <b-card-text align="center" style="width:180px; height:180px;">
+                                            <b-card-text align="center" style="width:180px; height:135px;">
                                                 <div style="display:inline-block; width:100%; height: 100%; padding: 5px; border:1px solid silver; border-radius: 3px;">
                                                     <b-img 
                                                         style="height:100%; width:100%; object-fit:contain;"
@@ -142,7 +142,7 @@
                                 <b-form-group label="상품 상세 페이지 이미지 3">
                                     <b-card>
                                         <b-card-body align="center">
-                                            <b-card-text align="center" style="width:180px; height:180px;">
+                                            <b-card-text align="center" style="width:180px; height:135px;">
                                                 <div style="display:inline-block; width:100%; height: 100%; padding: 5px; border:1px solid silver; border-radius: 3px;">
                                                     <b-img 
                                                         style="height:100%; width:100%; object-fit:contain;"
@@ -163,7 +163,7 @@
                                 <b-form-group label="상품 상세 페이지 이미지 4">
                                     <b-card>
                                         <b-card-body align="center">
-                                            <b-card-text align="center" style="width:180px; height:180px;">
+                                            <b-card-text align="center" style="width:180px; height:135px;">
                                                 <div style="display:inline-block; width:100%; height: 100%; padding: 5px; border:1px solid silver; border-radius: 3px;">
                                                     <b-img 
                                                         style="height:100%; width:100%; object-fit:contain;"
@@ -184,7 +184,7 @@
                                 <b-form-group label="상품 상세 페이지 이미지 5">
                                     <b-card>
                                         <b-card-body align="center">
-                                            <b-card-text align="center" style="width:180px; height:180px;">
+                                            <b-card-text align="center" style="width:180px; height:135px;">
                                                 <div style="display:inline-block; width:100%; height: 100%; padding: 5px; border:1px solid silver; border-radius: 3px;">
                                                     <b-img 
                                                         style="height:100%; width:100%; object-fit:contain;"
@@ -252,11 +252,11 @@ module.exports = {
 
             product_image_prev: '',
             product_image_del: false,
-            product_image_default: this.$store.getters.dummy_image_url(['180x180']),
+            product_image_default: this.$store.getters.dummy_image_url(['800x600']),
 
             detail_image_prev: '',
             detail_image_del: false,
-            detail_image_default: this.$store.getters.dummy_image_url(['180x180']),
+            detail_image_default: this.$store.getters.dummy_image_url(['800x600']),
             detail_image_2_prev: '',
             detail_image_2_del: false,
             detail_image_3_prev: '',

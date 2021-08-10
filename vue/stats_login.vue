@@ -80,7 +80,7 @@
 
     <b-row>
       <b-col>
-        <b-table small :fields="fields" :items="items" responsive="sm">
+        <b-table small :fields="fields" :items="items" responsive="sm" class="text-center">
           <template #cell(manageBtn)="row">
             <b-button size="sm" pill variant="outline-success" @click="loginInfo(row.item, row.index, $event.target)">
               상세보기

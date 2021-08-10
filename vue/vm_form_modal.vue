@@ -286,7 +286,7 @@
       </b-row>
 
       <b-form-group>
-        <b-row class="mb-1">
+        <b-row class="mb-1" style="margin-top:10px;">
           <b-col><span>Languages</span></b-col>
           <b-col class="text-right">
             <b-button size="sm" variant="primary" @click="language_form={}; modal1=true;">통역사 계정생성</b-button>
@@ -341,7 +341,7 @@
           <p class="m-0" style="color: silver; font-size: 10pt;">- Attendees 사이에 chatting할 수 있습니다.</p>
         </div>
         <b-form-checkbox v-model="form.is_qna_chat" unchecked-value="0" value="1" variant="success">
-          Q&A / Chat
+          Q&A
         </b-form-checkbox>
         <p class="pl-4 m-0" style="color: silver; font-size: 10pt;">- Attendees 가 Moderators와 Presenters에
           질문할 수 있습니다.</p>

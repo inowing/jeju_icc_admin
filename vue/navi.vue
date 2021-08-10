@@ -148,79 +148,79 @@
     <b-card no-body class="mb-0 p-0">
       <b-card-header class="p-0" role="tab">
         <b-button block squared v-b-toggle.accordion-7 variant="info" size="sm" class="text-left"
-                  v-bind:class="[ routePath == '/stats_login' || routePath == '/site_hit' || routePath == '/stats_counsel_b' || routePath == '/stats_counsel_s' || routePath == '/stats_vm_b' || routePath == '/stats_vm_s' || routePath == '/stats_vm_s_detail' || routePath == '/stats_login_detail' ? active_parent_menu : '' ]">
+                  v-bind:class="[ routePath == '/stats_login' || routePath == '/site_hit' || routePath == '/stats_counsel' || routePath == '/stats_counsel_b' || routePath == '/stats_counsel_s' || routePath == '/stats_vm_b' || routePath == '/stats_vm_s' || routePath == '/stats_vm_s_detail' || routePath == '/stats_login_detail' ? active_parent_menu : '' ]">
           <span>7. 통계</span>
         </b-button>
       </b-card-header>
       <b-collapse id="accordion-7" visible accordion="inowing-accordion" role="tabpanel" v-model="accordion7">
-        <b-card-body class="m-0 p-0">
-          <router-link to="/site_hit">
-            <b-card-text class="m-0 p-2">
-              <span
-                  v-bind:class="[ routePath == '/site_hit'  ? classObject : '' ]">사이트 방문수 </span>
-            </b-card-text>
-          </router-link>
+            <b-card-body class="m-0 p-0">
+                <router-link to="/site_hit">
+                    <b-card-text class="m-0 p-2">
+                        <span v-bind:class="[ routePath == '/site_hit' ? classObject : '' ]">사이트 방문수</span>
+                    </b-card-text>
+                </router-link>
+                <router-link to="/stats_login">
+                    <b-card-text class="m-0 p-2">
+                        <span v-bind:class="[ routePath == '/stats_login' || routePath == '/stats_login_detail' ? classObject : '' ]">로그인</span>
+                    </b-card-text>
+                </router-link>
+                <router-link to="/stats_counsel">
+                    <b-card-text class="m-0 p-2">
+                        <span v-bind:class="[ routePath == '/stats_counsel' || routePath == '/stats_counsel_b_detail' || routePath == '/stats_counsel_s_detail' ? classObject : '' ]">상담 신청</span>
+                    </b-card-text>
+                </router-link>
+                <router-link to="/stats_vm">
+                    <b-card-text class="m-0 p-2">
+                        <span v-bind:class="[ routePath == '/stats_vm' || routePath == '/stats_vm_b_detail' || routePath == '/stats_vm_s_detail' ? classObject : '' ]">상담 실적</span>
+                    </b-card-text>
+                </router-link>
 
-          <router-link to="/stats_login">
-            <b-card-text class="m-0 p-2">
-              <span
-                  v-bind:class="[ routePath == '/stats_login' || routePath == '/stats_login_detail' ? classObject : '' ]">로그인(기업)</span>
-            </b-card-text>
-          </router-link>
-
-          <b-card no-body class="mb-0 p-0">
-            <b-card-header class="p-0" role="tab">
-              <b-button block squared v-b-toggle.accordion-8 variant="warning" size="sm" class="text-left"
-                        v-bind:class="[ routePath == '/stats_counsel_b' || routePath == '/stats_counsel_s' || routePath == '/stats_counsel_b_detail' ? active_parent_menu : '' ]">
-                <span>비지니스 상담 예약</span>
-              </b-button>
-            </b-card-header>
-            <b-collapse id="accordion-8" visible accordion="inowing-accordion2" role="tabpanel" v-model="accordion8">
-              <b-card-body class="m-0 p-0">
-                <router-link to="/stats_counsel_b">
-                  <b-card-text class="m-0 p-2">
-                    <span
-                        v-bind:class="[ routePath == '/stats_counsel_b' || routePath == '/stats_counsel_b_detail' ? classObject : '' ]">바이어</span>
-                  </b-card-text>
-                </router-link>
-                <hr class="m-0 p-0"/>
-                <router-link to="/stats_counsel_s">
-                  <b-card-text class="m-0 p-2">
-                    <span
-                        v-bind:class="[ routePath == '/stats_counsel_s'  || routePath == '/stats_counsel_s_detail' ? classObject : '' ]">셀러</span>
-                  </b-card-text>
-                </router-link>
-              </b-card-body>
-            </b-collapse>
-          </b-card>
-
-          <b-card no-body class="mb-0 p-0">
-            <b-card-header class="p-0" role="tab">
-              <b-button block squared v-b-toggle.accordion-9 variant="warning" size="sm" class="text-left"
-                        v-bind:class="[ routePath == '/stats_vm_b'  ||  routePath == '/stats_vm_b_detail'  || routePath == '/stats_vm_s' ? active_parent_menu : '' ]">
-                <span>비지니스 실적 </span>
-              </b-button>
-            </b-card-header>
-            <b-collapse id="accordion-9" visible accordion="inowing-accordion3" role="tabpanel" v-model="accordion9">
-              <b-card-body class="m-0 p-0">
-                <router-link to="/stats_vm_b">
-                  <b-card-text class="m-0 p-2">
-                    <span
-                        v-bind:class="[ routePath == '/stats_vm_b'  ||  routePath == '/stats_vm_b_detail'  ? classObject : '' ]">바이어</span>
-                  </b-card-text>
-                </router-link>
-                <hr class="m-0 p-0"/>
-                <router-link to="/stats_vm_s">
-                  <b-card-text class="m-0 p-2">
-                    <span
-                        v-bind:class="[ routePath == '/stats_vm_s' || routePath == '/stats_vm_s_detail' ? classObject : '' ]">셀러</span>
-                  </b-card-text>
-                </router-link>
-              </b-card-body>
-            </b-collapse>
-          </b-card>
-        </b-card-body>
-      </b-collapse>
+                <!-- <b-card no-body class="mb-0 p-0">
+                    <b-card-header class="p-0" role="tab">
+                        <b-button block squared v-b-toggle.accordion-8 variant="warning" size="sm" class="text-left" v-bind:class="[ routePath == '/stats_counsel_b' || routePath == '/stats_counsel_s' ? active_parent_menu : '' ]">
+                            <span>VM 상담</span>
+                        </b-button>
+                    </b-card-header>
+                    <b-collapse id="accordion-8" visible accordion="inowing-accordion2" role="tabpanel" v-model="accordion8">
+                        <b-card-body class="m-0 p-0">
+                            <router-link to="/stats_counsel_b">
+                                <b-card-text class="m-0 p-2">
+                                    <span v-bind:class="[ routePath == '/stats_counsel_b' ? classObject : '' ]">바이어</span>
+                                </b-card-text>
+                            </router-link>
+                            <hr class="m-0 p-0" />
+                            <router-link to="/stats_counsel_s">
+                                <b-card-text class="m-0 p-2">
+                                    <span v-bind:class="[ routePath == '/stats_counsel_s' ? classObject : '' ]">셀러</span>
+                                </b-card-text>
+                            </router-link>
+                        </b-card-body>
+                    </b-collapse>
+                </b-card> -->
+                <!-- <b-card no-body class="mb-0 p-0">
+                    <b-card-header class="p-0" role="tab">
+                        <b-button block squared v-b-toggle.accordion-9 variant="warning" size="sm" class="text-left" v-bind:class="[ routePath == '/stats_vm_b' || routePath == '/stats_vm_s' ? active_parent_menu : '' ]">
+                            <span>VM 실적</span>
+                        </b-button>
+                    </b-card-header>
+                    <b-collapse id="accordion-9" visible accordion="inowing-accordion3" role="tabpanel" v-model="accordion9">
+                        <b-card-body class="m-0 p-0">
+                            <router-link to="/stats_vm_b">
+                                <b-card-text class="m-0 p-2">
+                                    <span v-bind:class="[ routePath == '/stats_vm_b' ? classObject : '' ]">바이어</span>
+                                </b-card-text>
+                            </router-link>
+                            <hr class="m-0 p-0" />
+                            <router-link to="/stats_vm_s">
+                                <b-card-text class="m-0 p-2">
+                                    <span v-bind:class="[ routePath == '/stats_vm_s' ? classObject : '' ]">셀러</span>
+                                </b-card-text>
+                            </router-link>
+                        </b-card-body>
+                    </b-collapse>
+                </b-card> -->
+            </b-card-body>
+        </b-collapse>
 
       <b-button class="mt-1" variant="outline-danger" @click="logoutFn">Logout</b-button>
       <b-button class="mt-1" variant="outline-success"

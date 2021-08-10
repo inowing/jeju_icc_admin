@@ -782,7 +782,9 @@ input[type=color].form-control:disabled {
   height: 0.875rem;
   background: no-repeat 50%/50% 50%;
 }
-
+.text-center {
+  text-align: center;
+}
 .b-rating {
   text-align: center;
 }

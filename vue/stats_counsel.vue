@@ -8,6 +8,9 @@
     <br>
 
     <b-row>
+      <b-col cols="2">
+        <b-form-select v-model="selected" @change="changeType" :options="options" size="sm"></b-form-select>
+      </b-col>
       <b-col cols="6">
         <b-form inline size="sm">
 
@@ -58,7 +61,7 @@
         </b-form>
 
       </b-col>
-      <b-col cols="4">
+      <b-col cols="2">
         <b-input-group size="sm" align-v="baseline">
           <b-form-input v-model="search" aria-placeholder="검색어를 입력하세요."></b-form-input>
           <b-input-group-append>
@@ -67,7 +70,7 @@
         </b-input-group>
       </b-col>
       <b-col cols="2">
-        <b-button variant="info"  @click="excelDownload" size="sm">
+        <b-button variant="info" @click="excelDownload" size="sm">
           <b-icon-download></b-icon-download>
           엑셀 다운로드
         </b-button>
@@ -79,11 +82,13 @@
       <b-col>
         <b-table small :fields="fields" :items="items" responsive="sm" class="text-center">
           <template #cell(manageBtn)="row">
-            <b-button size="sm" pill variant="outline-success" @click="loginInfo(row.item, row.index, $event.target)">
+            <b-button size="sm" pill variant="outline-success"
+                      @click="loginInfoStatus0(row.item, row.index, $event.target)">
               상담 신청 건수
             </b-button>
 
-            <b-button size="sm" pill variant="outline-danger" @click="loginInfo(row.item, row.index, $event.target)">
+            <b-button size="sm" pill variant="outline-danger"
+                      @click="loginInfoStatus1(row.item, row.index, $event.target)">
               매칭 건수
             </b-button>
           </template>
@@ -102,7 +107,7 @@
 </template>
 <script>
 module.exports = {
-  name: "statsCounselBDetail",
+  name: "statsCounselB",
   data: function () {
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -134,12 +139,12 @@ module.exports = {
         {value: 'seller', text: '셀러'}
       ],
       fields: [
-        {key: 'id', label: '번호'},
+        {key: 'company_id', label: '번호'},
         {key: 'type', label: '구분'},
         {key: 'company', label: '업체'},
-        {key: 'email', label: '신청 아이디'},
-        {key: 'opponentCompany', label: '상담 대상 기업'},
-        {key: 'date', label: '상담 신청 시간'},
+        {key: 'count', label: '상담 신청 횟수'},
+        {key: 'countAccepted', label: '매칭 건수'},
+        {key: 'manageBtn', label: '상세보기'}
       ],
       items: [
         // {id: 6, type: '셀러', company: '기업 #1', email: 'admin@companyA.com', loginCnt: 12},
@@ -151,19 +156,21 @@ module.exports = {
     this.$nextTick(async function () {
       this.event_id = this.$store.getters.event_id;
       this.api_url = this.$store.getters.api_url;
-      this.user_id = this.$route.query.user_id;
-      this.company_id = this.$route.query.company_id;
-      this.status = this.$route.query.status;
+      this.id = this.$route.query.id;
       await this.getData();
     });
   },
   methods: {
-    loginInfo(item, index, target) {
-      window.location.href = "#/stats_login_detail?user_id=" + item.user_id;
-      console.log(item, index, target);
+    loginInfoStatus0(item, index, target) {
+      window.location.href = "#/stats_counsel_"+(item.attend_type==0?"b":"s")+"_detail?company_id=" + item.company_id+`&event_id=${this.event_id}&status=0`;
+      // console.log(item, index, target);
+    },
+    loginInfoStatus1(item, index, target) {
+      window.location.href = "#/stats_counsel_"+(item.attend_type==0?"b":"s")+"_detail?company_id=" + item.company_id+`&event_id=${this.event_id}&status=1`;
+      // console.log(item, index, target);
     },
     getData: async function () { // 데이터 가져오기
-      let url = `${this.api_url}/front/bm_statistic/get_meeting_statistic_list_bayer_detail?company_id=${this.company_id}&event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}&status=${this.status}`;
+      let url = `${this.api_url}/front/bm_statistic/get_meeting_statistic_list?event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}`;
       let rs = await axios.get(url);
       let data = rs.data.result;
       let pagination = rs.data.pagination;
@@ -176,11 +183,17 @@ module.exports = {
           id: data[j]['id'],
           type: data[j]['attend_type'] == 0 ? "바이어" : "셀러",
           company: data[j]['company_name'],
+          company_id: data[j]['company_id'],
           email: data[j]['user_email'],
-          opponentCompany: data[j]['opponent_company_name'],
-          date: data[j]['date'] + ' ' + data[j]['time_start'] + '-' + data[j]['time_end'],
+          count: data[j]['count'],
+          countAccepted: data[j]['count_accepted'],
+          user_id: data[j]['user_id'],
+          attend_type: data[j]['attend_type'],
         };
       }
+      console.log(new_object)
+
+
       this.currentPage = pagination.current_page;
       this.rows = pagination.total_count;
       this.perPage = pagination.limit;
@@ -218,7 +231,7 @@ module.exports = {
       this.getData();
     },
     excelDownload() {
-      window.location.href = `${this.api_url}/front/bm_statistic/get_meeting_statistic_list_bayer_detail_excel?user_id=${this.user_id}&event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}&status=${this.status}`;
+      window.location.href = `${this.api_url}/front/bm_statistic/get_meeting_statistic_list_bayer_excel?event_id=${this.event_id}&page=${this.currentPage}&limit=${this.perPage}&attend_type=${this.attendType}&date_from=${this.dateFrom}&date_to=${this.dateTo}&search=${this.search}`;
     }
   },
   watch: {

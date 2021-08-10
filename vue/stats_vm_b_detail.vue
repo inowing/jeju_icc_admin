@@ -77,7 +77,7 @@
 
     <b-row>
       <b-col>
-        <b-table small :fields="fields" :items="items" responsive="sm">
+        <b-table small :fields="fields" :items="items" responsive="sm" class="text-center">
           <template #cell(manageBtn)="row">
             <b-button size="sm" pill variant="outline-success" @click="loginInfo(row.item, row.index, $event.target)">
               상세보기
@@ -176,7 +176,7 @@ module.exports = {
           // id: data[j]['id'],
           // type: data[j]['attend_type'] == 0 ? "바이어" : "셀러",
           id: parseInt(key) + 1,
-          type: "바이어",
+          type: data[key]['attend_type'] == 0 ? "바이어" : "셀러",
           company: data[key]['company_name'],
           company_opponent: data[key]['opponent_company_name'],
           email: data[key]['opponent_email'],

@@ -65,7 +65,7 @@
 
     <b-row>
       <b-col>
-        <b-table small :fields="fields" :items="items" bordered center responsive="sm">
+        <!-- <b-table small :fields="fields" :items="items" bordered center responsive="sm">
           <template #cell(manageBtn)="row">
             <b-button size="sm" pill variant="outline-success" @click="loginInfo(row.item, row.index, $event.target)">
               상세보기
@@ -78,7 +78,11 @@
             :total-rows="rows"
             :per-page="perPage"
             first-number
-        ></b-pagination>
+        ></b-pagination> -->
+
+        <div>
+          <canvas id="myChart"></canvas>
+        </div>
 
       </b-col>
     </b-row>
@@ -87,7 +91,7 @@
 
 <script>
 module.exports = {
-  name: "statsLogin",
+  name: "siteHit",
   data: function () {
     const now = new Date()
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
@@ -127,8 +131,32 @@ module.exports = {
       ],
       items: [
         // {id: 6, type: '셀러', company: '기업 #1', email: 'admin@companyA.com', loginCnt: 12},
-      ]
-
+      ],
+      chart: null,
+      chart_setting: {
+        type: 'line',
+        data: {
+            labels: [],
+            datasets: [{
+                label: '사이트 방문수',
+                data: [],
+                borderColor: 'rgb(75, 192, 192)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+          plugins:{
+            legend: {
+              display: false
+            },
+            scales: {
+              y: {
+                  beginAtZero: true
+              }
+            }
+          },
+        }
+      }
     };
   },
   mounted: async function () {
@@ -136,7 +164,11 @@ module.exports = {
       this.event_id = this.$store.getters.event_id;
       this.api_url = this.$store.getters.api_url;
       this.id = this.$route.query.id;
-      await this.getData();
+      // await this.getData();
+      console.log('mounted nextTick');
+    var ctx = document.getElementById('myChart');
+    this.chart = new Chart(ctx, this.chart_setting);
+      await this.getChartData();
     });
   },
   methods: {
@@ -169,19 +201,31 @@ module.exports = {
 
       this.items = new_object;
     },
+    getChartData: async function () {
+      let url = `${this.api_url}/front/bm_statistic/get_site_hit_statistic_chart?event_id=${this.event_id}&date_from=${this.dateFrom}&date_to=${this.dateTo}`;
+      let rs = await axios.get(url);
+      let data = rs.data.result;
+
+      this.chart_setting.data.labels = data.label;
+      this.chart_setting.data.datasets[0].data = data.hit;
+      console.log('chart_setting', this.chart_setting);
+      this.chart.update();
+    },
     onContextFrom(ctx) {
       if (ctx.selectedYMD == "")
         return false;
 
       this.dateFrom = ctx.selectedYMD
-      this.getData();
+      // this.getData();
+      this.getChartData();
     },
     onContextTo(ctx) {
       if (ctx.selectedYMD == "")
         return false;
 
       this.dateTo = ctx.selectedYMD
-      this.getData();
+      // this.getData();
+      this.getChartData();
     },
     changeType(selected_type) {
       if (selected_type == null) {

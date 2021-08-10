@@ -42,6 +42,8 @@
 
 	<link type="text/css" href="./static/css/ino-vue.css" rel="stylesheet">
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js" integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 	<script src="/src/js/tinymce/tinymce.min.js"></script>
 	<script src="/src/js/tinymce/vue-easy-tinymce.min.js"></script>
 	<!-- <script src="https://cdn.jsdelivr.net/npm/vue-easy-tinymce/dist/vue-easy-tinymce.min.js"></script> -->
@@ -98,6 +100,7 @@
 	<script type="module">
 		import { store } from './vue/store.js';
 		import InowingPlugin from './vue/InowingPlugin.js?v=1'
+		
 		// import Editor from '@tinymce/tinymce-vue'
 
 		// var Editor = require('@tinymce/tinymce-vue').default;
@@ -116,7 +119,7 @@
 			mode: 'history',
 			store: store,
 			components: {
-				navi: window.httpVueLoader(`./vue/navi.vue?v=3`),
+				navi: window.httpVueLoader(`./vue/navi.vue?v=6`),
 				// 'tinymce_editer': VueEasyTinyMCE
 			},
 			router: router,
@@ -213,12 +216,14 @@
 					router.addRoute({ path: '/stats_login', component: window.httpVueLoader('./vue/stats_login.vue') });
 					router.addRoute({ path: '/site_hit', component: window.httpVueLoader('./vue/site_hit.vue') });
 					router.addRoute({ path: '/stats_login_detail', component: window.httpVueLoader('./vue/stats_login_detail.vue') });
+					router.addRoute({ path: '/stats_counsel', component: window.httpVueLoader('./vue/stats_counsel.vue') });
 					router.addRoute({ path: '/stats_counsel_b', component: window.httpVueLoader('./vue/stats_counsel_b.vue') });
 					router.addRoute({ path: '/stats_counsel_b_detail', component: window.httpVueLoader('./vue/stats_counsel_b_detail.vue') });
 					router.addRoute({ path: '/stats_counsel_s', component: window.httpVueLoader('./vue/stats_counsel_s.vue') });
 					router.addRoute({ path: '/stats_counsel_s_detail', component: window.httpVueLoader('./vue/stats_counsel_s_detail.vue') });
+					router.addRoute({ path: '/stats_vm', component: window.httpVueLoader('./vue/stats_vm.vue') });
 					router.addRoute({ path: '/stats_vm_b', component: window.httpVueLoader('./vue/stats_vm_b.vue') });
-					router.addRoute({ path: '/stats_vm_b_detail', component: window.httpVueLoader('./vue/stats_vm_b_detail.vue') });
+					router.addRoute({ path: '/stats_vm_b_detail', component: window.httpVueLoader('./vue/stats_vm_b_detail.vue?v=1') });
 					router.addRoute({ path: '/stats_vm_s', component: window.httpVueLoader('./vue/stats_vm_s.vue') });
 					router.addRoute({ path: '/stats_vm_s_detail', component: window.httpVueLoader('./vue/stats_vm_s_detail.vue') });
 

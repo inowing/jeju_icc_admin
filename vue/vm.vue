@@ -39,7 +39,8 @@
                       <span class="vm_smaller">{{item.date.split(' ')[0]}}</span><br>
                       <span
                         class="vm_smaller">({{ week[(new Date(Date.parse(item.date.split(' ')[0]))).getDay()] }})</span><br>
-                      <b-button variant="danger" pill size="sm">Broadcast START</b-button>
+                      <b-button variant="danger" v-if="item.is_start == 1" pill size="sm">Broadcast ON</b-button>
+                      <b-button variant="secondary" v-if="item.is_start == 0" pill size="sm">Broadcast OFF</b-button>
                     </div>
                   </b-col>
                   <b-col cols="8" class="vm_card_v_center">
@@ -144,11 +145,11 @@
                                 </b-button>
                                 예상 참가자수 <strong class="text-primary">{{ item.event_size }}</strong> 명
                               </p>
-                              <p class="mb-3">
+                              <!-- <p class="mb-3">
                                 <b-button size="sm" variant="danger" class="inoBtn-200">
                                   <b-icon-stop-circle></b-icon-stop-circle> BroadCast 멈추기
                                 </b-button>
-                              </p>
+                              </p> -->
                               <p class="mb-1 mt-3">
                                 <b-button size="sm" variant="success" class="inoBtn-200 mt-3"
                                   @click="openModal1($event, item)">
@@ -200,7 +201,8 @@
                       <span class="vm_smaller">{{item.date.split(' ')[0]}}</span><br>
                       <span
                         class="vm_smaller">({{ week[(new Date(Date.parse(item.date.split(' ')[0]))).getDay()] }})</span><br>
-                      <b-button variant="danger" pill size="sm">Broadcast START</b-button>
+                      <b-button variant="danger" v-if="item.is_start == 1" pill size="sm">Broadcast ON</b-button>
+                      <b-button variant="secondary" v-if="item.is_start == 0" pill size="sm">Broadcast OFF</b-button>
                     </div>
                   </b-col>
                   <b-col cols="8" class="vm_card_v_center">
@@ -305,11 +307,11 @@
                                 </b-button>
                                 예상 참가자수 <strong class="text-primary">{{ item.event_size }}</strong> 명
                               </p>
-                              <p class="mb-1 mb-3">
+                              <!-- <p class="mb-1 mb-3">
                                 <b-button size="sm" variant="danger" class="inoBtn-200">
                                   <b-icon-stop-circle></b-icon-stop-circle> BroadCast 멈추기
                                 </b-button>
-                              </p>
+                              </p> -->
                               <p class="mb-1 mt-3">
                                 <b-button size="sm" variant="success" class="inoBtn-200 mt-3"
                                   @click="openModal1($event, item)">

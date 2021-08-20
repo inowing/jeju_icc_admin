@@ -358,6 +358,12 @@
           참여중인 Attendee 숫자 표시
         </b-form-checkbox>
 
+
+        <b-form-checkbox v-model="form.is_attendee_handsup" unchecked-value="0" value="1" variant="success">
+          Attendee Hands up
+        </b-form-checkbox>
+
+
         <b-form-checkbox v-model="form.is_play_music" unchecked-value="0" value="1" variant="success" disabled="true">
           Welcome Music Play
         </b-form-checkbox>

@@ -6,11 +6,11 @@
         </b-col>
       </b-row>
       <b-table :fields="attend_fields" :items="attend_items" small bordered head-variant="light" class="mt-1 vm_modal4_table">
-        <template #cell(id)="row">
-          <div class="text-center">{{row.item.id}}</div>
-        </template>
         <template #cell(name)="row">
-          <div class="text-center">{{row.item.user.name}}</div>
+          <div class="text-center">{{row.item.name}}</div>
+        </template>
+        <template #cell(email)="row">
+          <div class="text-center">{{row.item.email}}</div>
         </template>
         <template #cell(time_login)="row">
           <div class="text-center">{{row.item.time_login}}</div>
@@ -32,13 +32,14 @@
         api_url: '',
         conference_item: this.params.conference_item,
         attend_items: [],
-        attend_fields: [{
-            key: "id",
-            label: "아이디"
-          },
+        attend_fields: [
           {
             key: "name",
             label: "이름"
+          },
+          {
+            key: "email",
+            label: "이메일"
           },
           {
             key: "time_login",

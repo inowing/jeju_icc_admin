@@ -161,7 +161,7 @@
                 </router-link>
                 <router-link to="/stats_login">
                     <b-card-text class="m-0 p-2">
-                        <span v-bind:class="[ routePath == '/stats_login' || routePath == '/stats_login_detail' ? classObject : '' ]">로그인</span>
+                        <span v-bind:class="[ routePath == '/stats_login' || routePath == '/stats_login_detail' ? classObject : '' ]">업체 로그인</span>
                     </b-card-text>
                 </router-link>
                 <router-link to="/stats_counsel">

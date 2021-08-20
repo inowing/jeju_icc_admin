@@ -131,7 +131,7 @@
                               <b-button size="sm" variant="outline-secondary" @click="openModal2(item)">
                                 <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A({{item.qna_count}})
                               </b-button>
-                              <b-button size="sm" variant="outline-secondary" @click="openModal3(item, '참가자')">
+                              <b-button size="sm" variant="outline-secondary" @click="openModal3(item)">
                                 <b-icon-people></b-icon-people> 참가자({{item.user_count}})
                               </b-button>
                             </b-col>
@@ -290,10 +290,10 @@
                               <b-button size="sm" variant="outline-secondary" @click="goVmNotice(item)">
                                 <b-icon-info-circle></b-icon-info-circle> 공지사항
                               </b-button>
-                              <b-button size="sm" variant="outline-secondary" @click="openModal2(item, 'Q&A')">
+                              <b-button size="sm" variant="outline-secondary" @click="openModal2(item)">
                                 <b-icon-chat-dots></b-icon-chat-dots> Q&amp;A({{item.qna_count}})
                               </b-button>
-                              <b-button size="sm" variant="outline-secondary" @click="openModal3(item, '참가자')">
+                              <b-button size="sm" variant="outline-secondary" @click="openModal3(item)">
                                 <b-icon-people></b-icon-people> 참가자({{item.user_count}})
                               </b-button>
                             </b-col>
@@ -383,7 +383,7 @@
   module.exports = {
     name: "vm",
     components: {
-        'vm-form-modal': window.httpVueLoader(`./vue/vm_form_modal.vue?v=5`),
+        'vm-form-modal': window.httpVueLoader(`./vue/vm_form_modal.vue?v=6`),
 				'vm-qna-modal': window.httpVueLoader(`./vue/vm_qna_modal.vue`),
 				'vm-attendee-modal': window.httpVueLoader(`./vue/vm_attendee_modal.vue`),
 				'vm-invitation-modal': window.httpVueLoader(`./vue/vm_invitation_modal.vue?v=4`)

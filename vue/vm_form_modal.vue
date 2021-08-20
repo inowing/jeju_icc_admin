@@ -6,7 +6,7 @@
           <b-form-group label="Session title" label-variant="primary">
             <b-form-textarea 
               rows="1"
-              v-model="form.name" size="sm" :state="form.name ? true: false"></b-form-textarea>
+              v-model="form.name" size="sm"></b-form-textarea>
           </b-form-group>
           <b-form-group label="Subtitle">
             <b-form-textarea 
@@ -505,7 +505,6 @@
     computed: {
       validation: function () {
         return (
-          this.form.name &&
           this.form.venue &&
           this.form.host &&
           this.event_size &&

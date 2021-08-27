@@ -6,12 +6,17 @@
         </b-col>
     </b-row>
     <b-row class="mt-3">
-        <b-col>
+        <b-col cols="8">
             <b-button  href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
                 <b-icon-arrow-left></b-icon-arrow-left> 이전으로
             </b-button>
             <b-button size="sm" variant="primary">상품 관리</b-button>
             <b-button size="sm" variant="outline-primary" @click="goShopOrderList">판매 내역 관리</b-button>
+        </b-col>
+        <b-col cols="4" style="display: flex;">
+            <b-button v-show="!is_shoping_pay" size="sm" variant="outline-secondary" @click="updateMenu(true)" style="margin-left: auto;"><b-icon-eye-slash></b-icon-eye-slash>결제버튼 비활성화</b-button>
+            <b-button v-show="is_shoping_pay" size="sm" variant="outline-success" @click="updateMenu(false)" style="margin-left: auto;"><b-icon-eye></b-icon-eye>결제버튼 활성화</b-button>
+
         </b-col>
     </b-row>
     <b-row class="mt-3">
@@ -159,7 +164,8 @@ module.exports = {
             thumb_prev: '',
             thumb_prev_default: this.$store.getters.dummy_image_url(['180x180']),
             movie_file_src: '',
-            isNew: true
+            isNew: true,
+            is_shoping_pay:true,
         }
     },
     mounted: function () {
@@ -181,6 +187,7 @@ module.exports = {
             let response = await axios.get(url);
             let rs = response.data.result;
             this.items = rs;
+            this.is_shoping_pay = response.data.is_shoping_pay == 1 ? true : false;
         },
         goAdminList: function (item) {
             this.$router.push({ name: 'admin_list', query: {company_id: item.id, company_name: item.name}});
@@ -205,6 +212,18 @@ module.exports = {
         },
         goShopOrderList: function () {
             this.$router.push({ name: 'shop_order', query: {menu_id : this.menu_id}});
+        },
+        updateMenu: async function (set_shoping_pay){
+            let url = `${this.api_url}/menu/${this.menu_id}`;
+            var formData = new FormData();
+            formData.append('is_shoping_pay', set_shoping_pay ? 1 : 0);
+            let rs = await axios.post(url, formData, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            this.getList();
+            this.$showMsgBoxTwo(rs.status);
         }
     }
 }

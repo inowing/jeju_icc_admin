@@ -95,6 +95,15 @@
             <b-row v-show="16 == form.type">
                 <b-col>
                     <b-row>
+                        <b-col>
+                            <div class="form-group">
+                                <b-form-checkbox v-model="is_shoping_pay" name="check-button" switch>
+                                    <strong>결제버튼 활성화 여부 : {{ is_shoping_pay ? "활성화" : "비활성화"}}</strong>
+                                </b-form-checkbox>
+                            </div>
+                        </b-col>
+                    </b-row>
+                    <b-row>
                         <b-col cols="10">
                             <h6>하단 링크 추가</h6>
                         </b-col>
@@ -196,6 +205,18 @@
                         </b-form-file>
                         <b-button @click="photo_1 = null; photo_1_prev = null; photo_1_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
                     </b-card>
+                </b-col>
+                <b-col></b-col>
+            </b-row>
+            <b-row v-show="form.type == 7">
+                <b-col>
+                    <form size="sm">
+                        <div class="form-group">
+                            <b-form-checkbox v-model="is_speaker_chat" name="check-button" switch>
+                                <strong>연자 채팅 : {{ is_speaker_chat ? "사용" : "숨기기"}}</strong>
+                            </b-form-checkbox>
+                        </div>
+                    </form>
                 </b-col>
                 <b-col></b-col>
             </b-row>
@@ -344,6 +365,8 @@ module.exports = {
             exhibition_search_location: true,
             exhibition_search_selling: true,
             exhibition_search_type: true, // 회사규모
+            is_speaker_chat:true,
+            is_shoping_pay:true,
 
             fields: [{
                     key: 'id',
@@ -455,7 +478,8 @@ module.exports = {
             this.exhibition_search_location = menu.exhibition_search_location ? true : false;
             this.exhibition_search_selling = menu.exhibition_search_selling ? true : false;
             this.exhibition_search_type = menu.exhibition_search_type ? true : false;
-
+            this.is_speaker_chat = menu.is_speaker_chat ? true : false;
+            this.is_shoping_pay = menu.is_shoping_pay ? true : false;
 
             this.photo_1_prev = menu.photo_1;
             this.photo_1_del = false;
@@ -508,6 +532,12 @@ module.exports = {
 
             if (15 == this.form.type) {
                 !this.photo_1 && this.photo_1_del ? formData.append('photo_1_del', 'Y') : formData.append('photo_1', this.photo_1);
+            }
+            if (7 == this.form.type){
+                formData.append('is_speaker_chat', this.is_speaker_chat ? 1 : 0);
+            }
+            if (16 == this.form.type){
+                formData.append('is_shoping_pay', this.is_shoping_pay ? 1 : 0);
             }
 
             let rs = await axios.post(url, formData, {

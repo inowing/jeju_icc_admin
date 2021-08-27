@@ -160,14 +160,14 @@ module.exports = {
     };
   },
   mounted: async function () {
+    var ctx = document.getElementById('myChart');
+    this.chart = new Chart(ctx, this.chart_setting);
     this.$nextTick(async function () {
       this.event_id = this.$store.getters.event_id;
       this.api_url = this.$store.getters.api_url;
       this.id = this.$route.query.id;
       // await this.getData();
       console.log('mounted nextTick');
-    var ctx = document.getElementById('myChart');
-    this.chart = new Chart(ctx, this.chart_setting);
       await this.getChartData();
     });
   },

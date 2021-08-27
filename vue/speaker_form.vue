@@ -172,6 +172,21 @@
 				</b-card>
             </b-col>
         </b-row>
+        <b-row>
+            <b-col>
+                <b-form class="mt-2">
+                    <b-form-group label="Video">
+                        <b-card-text>
+                            <div class="img-box" style="max-width:200px;">
+                                <b-img v-show="video" src="/data/default/video-upload.png"></b-img>
+                            </div>
+                        </b-card-text>
+                        <b-form-file v-model="video" size="sm" class="w-50 mr-sm-2" accept=".mp4"></b-form-file>
+                        <b-button v-show="video" size="sm" variant="danger" @click="video=null; video_del = true;">Video Delete</b-button>
+                    </b-form-group>
+                </b-form>
+            </b-col>
+        </b-row>
         <b-button v-show="!id" variant="primary" size="sm" class="inoBtn-150 mt-2" @click="storeData">저장</b-button>
         <b-button v-show="id" variant="success" size="sm" class="inoBtn-150 mt-2" @click="updateData">수정</b-button>
     </b-card>
@@ -235,7 +250,10 @@ module.exports = {
             file2_del: false,
             file2_en_del: false,
             file_name_1: '',
-            file_name_1_en: ''
+            file_name_1_en: '',
+
+            video: null,
+            video_del: false
         };
     },
     mounted: function () {
@@ -287,6 +305,7 @@ module.exports = {
             this.file2_en = data.file_en;
             this.file_name_1 = data.file_name_1;
             this.file_name_1_en = data.file_name_1_en;
+            this.video = data.video;
 
             // 탑 셀렉트
             this.category.selected_top = data.top_category_id
@@ -304,6 +323,8 @@ module.exports = {
 
                 !this.file2 && this.file2_del ? formData.append('file_del', 'Y') : formData.append('file', this.file2);
                 !this.file2_en && this.file2_en_del ? formData.append('file_en_del', 'Y') : formData.append('file_en', this.file2_en);
+
+                !this.video && this.video_del ? formData.append('video_del', 'Y') : formData.append('video', this.video);
 
                 formData.append('order', this.order);
 
@@ -349,6 +370,8 @@ module.exports = {
 
                 !this.file2 && this.file2_del ? formData.append('file_del', 'Y') : formData.append('file', this.file2);
                 !this.file2_en && this.file2_en_del ? formData.append('file_en_del', 'Y') : formData.append('file_en', this.file2_en);
+
+                !this.video && this.video_del ? formData.append('video_del', 'Y') : formData.append('video', this.video);
 
                 formData.append('order', this.order);
 

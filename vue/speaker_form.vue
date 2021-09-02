@@ -175,6 +175,21 @@
         <b-row>
             <b-col>
                 <b-form class="mt-2">
+                    <b-form-group label="e-Poster">
+                        <b-card-text>
+                            <div class="img-box" style="max-width:200px;">
+                                <b-img v-show="video" src="/data/default/pdf-upload.png" style="width:172px;height:172px;"></b-img>
+                            </div>
+                        </b-card-text>
+                        <b-form-file v-model="eposter" size="sm" class="w-50 mr-sm-2" accept=".pdf"></b-form-file>
+                        <b-button v-show="eposter" size="sm" variant="danger" @click="eposter=null; eposter_del = true;">e-Poster Delete</b-button>
+                    </b-form-group>
+                </b-form>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col>
+                <b-form class="mt-2">
                     <b-form-group label="Video">
                         <b-card-text>
                             <div class="img-box" style="max-width:200px;">
@@ -251,7 +266,8 @@ module.exports = {
             file2_en_del: false,
             file_name_1: '',
             file_name_1_en: '',
-
+            eposter:'',
+            eposter_del:false,
             video: null,
             video_del: false
         };
@@ -306,6 +322,7 @@ module.exports = {
             this.file_name_1 = data.file_name_1;
             this.file_name_1_en = data.file_name_1_en;
             this.video = data.video;
+            this.eposter = data.eposter;
 
             // 탑 셀렉트
             this.category.selected_top = data.top_category_id
@@ -325,6 +342,7 @@ module.exports = {
                 !this.file2_en && this.file2_en_del ? formData.append('file_en_del', 'Y') : formData.append('file_en', this.file2_en);
 
                 !this.video && this.video_del ? formData.append('video_del', 'Y') : formData.append('video', this.video);
+                !this.eposter && this.eposter_del ? formData.append('eposter_del', 'Y') : formData.append('eposter', this.eposter);
 
                 formData.append('order', this.order);
 
@@ -372,6 +390,7 @@ module.exports = {
                 !this.file2_en && this.file2_en_del ? formData.append('file_en_del', 'Y') : formData.append('file_en', this.file2_en);
 
                 !this.video && this.video_del ? formData.append('video_del', 'Y') : formData.append('video', this.video);
+                !this.eposter && this.eposter_del ? formData.append('eposter_del', 'Y') : formData.append('eposter', this.eposter);
 
                 formData.append('order', this.order);
 

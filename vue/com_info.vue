@@ -210,13 +210,29 @@
             </b-row>
             <b-row v-show="form.type == 7">
                 <b-col>
-                    <form size="sm">
-                        <div class="form-group">
-                            <b-form-checkbox v-model="is_speaker_chat" name="check-button" switch>
-                                <strong>연자 채팅 : {{ is_speaker_chat ? "사용" : "숨기기"}}</strong>
-                            </b-form-checkbox>
-                        </div>
-                    </form>
+                    <b-row>
+                        <form size="sm">
+                            <div class="form-group">
+                                <b-form-checkbox v-model="is_speaker_chat" name="check-button" switch>
+                                    <strong>연자 채팅 : {{ is_speaker_chat ? "사용" : "숨기기"}}</strong>
+                                </b-form-checkbox>
+                            </div>
+                        </form>
+                    </b-row>
+                    <b-row>
+                        <b-form-group label="연자기본이미지">
+                            <b-card-text>
+                                <div class="img-box" style="max-width:200px;">
+                                    <b-img class="center-fit" :src="speaker_default_prev||photo_prev" fluid></b-img>
+                                </div>
+                            </b-card-text>
+                            <b-card-text class="mt-1">
+                                <b-form-file v-model="speaker_default" @change="onFileChange($event, 'speaker_default_prev')" 
+                                style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
+                                <b-button @click="speaker_default = null; speaker_default_prev = ''; speaker_default_del = true;" size="sm" variant="danger">이미지 삭제</b-button>
+                            </b-card-text>
+                        </b-form-group>
+                    </b-row>
                 </b-col>
                 <b-col></b-col>
             </b-row>
@@ -367,6 +383,10 @@ module.exports = {
             exhibition_search_type: true, // 회사규모
             is_speaker_chat:true,
             is_shoping_pay:true,
+            speaker_default:'',
+            speaker_default_prev:'',
+            speaker_default_del:false,
+            photo_prev: this.$store.getters.dummy_image_url(['400x400']),
 
             fields: [{
                     key: 'id',
@@ -488,6 +508,10 @@ module.exports = {
             this.link = menu.link;
             this.link_en = menu.link_en;
 
+            this.speaker_default_prev = menu.speaker_default;
+            this.speaker_default = null;
+            menu.speaker_default = null;
+
             this.form = {
                 ...menu
             };
@@ -535,6 +559,7 @@ module.exports = {
             }
             if (7 == this.form.type){
                 formData.append('is_speaker_chat', this.is_speaker_chat ? 1 : 0);
+                !this.speaker_default && this.speaker_default_del ? formData.append('speaker_default_del', 'Y') : formData.append('speaker_default', this.speaker_default);
             }
             if (16 == this.form.type){
                 formData.append('is_shoping_pay', this.is_shoping_pay ? 1 : 0);

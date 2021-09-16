@@ -603,41 +603,46 @@ module.exports = {
             this.event_id = this.$store.getters.event_id;
             let url = `${this.api_url}/e_overview?menu_id=${this.menu_id}`;
             let rs = (await axios.get(url)).data.result;
-            this.exibition_a = rs[0];
-            this.contents1_arr = rs[0].contents ? JSON.parse(rs[0].contents) : [];
-            this.contents1_en_arr = rs[0].contents_en ? JSON.parse(rs[0].contents_en) : [];
+            if(rs.length > 0){
+                this.exibition_a = rs[0];
+                this.contents1_arr = rs[0].contents ? JSON.parse(rs[0].contents) : [];
+                this.contents1_en_arr = rs[0].contents_en ? JSON.parse(rs[0].contents_en) : [];
 
-            this.photo_1_preview_data = this.exibition_a.photo_1; // 변경여부 비교용...
-            this.photo_2_preview_data = this.exibition_a.photo_2;
-            this.photo_3_preview_data = this.exibition_a.photo_3;
+                this.photo_1_preview_data = this.exibition_a.photo_1; // 변경여부 비교용...
+                this.photo_2_preview_data = this.exibition_a.photo_2;
+                this.photo_3_preview_data = this.exibition_a.photo_3;
 
-            this.photo_1_preview_local = this.exibition_a.photo_1;
-            this.photo_2_preview_local = this.exibition_a.photo_2;
-            this.photo_3_preview_local = this.exibition_a.photo_3;
+                this.photo_1_preview_local = this.exibition_a.photo_1;
+                this.photo_2_preview_local = this.exibition_a.photo_2;
+                this.photo_3_preview_local = this.exibition_a.photo_3;
 
-            this.photo_1_en_preview_data = this.exibition_a.photo_1_en; // 변경여부 비교용...
-            this.photo_2_en_preview_data = this.exibition_a.photo_2_en;
-            this.photo_3_en_preview_data = this.exibition_a.photo_3_en;
+                this.photo_1_en_preview_data = this.exibition_a.photo_1_en; // 변경여부 비교용...
+                this.photo_2_en_preview_data = this.exibition_a.photo_2_en;
+                this.photo_3_en_preview_data = this.exibition_a.photo_3_en;
 
-            this.photo_1_en_preview_local = this.exibition_a.photo_1_en;
-            this.photo_2_en_preview_local = this.exibition_a.photo_2_en;
-            this.photo_3_en_preview_local = this.exibition_a.photo_3_en;
+                this.photo_1_en_preview_local = this.exibition_a.photo_1_en;
+                this.photo_2_en_preview_local = this.exibition_a.photo_2_en;
+                this.photo_3_en_preview_local = this.exibition_a.photo_3_en;
 
-            this.logo_file_preview_data = this.exibition_a.logo;
-            this.logo_file_preview_local = this.exibition_a.logo;
+                this.logo_file_preview_data = this.exibition_a.logo;
+                this.logo_file_preview_local = this.exibition_a.logo;
 
-            this.logo_file_en_preview_data = this.exibition_a.logo_en;
-            this.logo_file_en_preview_local = this.exibition_a.logo_en;
+                this.logo_file_en_preview_data = this.exibition_a.logo_en;
+                this.logo_file_en_preview_local = this.exibition_a.logo_en;
 
-            this.is_visible_photo_1 = this.exibition_a.is_visible_photo_1 ? true : false;
-            this.is_visible_photo_2 = this.exibition_a.is_visible_photo_2 ? true : false;
-            this.is_visible_photo_3 = this.exibition_a.is_visible_photo_3 ? true : false;
-            this.is_visible_photo_1_en = this.exibition_a.is_visible_photo_1_en ? true : false;
-            this.is_visible_photo_2_en = this.exibition_a.is_visible_photo_2_en ? true : false;
-            this.is_visible_photo_3_en = this.exibition_a.is_visible_photo_3_en ? true : false;
+                this.is_visible_photo_1 = this.exibition_a.is_visible_photo_1 ? true : false;
+                this.is_visible_photo_2 = this.exibition_a.is_visible_photo_2 ? true : false;
+                this.is_visible_photo_3 = this.exibition_a.is_visible_photo_3 ? true : false;
+                this.is_visible_photo_1_en = this.exibition_a.is_visible_photo_1_en ? true : false;
+                this.is_visible_photo_2_en = this.exibition_a.is_visible_photo_2_en ? true : false;
+                this.is_visible_photo_3_en = this.exibition_a.is_visible_photo_3_en ? true : false;
 
-            this.photoParams_reset.overview_id = this.exibition_a.id;
-            this.photoParams.overview_id = this.exibition_a.id;
+                this.photoParams_reset.overview_id = this.exibition_a.id;
+                this.photoParams.overview_id = this.exibition_a.id;
+            }else{
+                
+            }
+            
         },
 
         save: async function () {

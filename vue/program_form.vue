@@ -31,6 +31,13 @@
         </b-row>
         <b-row>
             <b-col>
+                <b-form-group label="순서">
+                    <b-form-input type="text" v-model="order"></b-form-input>
+                </b-form-group>
+            </b-col>
+        </b-row>
+        <b-row>
+            <b-col>
                 <b-card no-body>
 					<b-tabs content-class="" card>
 						<b-tab title="국문" active>
@@ -87,6 +94,7 @@ module.exports = {
             menu_id: null,
             id: 0,
             menu_id: 0,
+            order: 0,
 
             category: {
                 topcategory: [],
@@ -130,6 +138,7 @@ module.exports = {
             let rs = await axios.get(url);
             let data = rs.data.result;
             this.id = data.id;
+            this.order = data.order;
             this.title = data.title;
             this.time = data.time;
             this.time_en = data.time_en;
@@ -154,6 +163,7 @@ module.exports = {
             let url = `${this.api_url}/program`;
             let formData = new FormData();
                 formData.append('menu_id', this.menu_id);
+                formData.append('order', this.order);
                 
                 formData.append('time', this.time);
                 formData.append('time_en', this.time_en);
@@ -198,6 +208,7 @@ module.exports = {
         updateData: async function () { // 데이터 수정저장
             let url = `${this.api_url}/program/${this.id}`;
             let formData = new FormData();
+                formData.append('order', this.order);
 
                 formData.append('time', this.time);
                 formData.append('time_en', this.time_en);

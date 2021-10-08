@@ -48,7 +48,7 @@
                             <b-form-group label="제목">
                                 <b-form-input type="text" v-model="title"></b-form-input>
                             </b-form-group>
-                            <b-card-text class="ino-180-70-wrap mb-1">
+                            <!-- <b-card-text class="ino-180-70-wrap mb-1">
                                 <div>
                                     <b-img :src="photo_1||photo_prev" fluid></b-img>
                                 </div>
@@ -57,7 +57,7 @@
                                 <b-form-file v-model="file" @change="onFileChange($event, 'photo_1')" 
                                 style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
                                 <b-button @click="file = null; photo_1 = '';" size="sm" variant="danger">이미지 삭제</b-button>
-                            </b-card-text>
+                            </b-card-text> -->
 
 							<b-card-text>
 								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents"/>
@@ -69,7 +69,7 @@
                             <b-form-group label="제목">
                                 <b-form-input type="text" v-model="title_en"></b-form-input>
                             </b-form-group>
-                            <b-card-text class="ino-180-70-wrap mb-1">
+                            <!-- <b-card-text class="ino-180-70-wrap mb-1">
                                 <div>
                                     <b-img :src="photo_1_en||photo_prev" fluid></b-img>
                                 </div>
@@ -78,7 +78,7 @@
                                 <b-form-file v-model="file_en" @change="onFileChange($event, 'photo_1_en')" 
                                 style="max-width:70%;" class="mr-2" size="sm"></b-form-file>
                                 <b-button @click="file_en = null; photo_1_en = '';" size="sm" variant="danger">이미지 삭제</b-button>
-                            </b-card-text>
+                            </b-card-text> -->
 
 							<b-card-text>
 								<quill-editor ref="quillEditor" class="editor" :options="editorOption" v-model="contents_en"/>

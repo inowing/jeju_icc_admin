@@ -36,16 +36,16 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 
 	<!-- Include stylesheet -->
-	<link type="text/css" href="https://cdn.quilljs.com/1.3.4/quill.core.css" rel="stylesheet">
-	<link type="text/css" href="https://cdn.quilljs.com/1.3.4/quill.snow.css" rel="stylesheet">
-	<link type="text/css" href="https://cdn.quilljs.com/1.3.4/quill.bubble.css" rel="stylesheet">
+	<link type="text/css" href="https://cdn.quilljs.com/1.3.6/quill.core.css" rel="stylesheet">
+	<link type="text/css" href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+	<link type="text/css" href="https://cdn.quilljs.com/1.3.6/quill.bubble.css" rel="stylesheet">
 
 	<link type="text/css" href="./static/css/ino-vue.css" rel="stylesheet">
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js" integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-	<script src="/src/js/tinymce/tinymce.min.js"></script>
-	<script src="/src/js/tinymce/vue-easy-tinymce.min.js"></script>
+	<!-- <script src="/src/js/tinymce/tinymce.min.js"></script>
+	<script src="/src/js/tinymce/vue-easy-tinymce.min.js"></script> -->
 	<!-- <script src="https://cdn.jsdelivr.net/npm/vue-easy-tinymce/dist/vue-easy-tinymce.min.js"></script> -->
 	
 </head>
@@ -154,7 +154,7 @@
 					}
 					this.navShow = this.$refs.inoResizer.clientWidth > 800 ? true : false; // 네비게이션 쇼,하이드
 					router.addRoute({ path: '/', component: window.httpVueLoader('./vue/site_info.vue?v=2') });
-					router.addRoute({ path: '/site_info', component: window.httpVueLoader('./vue/site_info.vue?v=2') });
+					router.addRoute({ path: '/site_info', component: window.httpVueLoader('./vue/site_info.vue?v=3') });
 					router.addRoute({ path: '/familysite', component: window.httpVueLoader('./vue/familysite.vue?v=1') });
 					router.addRoute({ path: '/popup', component: window.httpVueLoader('./vue/popup.vue') });
 					router.addRoute({ path: '/banner', component: window.httpVueLoader('./vue/banner.vue') });
@@ -162,7 +162,7 @@
 
 					router.addRoute({ path: '/mainmenu', component: window.httpVueLoader('./vue/mainmenu.vue') });
 					router.addRoute({ path: '/mainmenu/category', name: 'category', component: window.httpVueLoader('./vue/category.vue?v=1') });
-					router.addRoute({ path: '/mainmenu/contents/overview', name: 'overview', component: window.httpVueLoader('./vue/overview.vue') });
+					router.addRoute({ path: '/mainmenu/contents/overview', name: 'overview', component: window.httpVueLoader('./vue/overview.vue?v=3') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition_a', name: 'exhibition_a', component: window.httpVueLoader('./vue/exhibition_a.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition_b', name: 'exhibition_b', component: window.httpVueLoader('./vue/exhibition_b.vue') });
 					router.addRoute({ path: '/mainmenu/contents/exhibition', name: 'exhibition', component: window.httpVueLoader('./vue/exhibition.vue?v=2') });
@@ -180,9 +180,9 @@
 					router.addRoute({ path: '/mainmenu/contents/information', name: 'information', component: window.httpVueLoader('./vue/information.vue') });
 					router.addRoute({ path: '/mainmenu/contents/introduction', name: 'introduction', component: window.httpVueLoader('./vue/introduction.vue') });
 					router.addRoute({ path: '/mainmenu/contents/program', name: 'program', component: window.httpVueLoader('./vue/program.vue') });
-					router.addRoute({ path: '/mainmenu/contents/information_form', name: 'information_form', component: window.httpVueLoader('./vue/information_form.vue') });
+					router.addRoute({ path: '/mainmenu/contents/information_form', name: 'information_form', component: window.httpVueLoader('./vue/information_form.vue?v=1') });
 					router.addRoute({ path: '/mainmenu/contents/introduction_form', name: 'introduction_form', component: window.httpVueLoader('./vue/introduction_form.vue') });
-					router.addRoute({ path: '/mainmenu/contents/program_form', name: 'program_form', component: window.httpVueLoader('./vue/program_form.vue') });
+					router.addRoute({ path: '/mainmenu/contents/program_form', name: 'program_form', component: window.httpVueLoader('./vue/program_form.vue?v=1') });
 
 					router.addRoute({ path: '/mainmenu/contents/keynote', name: 'keynote', component: window.httpVueLoader('./vue/keynote.vue') });
 					router.addRoute({ path: '/mainmenu/contents/keynote_form', name: 'keynote_form', component: window.httpVueLoader('./vue/keynote_form.vue?v=2') });

@@ -525,7 +525,10 @@
                     <h6><strong>로그인/회원가입 사용여부</strong></h6>
                 </template>
                 <b-form-checkbox v-model="is_login" name="check-button" switch>
-                    <strong>로그인/회원가입</strong>
+                    <strong>로그인</strong>
+                </b-form-checkbox>
+                <b-form-checkbox v-model="is_join" name="check-button" switch>
+                    <strong>회원가입</strong>
                 </b-form-checkbox>
             </b-card>
             
@@ -642,6 +645,7 @@ module.exports = {
             is_visible_familysite: true,
             is_visible_familysite_en: true,
             is_login: true,
+            is_join:true,
             is_language: true,
             language: 0,
             options: [
@@ -718,6 +722,7 @@ module.exports = {
             this.is_visible_familysite_en = res.is_visible_familysite_en ? true : false;
 
             this.is_login = res.is_login ? true : false;
+            this.is_join = res.is_join ? true : false;
             this.is_language = res.is_language ? true : false;
             this.language = res.language;
 
@@ -788,7 +793,8 @@ module.exports = {
             // formData.append("is_visible_familysite_en", this.is_visible_familysite_en ? 1 : 0);
 
             // 로그인 여부
-            formData.append("is_login", this.is_login ? 1 : 0); // 로그인, 회원가입 - 0 - not use, 1 - use
+            formData.append("is_login", this.is_login ? 1 : 0); // 로그인 - 0 - not use, 1 - use
+            formData.append("is_join", this.is_join ? 1 : 0); // 회원가입 - 0 - not use, 1 - use
 
             // 홈페이지 언어
             formData.append("is_language", this.is_language ? 1 : 0); // 언어선택 노출여부

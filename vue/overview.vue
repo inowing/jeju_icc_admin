@@ -142,7 +142,7 @@
                 </b-col>
                 <b-col class="text-right">
                     <b-button variant="outline-primary" size="sm" @click="addNewVideo">
-                        <b-icon-plus></b-icon-plus> 영상 추가
+                        <b-icon-plus></b-icon-plus> 이미지 또는 영상추가
                     </b-button>
                 </b-col>
             </b-row>
@@ -208,18 +208,21 @@
                                 </b-col>
                             </b-row>
                             <b-row class="p-1">
-                                <b-col sm="4"><label style="font-size: 10pt;" placeholder="반드시 http:// 를 입력해주세요.">영상 링크(Youtube)</label></b-col>
+                                <b-col sm="4"><label style="font-size: 10pt;" placeholder="반드시 http:// 를 입력해주세요.">1. 외부 링크 주소</label></b-col>
                                 <b-col sm="8">
                                     <b-form-input type="text" size="sm" v-model="videoParams.video_link">
                                 </b-col>
                             </b-row>
                             <b-row class="p-1">
-                                <b-col sm="4"><label style="font-size: 10pt;">영상 파일</label></b-col>
+                                <b-col sm="4"><label style="font-size: 10pt;">2. 영상 파일</label></b-col>
                                 <b-col sm="8">
                                     <b-form-file v-model="videoParams.file" class="mb-2" size="sm">
                                     </b-form-file>
                                     <b-button @click="videoParams.file = null" size="sm" variant="danger">영상 삭제</b-button>
                                 </b-col>
+                            </b-row>
+                            <b-row class="p-1">
+                                <label style="font-size: 10pt;">※영상파일과 외부 링크 주소가 같이 있을경우 영상파일이 우선시됩니다</label>
                             </b-row>
                         </b-tab>
                         <b-tab title="영문">
@@ -238,18 +241,21 @@
                                 </b-col>
                             </b-row>
                             <b-row class="p-1">
-                                <b-col sm="4"><label style="font-size: 10pt;" placeholder="반드시 http:// 를 입력해주세요.">영상 링크(Youtube)</label></b-col>
+                                <b-col sm="4"><label style="font-size: 10pt;" placeholder="반드시 http:// 를 입력해주세요.">1. 외부 링크 주소</label></b-col>
                                 <b-col sm="8">
                                     <b-form-input type="text" size="sm" v-model="videoParams.video_link_en">
                                 </b-col>
                             </b-row>
                             <b-row class="p-1">
-                                <b-col sm="4"><label style="font-size: 10pt;">영상 파일</label></b-col>
+                                <b-col sm="4"><label style="font-size: 10pt;">2. 영상 파일</label></b-col>
                                 <b-col sm="8">
                                     <b-form-file v-model="videoParams.file_en" class="mb-2" size="sm">
                                     </b-form-file>
                                     <b-button @click="videoParams.file_en = null" size="sm" variant="danger">영상 삭제</b-button>
                                 </b-col>
+                            </b-row>
+                            <b-row class="p-1">
+                                <label style="font-size: 10pt;">※영상파일과 외부 링크 주소가 같이 있을경우 영상파일이 우선시됩니다</label>
                             </b-row>
                         </b-tab>
                     </b-tabs>
@@ -343,10 +349,10 @@
                     </b-row>
                     <b-row class="p-1">
                         <b-col>
-                            <b-card sub-title="썸네일 이미지(450px*260px)">
-                                <b-card-text align="center" class="ino-450-260-wrap">
+                            <b-card sub-title="썸네일 이미지(365px*230px)">
+                                <b-card-text align="center" class="ino-365-230-wrap">
                                     <div>
-                                        <b-img :src="linkPreview||$store.getters.dummy_image_url(['450x260'])" fluid></b-img>
+                                        <b-img :src="linkPreview||$store.getters.dummy_image_url(['365x230'])" fluid></b-img>
                                     </div>
                                 </b-card-text>
                                 <b-form-file v-model="linkParams.photo_1" @change="onFileChange($event, 'linkPreview')" class="mb-1 mt-1" size="sm">
@@ -383,10 +389,10 @@
                     </b-row>
                     <b-row class="p-1">
                         <b-col>
-                            <b-card sub-title="썸네일 이미지(450px*260px)">
-                                <b-card-text align="center" class="ino-450-260-wrap">
+                            <b-card sub-title="썸네일 이미지(365px*230px)">
+                                <b-card-text align="center" class="ino-365-230-wrap">
                                     <div>
-                                        <b-img :src="linkPreview_en||$store.getters.dummy_image_url(['450x260'])" fluid></b-img>
+                                        <b-img :src="linkPreview_en||$store.getters.dummy_image_url(['365x230'])" fluid></b-img>
                                     </div>
                                 </b-card-text>
                                 <b-form-file v-model="linkParams.photo_1_en" @change="onFileChange($event, 'linkPreview_en')" class="mb-1 mt-1" size="sm">
@@ -424,7 +430,7 @@ module.exports = {
             videoFields: [
                 { key: 'id', label: '번호' },
                 { key: 'order', label: '순서' },
-                { key: 'video_link', label: '영상링크' },
+                { key: 'video_link', label: '이미지 또는 영상링크' },
                 { key: 'file', label: '업로드 영상' },
                 { key: 'manageBtn', label: '관리' }
             ],
@@ -505,8 +511,8 @@ module.exports = {
 
             linkPreview: null, // 현행 프리뷰
             linkPreview_en: null, // 현행 프리뷰 en
-            linkPreview_default: this.$store.getters.dummy_image_url(['626x352']), // DB 저장값 프리뷰
-            linkPreview_en_default: this.$store.getters.dummy_image_url(['626x352']), // DB 저장값 프리뷰 en
+            linkPreview_default: this.$store.getters.dummy_image_url(['365x230']), // DB 저장값 프리뷰
+            linkPreview_en_default: this.$store.getters.dummy_image_url(['365x230']), // DB 저장값 프리뷰 en
 
             videoParams: {
                 "type": 1,

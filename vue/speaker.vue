@@ -3,10 +3,26 @@
     <b-row class="mb-1">
         <b-col>
             <h6><strong>2.메뉴 및 컨텐츠 관리 >	연자소개2 > 컨텐츠 (관리)</strong></h6>
+        </b-col>
+    </b-row>
+    <b-row class="mt-3">
+        <b-col cols="8">
             <b-button href="#" variant="outline-primary" size="sm" @click.prevent="$router.go(-1)">
                 <b-icon-arrow-left></b-icon-arrow-left> 이전으로
             </b-button>
             <b-button size="sm" variant="primary" @click="goForm"><b-icon-plus></b-icon-plus>추가하기</b-button>
+        </b-col>
+        <b-col cols="4" style="display: flex;">
+            <b-button size="sm" variant="outline-success" @click="upload_excel=!upload_excel" style="margin-left: auto;"><b-icon-upload></b-icon-upload> 엑셀로 올리기</b-button>
+
+        </b-col>
+    </b-row>
+    <b-row class="mt-3" v-if="upload_excel">
+        <b-col>
+            <b-button href="/data/form/speaker.csv" size="sm" variant="secondary">양식 다운받기</b-button>
+            <b-form-file v-model="upload_file" @change="onFileChange($event, 'upload_file')" 
+                style="max-width:40%;" class="mr-2" size="sm"></b-form-file>
+            <b-button @click="uploadExcel()" size="sm" variant="danger">파일 적용하기</b-button>
         </b-col>
     </b-row>
 
@@ -67,6 +83,8 @@ module.exports = {
             event_id: 0,
             api_url: '',
             menu_id: null,
+            upload_excel:false,
+            upload_file:'',
             
             fields: [{
                     key: 'reverse_index',
@@ -165,6 +183,33 @@ module.exports = {
             document.body.appendChild(link);
             link.click();
             link.remove();
+        },
+        uploadExcel: async function(){
+            if(this.upload_file==null || this.upload_file==''){
+                this.$toast("Alert", "파일을 확인해주세요.", "danger");
+                return;
+            }
+            if (confirm('서버에 업로드 하시겠습니까?')) {
+                try {
+                    let formData = new FormData();
+                    formData.append('upload_file', this.upload_file);
+    
+                    let url = `${this.api_url}/speaker/excel_upload/${this.menu_id}`;
+                    let rs = await axios.post(url, formData, {
+                        Headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+    
+                    async function callback () {
+                        await this.getList();
+                    }
+                    this.$showMsgBoxTwo(rs.status, '', '', callback.bind(this));
+    
+                } catch (error) {
+                    this.$showMsgBoxTwo(error.response.status, '', error.response.statusText);
+                }
+            }
         }
     }
 };

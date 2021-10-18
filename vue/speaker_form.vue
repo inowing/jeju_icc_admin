@@ -39,7 +39,7 @@
                                 <b-form-input type="number" v-model="order"></b-form-input>
                             </b-form-group>
 
-                            <b-form-group label="발표주제">
+                            <b-form-group label="발표주제" v-if="event_id != 108">
                                 <b-form-input type="text" v-model="title"></b-form-input>
                             </b-form-group>
                             <b-row>
@@ -106,7 +106,7 @@
                             <b-form-group label="노출순서">
                                 <b-form-input type="number" v-model="order"></b-form-input>
                             </b-form-group>
-                            <b-form-group label="발표주제">
+                            <b-form-group label="발표주제" v-if="event_id != 108">
                                 <b-form-input type="text" v-model="title_en"></b-form-input>
                             </b-form-group>
                             <b-row>
@@ -346,18 +346,20 @@ module.exports = {
 
                 formData.append('order', this.order);
 
-                this.title ? formData.append('title', this.title) : '';
-                this.title_en ? formData.append('title_en', this.title_en) : '';
+                // this.title ? formData.append('title', this.title) : '';
+                // this.title_en ? formData.append('title_en', this.title_en) : '';
+                formData.append('title', this.title ? this.title: '')
+                formData.append('title_en', this.title_en ? this.title_en: '')
                 // this.contents ? formData.append('contents', this.contents) : '';
                 // this.contents_en ? formData.append('contents_en', this.contents_en) : '';
                 formData.append('contents', this.contents ? this.contents: '')
                 formData.append('contents_en', this.contents_en ? this.contents_en: '')
-                this.speaker_name ? formData.append('speaker_name', this.speaker_name) : '';
-                this.position ? formData.append('position', this.position) : '';
-                this.introduction ? formData.append('introduction', this.introduction) : '';
-                this.speaker_name_en ? formData.append('speaker_name_en', this.speaker_name_en) : '';
-                this.position_en ? formData.append('position_en', this.position_en) : '';
-                this.introduction_en ? formData.append('introduction_en', this.introduction_en) : '';
+                formData.append('speaker_name', this.speaker_name ? this.speaker_name: '')
+                formData.append('speaker_name_en', this.speaker_name_en ? this.speaker_name_en: '')
+                formData.append('position', this.position ? this.position: '')
+                formData.append('position_en', this.position_en ? this.position_en: '')
+                formData.append('introduction', this.introduction ? this.introduction: '')
+                formData.append('introduction_en', this.introduction_en ? this.introduction_en: '')
                 
                 let category_id = this.category.selected_sub != 0 ? this.category.selected_sub : this.category.selected_top;
                 formData.append('category_id', category_id);
@@ -394,18 +396,20 @@ module.exports = {
 
                 formData.append('order', this.order);
 
-                this.title ? formData.append('title', this.title) : '';
-                this.title_en ? formData.append('title_en', this.title_en) : '';
+                // this.title ? formData.append('title', this.title) : '';
+                // this.title_en ? formData.append('title_en', this.title_en) : '';
+                formData.append('title', this.title ? this.title: '')
+                formData.append('title_en', this.title_en ? this.title_en: '')
                 // this.contents ? formData.append('contents', this.contents) : '';
                 // this.contents_en ? formData.append('contents_en', this.contents_en) : '';
                 formData.append('contents', this.contents ? this.contents: '')
                 formData.append('contents_en', this.contents_en ? this.contents_en: '')
-                this.speaker_name ? formData.append('speaker_name', this.speaker_name) : '';
-                this.position ? formData.append('position', this.position) : '';
-                this.introduction ? formData.append('introduction', this.introduction) : '';
-                this.speaker_name_en ? formData.append('speaker_name_en', this.speaker_name_en) : '';
-                this.position_en ? formData.append('position_en', this.position_en) : '';
-                this.introduction_en ? formData.append('introduction_en', this.introduction_en) : '';
+                formData.append('speaker_name', this.speaker_name ? this.speaker_name: '')
+                formData.append('speaker_name_en', this.speaker_name_en ? this.speaker_name_en: '')
+                formData.append('position', this.position ? this.position: '')
+                formData.append('position_en', this.position_en ? this.position_en: '')
+                formData.append('introduction', this.introduction ? this.introduction: '')
+                formData.append('introduction_en', this.introduction_en ? this.introduction_en: '')
                 
                 let category_id = this.category.selected_sub != 0 ? this.category.selected_sub : this.category.selected_top;
                 

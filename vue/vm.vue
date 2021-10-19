@@ -386,7 +386,7 @@
         'vm-form-modal': window.httpVueLoader(`./vue/vm_form_modal.vue?v=6`),
 				'vm-qna-modal': window.httpVueLoader(`./vue/vm_qna_modal.vue`),
 				'vm-attendee-modal': window.httpVueLoader(`./vue/vm_attendee_modal.vue?v=1`),
-				'vm-invitation-modal': window.httpVueLoader(`./vue/vm_invitation_modal.vue?v=4`)
+				'vm-invitation-modal': window.httpVueLoader(`./vue/vm_invitation_modal.vue?v=5`)
     },
     data: function () {
       return {

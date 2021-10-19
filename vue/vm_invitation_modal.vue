@@ -481,7 +481,8 @@
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         
         let valid1 = this.userForm.name ? true : false;
-        let valid2 = this.userForm.email && re.test(String(this.userForm.email).toLowerCase()) ? true : false;
+        // let valid2 = this.userForm.email && re.test(String(this.userForm.email).toLowerCase()) ? true : false;
+        let valid2 = this.userForm.email ? true : false;
         let valid_result = valid1 && valid2;
         return {
           valid1,

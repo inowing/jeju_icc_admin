@@ -135,6 +135,31 @@ module.exports = {
             editorOption: {
 				placeholder: '게시물을 작성해주세요.',
                 theme: "snow",
+                modules: {
+                    toolbar: {
+                        container: [
+                            ['bold', 'italic', 'underline', 'strike'], // toggled buttons
+                            ['blockquote', 'code-block'],
+                            [{ header: 1 }, { header: 2 }], // custom button values
+                            [{ list: 'ordered' }, { list: 'bullet' }],
+                            [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+                            [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
+                            [{ direction: 'rtl' }], // text direction
+                            [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
+                            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                            [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+                            [{ font: [] }],
+                            [{ align: [] }],
+                            ['clean'], // remove formatting button
+                            ['link', 'image', 'video'],
+                            ['newImage'], // New tools 
+                        ],
+                        handlers: {
+                            shadeBox: null,
+                            newImage: this.newImage,
+                        },
+                    },
+                }
             }
         };
     },
@@ -145,6 +170,8 @@ module.exports = {
             this.event_id = this.$store.getters.event_id;
             this.api_url = this.$store.getters.api_url;
             
+            this.initButton();
+
             await this.getTopCategory();
             await this.getData();
         });
@@ -283,7 +310,31 @@ module.exports = {
 
             this.category.sub_id_key_store = sub;
             this.category.subcategory = temArr;
-        }
+        },
+        newImage() {
+            // alert('insertInput run');
+          let selection = window.getSelection()
+          let range = selection.getRangeAt(0)
+          let node = document.createElement('img')
+          let text = document.createTextNode(' Please fill in the blanks ')
+          node.setAttribute('src', 'data:image/none-png')
+          node.setAttribute('class', `answer-wrap-${ _.uniqueId() }`)
+          console.log(node)
+          range.setStart(range.endContainer, range.endOffset)
+          range.insertNode(node)
+          range.setEnd(range.endContainer, range.endOffset)
+          selection.collapse(range.endContainer, range.endOffset)
+        },
+        
+        initButton() {
+                const insertInputButtons = document.querySelectorAll('.ql-newImage');
+                for (let btnDom of insertInputButtons) {
+                    // btnDom.classList.add('iconeditor')
+                    // btnDom.classList.add('iconfont')
+                    // btnDom.classList.add('owner-tool-btn')
+                    btnDom.title = ' newImage '
+                }
+        },
     }
 };
 </script>
